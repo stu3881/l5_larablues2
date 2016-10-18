@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('examplewelcome');
+    return view('welcome');
 });
 Route::resource('books','BookController');
 Route::resource('miscThings','MiscThingController');
