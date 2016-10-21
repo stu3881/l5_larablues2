@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-# Attempting push at 2016-10-17 08:27 master
-=======
-# Attempting push at 2016-10-17 08:27 v0.0.0.1
->>>>>>> Signed-off-by: stu p <stu_3881@yahoo.com>
+# 2016-10-21 deh This will be v0.0.0 l535i at 11:38
+
 
 # Laravel PHP Framework
 
