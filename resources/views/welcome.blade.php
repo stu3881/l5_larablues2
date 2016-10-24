@@ -75,7 +75,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel l5_larablues2
+                    Laravel l5_larablues2 master
                 </div>
 
                 <div class="links">
