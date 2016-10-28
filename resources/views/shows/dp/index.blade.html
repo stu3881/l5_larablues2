@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>jQuery UI Datepicker - Default functionality</title>
+ <!-- Datepicker Styles - Scripts  -->
+ <!-- 
+{{--
+{{ HTML::style('css/jquery-ui-1.10.3.custom.css') }}
+{{ HTML::style('css/jquery-ui-1.10.3.custom.min.css') }}
+{{ HTML::script('js/jquery-1.9.1.js') }}
+{{ HTML::script('js/jquery.ui.core.js') }}
+{{ HTML::script('js/jquery.ui.widget.js') }}
+{{ HTML::script('js/jquery.ui.datepicker.js') }}
+{{ HTML::link('/store/category/'.$cat->id, $cat->name) }}
+--}}
+-->
+
+<!--  
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+-->
+
+
+<!-- the next 2 uncommented work 5-30-14 -->
+<!-- 
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+-->
+
+
+<!-- Datepicker Styles - Scripts  -->
+<!-- 
+{{ HTML::style('css/jquery-ui-1.10.4.custom.css') }}
+{{ HTML::style('css/jquery-ui-1.10.4.custom.min.css') }}
+<link rel="stylesheet" src="jquery-ui-1.10.4.custom.css">
+<link rel="stylesheet" src='jquery-ui-1.10.4.custom.min.css'>
+
+<script src="//code.jquery.com/js/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="//code.jquery.com/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="/larablues/app/public/js/jquery-1.10.2.js"></script>
+<script src="/larablues/app/public/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="/larablues/app/public/js/jquery-ui-1.10.4.custom.min.js"></script>
+-->
+
+<!-- these next 5 work when I have them in the same directory as index.blade -->
+<!--  
+<link rel="stylesheet" src="jquery-ui-1.10.4.custom.css">
+<link rel="stylesheet" src='jquery-ui-1.10.4.custom.min.css'>
+<script src="jquery-1.10.2.js"></script>
+<script src="jquery-ui-1.10.4.custom.js"></script>
+<script src="jquery-ui-1.10.4.custom.min.js"></script>
+-->
+
+
+<!-- 
+{{--
+{{ HTML::script('js/jquery-1.10.2.js') }}
+{{ HTML::script('js/jquery-ui-1.10.4.custom.js') }}
+{{ HTML::script('js/jquery-ui-1.10.4.custom.min.js') }}
+--}
+-->
+
+<script>
+$(function() {
+	$( "#datepicker" ).datepicker();
+});
+</script>
+</head>
+<body>
+<p>Date: <input type="text" id="datepicker"></p>
+</body>
+</html>

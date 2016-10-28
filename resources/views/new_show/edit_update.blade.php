@@ -1,0 +1,1 @@
+@include('../'.'baseline_blades/edit_update')

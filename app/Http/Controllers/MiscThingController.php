@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\MiscThing;
+use App\Models\MiscThing;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

@@ -1,0 +1,170 @@
+@extends('layouts.main')
+
+@section('promo_original')
+	<section id="promo"> 
+  		<div id="promo-details"> 
+ 		 <h1>Today's Deals</h1> 
+              <p>Checkout this section of<br /> 
+               products at a discounted price.</p> 
+              <a href="#" class="default-btn">Shop Now</a> 
+        
+         {{ HTML::image('img/72ferrari246.jpg', 'ferarri pic logo',array('height'=>'272px'))}} 
+          
+        </div> <!-- end promo-details -->
+        </section><!-- promo -->
+@stop
+
+@section('promo')
+<section id="promo">     
+	<div id="promo-details"> 
+		{{ HTML::image('img/72ferrari246.jpg', 'ferarri pic logo',array('height'=>'272px'))}} 
+	</div> 
+</section>
+@stop
+
+@section('content')
+<div id="user-menu" >
+	larablues_www
+    @if(Auth::check())
+    
+			<nav class="dropdown">
+				@section('vertical_navigation_ul')
+					<div id="admin_nav_bar" style="width:500px">	
+						<div id="admin_nav_bar_center" style="width:400px;text-align:left;background-color:#F0E68C;">	
+							<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
+							<ul>
+								@if(Auth::user()->admin == 1)
+								<li>{{ HTML::link('admin/assignments', 'Manage Volunteer assignments for current show') }}</li>
+								<li>{{ HTML::link('admin/shows/getEdittaskassignments', 'Manage Shows') }}</li>
+								<li>{{ HTML::link('admin/volunteers', 'Manage Volunteers') }}</li>
+								<li>{{ HTML::link('admin/tasks', 'Manage tasks') }}</li>
+								<li>{{ HTML::link('nerds', 'Manage nerds') }}</li>
+								<li>{{ HTML::link('admin/miscThings', 'Manage miscThings') }}</li>
+								<li>
+									{{ Form::open(array('url'=>'admin/tasks/edit4', 'method'=>'GET')) }}
+									{{ Form::hidden('edit4_option','programmer_utilities_menu') }}
+									{{ Form::submit('programmer utilities') }}
+									{{ Form::close() }}
+								</li>
+								
+								@endif
+								<li>{{ HTML::link('users/signout', 'Sign Out') }}</li>
+								</ul>
+							</div>
+					</div>
+				@stop
+			</nav>
+    @else
+        <nav id="signin" class="dropdown" class="products">
+            <ul>
+                <li>
+                    <a href="#">{{ HTML::image('img/user-icon.gif', 'Sign In') }} Sign In {{ HTML::image('img/down-arrow.gif', 'Sign In') }}</a>
+                    <ul>
+                        <li>{{ HTML::link('users/signin', 'Sign In') }}</li>
+                        <li>{{ HTML::link('users/newaccount', 'Sign Up') }}</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    @endif
+    
+</div><!-- end user-menu -->
+@stop
+
+@section('NOTcontent0')
+	<h2>New Products</h2>
+    <hr>
+    <div id="products">
+    	@foreach($products as $product)
+        <div class="product">
+            <a href="/store/view/{{ $product->id }}">
+            	{{ HTML::image($product->image, $product->title, array('class'=>'feature', 'width'=>'240', 'height'=>'127')) }}
+            </a>
+
+            <h3><a href="/store/view/{{ $product->id }}">{{ $product->title }}</a></h3>
+
+            <p>{{ $product->description }}</p>
+
+            <h5>
+            	Availability: 
+            	<span class="{{ Availability::displayClass($product->availability) }}">
+            		{{ Availability::display($product->availability) }}
+            	</span>
+            </h5>
+
+            <p>
+                {{ Form::open(array('url'=>'store/addtocart')) }}
+                {{ Form::hidden('quantity', 1) }}
+                {{ Form::hidden('id', $product->id) }}
+                <button type="submit" class="cart-btn">
+                    <span class="price">${{ $product->price }}</span> 
+                    {{ HTML::image('img/white-cart.gif', 'Add to Cart') }} 
+                    ADD TO CART
+                </button>
+                {{ Form::close() }}
+            </p>
+        </div>
+        @endforeach
+    </div>
+@stop
+
+@section('NOTlinks')
+
+	<h3>For phone orders please call 1-800-000. You<br>can also email us at <a href="mailto:office@shop.com">office@shop.com</a></h3>
+
+
+	<div id="my-account">
+		<h4>MY ACCOUNT</h4>
+		<ul>
+		<li><a href="#">Sign In</a></li>
+		<li>{{ HTML::link('users/signin', 'Sign In') }}</li>
+		<li>{{ HTML::link('users/newaccount', 'Sign Up') }}</li>
+		<li>{{ HTML::link('stores/cart', 'Shopping Cart') }}</li>
+		</ul>
+	</div>
+		<!-- end my-account -->
+		
+	<div id="info">
+		<h4>INFORMATION</h4>
+		<ul>
+		<li><a href="#">Terms of Use</a></li>
+		<li><a href="#">Privacy Policy</a></li>
+		</ul>
+	</div>
+		
+		<!-- end info -->
+		
+	<div id="extras">
+		<h4>EXTRAS</h4>
+		<ul>
+		<li><a href="#">About Us</a></li>
+		<li>{{ HTML::link('/store/contact/','Contact Us') }}</li>
+		</ul>
+	</div>
+
+@stop
+
+
+
+@section('NOTstuff_in_footer')
+	<div id="copyright">
+		<div id="logo">
+			<a href="#"><span id="logo-accent">e</span>Commerce</a>
+		</div>
+		<!-- end logo -->
+		
+		<p id="store-desc">This is a short description of the store.</p>
+		<p id="store-copy">&copy; 2013 eCommerce. Theme designed by Adi Purdila.</p>
+	</div><!-- end copyright -->
+	<div id="connect">
+		<h4>CONNECT WITH US</h4>
+		<ul>
+		<li class="twitter"><a href="#">Twitter</a></li>
+		<li class="fb"><a href="#">Facebook</a></li>
+		</ul>
+	</div><!-- end connect -->
+	<div id="payments">
+		<h4>SUPPORTED PAYMENT METHODS</h4>
+		{{ HTML::image('img/payment-methods.gif','Supported Payment Methods')}}
+	</div><!-- end payments -->
+@stop

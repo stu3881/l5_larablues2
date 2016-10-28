@@ -1,0 +1,11 @@
+<tr>
+<td>#</td>
+<td>record_type</td>
+<td>table_name</td>
+<td>report_name</td>
+<td>modifiable_add_save_snippet</td>
+<td>modifiable_fields_array</td>
+<td>modifiable_fields_list</td>
+<td>modifiable_fields_putUpdate</td>
+<td>modifiable_fields_update_array_include</td>
+</tr>
