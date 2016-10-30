@@ -1,0 +1,1 @@
+<?php $rules = array( 'id' =>  'required', 'TaskName1' =>  'required', 'TaskType' =>  'required'); ?>

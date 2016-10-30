@@ -13,6 +13,7 @@
         return view('welcome');
     })->middleware('guest');
 */
+    Route::resource('main','MainController');
     Route::get('/', array('uses'=>'MainController@getIndex'));
     /*
     Route::get('/', function () {

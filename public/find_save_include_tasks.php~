@@ -1,0 +1,7 @@
+DB::table('tasks')->where('id','=',48)
+->update(array(
+'TaskName1' => Input::get('TaskName1'),
+'TaskName' => Input::get('TaskName'),
+'shift_id' => Input::get('shift_id'),
+'active_for_current_show' => Input::get('active_for_current_show'));
+

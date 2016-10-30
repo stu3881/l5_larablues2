@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MiscThing;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\MiscThing;
-use DB;
+
 class MainController extends Controller
 {
     /**
@@ -49,7 +51,8 @@ class MainController extends Controller
         $backup_node                    = "",  
         $generated_files_folder         = "",      
         $key_field_name                 = "", 
-        $bypassed_field_name            = ""
+        $bypassed_field_name            = "",
+        $record_type                    = "table_controller"
         ) {
     $this->middleware('auth');
 
@@ -59,89 +62,37 @@ class MainController extends Controller
 
     public function getIndex() 
     {
-        //$this->debug_exit(__FILE__,__LINE__);
-        $this->middleware('auth');
-        $query = $this->getMeTables("record_type");
-        return View::make('main.index')
-        ->with('queryx', $query);
+       $record_type                    = "table_controller";
+       echo($record_type." ");
+       $this->middleware('auth');
+
+        $queryx = $this->getMeTables($record_type);
+        echo($queryx[0]->model_table." <br>");
+        echo($queryx[1]->model_table." <br>");
+        echo($queryx[2]->model_table." <br>");
+        echo($queryx[3]->model_table." <br>");
+        echo($queryx[4]->model_table." <br>");
+        echo($queryx[5]->model_table." <br>");
+     
+        //return View::'main.index' ->with('queryx', $queryx);
+        return view('main.index',compact('queryx'));
+        //return View::make('main.index') ->with(compact($queryx));
+        //  ->with('queryx', $queryx);
     }
 
     public function getMeTables($record_type) {
-        //$this->debug_exit(__FILE__,__LINE__);
+      echo("getMeTables ".$record_type);
+      $miscThings = MiscThing::where('record_type','=','table_controller')
+      //->distinct('id','model_table')
+      ->distinct('model_table','id')
+      //->orderBy('model_table', 'desc')
+      ->get();
+      //->get(array('id','table_name'));
+       return $miscThings;
 
-        $field_name = "record_type";
-       $query = DB::connection($this->db_snippet_connection)
-       ->table($this->snippet_table)
-       ->distinct($field_name)
-       ->orderBy($field_name)
-       ->get(array($field_name));
-       // var_dump($query);$this->debug_exit(__FILE__,__LINE__,0);
-
-
-      return $query;
-
-        return View::make('main.index')
-        ->with('query', $query);
     }
 
-    public function getMeTablesOld($record_type) {
-        //$this->debug_exit(__FILE__,__LINE__);
 
-        $field_name = "record_type";
-       $query = DB::connection($this->db_snippet_connection)
-       ->table($this->snippet_table)
-       ->distinct($field_name)
-       ->orderBy($field_name)
-       ->get(array($field_name));
-       // var_dump($query);$this->debug_exit(__FILE__,__LINE__,0);
-
-       $field_name = "record_type";
-       $query = DB::connection($this->db_snippet_connection)
-       ->table($this->snippet_table)
-       ->distinct($field_name)
-       ->orderBy($field_name)
-       ->get(array($field_name));
-        //var_dump($query);$this->debug_exit(__FILE__,__LINE__,0);
-
-        $field_name = "record_type";
-        $value = "database_connection";
-        $query = DB::connection($this->db_snippet_connection)
-        ->table($this->snippet_table)
-        ->where($field_name,'=',$value)
-        //->distinct($distinct)
-        //->orderBy($field_name)
-        //->first()
-        ->get();
-        //var_dump($query);$this->debug_exit(__FILE__,__LINE__,1);
-
-        $field_name = "record_type";
-        $value = "report_definition";
-       $query = DB::connection($this->db_snippet_connection)
-       ->table($this->snippet_table)
-       ->where($field_name,'=',$value)
-       //->distinct($distinct)
-       ->orderBy($field_name)
-       ->get();
-         //var_dump($query);$this->debug_exit(__FILE__,__LINE__,1);
-
-        $field_name = "record_type";
-        $distinct = "node_name";
-        $distinct = "model_table";
-         
-        $value = "table_controller";
-       $query = DB::connection($this->db_snippet_connection)
-       ->table($this->snippet_table)
-       ->where($field_name,'=',$value)
-        ->distinct($distinct)
-       ->orderBy($distinct)
-       //->get(array($field_name,$distinct));
-       ->get();
-       //var_dump($query);$this->debug_exit(__FILE__,__LINE__,1);
-      return $query;
-
-        return View::make('main.index')
-        ->with('query', $query);
-    }
 
 
     public function index()

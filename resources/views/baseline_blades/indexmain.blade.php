@@ -59,6 +59,8 @@ else{
 		<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
 		<ul>
 		   	<?php //echo"fart";exit("exit 60");?>
+		   	<?php //echo"fart";exit("exit 60");?>
+		   	{{ $queryx[0]->node_name }}
 		<li>
 			{{ Form::open(array('url'=>'admin/miscThings', 'method'=>'GET')) }}
 			{{ Form::submit('Manage miscThings') }}

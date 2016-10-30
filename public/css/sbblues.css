@@ -1,0 +1,344 @@
+		/* *******************
+		 * 2011-07-04 deh
+		*
+		* We want to precisely position our fields on the screen
+		* But, we have have an image size which will vary from page to page.
+		*
+		* We also know that everything we're putting together will be into a
+		* fixed width field
+		*
+		* As a first cut, we set a few fixed variables and use them and the
+		* dynamic variables to compute all the others.
+		* e.g. the width of the title container = (fixed-width - img width)
+		*
+		* This means that these variable values have to be available when this
+		* page is loaded
+		*/
+
+#admin_nav_bar {
+	//width: 900px;
+	//height:400px;
+	margin-left: auto;
+ 	margin-right: auto;
+ 	background-color:#cecbe6; // blues society logo blue 
+	//background-color:yellow; // MediumOrchid 
+	}
+#admin_nav_bar_center {
+	width: 98%;
+	margin-left: auto;
+ 	margin-right: auto;
+ 	//background-color:red; // MediumOrchid 
+ 	//background-color:#BA55D3; // MediumOrchid 
+	}
+		
+#update_active_tasks {
+	top:0px;
+	width: 98%
+	//height:400px;
+	margin-left: auto;
+ 	margin-right: auto;
+ 	background-color:#BA55D3; // MediumOrchid medium dark purple
+	}
+#div_inside_update_active_tasks {
+	position: relative;
+	top:0px;
+	width: 98%;
+	margin-left: auto;
+ 	margin-right: auto;
+	//background-color: #FFF8DC;  //Cornsilk;
+	background-color: #B0E0E6;
+}
+	
+#div_inside_update_active_tasks_button_bar {
+	position:relative;
+	top:20px;
+	width: 98%;
+	margin-left: auto;
+ 	margin-right: auto;
+	background-color: #FFF8DC;  //Cornsilk;
+	background-color: #E9967A;  //darkSalmon;
+	//background-color: #B0E0E6;
+}
+	
+	
+.border_left td {
+	border-left: solid 5px green ;
+	}
+#div_center_only {
+	position: relative;
+	margin-left: auto;
+ 	margin-right: auto;
+	background-color: #B0E0E6;
+}
+
+#column_names_select_div {
+	margin-left: auto;
+ 	margin-right: auto;
+	width: 510px;
+	//height: 600px;
+	position:relative;
+	background-color: #98FB98;
+}
+
+
+.mycart-btn {
+    padding: 2px 2px 2px 2px;
+    background-color: #5daad0;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.mycart-btn10 {
+    padding: 2px 2px 2px 2px;
+    background-color: #cd853f;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.mycart-btn-row2 {
+    padding: 2px 2px 2px 2px;
+    background-color:  	#ADD8E6;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+select {
+	background-color: #dda0dd;	
+}
+.select_pink {
+	background-color: #ffc0cb;	
+	
+}
+ 
+
+.text_align_left{
+	text-align:left;
+}
+
+.text_align_right{
+	text-align:right;
+}
+
+.table_inside_update_active_tasks {
+	// if you want something centered, we need it's width
+	// (quit taking it out!!)
+	margin-left: auto;
+ 	margin-right: auto;
+	width:800px;
+	//overflow:auto;
+	//height:190%;
+	background-color: #FF8C00;  //dark orange
+	}
+.table_inside_update_active_tasks tr {
+	border-bottom: solid 1px black;
+	}
+.table_inside_update_active_tasks td {
+	border-left: solid 1px black;
+	border-right: solid 1px black;
+}
+
+
+
+.table_no_lines table {
+	margin-left: auto;
+ 	margin-right: auto;
+	width:95%;
+	padding: 2px 2px 2px 2px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	
+	// if you want something centered, we need it's width
+	// (quit fucking taking it out!!)
+	border:0;
+	background-color: #ff1493;
+	}
+.table_no_lines tr {
+	padding: 2px 2px 2px 2px;
+	border-bottom: solid 0px #ff7f50 ;
+	}
+.table_no_lines td {
+	padding: 2px 2px 2px 2px;
+	border-left: solid 0px green ;
+	}
+
+
+td. {
+	text-align:center;	
+	background-color:Red;	
+	}
+.task_title1 td{
+	text-align:center;
+	//height:25px;
+	//border-left: solid 0px black;
+	//background-color:LightSteelBlue;		    		
+	} 	
+.task_title1 tr{
+	//border-bottom: solid 0px black;
+	} 	
+
+.task_title1 input{
+	text-align:center;
+	background-color:#ffa500;
+	} 	
+
+.small_numeric td{
+	text-align:left;
+	//width: 80px;
+	}
+.small_numeric_50w td{
+	text-align:right;
+	width: 50px;
+	}
+label.small_numeric_50w {
+	text-align:right;
+	width: 50px;
+	}
+label.small_numeric_90w {
+	text-align:right;
+	width: 90px;
+	}
+.task_name {
+	background-color:Red;	
+}
+.task_active {
+	text-align:left;
+	background-color: LightBlue;
+}
+.task_not_active {
+	text-align:left;
+	background-color:Red;	
+}
+    	
+	td {
+		text-align:center;	
+		}
+	.task_name {
+		text-align:left;	
+		}
+	tr {
+		//border-bottom: solid 1px black;
+    	} 
+  
+	.no-border {
+		border-left: none;
+    	} 
+
+DIV.container {
+   margin-left: auto;
+   margin-right: auto;
+   width: 920px;
+   background-color: #FF1493;
+   // if you want something centered, we need it's width
+   // and that margin auto shit
+	}
+
+
+.bottom_row {
+	//color: #000;
+	//font-size: 12px;
+	//top: -0px;
+	//padding-top:0;
+	//padding-left:0;
+	//padding-right:0;
+	//margin-left:0;
+	//line-height: 1;
+	background-color: LightBlue;		    		
+	/*height: 20px;*/
+	//vertical-align: middle;
+	width:800px;
+	//text-align: center;
+	}	
+.bottom_buttons {
+	//color: #000;
+	//font-size: 12px;
+	//top: -0px;
+	//padding-top:0;
+	//padding-left:0;
+	//padding-right:0;
+	//margin-left:0;
+	//line-height: 1;
+	background-color: LightBlue;		    		
+	   /*height: 20px;*/
+	   //vertical-align: middle;
+	//width:300px;
+	//text-align: center;
+	}
+			
+#div0_main {
+	position: relative;
+	text-align: center;
+	align: center;
+	background-color: #e6e6fa;
+	//width: 99%;
+	margin-left: auto;
+ 	margin-right: auto;
+ 	//width: 6em
+	top: 0px;
+	left: 0px;
+	color: #000;
+	}
+	
+#date_picker_div {
+	position: relative;
+	text-align: center;
+	background-color: #e9d;
+	top: 100px;
+	left: 100px;
+	}
+#body_wrapper_div {
+	position: relative;
+	text-align: center;
+	background-color: #e9d;
+	width: 800px;
+	top: -1560px;
+	left: 550px;
+	background-color: #000;
+	height: 850px;
+	}
+
+#center_wrapper_div {
+	position: relative;
+	text-align: center;
+	/*	background-color: #0ff;*/
+	}
+#footer_wrapper_div {
+	position: relative;
+	border: 1;
+	text-align: center;
+	background-color: #888;
+	/*	background-color: #888;*/
+	width: 1186px;
+	height: 120px;
+	top: -1505px;
+	}
+#inner_wrapper_div {
+	position: relative;
+	text-align: center;
+	/*	background-color: #0c7;*/
+	}
+
+#left_side_wrapper_div {
+	position: relative;
+	/*
+	display: block;
+	margin-left: auto;
+	background-color: #c6f;
+	*/
+	left: 0px;
+	height: 1560px;
+	width: 550px;
+	}
+#outerwrapper_div {
+	text-align: center;
+	background-color: #f69;
+	//background-color: #222;
+	height: 590px;
+	width: 590px;
+	}
+		
+// ************
+// ************		
+		
+		

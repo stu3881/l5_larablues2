@@ -1,0 +1,26 @@
+<?php ?>
+<tr>
+<td style="text-align:left">
+{{ Form::label('active_for_current_show','active_for_current_show') }}
+</td>
+<td style="text-align:left">
+{{ Form::text('active_for_current_show', Input::get('active_for_current_show')) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label('id','id') }}
+</td>
+<td style="text-align:left">
+{{ Form::text('id', Input::get('id')) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label('shift_id','shift_id') }}
+</td>
+<td style="text-align:left">
+{{ Form::text('shift_id', Input::get('shift_id')) }}
+</td>
+</tr>
+
