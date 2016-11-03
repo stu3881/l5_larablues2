@@ -36,7 +36,7 @@ else{
 @section('promo')
 <section id="promo">     
 	<div id="promo-details-identity"> 
-	this is indexmain.blade in baseline_blades
+	indexmain
  	</div> 
  		<div id="promo-details"> 
 		{{-- HTML::image('img/Alfa120pct.JPG', '69 myalfa',array('height'=>'272px'))--}} 
@@ -58,23 +58,15 @@ else{
 	<div id="admin_nav_bar_center" style="width:400px;text-align:left;background-color:#F0E68C;">	
 		<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
 		<ul>
-		   	<?php //echo"fart";exit("exit 60");?>
-		   	<?php //echo"fart";exit("exit 60");?>
-		   	{{ $queryx[0]->node_name }}
-		<li>
-			{{ Form::open(array('url'=>'admin/miscThings', 'method'=>'GET')) }}
-			{{ Form::submit('Manage miscThings') }}
-			{{ Form::close() }}
-		</li>
+
 	   	@foreach($queryx as $query)
-		   	<?php //echo"fart";exit("exit 74");?>
 		   	<li>
 		   	@if ($passed_array)
-				{{ Form::open(array('url'=>'admin/'."$query->node_name", 'method'=>'GET')) }}
+				{{ Form::open(array('url'=>'admin/'."$query->node_name"."/getEdit11", 'method'=>'GET')) }}
 				{{ Form::submit('Manage '.$query->node_name) }}
 				{{ Form::close() }}
 		   	@else
-				{{ Form::open(array('url'=>'admin/'.$query->node_name, 'method'=>'GET')) }}
+				{{ Form::open(array('url'=>'admin/'.$query->node_name."/getEdit11", 'method'=>'GET')) }}
 				{{ Form::submit('Manage '.$query->model_table) }}
 				{{ Form::close() }}
 	   		@endif

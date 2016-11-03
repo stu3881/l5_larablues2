@@ -1,15 +1,28 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\MiscThing;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class MiscThingsController extends DEHBaseController
-{
-        public function __construct(
+use Storage;
+use Illuminate\Support\Facades\Schema; 
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\View;
+use App\Http\Requests;
+
+use DB;
+class MiscThingsController extends DEHBaseController {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function __construct(
      
         /**/
         $record_type                    = "table_controller", 
@@ -95,32 +108,36 @@ class MiscThingsController extends DEHBaseController
         //$this->debug_exit(__FILE__,__LINE__);
         $this->generated_snippets_array         = $this->get_generated_snippets();
         // generated_snippets are arrays that are generated when the properties
-
-
-
+        // of a report change
+        //print_r($this->generated_snippets_array);exit('exit 22');
+        //$this->report_nippets_array           = $this->decode_generated_snippets_by_record_type('table_snippets');
+        //$this->key_field_name_array           = array($this->key_field_name=>$this->key_field_name);
         $this->required_fields_array            = $this->generated_snippets_array['required_fields_array'];
         //echo $this->view_files_prefix ;exit ("exit in constructor");
 
+        // THIS IS HOWWE CHANGE CONNECTIONS
+        $this->snippet_table                    = "miscThings";
+        //$this->defaultConnection                = "defaultConnection";
+        $this->defaultConnection                = "blues_main";
+        //$this->defaultConnection                = "startup_dont_change";        
+        $ConnectionsQuery = DB::connection($this->defaultConnection)->table($this->snippet_table);
+        //$ConnectionsQuery = Select * from $this->snippet_table
+        $ConnectionsQuery = DB::table($this->snippet_table)
+         // i think this will use the one in config/database.php
+        ->where('record_type','=','database_connection')
+        //->where('db_connection_name' ,"=", $this->defaultConnection)
+        ->get();
+        //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
+        //$old_mask = "2016_04_25_175736";
+        //$new_mask = "2016_04_20_143513";
+        $this->migrations_path     = "/home/vagrant/code/l5_larablues/database/migrations/";
+        //$this->one_time_rename_file_mask("miscThings","node",$this->migrations_path,$old_mask,$new_mask);
 
-        // THIS IS HOW WE CHANGE CONNECTIONS
- 
-
-        $MiscThing = new MiscThing;
-        $MiscThing->setConnection("blues_main");
-        $miscThings = MiscThing::where('record_type','=','table_controller')
-            ->where('controller_name','='    ,"MiscThingsController")
-            ->get();
-        $this->db_snippet_connection            = $miscThings[0]->db_snippet_connection;
-        $this->db_data_connection               = $miscThings[0]->db_data_connection;
-        //echo("**".$this->db_snippet_connection ."**");
-        //echo("**".$this->db_data_connection . $miscThings[0]->db_connection_name. "**");
-        //var_dump($miscThings[0]);  
-
-        //$this->debug_exit(__FILE__,__LINE__,1);
+  
 
 
-
-
+        $this->db_snippet_connection            = $ConnectionsQuery[0]->db_snippet_connection;
+        $this->db_data_connection               = $ConnectionsQuery[0]->db_data_connection;
         $this->db_snippet_connection            = "blues_main";
         $this->db_data_connection               = "blues_main";
         //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
@@ -129,7 +146,7 @@ class MiscThingsController extends DEHBaseController
         //$this->db_data_connection               = "localhost_stu3881_main";
 
        
-        //$this->debug_exit(__FILE__,__LINE__,0);
+        //echo("exiting miscThings constructor");$this->debug_exit(__FILE__,__LINE__,0);
         $this->field_name_lists_array = $field_name_lists_array;
         $this->field_name_list_array = "";
  
@@ -139,45 +156,13 @@ class MiscThingsController extends DEHBaseController
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
      
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getEdit11() {
-        echo('getEdit11');echo($this->snippet_table_key_field_name);$this->debug_exit(__FILE__,__LINE__,1);
-        var_dump($this->field_name_list_array);
-       $record_type                    = "report_definition";
-       $miscThings = MiscThing::where('record_type','=',$record_type)
-         ->where('table_name','='    ,$this->model_table)
-        ->where('node_name','='     ,$this->node_name)
-        ->orderBy('report_name'     ,'asc')
-        ->get();
+    
 
-        return view('main.index',compact('queryx'));
-
-        $db_result = MiscThing::connection($this->db_snippet_connection)->table($this->snippet_table)
-        ->where('record_type','='   ,'report_definition')
-        ->where('table_name','='    ,$this->model_table)
-        ->where('node_name','='     ,$this->node_name)
-        ->orderBy('report_name'     ,'asc')
-        //->take(6)
-        ->get();
-        //echo("node_name ".$this->node_name);var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
-
-        $this->debug_exit(__FILE__,__LINE__,0);
-        return View::make($this->node_name.'.edit1')
-        //return View::make($this->node_name.'.edit1')
-            ->with('all_records'                ,$db_result)
-            ->with('encoded_report_description' ,json_encode($db_result))
-            ->with('node_name'                  ,$this->node_name)
-            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
-            ->with('snippet_table'                  ,$this->snippet_table)
-            ;
-        }
-    public function index()
+   
+     public function index()
     {
         //
+        $this->debug_exit(__FILE__,__LINE__);
     }
 
     /**
@@ -185,10 +170,6 @@ class MiscThingsController extends DEHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -198,7 +179,18 @@ class MiscThingsController extends DEHBaseController
      */
     public function store(Request $request)
     {
-        //
+        echo("controller store");exit("x");
+        $this->debug_exit(__FILE__,__LINE__);
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+        ]);
+
+        $request->user()->tasks()->create([
+            'name' => $request->name,
+        ]);
+
+        return redirect('/tasks');
     }
 
     /**
@@ -210,6 +202,7 @@ class MiscThingsController extends DEHBaseController
     public function show($id)
     {
         //
+        $this->debug_exit(__FILE__,__LINE__);
     }
 
     /**
@@ -220,7 +213,7 @@ class MiscThingsController extends DEHBaseController
      */
     public function edit($id)
     {
-        //
+         //$this->debug_exit(__FILE__,__LINE__);
     }
 
     /**
@@ -233,6 +226,7 @@ class MiscThingsController extends DEHBaseController
     public function update(Request $request, $id)
     {
         //
+        $this->debug_exit(__FILE__,__LINE__);
     }
 
     /**
@@ -244,5 +238,6 @@ class MiscThingsController extends DEHBaseController
     public function destroy($id)
     {
         //
+        $this->debug_exit(__FILE__,__LINE__);
     }
 }

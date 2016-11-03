@@ -15,9 +15,6 @@ use App\Http\Requests;
 
 use DB;
 
-//use App\Http\Controllers\Schema;
-//use Illuminate\Database\Schema;
-
 class DEHBaseController extends Controller
 {
     /**
@@ -6558,7 +6555,7 @@ public function merge_table_snippets_into_array($report_snippets_array) {
 	}
 
 	public function putUpdate() {
-		echo("putUpdate still in use ". Input::get('coming_from'));$this->debug_exit(__FILE__,__LINE__,0);
+		//echo("putUpdate still in use ". Input::get('coming_from'));$this->debug_exit(__FILE__,__LINE__,0);
 		//var_dump(Input::all());
 		//var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
 			        //$business_rules_relational_operators = $this->build_business_rules_relational_operators();

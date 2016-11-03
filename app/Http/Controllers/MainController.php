@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class MainController extends Controller
+class MainController extends DEHBaseController
 {
     /**
      * Display a listing of the resource.
@@ -63,32 +63,21 @@ class MainController extends Controller
     public function getIndex() 
     {
        $record_type                    = "table_controller";
-       echo($record_type." ");
        $this->middleware('auth');
-
+ 
         $queryx = $this->getMeTables($record_type);
-        echo($queryx[0]->model_table." <br>");
-        echo($queryx[1]->model_table." <br>");
-        echo($queryx[2]->model_table." <br>");
-        echo($queryx[3]->model_table." <br>");
-        echo($queryx[4]->model_table." <br>");
-        echo($queryx[5]->model_table." <br>");
-     
-        //return View::'main.index' ->with('queryx', $queryx);
+
         return view('main.index',compact('queryx'));
-        //return View::make('main.index') ->with(compact($queryx));
-        //  ->with('queryx', $queryx);
+      $this->debug_exit(__FILE__,__LINE__,0);
     }
 
     public function getMeTables($record_type) {
       echo("getMeTables ".$record_type);
       $miscThings = MiscThing::where('record_type','=','table_controller')
-      //->distinct('id','model_table')
-      ->distinct('model_table','id')
-      //->orderBy('model_table', 'desc')
+      ->distinct('node_name','id')
+      ->orderBy('node_name', 'asc')
       ->get();
-      //->get(array('id','table_name'));
-       return $miscThings;
+      return $miscThings;
 
     }
 
