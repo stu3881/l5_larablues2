@@ -1,0 +1,264 @@
+ 
+
+ select db_connection_name , db_host , db_database   , db_username,  db_password from miscThings where db_username IS NOT null;
+
+ +-------------------------+-----------------+--------------------+-------------+--------------+
+| db_connection_name      | db_host         | db_database        | db_username | db_password  |
++-------------------------+-----------------+--------------------+-------------+--------------+
+| gohoooa_stu3881_main    | 192.254.233.219 | stu3881_main       | stu3881     | 314NEW159ton |
+| localhost_stu3881_main  | 127.0.0.1       | stu3881_main       | root        |              |
+| gohoooa_stu3881_prst1   | 192.254.233.219 | stu3881_prst1      | stu3881     | 314NEW159ton |
+| localhost_stu3881_clone | 127.0.0.1       | stu3881_main_clone | root        |              |
+| connection_name         | host            | database           | username    | password     |
++-------------------------+-----------------+--------------------+-------------+--------------+
+
+update miscThings set db_database = 'blues_main', db_username='homestead', db_password = 'secret'
+where db_connection_name = 'localhost_stu3881_main'
+
+select * from miscThings where db_connection_name = 'localhost_stu3881_main';
+
+select db_connection_name , db_host , db_database   , db_username,  db_password from miscThings where db_connection_name = 'localhost_stu3881_main'
+
+ select db_connection_name, record_type from miscThings where db_connection_name is not NULL;
+
+ update miscThings set db_snippet_connection   = db_connection_name  where record_type = "database_connection";
+
+ update miscThings set db_data_connection   = "defaultConnection" where record_type = "database_connection";
+
+$users = DB::table('miscThings')->distinct('record_type')->get();
+
+CREATE TEMPORARY TABLE tmp SELECT * from miscThings WHERE ...;
+ALTER TABLE tmp drop pk_id; # drop autoincrement field
+# UPDATE tmp SET ...; # just needed to change other unique keys
+INSERT INTO my_table SELECT 0,tmp.* FROM tmp;
+DROP TEMPORARY TABLE tmp;
+
+CREATE TEMPORARY TABLE tmp SELECT * from miscThings WHERE id=8508
+
+INSERT INTO miscThings SELECT 0,tmp.* FROM tmp;
+DROP TEMPORARY TABLE tmp;
+
+		'blues_main' => array(
+			'driver' => 'mysql', 
+			'host' => '127.0.0.1', 
+			'database' => 'blues_main', 
+			'username' => 'homestead', 
+			'charset' => 'utf8', 
+			'collation' => 'utf8_unicode_ci', 
+			'prefix' => '', 
+			'password' => 'secret', 
+		),
+
+update miscThings set 
+ 	driver = 'mysql', 
+	host = '127.0.0.1', 
+	database = 'blues_main', 
+	username = 'homestead', 
+	charset = 'utf8', 
+	collation = 'utf8_unicode_ci', 
+	password = 'secret'
+where id = 8508;
+
+
+
+
+
+CREATE TEMPORARY TABLE tmptable_1 SELECT * FROM miscThings WHERE id = 8508;
+UPDATE tmptable_1 SET primarykey = NULL;
+INSERT INTO miscThings SELECT * FROM tmptable_1;
+DROP TEMPORARY TABLE IF EXISTS tmptable_1;
+
+created_at= current_timestamp()
+
+INSERT INTO miscThings(driver,
+	host,
+	database,
+	username,
+	charset,
+	collation,
+	password,
+	created_at)
+VALUES("mysql", 
+	"127.0.0.1", 
+	"blues_main", 
+	"homestead", 
+	"utf8", 
+	"utf8_unicode_ci", 
+	"secret",
+	current_timestamp());
+
+INSERT INTO miscThings( 
+	record_type,
+ 	driver,
+	host,
+	database,
+	username,
+	charset,
+	collation,
+	password)
+
+VALUES(
+	'database_connection','mysql','127.0.0.1', 
+	'blues_main', 
+	'homestead', 
+	'utf8', 
+	'utf8_unicode_ci', 
+	'secret');
+	,
+	current_timestamp());
+
+INSERT INTO miscThings 
+(record_type,driver,host,database,username,charset,collation,password,created_at)
+
+VALUES
+('database_connection','mysql','127.0.0.1','blues_main','homestead','utf8','utf8_unicode_ci','secret',current_timestamp())
+
+INSERT INTO miscThings 
+(record_type,created_at)
+
+VALUES
+('database_connection',current_timestamp())
+
+update miscThings SET 
+ 	db_driver = 'mysql',
+ 	db_host = '127.0.0.1', 
+	db_database = 'blues_main', 
+	db_username = 'homestead', 
+	db_charset = 'utf8', 
+	db_collation = 'utf8_unicode_ci', 
+	db_password = 'secret'
+
+	where id = 9046;
+
+SELECT
+id,
+record_type,
+db_connection_name,
+db_default,
+db_driver,
+db_host,
+db_database,
+db_username
+FROM miscThings
+where db_connection_name IS NOT NULL;
+
+select db_connection_name, record_type from miscThings where db_connection_name IS NOT NULL;
+
+db_charset,
+db_collation,
+db_prefix,
+db_schema ,
+db_password   
+
+update miscThings SET 
+	db_connection_name= 'blues_main',
+ 	db_driver = 'mysql',
+ 	db_host = '127.0.0.1', 
+	db_database = 'blues_main', 
+	db_username = 'homestead', 
+	db_charset = 'utf8', 
+	db_collation = 'utf8_unicode_ci', 
+	db_password = 'secret'
+
+	where id = 9046;
+
+	SELECT id, record_type, db_connection_name, db_default, db_driver, db_host, db_database, db_username FROM miscThings where db_connection_name IS NOT NULL;
+
+SELECT * FROM migrations WHERE migrations LIKE '%06-16%';
+
+mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues/homestead_all20160824.sql
+mysql -u homestead -psecret create database blues_main
+mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues/homestead_just_data20160824.sql
+
+Hi,
+
+I'm not sure what happened but I did a "php artisan migrate:status" from my vm and it showed no migrations at all!  "select * from migrations" showed the migrations table to be there.  file manager shows all the migrations to be there contradicting what migrate:status says. (22 in all)
+
+This worked once before but somehow something is 'out of sync' now, and i don't know how to fix it. 
+
+i have artisan running on the local machine as well as on the vm.
+there's a good chance i ran php artisan migrate from both places.
+
+i moved all the migrations somewhere else so my database/migrations folder was empty.
+
+(inside of projects/config/database.php)
+
+	//define_default_connection_anchor
+	 
+	'default' => 'blues_main',					// goes against the vm database
+	//'default' => 'localhost_stu3881_main',	// goes against the local database
+
+both of the connections work
+lots of the other documentation says this is all you have to do:
+
+		'migrations' => 'migrations',
+
+i had backups from mysqldump that i took from the vm so i 
+	delete database blues_main;
+	create database blues_main 
+and started over.  i had backed up my migrations folder elsewhere and emptied it
+
+	vagrant@homestead:~/code/l5_larablues$ php artisan migrate:install
+
+
+  [Illuminate\Database\QueryException]                                                                                                   
+  SQLSTATE[42000]: Syntax error or access violation: 1103 Incorrect table name '' (SQL: create table `` (`migration` varchar(255) not n  
+  ull, `batch` int not null) default character set utf8 collate utf8_unicode_ci)                                                         
+                                                                                                                                         
+
+                                                                                   
+  [PDOException]                                                                   
+  SQLSTATE[42000]: Syntax error or access violation: 1103 Incorrect table name ''  
+                                                                                   
+can anyone shed some light on this for me?
+thanks
+
+
+homestead_all20160824.sql
+ mysql -uhomestead -p  blues_main  < ~/code/l5_larablues/stu3881_main_schema.sql
+  mysql -uhomestead -p  blues_main  < ~/code/l5_larablues/homestead_all20160824.sql
+
+
+  grep -rnw 'config' -e "migrations"
+  --exclude=*.o
+
+ grep --exclude=storage -rnw 'l5_larablues' -e "migrations"
+/
+
+
+SELECT `FirstName` , `LastName` , `Status`
+FROM `maillist`
+ORDER BY `LastName` , `FirstName` 
+INTO OUTFILE '/tmp/orders.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+
+mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues/homestead_all20161011.sql
+mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues/homestead_all20161011data.sql
+
+ mysql -uhomestead -p  < ~/code/l5_larablues/homestead_all20161011.sql
+  mysql -uhomestead -p  blues_main  < ~/code/l5_larablues/homestead_all20160824.sql
+
+  mysql -uhomestead -p  < ~/code/l5_larablues/homestead_all20160910.sql
+    mysql -uhomestead -p  < ~/code/l5_larablues2/no99_homestead_all20161022.sql
+ 
+        'record_type' => 'required',
+        'report_name' => 'required'
+        'report_query' => 'required',
+        'bypassed_field_name' => 'required'
+        'report_containing_menu' => 'required',
+
+
+       'record_type' 
+        'report_name'
+        'report_query' 
+        'bypassed_field_name' 
+        'report_containing_menu'
+                                                
+                                              
+                                  
+       
+ select record_type, table_name from miscThings where record_type = 'table_controller';
+
+       

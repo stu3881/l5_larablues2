@@ -68,7 +68,7 @@ class MainController extends DEHBaseController
         $queryx = $this->getMeTables($record_type);
 
         return view('main.index',compact('queryx'));
-      $this->debug_exit(__FILE__,__LINE__,0);
+        //$this->debug_exit(__FILE__,__LINE__,0);
     }
 
     public function getMeTables($record_type) {
@@ -86,7 +86,13 @@ class MainController extends DEHBaseController
 
     public function index()
     {
-        //
+       $record_type                    = "table_controller";
+       $this->middleware('auth');
+       $queryx = $this->getMeTables($record_type);
+
+        return view('main.index',compact('queryx'));
+        //$this->debug_exit(__FILE__,__LINE__,0);
+
     }
 
     /**

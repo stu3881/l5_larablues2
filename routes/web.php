@@ -25,7 +25,11 @@
         $node_name              = 'miscThings';
         $controller_name        = 'MiscThingsController';
         Route::resource($node_name,$controller_name);
-    });
+     });
+    //$node_name              = 'miscThings';
+    //$controller_name        = 'MiscThingsController';
+    //Route::get('admin/'.$node_name.'/indexReports', array('uses'=>$controller_name.'@indexReports'))->name($node_name .'.indexReports');
+
  
     Route::auth();
 

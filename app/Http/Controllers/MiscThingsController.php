@@ -42,6 +42,7 @@ class MiscThingsController extends DEHBaseController
         {
         
         parent::__construct();
+        //$this->debug_exit(__FILE__,__LINE__,0); echo(" entering constructor");
 
         //$snippet_table = "miscThings";
         //$defaultConnection = "localhost_stu3881_main";
@@ -116,11 +117,7 @@ class MiscThingsController extends DEHBaseController
         //echo("**".$this->db_data_connection . $miscThings[0]->db_connection_name. "**");
         //var_dump($miscThings[0]);  
 
-        //$this->debug_exit(__FILE__,__LINE__,1);
-
-
-
-
+       
         $this->db_snippet_connection            = "blues_main";
         $this->db_data_connection               = "blues_main";
         //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
@@ -137,15 +134,17 @@ class MiscThingsController extends DEHBaseController
         // the first level index 
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
-     
+        //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
+ 
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function getEdit11() {
-        echo('getEdit11');echo($this->snippet_table_key_field_name);$this->debug_exit(__FILE__,__LINE__,1);
+    public function indexReports() {
+        echo('indexReports');echo($this->snippet_table_key_field_name);$this->debug_exit(__FILE__,__LINE__,0);
+        /*
         var_dump($this->field_name_list_array);
        $record_type                    = "report_definition";
        $miscThings = MiscThing::where('record_type','=',$record_type)
@@ -156,13 +155,7 @@ class MiscThingsController extends DEHBaseController
 
         return view('main.index',compact('queryx'));
 
-        $db_result = MiscThing::connection($this->db_snippet_connection)->table($this->snippet_table)
-        ->where('record_type','='   ,'report_definition')
-        ->where('table_name','='    ,$this->model_table)
-        ->where('node_name','='     ,$this->node_name)
-        ->orderBy('report_name'     ,'asc')
-        //->take(6)
-        ->get();
+
         //echo("node_name ".$this->node_name);var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
 
         $this->debug_exit(__FILE__,__LINE__,0);
@@ -174,10 +167,42 @@ class MiscThingsController extends DEHBaseController
             ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
             ->with('snippet_table'                  ,$this->snippet_table)
             ;
+            */
         }
     public function index()
     {
-        //
+        //echo('index');$this->debug_exit(__FILE__,__LINE__,1);
+        echo('index');$this->debug_exit(__FILE__,__LINE__,0);
+        
+        //var_dump($this->field_name_list_array);
+       $record_type                    = "report_definition";
+       $all_records = MiscThing::where('record_type','=',$record_type)
+         ->where('table_name','='    ,$this->model_table)
+        ->where('node_name','='     ,$this->node_name)
+        ->orderBy('report_name'     ,'asc')
+        ->get();
+
+        return view($this->node_name.'.edit1',compact('all_records'))
+            ->with('encoded_report_description' ,json_encode($all_records))
+            ->with('node_name'                  ,$this->node_name)
+            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
+            ->with('snippet_table'                  ,$this->snippet_table)
+            ;
+
+
+
+        //echo("node_name ".$this->node_name);var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
+
+        $this->debug_exit(__FILE__,__LINE__,0);
+        return View::make($this->node_name.'.edit1')
+        //return View::make($this->node_name.'.edit1')
+            ->with('all_records'                ,$db_result)
+            ->with('encoded_report_description' ,json_encode($db_result))
+            ->with('node_name'                  ,$this->node_name)
+            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
+            ->with('snippet_table'                  ,$this->snippet_table)
+            ;
+            
     }
 
     /**

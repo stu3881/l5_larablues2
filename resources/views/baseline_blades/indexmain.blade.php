@@ -58,20 +58,13 @@ else{
 	<div id="admin_nav_bar_center" style="width:400px;text-align:left;background-color:#F0E68C;">	
 		<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
 		<ul>
-
+		{{$queryx[0]->node_name}}
 	   	@foreach($queryx as $query)
 		   	<li>
-		   	@if ($passed_array)
-				{{ Form::open(array('url'=>'admin/'."$query->node_name"."/getEdit11", 'method'=>'GET')) }}
-				{{ Form::submit('Manage '.$query->node_name) }}
-				{{ Form::close() }}
-		   	@else
-				{{ Form::open(array('url'=>'admin/'.$query->node_name."/getEdit11", 'method'=>'GET')) }}
+				{{ Form::open(array('url'=>'admin/'.$query->node_name, 'method'=>'GET')) }}
 				{{ Form::submit('Manage '.$query->model_table) }}
 				{{ Form::close() }}
-	   		@endif
 		   	</li>
-	   	
 	   	@endforeach
 	
 		<li>
