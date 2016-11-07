@@ -61,7 +61,7 @@ else{
 		{{$queryx[0]->node_name}}
 	   	@foreach($queryx as $query)
 		   	<li>
-				{{ Form::open(array('url'=>'admin/'.$query->node_name, 'method'=>'GET')) }}
+				{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
 				{{ Form::submit('Manage '.$query->model_table) }}
 				{{ Form::close() }}
 		   	</li>

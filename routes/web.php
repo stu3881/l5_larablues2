@@ -9,31 +9,35 @@
 | by your application. Just tell Laravel the URIs it should respond
 | to using a Closure or controller method. Build something great!
 |
-   Route::get('/', function () {
-        return view('welcome');
-    })->middleware('guest');
+
 */
+    Route::get('/', array('uses'=>'MainController@getIndex'));
+
     Route::resource('books','BookController');
     //Route::resource('miscThings','MiscThingController');   
+    
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'main';
         $controller_name        = 'MainController';
         Route::resource($node_name,$controller_name);
     });
 
-    Route::group(array('prefix' => 'admin'), function() {
-        $node_name              = 'miscThings';
-        $controller_name        = 'MiscThingsController';
-        Route::resource($node_name,$controller_name);
-     });
-    //$node_name              = 'miscThings';
-    //$controller_name        = 'MiscThingsController';
-    //Route::get('admin/'.$node_name.'/indexReports', array('uses'=>$controller_name.'@indexReports'))->name($node_name .'.indexReports');
+    $node_name              = 'miscThings';
+    $controller_name        = 'MiscThingsController';
+    $method_name            = "indexReports";
+    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
+    $node_name              = 'miscThings';
+    $controller_name        = 'MiscThingsController';
+    $method_name            = "browseEdit";
+    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
+
+    $node_name              = 'miscThings';
+    $controller_name        = 'MiscThingsController';
+    $method_name            = "editUpdate";
+    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
  
     Route::auth();
-
-    Route::get('/', array('uses'=>'MainController@getIndex'));
 
 /*
     Route::controller('admin/main','MainController');

@@ -3145,36 +3145,6 @@ SQL;
 				//echo("<br><br>getEdit 182");
 		}
 	}
-		public function getEdit1() {
-		echo('getEdit1*');echo($this->snippet_table_key_field_name);$this->debug_exit(__FILE__,__LINE__,0);
-		//var_dump($this->field_name_list_array);
-//$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
-       //$this->field_name_list_array_first_index = $field_name_list_array_first_index;
-		$field_name_array = array();
-		//$field_name_array["$this->snippet_table_key_field_name"] 	= $this->snippet_table_key_field_name;
-		$field_name_array['report_name'] 						= 'report_name';
-		$field_name_array[$this->snippet_table_key_field_name] 	= $this->snippet_table_key_field_name;
-		
-		// get all report definitions
-		$db_result = DB::connection($this->db_snippet_connection)->table($this->snippet_table)
-		->where('record_type','='	,'report_definition')
-		->where('table_name','='	,$this->model_table)
-		->where('node_name','='		,$this->node_name)
-		->orderBy('report_name'		,'asc')
-		//->take(6)
-		->get();
-		//echo("node_name ".$this->node_name);var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
-
-		$this->debug_exit(__FILE__,__LINE__,0);
-		return View::make($this->node_name.'.edit1')
-		//return View::make($this->node_name.'.edit1')
-			->with('all_records'				,$db_result)
-			->with('encoded_report_description'	,json_encode($db_result))
-			->with('node_name'					,$this->node_name)
-			->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
-			->with('snippet_table'					,$this->snippet_table)
-			;
-		}
 			
 		public function Edit2defaultBrowse() {
 			echo("Edit2defaultBrowse");$this->debug_exit(__FILE__,__LINE__,1);
@@ -6555,7 +6525,7 @@ public function merge_table_snippets_into_array($report_snippets_array) {
 	}
 
 	public function putUpdate() {
-		//echo("putUpdate still in use ". Input::get('coming_from'));$this->debug_exit(__FILE__,__LINE__,0);
+		//gecho("putUpdate still in use ". Input::get('coming_from'));$this->debug_exit(__FILE__,__LINE__,0);
 		//var_dump(Input::all());
 		//var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
 			        //$business_rules_relational_operators = $this->build_business_rules_relational_operators();
