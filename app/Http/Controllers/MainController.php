@@ -36,7 +36,7 @@ class MainController extends DEHBaseController
         $bypassed_field_name            = "not_used"
         */
         // *******************************
-        $record_type                    = "", 
+        //$record_type                    = "", 
         $db_connection_name             = "", 
         $db_snippet_connection          = "",   
         $db_data_connection             = "",   
