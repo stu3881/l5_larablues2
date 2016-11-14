@@ -261,4 +261,4 @@ mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info 
        
  select record_type, table_name from miscThings where record_type = 'table_controller';
 
-       
+       mysql -uhomestead -p  < ~/code/l5_larablues2/no99_homestead_all20161022.sql    

@@ -136,23 +136,9 @@ $rowcount = -1;
 					{{ Form::close() }}
 				</td>		
 
-				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/'.$record->id.'/browseEdit', 'method'=>'GET')) }}
+	             <td><a href="{{route($node_name.'.browseEdit',$record->id)}}" class="btn btn-warning">browseEdit</a></td>
 
-					{{ Form::submit('browse_edit') }}
-
-					{{ Form::hidden('key_field_name'		,$record->key_field_name) }}
-					{{ Form::hidden('data_key'				,$record->id) }}
-					{{ Form::hidden('report_key'			,$record->$snippet_table_key_field_name) }}
-					{{ Form::hidden('model_table'			,$record->model_table) }}
-					{{ Form::hidden('node_name'				,$node_name) }}
-					{{ Form::hidden('report_name'			,$record->report_name) }}
-					{{ Form::hidden('coming_from'			,'edit1_browse_button') }}
-					{{ Form::hidden('what_we_are_doing'		,'browseEdit_build_default_browse') }}		
-
-					{{ Form::hidden('logical_button_name'	,'executing_and_displaying_a_browse') }}
-					{{ Form::close() }}
-				</td>
+	
 			</tr>
 				
 		@endforeach

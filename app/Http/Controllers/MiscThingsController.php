@@ -138,20 +138,40 @@ class MiscThingsController extends DEHBaseController
         $this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
  
     }
+
      /**
      * Execute the query and show the report you just requested
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function browseEdit() {
+    public function browseEdit($id) {
         
-        //echo(Input::get('what_we_are_doing'));
+         //echo("browseEdit<br>");
+        //var_dump($miscThings);
+        //$this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
+         $report_definition  = $this->execute_query_by_report_no($id);
+
+
+        return View::make($this->node_name.'.edit2_default_browse')
+            ->with('passed_to_view_array'   ,$passed_to_view_array);    
+
+ 
+    }
+
+     /**
+     * Execute the query and show the report you just requested
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function browseEditObolete() {
+         //echo(Input::get('what_we_are_doing'));
         //echo("browseEdit<br>");
         //var_dump($miscThings);
         //$this->debug_exit(__FILE__,__LINE__,0);
-//var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
-         $report_definition  = $this->execute_query_by_report_no($MiscThings->id);
+        $report_definition  = $this->execute_query_by_report_no($MiscThings->id);
         $ppv_array_names    = array('ppv_define_query','ppv_define_business_rules');
         $working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,$what_we_are_doing);
         //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
@@ -184,7 +204,7 @@ class MiscThingsController extends DEHBaseController
         $passed_to_view_array['encoded_business_rules_field_name_array'] = $report_definition[0]->business_rules_field_name_array;
         $passed_to_view_array['encoded_business_rules_r_o_array'] = $report_definition[0]->business_rules_r_o_array;
         $passed_to_view_array['encoded_business_rules_value_array'] = $report_definition[0]->business_rules_value_array;
-        //var_dump($passed_to_view_array['miscThings']); $this->debug_exit(__FILE__,__LINE__,1);
+        var_dump($passed_to_view_array['miscThings']); $this->debug_exit(__FILE__,__LINE__,1);
         //var_dump($laravel_snippets_array); $this->debug_exit(__FILE__,__LINE__,1);
         $passed_to_view_array['snippets_array'] = $laravel_snippets_array;
 
@@ -203,15 +223,28 @@ class MiscThingsController extends DEHBaseController
     {
         //
     }
+    public function execute_query_by_report_no($report_no) {
+        //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
+        //var_dump(Input::all());       
+    
+      $response_array = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
+        ->get();
 
+        if ($response_array){
+            return (array) $response_array;
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
  
-    public function index()
-    {
+    public function index(){
         //echo('index');$this->debug_exit(__FILE__,__LINE__,1);
         echo('index');$this->debug_exit(__FILE__,__LINE__,1);
         
@@ -229,22 +262,33 @@ class MiscThingsController extends DEHBaseController
             ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
             ->with('snippet_table'                  ,$this->snippet_table)
             ;
-
-
-
-        //echo("node_name ".$this->node_name);var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
-
-        $this->debug_exit(__FILE__,__LINE__,0);
-        return View::make($this->node_name.'.edit1')
-        //return View::make($this->node_name.'.edit1')
-            ->with('miscThings'                ,$db_result)
-            ->with('encoded_report_description' ,json_encode($db_result))
-            ->with('node_name'                  ,$this->node_name)
-            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
-            ->with('snippet_table'                  ,$this->snippet_table)
-            ;
             
     }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexRecords() {
+       echo(' indexRecords');$this->debug_exit(__FILE__,__LINE__,0);
+        
+        var_dump($this->node_name);
+       $record_type                    = "report_definition";
+       $miscThings = MiscThing::where('record_type','=',$record_type)
+         ->where('table_name',  '='    ,$this->model_table)
+        ->where('node_name',    '='    ,$this->node_name)
+        ->orderBy('report_name','asc')
+        ->get();
+
+        return view($this->node_name.'.indexRecords',compact('miscThings'))
+            ->with('encoded_report_description' ,json_encode($miscThings))
+            ->with('node_name'                  ,$this->node_name)
+            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
+            ->with('snippet_table'               ,$this->snippet_table)
+            ;
+        }
+
 
      /**
      * Display a listing of the resource.

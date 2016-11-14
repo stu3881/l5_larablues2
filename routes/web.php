@@ -22,17 +22,26 @@
         Route::resource($node_name,$controller_name);
     });
 
+    $node_name                = 'miscThings';
+    $model                    = 'miscThing';
+    $controller_name        = 'MiscThingsController';
+    $method_name            = "indexRecords";
+    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
     $node_name              = 'miscThings';
+    $model                    = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $node_name              = 'miscThings';
-    $controller_name        = 'MiscThingsController';
+      $model                    = 'miscThing';
+ $controller_name        = 'MiscThingsController';
     $method_name            = "browseEdit";
-    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
+    Route::get('admin/'.$node_name.'{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
 
     $node_name              = 'miscThings';
+   $model                    = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "editUpdate";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);

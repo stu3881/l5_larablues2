@@ -5736,11 +5736,11 @@ var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
 
 	public function execute_query_by_report_no($report_no) {
 		//echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-		//var_dump(Input::all());
-		$response_array = DB::connection($this->db_snippet_connection)->table($this->snippet_table)
-		->where($this->snippet_table_key_field_name, '=', $report_no)
+		//var_dump(Input::all());		
+    
+      $response_array = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
 		->get();
-			//$this->debug_exit(__FILE__,__LINE__,1);var_dump($response_array);
+
 		if ($response_array){
 			return (array) $response_array;
 		}
