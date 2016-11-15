@@ -147,17 +147,41 @@ class MiscThingsController extends DEHBaseController
 
     public function browseEdit($id) {
         
-         //echo("browseEdit<br>");
-        //var_dump($miscThings);
+         echo("browseEdit<br>");
+        var_dump($id);
         //$this->debug_exit(__FILE__,__LINE__,0);
         //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)
+        ->get();
+        //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
+        $passed_to_view_array = array();
+        $encoded_business_rules_field_name_array = array();
+        $field_names_array = array();
+
+        if ($miscThings){
+         return view('miscThings.edit2_default_browse',compact('miscThings'))
+             ->with('model_table'                ,$this->model_table)
+             ->with('generated_files_folder'    , $this->generated_files_folder)
+             ->with('report_key'    , $id)
+            ->with('field_names_array'    , $field_names_array)
+            ->with('key_field_name'    , 'id')
+
+           ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
+
+            ->with('passed_to_view_array'    , $passed_to_view_array)
+             ->with('node_name'                  ,$this->node_name);
+
+
+         return view('miscThings.edit2_default_browse',$miscThings);
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
          $report_definition  = $this->execute_query_by_report_no($id);
-
-
-        return View::make($this->node_name.'.edit2_default_browse')
-            ->with('passed_to_view_array'   ,$passed_to_view_array);    
-
- 
+        //var_dump($report_definition[0]);       
+       return view('miscThings.edit2_default_browse',$report_definition);
     }
 
      /**
@@ -231,7 +255,7 @@ class MiscThingsController extends DEHBaseController
         ->get();
 
         if ($response_array){
-            return (array) $response_array;
+            return $response_array;
         }
         else {
             echo 'you have a fatal error<br>';

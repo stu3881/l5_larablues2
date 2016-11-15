@@ -5734,22 +5734,6 @@ var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
 		}
 	}
 
-	public function execute_query_by_report_no($report_no) {
-		//echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-		//var_dump(Input::all());		
-    
-      $response_array = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-		->get();
-
-		if ($response_array){
-			return (array) $response_array;
-		}
-		else {
-			echo 'you have a fatal error<br>';
-			$this->debug_exit(__FILE__,__LINE__,1);
-		}
-	}
-
 
 	public function getEdit8_build_ppv_3_array	() {
 		// *****************
