@@ -124,12 +124,11 @@
 			@foreach($miscThings as  $record)
 				<?php 
 				$rowcount++;
-				$record = (array) $record;
-				//var_dump($record );
-				//exit("exit edit2_default_browse at 121");
-
+				//$record = (array) $record;
+				//var_dump($record );exit("exit edit2_default_browse at 121");
+				//echo("record type". $record->record_type);
+				//var_dump($record[0] );exit("exit edit2_default_browse at 121");
 				?>
-				<tr >
 					<td class='border_left'>
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit2new', 'method'=>'PUT')) }}
 						{{ Form::label('', $rowcount) }} 
@@ -138,13 +137,18 @@
 					
 				<?php 
 				/*
+				@include("../".$node_name.'/'.$generated_files_folder.'/'.$report_key.'_snippet_string')
+				we're trying to replace this (above) so we don't have to maintain a file
 				echo($passed_to_view_array['browse_select_loop_str']); 
+				the snippet_string includes needs $data_array_name
+				@include("../baseline_blades/". "displays_array_of_fields.blade")
+				the trouble with this approach is that you have to define the prefine and suffix strings and define an array of field names
+				we're going back to 
 				*/
 				?>
-				@include("../".$node_name.'/'.$generated_files_folder.'/'.$report_key.'_snippet_string')
-				@include("../baseline_blades/". "partial_view")
 				
-	
+				
+		@include("../".$node_name.'/'.$generated_files_folder.'/'.$report_key.'_snippet_string')
 
 	<!--
 		the buttons at the end of the line

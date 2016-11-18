@@ -1,4 +1,6 @@
-# 2016-10-21 deh This will be master l535i at 15:54
+# 2016-11-17 deh This is one of my first attempts at building and updating a laravel project on github
+
+# IT DOES NOT WORK!
 
 
 # Laravel PHP Framework

@@ -150,29 +150,28 @@ class MiscThingsController extends DEHBaseController
          echo("browseEdit<br>");
         var_dump($id);
         //$this->debug_exit(__FILE__,__LINE__,0);
-        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
+       // $report_definition  = $this->execute_query_by_report_no($id);
+       $report_definition = MiscThing::where('id','=',$id)
+          ->get();
+        var_dump($report_definition[0]);$this->debug_exit(__FILE__,__LINE__,10);
 
         $miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)
         ->get();
         //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
-        $passed_to_view_array = array();
-        $encoded_business_rules_field_name_array = array();
+       $encoded_business_rules_field_name_array = array();
         $field_names_array = array();
 
         if ($miscThings){
-         return view('miscThings.edit2_default_browse',compact('miscThings'))
-             ->with('model_table'                ,$this->model_table)
-             ->with('generated_files_folder'    , $this->generated_files_folder)
-             ->with('report_key'    , $id)
-            ->with('field_names_array'    , $field_names_array)
-            ->with('key_field_name'    , 'id')
-
-           ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
-
-            ->with('passed_to_view_array'    , $passed_to_view_array)
-             ->with('node_name'                  ,$this->node_name);
-
-
+            $passed_to_view_array = build_report_def_arrays($miscThings);
+             return view('miscThings.edit2_default_browse',compact('miscThings'))
+                ->with('model_table'                ,$this->model_table)
+                ->with('generated_files_folder'    , $this->generated_files_folder)
+                ->with('report_key'    , $id)
+                ->with('field_names_array'    , $field_names_array)
+                ->with('key_field_name'    , 'id')
+                ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
+                ->with('passed_to_view_array'    , $passed_to_view_array)
+                ->with('node_name'                  ,$this->node_name);
          return view('miscThings.edit2_default_browse',$miscThings);
         }
         else {
@@ -184,58 +183,68 @@ class MiscThingsController extends DEHBaseController
        return view('miscThings.edit2_default_browse',$report_definition);
     }
 
-     /**
-     * Execute the query and show the report you just requested
+    /**
+     * get data necessary for reporting and load it into a single array
+     * copied from putEdit2new
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
 
-    public function browseEditObolete() {
-         //echo(Input::get('what_we_are_doing'));
-        //echo("browseEdit<br>");
-        //var_dump($miscThings);
-        //$this->debug_exit(__FILE__,__LINE__,0);
-        $report_definition  = $this->execute_query_by_report_no($MiscThings->id);
-        $ppv_array_names    = array('ppv_define_query','ppv_define_business_rules');
-        $working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,$what_we_are_doing);
-        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,10);
-        $fieldName_r_o_value_array = $this->load_array_for_query_from_working_array($working_arrays);
-        //var_dump($working_arrays); $this->debug_exit(__FILE__,__LINE__,1);
-        $query_relational_operators_array = $this->build_query_relational_operators_array();
+    public function build_report_def_arrays() {
+        echo("build_report_def_arrays");$this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump(Input::all());
+       switch ($what_we_are_doing) { 
+            case "editing_a_data_record":
+                //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,1);
+                $report_definition  = $this->execute_query_by_report_no(Input::get('report_key'));
+                $modifiable_fields_array = $this->decode_object_field_to_array($report_definition[0],'modifiable_fields_array');
 
-        $db_result = $this->build_and_execute_query($fieldName_r_o_value_array,$this->bypassed_field_name,$query_relational_operators_array);
-        //$db_result = json_encode($db_result);
-        //$db_result = json_decode($db_result,1);
-        //var_dump($report_definition[0]->modifiable_fields_array); var_dump($db_result); $this->debug_exit(__FILE__,__LINE__,1);
-        //$laravel_snippets_array = $this->browse_select_blade_gen($this->model,         json_decode($report_definition[0]->modifiable_fields_array,1),'version4');
-        //var_dump($browse_select_loop_str); $this->debug_exit(__FILE__,__LINE__,1);
-        $passed_to_view_array = array();
-        //$passed_to_view_array['input'] = 'x';
-        $passed_to_view_array['input']              = Input::all();
-        $passed_to_view_array['encoded_input']      = json_encode(Input::all());
-        $passed_to_view_array['snippet_name']       ='_browse_select_display_snippet';
-        $passed_to_view_array['report_definition']  = $report_definition[0];
-        $passed_to_view_array['encoded_report_definition'] =json_encode($report_definition[0]);             
-        $passed_to_view_array['key_field_name']     = $this->key_field_name;
-        $passed_to_view_array['miscThings_obj']    = $db_result;
-        $strx                                       = json_encode($db_result);
-        //$passed_to_view_array['browse_select_loop_str']       = $browse_select_loop_str;
-        $passed_to_view_array['miscThings']        = json_decode($strx,1);
-        $passed_to_view_array['field_names_array']  = $working_arrays['maintain_browse_fields']['browse_select_array'];
+                //$arrr0 = $this->gen_lookup_name_value_array_data($this->model_table);
+                $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
 
+                //var_dump($lookups_array); $this->debug_exit(__FILE__,__LINE__,0);
 
-        $passed_to_view_array['generated_files_folder'] = $this->generated_files_folder;
-        $passed_to_view_array['encoded_business_rules_field_name_array'] = $report_definition[0]->business_rules_field_name_array;
-        $passed_to_view_array['encoded_business_rules_r_o_array'] = $report_definition[0]->business_rules_r_o_array;
-        $passed_to_view_array['encoded_business_rules_value_array'] = $report_definition[0]->business_rules_value_array;
-        var_dump($passed_to_view_array['miscThings']); $this->debug_exit(__FILE__,__LINE__,1);
-        //var_dump($laravel_snippets_array); $this->debug_exit(__FILE__,__LINE__,1);
-        $passed_to_view_array['snippets_array'] = $laravel_snippets_array;
+                $xxx_array = $this->gen_lookup_name_value_array_datax($this->model_table);
+                //$lookups_array = $this->gen_lookup_name_value_array_datax('shows');
+                $lookups_array = array_merge($lookups_array,$xxx_array);
+                //var_dump(Input::all());var_dump($lookups_array); $this->debug_exit(__FILE__,__LINE__,1);
+                //$data = $db_result[0];
+                $data = "";
+                $db_result  = $this->refresh_data_record_if_adding($what_we_are_doing,$data,$modifiable_fields_array); 
 
-        return View::make($this->node_name.'.edit2_default_browse')
-            ->with('passed_to_view_array'   ,$passed_to_view_array);    
+                //var_dump($modifiable_fields_array);
+                //var_dump($lookups_array);
+                //var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,01);
 
- 
+                $snippet_string = $this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,
+                    $lookups_array,$db_result[0]);
+
+                $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".Input::get('report_key').'_snippet_string.blade.php';
+                $this->add_delete_add_file_as_string($fnam,$this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,
+                    $lookups_array,$db_result[0]));
+
+                $strx       = json_encode($db_result);
+                //$db_result = json_encode($db_result);
+                //$db_result = json_decode($db_result,1);
+                //echo "<br><br>".$snippet_string;$this->debug_exit(__FILE__,__LINE__,1);
+                //var_dump($snippet_string);var_dump($db_result); $this->debug_exit(__FILE__,__LINE__,1);
+                
+                $passed_to_view_array = array();
+                //$passed_to_view_array['input'] = 'x';
+                //$passed_to_view_array['input']                = Input::all();
+                $passed_to_view_array['encoded_modifiable_fields_array'] = json_encode($modifiable_fields_array);
+                $passed_to_view_arra2newy['data_key']                       = Input::get('data_key');
+                $passed_to_view_array['encoded_input']                  = Input::get('encoded_input');
+                $passed_to_view_array['snippet_name']                   ='_modifiable_fields_getEdit_snippet';
+                $passed_to_view_array['report_definition']              = $report_definition[0];
+                $passed_to_view_array['record']                         = $db_result[0];
+                $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
+                $passed_to_view_array['snippet_string']                 = $snippet_string;      
+                $passed_to_view_array['lookups_array']                  = $lookups_array;       
+            default:
+                $this->debug_exit(__FILE__,__LINE__,1);
+                break;
+            }
     }
 
     /**
