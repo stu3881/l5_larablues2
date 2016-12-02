@@ -95,7 +95,7 @@ class MiscThingController extends Controller
     public function update(Request $request,$id)
     {
        //
-$this->validate($request, 
+        $this->validate($request, 
             [ 
         'record_type' => 'required',
         'report_name' => 'required',
@@ -104,9 +104,9 @@ $this->validate($request,
         'report_containing_menu' => 'required'
         ]);
 
-$miscThingUpdate=$request->all(); // important!!
-$miscThing=MiscThing::find($id);
-$miscThings->update($miscThingUpdate);
+        $miscThingUpdate=$request->all(); // important!!
+        $miscThing=MiscThing::find($id);
+        $miscThings->update($miscThingUpdate);
  
        return redirect('miscThings');
     }

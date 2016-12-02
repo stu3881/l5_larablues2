@@ -62,8 +62,12 @@ else{
 	   	@foreach($queryx as $query)
 		   	<li>
 				{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
+				{{ Form::hidden('what_are_we_doing','what_are_we_doing') }}
 				{{ Form::submit('Manage '.$query->model_table) }}
 				{{ Form::close() }}
+		   	</li>
+		   	<li>
+	             	<a href="{{route($query->node_name.'/indexReports')}}" class="btn btn-warning">reportDefEdits</a>
 		   	</li>
 	   	@endforeach
 	

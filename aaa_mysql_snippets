@@ -259,6 +259,12 @@ mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info 
                                               
                                   
        
- select record_type, table_name from miscThings where record_type = 'table_controller';
+ select record_type, report_name, table_name from miscThings where record_type = 'table_controller';
+  select record_type, report_name, snippet_name, snippet_table_key_field_name, table_name from miscThings where record_type is not null and where table_name = 'miscThings';
+snippet_name, snippet_table_key_field_name,
 
        mysql -uhomestead -p  < ~/code/l5_larablues2/no99_homestead_all20161022.sql    
+
+       	// no99_homestead_all20161130 has example database
+      	mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues2/no99_homestead_all20161130.sql
+		mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues2/no99_homestead_all20161130data.sql

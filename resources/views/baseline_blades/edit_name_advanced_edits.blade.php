@@ -83,15 +83,12 @@
 			<td>	
 				<!-- modifiable fields -->
 
-				{{ Form::open(array('url'=>'admin/'.$node_name.'/edit41'	,'method'=>'PUT')) }}
-				{{ Form::hidden('logical_button_name'					,'maintain_modifiable_fields') }}
-				
+				{{ Form::open(array('url'=>'admin/'.$node_name.'/edit41','method'=>'PUT')) }}
+				{{ Form::hidden('logical_button_name'					,'maintain_modifiable_fields') }}	
 				{{ Form::hidden('what_we_are_doing'						,'maintain_modifiable_fields') }}
 				{{ Form::hidden('edit4_option'							,'field_list_select') }}	
 				{{ Form::hidden('report_key'							, Input::get('report_key')) }}
-
-				{{ Form::hidden('encoded_working_arrays'					,$encoded_working_arrays) }}
-				{{-- Form::hidden('encoded_column_names'					,$encoded_column_names) --}}
+				{{ Form::hidden('encoded_working_arrays'				,$encoded_working_arrays) }}
 				{{ Form::hidden('encoded_record'						,$encoded_record) }}
 
 				{{ Form::submit('define_modifiable_fields', array('class'=>'mycart-btn-row2')) }}

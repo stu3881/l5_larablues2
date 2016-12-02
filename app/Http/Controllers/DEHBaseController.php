@@ -60,7 +60,75 @@ class DEHBaseController extends Controller
 			exit(" exiting");
 		}
 	}
+	
 
+	public function build_query_relational_operators_array() {
+		$query_relational_operators_array = array();
+		$query_relational_operators_array[] =  "=";
+		$query_relational_operators_array[] =  "<>";
+		$query_relational_operators_array[] =  "<";
+		$query_relational_operators_array[] =  "<=";
+		$query_relational_operators_array[] =  ">";
+		$query_relational_operators_array[] =  ">=";
+		$query_relational_operators_array[] =  "join";
+		$query_relational_operators_array[] =  "where";
+		$query_relational_operators_array[] =  "whereBetween";
+		$query_relational_operators_array[] =  "whereIn";
+		$query_relational_operators_array[] =  "whereNotIn";
+		$query_relational_operators_array[] =  "whereNull";
+		$query_relational_operators_array[] =  "whereNotNull";
+		$query_relational_operators_array[] =  "groupBy";
+		$query_relational_operators_array[] =  "orderBy";
+		$query_relational_operators_array[] =  "orderByDesc";
+		$query_relational_operators_array[] =  "getArray";
+		$query_relational_operators_array[] =  "distinct";
+		return $query_relational_operators_array;
+	}
+	
+	public function build_business_rules_relational_operators() {
+		$business_rules_relational_operators	= 		array();
+		$business_rules_relational_operators[] =		"required";
+		$business_rules_relational_operators[] =		"accepted";
+		$business_rules_relational_operators[] =		"active_url";
+		$business_rules_relational_operators[] =		"after:YYYY-MM-DD";
+		$business_rules_relational_operators[] =		"before:YYYY-MM-DD";
+		$business_rules_relational_operators[] =		"alpha";
+		$business_rules_relational_operators[] =		"alpha_dash";
+		$business_rules_relational_operators[] =		"alpha_num";
+		$business_rules_relational_operators[] =		"array";
+		$business_rules_relational_operators[] =		"between:1,10";
+		$business_rules_relational_operators[] =		"confirmed";
+		$business_rules_relational_operators[] =		"date";
+		$business_rules_relational_operators[] =		"date_format:YYYY-MM-DD";
+		$business_rules_relational_operators[]	= 		"different:fieldname";
+		$business_rules_relational_operators[] =		"digits:value";
+		$business_rules_relational_operators[] =		"digits_between:min,max";
+		$business_rules_relational_operators[] =		"boolean";
+		$business_rules_relational_operators[] =		"email";
+		$business_rules_relational_operators[] =		"exists:table,column";
+		$business_rules_relational_operators[] =		"image";
+		$business_rules_relational_operators[] =		"in:foo,bar,...";
+		$business_rules_relational_operators[] =		"not_in:foo,bar,...";
+		$business_rules_relational_operators[] =		"integer";
+		$business_rules_relational_operators[] =		"numeric";
+		$business_rules_relational_operators[] =		"ip";
+		$business_rules_relational_operators[] =		"max:value";
+		$business_rules_relational_operators[] =		"min:value";
+		$business_rules_relational_operators[] =		"mimes:jpeg,png";
+		$business_rules_relational_operators[] =		"regex:[0-9]";
+		$business_rules_relational_operators[] =		"required_if:field,value";
+		$business_rules_relational_operators[] =		"required_with:foo,bar,...";
+		$business_rules_relational_operators[] =		"required_with_all:foo,bar,...";
+		$business_rules_relational_operators[] =		"required_without:foo,bar,...";
+		$business_rules_relational_operators[] =		"required_without_all:foo,bar,...";
+		$business_rules_relational_operators[] =		"same:field";
+		$business_rules_relational_operators[] =		"size:value";
+		$business_rules_relational_operators[] =		"timezone";
+		$business_rules_relational_operators[] =		"unique:table,column,except,idColumn";
+		$business_rules_relational_operators[] =		"url";
+		return $business_rules_relational_operators;
+	}
+	
 
 	
 	public function get_generated_snippets() {

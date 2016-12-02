@@ -58,10 +58,18 @@ class MainController extends DEHBaseController
 
     }
 
+    public function debug_exit($file,$line,$exit=1) {
+        echo " "."in ".substr($file,strripos ($file , "/")+1)." on line **".$line." ";
+        if ($exit){
+            exit(" exiting");
+        }
+    }
+    
     // *** these were copied from the original MainController ***
 
     public function getIndex() 
     {
+        $this->debug_exit(__FILE__,__LINE__,10);
        $record_type                    = "table_controller";
        $this->middleware('auth');
  
@@ -88,6 +96,7 @@ class MainController extends DEHBaseController
     {
        $record_type                    = "table_controller";
        $this->middleware('auth');
+       echo ("index<br>");
        $queryx = $this->getMeTables($record_type);
 
         return view('main.index',compact('queryx'));

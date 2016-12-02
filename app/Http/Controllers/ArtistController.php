@@ -70,6 +70,43 @@ class ArtistController extends DEHBaseController {
         //
     }
 
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexReports(REQUEST $request) {
+       $this->debug_exit(__FILE__,__LINE__,10);echo(' indexReports');
+       //var_dump($request);
+        var_dump($this->node_name);
+       $record_type                    = "report_definition";
+       $miscThings = MiscThing::where('record_type','=',$record_type)
+         ->where('table_name',  '='    ,$this->model_table)
+        ->where('node_name',    '='    ,$this->node_name)
+        ->orderBy('report_name','asc')
+        ->get();
+       $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
+       $what_we_are_doing = 'displaying_advanced_edits_screen';
+       $working_arrays     = $this->working_arrays_construct($miscThings,$ppv_array_names,$what_we_are_doing);
+       $record = $miscThings[0];
+        return view($this->node_name.'.indexReports',compact('miscThings'))
+            ->with('encoded_report_description' ,json_encode($miscThings))
+            ->with('encoded_record' ,json_encode($record))
+            ->with('encoded_working_arrays' ,json_encode($working_arrays))
+            ->with('record'                     ,$record)
+            ->with('all_records'                ,$miscThings)
+           
+            ->with('report_key'                  ,$request->input('report_key'))
+            ->with('node_name'                  ,$this->node_name)
+            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
+            ->with('snippet_table'               ,$this->snippet_table)
+            ;
+        }
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *
