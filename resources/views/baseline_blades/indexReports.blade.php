@@ -147,7 +147,7 @@ $rowcount = -1;
 				?>
 				<tr >
 				<td class='border_left'>
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/edit41', 'method'=>'PUT')) }}
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'PUT')) }}
 					{{ Form::label('', $rowcount) }} 
 				</td>
 

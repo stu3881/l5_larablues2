@@ -23,30 +23,24 @@
     });
 
 
- 
+     
+    Route::group(array('prefix' => 'admin'), function() {
+        $node_name              = 'miscThings';
+        $controller_name        = 'MiscThingsController';
+        Route::resource($node_name,$controller_name);
+    });
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "browseEdit";
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
 
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
-    $method_name            = "putEdit41";
-    Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
-
+ 
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "editUpdate";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
-
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
-    $method_name            = "index";
-    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
@@ -70,7 +64,7 @@
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "reportDefEdits";
-    Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+    Route::put('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
 
 

@@ -69,18 +69,18 @@ class MainController extends DEHBaseController
 
     public function getIndex() 
     {
-        $this->debug_exit(__FILE__,__LINE__,10);
        $record_type                    = "table_controller";
        $this->middleware('auth');
  
         $queryx = $this->getMeTables($record_type);
-
-        return view('main.index',compact('queryx'));
+        $this->debug_exit(__FILE__,__LINE__,0);
+ 
+        return view('main.indexmain',compact('queryx'));
         //$this->debug_exit(__FILE__,__LINE__,0);
     }
 
     public function getMeTables($record_type) {
-      echo("getMeTables ".$record_type);
+      //echo("getMeTables ".$record_type);
       $miscThings = MiscThing::where('record_type','=','table_controller')
       ->distinct('node_name','id')
       ->orderBy('node_name', 'asc')

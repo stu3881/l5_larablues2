@@ -4,6 +4,7 @@
 
 //echo ($queryx[0]->record_type);
 //"exit("exit 4");
+//var_dump($queryx[0]);exit("exit 4");
 /*
 
 var_dump($queryx[1]);exit("exit 4");
@@ -58,17 +59,21 @@ else{
 	<div id="admin_nav_bar_center" style="width:400px;text-align:left;background-color:#F0E68C;">	
 		<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
 		<ul>
-		{{$queryx[0]->node_name}}
+		{{--$queryx[0]->node_name--}}
 	   	@foreach($queryx as $query)
-		   	<li>
-				{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
-				{{ Form::hidden('what_are_we_doing','what_are_we_doing') }}
-				{{ Form::submit('Manage '.$query->model_table) }}
-				{{ Form::close() }}
-		   	</li>
-		   	<li>
-	             	<a href="{{route($query->node_name.'/indexReports')}}" class="btn btn-warning">reportDefEdits</a>
-		   	</li>
+	   		{{  $query->node_name }}
+	   		@if($query->node_name == "miscThings")	
+			   	<li>
+					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
+					{{ Form::hidden('what_are_we_doing','what_are_we_doing') }}
+					{{ Form::submit('Manage '.$query->model_table) }}
+					{{ Form::close() }}
+			   	</li>
+			   	<li>
+		             	<a href="{{route($query->node_name.'.indexReports')}}" class="btn btn-warning">reportDefEdits</a>
+			   	</li>
+			@endif						
+
 	   	@endforeach
 	
 		<li>

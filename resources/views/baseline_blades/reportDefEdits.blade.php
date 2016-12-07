@@ -50,7 +50,7 @@
 	<br>
 		
 		for table {{$node_name}}
-		
+		 {{ csrf_field() }}
 		{{-- Form::open(array('url'=>'admin/'.$input['node_name'].'/update', 'method'=>'PUT','class'=>'table_inside_update_active_tasks')) --}}
 		
 		<p>		
