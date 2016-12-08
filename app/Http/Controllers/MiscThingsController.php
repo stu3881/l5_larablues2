@@ -136,7 +136,7 @@ class MiscThingsController extends DEHBaseController
         // the first level index 
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
-       //var_dump(Request $request);
+       //var_dump($request);
         $this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
  
     }
@@ -627,6 +627,9 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             ->with('node_name'                  ,$this->node_name)
             ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
             ->with('snippet_table'                  ,$this->snippet_table)
+            ->with('model_table'                  ,$this->snippet_table)
+            
+            
             ;
             
     }

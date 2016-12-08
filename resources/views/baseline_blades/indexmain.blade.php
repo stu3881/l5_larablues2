@@ -61,17 +61,33 @@ else{
 		<ul>
 		{{--$queryx[0]->node_name--}}
 	   	@foreach($queryx as $query)
-	   		{{  $query->node_name }}
+	   		{{--  $query->node_name --}}
 	   		@if($query->node_name == "miscThings")	
 			   	<li>
 					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
-					{{ Form::hidden('what_are_we_doing','what_are_we_doing') }}
+					{{ Form::hidden('what_we_are_doing','going to indexReports') }}
 					{{ Form::submit('Manage '.$query->model_table) }}
 					{{ Form::close() }}
 			   	</li>
 			   	<li>
-		             	<a href="{{route($query->node_name.'.indexReports')}}" class="btn btn-warning">reportDefEdits</a>
+					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
+					{{ Form::hidden('what_we_are_doing','going to indexReports') }}
+					{{ Form::submit('indexReports '.$query->model_table) }}
+					{{ Form::close() }}
 			   	</li>
+	   		<!--
+			   	<li>
+					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
+					{{ Form::hidden('what_we_are_doing','what_we_are_doing') }}
+					{{ Form::submit('Manage '.$query->model_table) }}
+					{{ Form::close() }}
+			   	</li>
+			-->
+			<li>
+			<!-- notice laravel is bypassed -->
+	             	<a href="{{--route($query->node_name.'.indexReports')--}}" class="btn btn-warning">indexReports</a>
+			   	</li>
+			
 			@endif						
 
 	   	@endforeach

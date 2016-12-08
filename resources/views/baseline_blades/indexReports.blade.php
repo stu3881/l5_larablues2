@@ -103,7 +103,7 @@ $rowcount = -1;
 				</td><td>	
 					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
 					{{ Form::hidden('model_table',$model_table) }}
-					{{ Form::hidden('id',$id) }}
+					{{-- Form::hidden('id',$id) --}}
 
 					{{ Form::hidden('node_name',$node_name) }}
 					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}

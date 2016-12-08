@@ -51,13 +51,13 @@
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $method_name            = "indexReports";
+    $method_name            = "indexReportsx";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $method_name            = "indexReportsx";
+    $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
     
     $node_name              = 'miscThings';
