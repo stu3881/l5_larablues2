@@ -103,7 +103,7 @@ $rowcount = -1;
 				</td><td>	
 					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
 					{{ Form::hidden('model_table',$model_table) }}
-					{{-- Form::hidden('id',$id) --}}
+					{{ Form::hidden('id',$all_records[0]->id) }}
 
 					{{ Form::hidden('node_name',$node_name) }}
 					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}
@@ -147,7 +147,10 @@ $rowcount = -1;
 				?>
 				<tr >
 				<td class='border_left'>
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'PUT')) }}
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
+     {{-- Form::hidden('_method','PUT') --}}
+    {{ Form::hidden('_token','csrf_token') }}
+
 					{{ Form::label('', $rowcount) }} 
 				</td>
 

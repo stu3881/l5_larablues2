@@ -626,10 +626,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             ->with('encoded_report_description' ,json_encode($miscThings))
             ->with('node_name'                  ,$this->node_name)
             ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
-            ->with('snippet_table'                  ,$this->snippet_table)
-            ->with('model_table'                  ,$this->snippet_table)
-            
-            
+            ->with('snippet_table'                ,$this->snippet_table)
+            ->with('model_table'                  ,$this->model_table)         
             ;
             
     }
@@ -772,8 +770,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     public function reportDefEdits(Request $request){
         echo('<br>this used to be putEdit41'.
             "<br>we moved it to indexReports");//$this->debug_exit(__FILE__,__LINE__,0);
-        echo("<br>".$request->Input('what_are_we_doing')); 
-        echo("<br>".$request->Input('what_we_are_doing')); 
+        echo("<br>what_are_we_doing".$request->Input('what_are_we_doing')); 
+        echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
         echo("<br>the request: reportDefEdits"); var_dump($request);
 
         $this->debug_exit(__FILE__,__LINE__,10);

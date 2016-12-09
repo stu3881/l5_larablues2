@@ -64,7 +64,7 @@
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "reportDefEdits";
-    Route::put('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+    Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
 
 
