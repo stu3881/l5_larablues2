@@ -1,10 +1,10 @@
 <tr>
 <td style="text-align:left">
-{{ Form::label('repert_name','report_name') }}
+{{ Form::label('report_name','report_name') }}
 </td>
 <td style="text-align:left">
-{{-- Form::text('report_name',  $record[0]['report_name']) --}}
-{{ Form::text('report_name',  $record->report_name) }}
+{{ Form::text('report_name',  $record[0]['report_name']) }}
+{{-- Form::text('report_name',  $record->report_name) --}}
 
 
 </td>

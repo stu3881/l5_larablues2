@@ -85,7 +85,7 @@ else{
 			-->
 			<li>
 			<!-- notice laravel is bypassed -->
-	             	<a href="{{--route($query->node_name.'.indexReports')--}}" class="btn btn-warning">indexReports</a>
+	             	<a href="{{route($query->node_name.'.indexReports')}}" class="btn btn-warning">indexReports</a>
 			   	</li>
 			
 			@endif						

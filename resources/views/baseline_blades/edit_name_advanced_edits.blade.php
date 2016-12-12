@@ -12,18 +12,6 @@
 
 ?>
 <div id="admin" style="width:750px">
-	@if($errors->has())	
-	<div id="form-errors">
-		<p>The following errors have occurred:</p>
-		<ul>
-			@foreach($errors->all() as $error)
-				<li>{{$error}}</li>
-			@endforeach
-		</ul>
-		uuuuuuuuuuuuuuuuuuuuuu
-	</div> 
-	<!-- end form-errors -->			
-	@endif
 	
 	</p>
 <!--  
@@ -87,7 +75,7 @@
 				{{ Form::hidden('logical_button_name'					,'maintain_modifiable_fields') }}	
 				{{ Form::hidden('what_we_are_doing'						,'maintain_modifiable_fields') }}
 				{{ Form::hidden('edit4_option'							,'field_list_select') }}	
-				{{ Form::hidden('report_key'							, Input::get('report_key')) }}
+				{{ Form::hidden('report_key'							, $request->Input('report_key')) }}
 				{{ Form::hidden('encoded_working_arrays'				,$encoded_working_arrays) }}
 				{{ Form::hidden('encoded_record'						,$encoded_record) }}
 
@@ -103,7 +91,7 @@
 
 				{{ Form::hidden('edit4_option'							,'field_list_select') }}
 				{{ Form::hidden('what_we_are_doing'						,'maintain_browse_fields') }}	
-				{{ Form::hidden('report_key'							, Input::get('report_key')) }}
+				{{ Form::hidden('report_key'							, $request->Input('report_key')) }}
 
 				{{ Form::hidden('encoded_working_arrays'					,$encoded_working_arrays) }}
 				{{-- Form::hidden('encoded_column_names'					,$encoded_column_names) --}}
@@ -119,7 +107,7 @@
 				{{ Form::hidden('logical_button_name'						,'ppv_define_query') }}
 				{{ Form::hidden('edit4_option'							,'field_list_select') }}
 				{{ Form::hidden('what_we_are_doing'						,'ppv_define_query') }}			
-				{{ Form::hidden('report_key'							, Input::get('report_key')) }}
+				{{ Form::hidden('report_key'							, $request->Input('report_key')) }}
 					
 				{{ Form::hidden('encoded_working_arrays'				,$encoded_working_arrays) }}
 				{{-- Form::hidden('encoded_column_names'				,$encoded_column_names) --}}
@@ -127,7 +115,7 @@
 
 				{{ Form::hidden('report_snippet_array_name'				,'required_fields_array') }}
 				{{ Form::hidden('generated_snippets_array'				,'report_snippets_array') }}
-				{{ Form::hidden('report_name'							,Input::get('report_name')) }}
+				{{ Form::hidden('report_name'							,$request->Input('report_name')) }}
 		
 				{{ Form::hidden('field_list_array_name'					,'required_fields_array') }}
 				{{ Form::submit('advanced_query'						, array('class'=>'mycart-btn-row2')) }}
@@ -141,7 +129,7 @@
 				{{ Form::hidden('logical_button_name'					,'ppv_define_business_rules') }}
 				{{ Form::hidden('edit4_option'							,'field_list_select') }}
 				{{ Form::hidden('what_we_are_doing'						,'ppv_define_business_rules') }}	
-				{{ Form::hidden('report_key'							, Input::get('report_key')) }}
+				{{ Form::hidden('report_key'							, $request->Input('report_key')) }}
 	
 				{{ Form::hidden('encoded_working_arrays'				,$encoded_working_arrays) }}
 				{{-- Form::hidden('encoded_column_names'				,$encoded_column_names) --}}
@@ -149,7 +137,7 @@
 				
 				{{ Form::hidden('report_snippet_array_name'				,'required_fields_array') }}
 				{{ Form::hidden('generated_snippets_array'				,'report_snippets_array') }}
-				{{ Form::hidden('report_name'							,Input::get('report_name')) }}
+				{{ Form::hidden('report_name'							,$request->Input('report_name')) }}
 				
 				{{ Form::hidden('field_list_array_name'					,'required_fields_array') }}
 				{{ Form::submit('business_rules'						, array('class'=>'mycart-btn-row2')) }}

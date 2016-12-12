@@ -662,7 +662,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexReports(REQUEST $request) {
+    public function indexReports(REQUEST $request,$id) {
        $this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
        //var_dump($request);
         var_dump($this->node_name);
@@ -767,14 +767,14 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      * @return \Illuminate\Http\Response
      */
 
-    public function reportDefEdits(Request $request){
+    public function reportDefEdits(Request $request,$id){
         echo('<br>this used to be putEdit41'.
             "<br>we moved it to indexReports");//$this->debug_exit(__FILE__,__LINE__,0);
-        echo("<br>what_are_we_doing".$request->Input('what_are_we_doing')); 
+        echo("<br>id ".$id); 
         echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
-        echo("<br>the request: reportDefEdits"); var_dump($request);
+        //echo("<br>the request: reportDefEdits"); var_dump($request);
 
-        $this->debug_exit(__FILE__,__LINE__,10);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //$this->reportDefEdits20161128($request);
 
         //case "maintain_modifiable_fields":
@@ -786,7 +786,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         $column_names_array         = json_decode($request->Input('encoded_column_names'),1);
         $working_arrays             = json_decode($request->Input('encoded_working_arrays'),1);
         //$record = json_decode($request->Input('encoded_record'));
-        //var_dump(Input::all());var_dump($record);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($request->Input('encoded_column_names'));$this->debug_exit(__FILE__,__LINE__,10);
         $node       = $this->node_name;
 
         if (!empty($request->Input('what_we_are_doing'))) {
@@ -799,25 +799,36 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 case "updating_report_name":
                     var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
                 case "displaying_advanced_edits_screen":
-                    //var_dump($record);$this->debug_exit(__FILE__,__LINE__,0);
+                    //var_dump($record);$this->debug_exit(__FILE__,__LINE__,10);
                     // we do all the io in the first case 'displaying_advanced_edits_screen'
                     // and pass encoded strings to the other buttons who cycle them around as Input
-                    $record             = $this->execute_query_by_report_no($request->Input('report_key'));
+                    $miscThings             = $this->execute_query_by_report_no($request->Input('report_key'));
                     //$record = json_encode($record);
                     //$record = json_decode($record,1);
                     $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
                     $working_arrays     = $this->working_arrays_construct($record,$ppv_array_names,$what_we_are_doing);
                     //$this->debug_exit(__FILE__,__LINE__,0);var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-                    return View::make($this->model_table.'.edit_name_advanced_edits')
-                        ->with('record'                             ,(array) $record)
-                        ->with('encoded_record'                     ,json_encode($record))
+                    //return View::make($this->model_table.'.edit_name_advanced_edits'    ,compact('miscThings'))
+                    return view('miscThings.edit_name_advanced_edits'    ,compact('miscThings'))
+                       ->with('record'                              ,$miscThings)
+                        ->with('encoded_record'                     ,json_encode($miscThings))
                         ->with('encoded_working_arrays'             ,json_encode($working_arrays))
-                        //->with('encoded_column_names'             ,json_encode($column_names))    
+                        ->with('request'                            ,$request)    
                         ->with('node_name'                          ,$this->node_name)
                         ->with('model_table'                        ,$this->model_table)
                         ->with('snippet_table'                      ,$this->snippet_table)
                     ;
-                    break;
+         return view('miscThings.reportDefEdits'    ,compact('miscThings'))
+            ->with('model_table'                  ,$this->model_table)
+            ->with('generated_files_folder'     , $this->generated_files_folder)
+            ->with('report_key'                   , $id)
+            ->with('field_names_array'            , $field_names_array)
+            ->with('key_field_name'               , 'id')
+            //->with('encoded_business_rules_field_name_array'    ,                             //$encoded_business_rules_field_name_array)
+            ->with('data_array_name'    , $passed_to_view_array)
+            ->with('record'                     , $miscThings[0])
+            ->with('node_name'                  ,$this->node_name);
+                     break;
                 case "maintain_modifiable_fields":
                 case "maintain_browse_fields":
 

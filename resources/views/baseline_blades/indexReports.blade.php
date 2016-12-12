@@ -148,9 +148,6 @@ $rowcount = -1;
 				<tr >
 				<td class='border_left'>
 					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-     {{-- Form::hidden('_method','PUT') --}}
-    {{ Form::hidden('_token','csrf_token') }}
-
 					{{ Form::label('', $rowcount) }} 
 				</td>
 
@@ -159,9 +156,6 @@ $rowcount = -1;
 				
 				
 				<!--	the buttons at the end of the line -->
-	             <td>
-	             	<a href="{{route($node_name.'.reportDefEdits',$record->id,'displaying_advanced_edits_screen')}}" class="btn btn-warning">reportDefEdits</a>
-	             </td>
 				<td >
 					{{ Form::hidden('coming_from','edit1') }}
 					{{ Form::hidden('report_key',$record->$snippet_table_key_field_name) }}
@@ -183,7 +177,8 @@ $rowcount = -1;
 					{{-- Form::hidden('key_field_name',$record->key_field_name) --}}
 					{{ Form::submit('delete') }}
 					{{ Form::close() }}
-				</td>		<td >
+				</td>		
+				<td >
 					{{ Form::open(array('url'=>'admin/'.$node_name.'/edit2', 'method'=>'GET')) }}
 
 					{{ Form::submit('browse_edit') }}
