@@ -603,6 +603,55 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     }
 
 
+    public function getEdit8_array_node_to_array($array) {
+        // *****************
+        // this converts encoded_strings to arrays
+        // ****************
+
+            $array['ppv_define_query']['lookups']['field_names']                = '';
+            $array['ppv_define_query']['lookups']['relational_operators']  = '';
+            $array['ppv_define_query']['lookups'][0]                        = '';
+            $array['ppv_define_query']['lookups'][1]                        = '';
+            
+
+            $array['ppv_define_query']['lookups']['field_names']            = '';
+            $array['ppv_define_query']['lookups']['relational_operators']  = '';
+            $array['ppv_define_query']['lookups'][0]                        = '';
+            $array['ppv_define_query']['lookups'][1]                        = '';
+            
+
+        foreach ($array as $field) {
+            if (is_null($field))    {
+                $array[$field] =  array();
+            }
+            /*
+            else{
+                $array[$field] =  json_decode($field);
+            }
+            */
+        }
+        return $array;
+
+        var_dump($arr);exit("xit 4420");
+    }
+
+    public function getEdit8_decode_array_to_array($record,$encoded_string) {
+        // *****************
+        // this converts encoded_strings to arrays
+        // ****************
+
+        //var_dump($encoded_string);
+        if (is_null($record[0][$encoded_string]))   {
+            $arr = array();
+        }else{
+            $arr =  (array) json_decode($record[0][$encoded_string],1);
+        }
+        return $arr;
+
+        var_dump($arr);exit("xit 4420");
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -768,10 +817,11 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      */
 
     public function reportDefEdits(Request $request,$id){
-        echo('<br>this used to be putEdit41'.
-            "<br>we moved it to indexReports");//$this->debug_exit(__FILE__,__LINE__,0);
+        echo('<br>this is reportDefEdits '.'<br>this used to be putEdit41'.
+            "<br>we moved it to indexReports");$this->debug_exit(__FILE__,__LINE__,10);
         echo("<br>id ".$id); 
-        echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
+        //echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
+        echo("<br>what_we_are_doing".$request->Input('report_key')); 
         //echo("<br>the request: reportDefEdits"); var_dump($request);
 
         //$this->debug_exit(__FILE__,__LINE__,10);
@@ -1056,202 +1106,148 @@ public function build_and_execute_query($fieldName_r_o_value_array,
 
 
     }//else{exit("exit3026");}
-
-    }
+        }
 
     //$request->input('name_of_field');
 }
 
-
-/**
- * 4 functions maintain 4 entities
- *
- * @param  \Illuminate\Http\Request  $request
- * @return \Illuminate\Http\Response
- */
-
-public function reportDefEdits20161128($id){
-    echo(" reportDefEdits<br>");
-    $misc_text_area_0 = "displaying_advanced_edits_screen";
-    var_dump($id);
-    $this->debug_exit(__FILE__,__LINE__,0);
-    $what_we_are_doing = "edit2_build_default_browse";
-    $column_names_array = (array) $this->build_column_names_array($this->model_table);
-    //$field_names_array = json_decode($values_array['encoded_field_name_array'],1);
-
-    //var_dump($report_definition);
-    $miscThings = MiscThing::where('id','=',$id)->get();
-    $miscThings[0]->misc_text_area_0 =  $misc_text_area_0;
-   var_dump($miscThings[0]);
-    $this->debug_exit(__FILE__,__LINE__,0);
-
-    if ($miscThings){
-        $passed_to_view_array = $this->build_report_def_arrays($miscThings);
-
-       $ppv_array_names    = array('ppv_define_query','ppv_define_business_rules');
-       $working_arrays     = $this->working_arrays_construct($miscThings,$ppv_array_names,$what_we_are_doing);
-    //var_dump($working_arrays);
-    //$this->debug_exit(__FILE__,__LINE__,10);
-
-        $lookups = array();
-        $lookups['field_name'] = $column_names_array;
-        $lookups['r_o'] = $this->build_business_rules_relational_operators();
-        $two_mbr_names_for_lookups      = array();
-        $two_mbr_names_for_lookups[]    = 'field_name';
-        $two_mbr_names_for_lookups[]    = 'r_o';
-
-
-         return view('miscThings.reportDefEdits'    ,compact('miscThings'))
-            ->with('model_table'                  ,$this->model_table)
-            ->with('generated_files_folder'     , $this->generated_files_folder)
-            ->with('report_key'                   , $id)
-            ->with('field_names_array'            , $field_names_array)
-            ->with('key_field_name'               , 'id')
-            //->with('encoded_business_rules_field_name_array'    ,                             //$encoded_business_rules_field_name_array)
-            ->with('data_array_name'    , $passed_to_view_array)
-            ->with('record'                     , $miscThings[0])
-            ->with('node_name'                  ,$this->node_name);
-         //return view('miscThings.edit2_default_browse',$miscThings);
-        }
-
-    }
-
-
     /**
-     * Store a newly created resource in storage.
+     * 4 functions maintain 4 entities
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function reportDefMenuUpdate(Request $request,$id){
+        echo('<br>reportDefMenuUpdate <br>this used to be putEdit41'.
+            $this->node_name.
+            "<br>we moved it to indexReports and then here");
+        $this->debug_exit(__FILE__,__LINE__,0);
+        echo("<br>id ".$id); 
+         //echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
+       // //echo("<br>the request: reportDefEdits"); var_dump($request);
+        $record=MiscThing::find($id);
+       var_dump($id);
+        return view($this->node_name.'.reportDefMenuUpdate'    ,compact('record'))
+        ->with('model'                            ,$this->model)
+        ->with('node_name'                        ,$this->node_name)
+       ;
+
+    //$request->input('name_of_field');
+}
+
     public function show($id)
     {
         //
+        $this->debug_exit(__FILE__,__LINE__,0);
     }
 
+
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function update(Request $request, $id)
     {
         //
     }
+
     /**
-     * Show the form for editing the specified resource.
+     * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editUpdate($id)
+    public function destroy($id)
     {
-       $miscThing=MiscThing::find($id);
-       return view('miscThings.editUpdate',compact('miscThing'));
+        //
     }
+            public function working_arrays_construct($record,$ppv_array_names,$what_we_are_doing) {
+            //echo("working_arrays_construct");
+            $working_arrays     = $this->working_arrays_build($record);
+            $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+            $column_names       = $this->build_column_names_array($this->model_table);
+            $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
+            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+            $working_arrays     = $this->working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays);
+            switch ($what_we_are_doing) {
+                case "edit2_build_default_browse":
+                    //just need assignments from record
+                    //$this->debug_exit(__FILE__,__LINE__,0);var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+    
+                    break;
+                default:
+                    //$column_names         = $this->build_column_names_array($this->model_table);
+                    //$working_arrays   = $this->working_arrays_populate_lookups($working_arrays,$column_names);
+                    //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+                    break;
 
-
-   public function showRequest(Request $request) {
-        
-        var_dump($request);
-       echo('showRequest');$this->debug_exit(__FILE__,__LINE__,0);
-         }
-
-
-    public function working_arrays_construct($record,$ppv_array_names,$what_we_are_doing) {
-        //echo("working_arrays_construct");
-        $working_arrays     = $this->working_arrays_build($record);
-        $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
-        $column_names       = $this->build_column_names_array($this->model_table);
-        $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-        //echo("working_arrays_construct");var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-        $working_arrays     = $this->working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays);
-        switch ($what_we_are_doing) {
-            case "edit2_build_default_browse":
-                //just need assignments from record
-                //$this->debug_exit(__FILE__,__LINE__,0);var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-
-                break;
-            default:
-                //$column_names         = $this->build_column_names_array($this->model_table);
-                //$working_arrays   = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-                //echo("working_arrays_construct");var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-                break;
-
+            }
+            return $working_arrays;
         }
-        return $working_arrays;
-    }
 
-    public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
-        
-        foreach ($ppv_array_names as $what_we_are_doing){
-            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
-            $pop_or_fill = "f";
-            $fill_ctr = $this->no_of_blank_entries;
-            //echo(count($working_arrays[$what_we_are_doing]['field_name_array']));$this->debug_exit(__FILE__,__LINE__,01);
-            foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $field_name=>$array_name){
-                //each of these has the name of one of the arrays we're processing
-                //$this->debug_exit(__FILE__,__LINE__,0);echo($field_name.'**'.'<br>'); //var_dump($array_name);
-                if ($field_name == 'field_name'){
-                    //echo($array_name.' * this is a field_name*<br>');
-                    $pop_or_fill = "f";
-                    // this column decides the size of the arrays
-                    if (is_array($working_arrays[$what_we_are_doing][$array_name])){
-                        $arr = array_count_values($working_arrays[$what_we_are_doing][$array_name]);
-                        //$this->debug_exit(__FILE__,__LINE__,0);
-                        //echo('*&*'.count($working_arrays[$what_we_are_doing]['field_name_array']).'*&*'.'bypassed_field_name = '.$this->bypassed_field_name .'***');
-                        //$this->debug_exit(__FILE__,__LINE__,0);
-                        //var_dump($working_arrays[$what_we_are_doing][$array_name] );
-                        if (array_key_exists($this->bypassed_field_name, $arr)) {
-                            //echo('there are already bypassed entries in array'.$arr[$this->bypassed_field_name] .'***');
-                            if ($arr[$this->bypassed_field_name] > $this->no_of_blank_entries){ 
-                                // correcting an old error
-                                $pop_or_fill = "p";
-                                $pop_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries -1;
-                                //echo ('pop ctr '.$pop_ctr);
-                            }
-                            if ($arr[$this->bypassed_field_name] < $this->no_of_blank_entries){ $pop_or_fill = "f";}
-                                $fill_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries;
-                            }
-                    else{ 
-                        $fill_ctr = $this->no_of_blank_entries;
-                        //echo('there are no bypassed entries in array'.$this->no_of_blank_entries);
-                        //$this->debug_exit(__FILE__,__LINE__,0);
-
+        public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
+            
+            foreach ($ppv_array_names as $what_we_are_doing){
+                //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
+                $pop_or_fill = "f";
+                $fill_ctr = $this->no_of_blank_entries;
+                //echo(count($working_arrays[$what_we_are_doing]['field_name_array']));$this->debug_exit(__FILE__,__LINE__,01);
+                foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $field_name=>$array_name){
+                    //each of these has the name of one of the arrays we're processing
+                    //$this->debug_exit(__FILE__,__LINE__,0);echo($field_name.'**'.'<br>'); //var_dump($array_name);
+                    if ($field_name == 'field_name'){
+                        //echo($array_name.' * this is a field_name*<br>');
                         $pop_or_fill = "f";
-                        //$this->debug_exit(__FILE__,__LINE__,1);
+                        // this column decides the size of the arrays
+                        if (is_array($working_arrays[$what_we_are_doing][$array_name])){
+                            $arr = array_count_values($working_arrays[$what_we_are_doing][$array_name]);
+                            //$this->debug_exit(__FILE__,__LINE__,0);
+                            //echo('*&*'.count($working_arrays[$what_we_are_doing]['field_name_array']).'*&*'.'bypassed_field_name = '.$this->bypassed_field_name .'***');
+                            //$this->debug_exit(__FILE__,__LINE__,0);
+                            //var_dump($working_arrays[$what_we_are_doing][$array_name] );
+                            if (array_key_exists($this->bypassed_field_name, $arr)) {
+                                //echo('there are already bypassed entries in array'.$arr[$this->bypassed_field_name] .'***');
+                                if ($arr[$this->bypassed_field_name] > $this->no_of_blank_entries){ 
+                                    // correcting an old error
+                                    $pop_or_fill = "p";
+                                    $pop_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries -1;
+                                    //echo ('pop ctr '.$pop_ctr);
+                                }
+                                if ($arr[$this->bypassed_field_name] < $this->no_of_blank_entries){ $pop_or_fill = "f";}
+                                    $fill_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries;
+                                }
+                        else{ 
+                            $fill_ctr = $this->no_of_blank_entries;
+                            //echo('there are no bypassed entries in array'.$this->no_of_blank_entries);
+                            $this->debug_exit(__FILE__,__LINE__,0);
+
+                            $pop_or_fill = "f";
+                            //$this->debug_exit(__FILE__,__LINE__,1);
+                        }
+                    }
+                } // end of 'field_name' process
+                if ($pop_or_fill == "p"){
+                    for ($i=0; $i<($pop_ctr); $i++){
+                        //echo($this->bypassed_field_name);var_dump($working_arrays[$what_we_are_doing][$array_name]);
+                        array_pop($working_arrays[$what_we_are_doing][$array_name]);
                     }
                 }
-            } // end of 'field_name' process
-            if ($pop_or_fill == "p"){
-                for ($i=0; $i<($pop_ctr); $i++){
-                    //echo($this->bypassed_field_name);var_dump($working_arrays[$what_we_are_doing][$array_name]);
-                    array_pop($working_arrays[$what_we_are_doing][$array_name]);
+                if ($pop_or_fill == "f"){
+                    for ($i=0; $i<($fill_ctr); $i++){
+                        $working_arrays[$what_we_are_doing][$array_name][] = 'not_used';
+                    }
                 }
             }
-            if ($pop_or_fill == "f"){
-                for ($i=0; $i<($fill_ctr); $i++){
-                    $working_arrays[$what_we_are_doing][$array_name][] = 'not_used';
-                }
-            }
-        }
-        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
 
-        //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
-        return $working_arrays;
-    }
-    }   
+            //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
+            return $working_arrays;
+        }
+        }   
 
         public function working_arrays_build($record) {
             //echo("working_arrays_build");
@@ -1340,45 +1336,24 @@ public function reportDefEdits20161128($id){
                 //echo("# 00 * ".$value);
                 foreach($working_arrays[$value]['field_name_array'] as $field_name){
                     //echo("*11 *".$field_name);
-                    $working_arrays[$value][$field_name] = $this->decode_array_to_array($record,$field_name);
+                    $working_arrays[$value][$field_name] = $this->getEdit8_decode_array_to_array($record,$field_name);
                 }
             }
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             $working_arrays['ppv_define_query']['lookups']['field_names']               = '';
-            $working_arrays['ppv_define_query']['lookups']['relational_operators']      = '';
-            $working_arrays['ppv_define_query']['lookups'][0]                           = '';
-            $working_arrays['ppv_define_query']['lookups'][1]                           = '';
+            $working_arrays['ppv_define_query']['lookups']['relational_operators']  = '';
+            $working_arrays['ppv_define_query']['lookups'][0]                       = '';
+            $working_arrays['ppv_define_query']['lookups'][1]                       = '';
 
             $working_arrays['ppv_define_business_rules']['lookups']['field_names']              = '';
-            $working_arrays['ppv_define_business_rules']['lookups']['relational_operators']     = '';
-            $working_arrays['ppv_define_business_rules']['lookups'][0]                          = '';
+            $working_arrays['ppv_define_business_rules']['lookups']['relational_operators']  = '';
+            $working_arrays['ppv_define_business_rules']['lookups'][0]                      = '';
             $working_arrays['ppv_define_business_rules']['lookups'][1]                          = '';
-            $working_arrays = $this->array_node_to_array($working_arrays);
+            $working_arrays = $this->getEdit8_array_node_to_array($working_arrays);
 
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             return($working_arrays);
             
         }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

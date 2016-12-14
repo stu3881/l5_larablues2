@@ -153,8 +153,6 @@ $rowcount = -1;
 
 					@include($node_name.'/'.'genned_edit1')
 				
-				
-				
 				<!--	the buttons at the end of the line -->
 				<td >
 					{{ Form::hidden('coming_from','edit1') }}
@@ -165,8 +163,21 @@ $rowcount = -1;
 					{{ Form::submit($record->$snippet_table_key_field_name.' edit') }}
 					{{ Form::close() }}
 				</td>
+	            <td>
+	            <a href="{{route($node_name.'.reportDefMenuUpdate',$record->id)}}" class="btn btn-warning">reportDefMenuUpdate</a></td>
 				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'POST')) }}
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefMenuUpdate', 'method'=>'GET')) }}
+					{{ Form::hidden('coming_from','edit1') }}
+					{{ Form::hidden('logical_button_name'	,'reportDefMenuUpdate') }}
+					{{ Form::hidden('what_we_are_doing'		,'reportDefMenuUpdate') }}			
+					{{ Form::hidden('node_name',$node_name) }}
+					{{ Form::submit('reportDefMenuUpdate') }}
+					{{ Form::close() }}
+				</td>		
+
+	
+				<td >
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'GET')) }}
 					{{ Form::hidden('coming_from','edit1') }}
 					{{ Form::hidden('logical_button_name'	,'deleting a record') }}
 					{{ Form::hidden('what_we_are_doing'		,'deleting_record') }}			
