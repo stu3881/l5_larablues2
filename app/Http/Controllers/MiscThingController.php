@@ -11,7 +11,7 @@ class MiscThingController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *snippet_string
      * @return \Illuminate\Http\Response
      */
     public function index()

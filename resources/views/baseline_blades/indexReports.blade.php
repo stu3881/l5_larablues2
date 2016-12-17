@@ -155,25 +155,9 @@ $rowcount = -1;
 				
 				<!--	the buttons at the end of the line -->
 				<td >
-					{{ Form::hidden('coming_from','edit1') }}
-					{{ Form::hidden('report_key',$record->$snippet_table_key_field_name) }}
-					{{ Form::hidden('node_name',$node_name) }}
-					{{ Form::hidden('what_we_are_doing'		,'displaying_advanced_edits_screen') }}			
-
-					{{ Form::submit($record->$snippet_table_key_field_name.' edit') }}
-					{{ Form::close() }}
+<a href="{{ URL::route($node_name.'.reportDefMenuUpdate', array($record->id, 'displaying_advanced_edits_screen','edit1')) }}" class="btn btn-danger">{{$record->$snippet_table_key_field_name.' edit'}}</a>					
+{{ Form::close() }}
 				</td>
-	            <td>
-	            <a href="{{route($node_name.'.reportDefMenuUpdate',$record->id)}}" class="btn btn-warning">reportDefMenuUpdate</a></td>
-				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefMenuUpdate', 'method'=>'GET')) }}
-					{{ Form::hidden('coming_from','edit1') }}
-					{{ Form::hidden('logical_button_name'	,'reportDefMenuUpdate') }}
-					{{ Form::hidden('what_we_are_doing'		,'reportDefMenuUpdate') }}			
-					{{ Form::hidden('node_name',$node_name) }}
-					{{ Form::submit('reportDefMenuUpdate') }}
-					{{ Form::close() }}
-				</td>		
 
 	
 				<td >

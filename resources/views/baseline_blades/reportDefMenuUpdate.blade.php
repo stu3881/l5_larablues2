@@ -7,7 +7,8 @@
 	// *****/
 	$table_name = 'to_be_resolved';
 	$update_table = "";
-	
+	//var_dump($miscThing);
+	//exit('exit in edit.blade at 12');
 	$lookups = "";
 	$encoded_field_name_array = array();
 	$lookups = "";
@@ -16,9 +17,9 @@
 	$lookups = "";
 	$lookups = "";
 	 
-	//echo ('<br>8 edit.blade<br>');print_r($record);//echo ("<br>$record->table_name<br>");
+	//echo ('<br>8 edit.blade<br>');print_r($miscThing);//echo ("<br>$miscThing->table_name<br>");
 	//echo ('<br>9 edit.blade<br>');
-	//print_r($lookups);//echo ("<br>$record->table_name<br>");
+	//print_r($lookups);//echo ("<br>$miscThing->table_name<br>");
 
 	//$coming_from = $input['coming_from');
 
@@ -51,8 +52,8 @@
 		
 		for table {{$node_name}}
 		 {{ csrf_field() }}
-		{{-- Form::open(array('url'=>'admin/'.$node_name.'/update', 'method'=>'PUT','class'=>'table_inside_update_active_tasks')) --}}
-		 {!! Form::model('miscThing',['method' => 'PATCH','route'=>[$node_name.'.update',$record->id]]) !!}
+  
+		 {!! Form::model('MiscThing',['method' => 'PATCH','route'=>[$node_name.'.update',$miscThing->id]]) !!}
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
 		
@@ -63,8 +64,8 @@
 				<table id="inner_tbl_0_0" class="table_no_lines">
 					<tr class="table_no_lines">
 				    <td class="table_no_lines">
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="table_no_lines">
-		             	Update Record</a>
+		             	<a href="{{route($node_name.'.update',$miscThing->id)}}" >
+		             	xUpdatex Record</a>
 	            	</td>
 
 					<td class="table_no_lines">
@@ -74,7 +75,7 @@
 			
 					<td class="table_no_lines">
 						{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit1', 'method'=>'GET')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="table_no_lines">
+		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="table_no_lines">
 		             	Reports menu</a>
 
 					</td>
@@ -105,7 +106,7 @@
 					<!-- modifiable fields -->
 
 					{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit4'	,'method'=>'PUT')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="mycart-btn-row2">
+		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
 		             	define_modifiable_fields</a>
 					{{-- Form::submit('define_modifiable_fields'				, array('class'=>'mycart-btn-row2')) --}}
 				</td>		
@@ -113,7 +114,7 @@
 				
 				<!-- browse_select_array fields -->
 				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit4' , 'method'=>'PUT')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="mycart-btn-row2">
+		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
 		             	define_browse_fields</a>
 				{{-- Form::submit('define_browse_fields', array('class'=>'mycart-btn-row2')) --}}
 
@@ -126,7 +127,7 @@
 				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit5' , 'method'=>'PUT')) --}}
 				{{-- Form::submit('advanced_query', array('class'=>'mycart-btn-row2')) --}}
 				{{-- Form::close() --}}
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="mycart-btn-row2">
+		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
 		             	advanced_query</a>
 				</td>
 			<td>
@@ -135,7 +136,7 @@
 				-->		
 				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit5' , 'method'=>'PUT')) --}}
 				{{-- Form::submit('business_rules', array('class'=>'mycart-btn-row2')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$record->id)}}" class="mycart-btn-row2">
+		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
 		             	business_rules</a>
 				{{-- Form::close() --}}
 				</td>
@@ -147,6 +148,7 @@
 				</td>
 				</tr>
 		
+{{$miscThing->id}} {{$miscThing->report_name}} {{$coming_from}}
 
 				@if($coming_from == "edit1")	
 					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')

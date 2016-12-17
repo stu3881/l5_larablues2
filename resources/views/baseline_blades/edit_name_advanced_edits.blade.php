@@ -24,7 +24,7 @@
 		
 		updating table {{$record[0]->table_name }}
 		
-		{{ Form::open(array('url'=>'admin/'.$node_name.'/update', 'method'=>'PUT','class'=>'table_inside_update_active_tasks')) }}
+		{{ Form::open(array('url'=>'admin/'.$node_name.'/update', 'method'=>'PATCH','class'=>'table_inside_update_active_tasks')) }}
 		{{ Form::hidden('what_we_are_doing'			,'update_report_name') }}
 		{{ Form::hidden('coming_from'				,'edit_name_advanced_edits') }}
 

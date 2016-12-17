@@ -919,9 +919,9 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                             ->where($this->snippet_table_key_field_name,    '=', $record[0][$this->snippet_table_key_field_name])
                             ->update(array($working_arrays[$what_we_are_doing]['field_name_array']['field_name']=>$encoded_nv_array));
 
-                            //t41
+                            
                             $this->generate_by_list_name($nv_array,$this->model_table);
-                            //echo ("t41 generate_by_list_name ");$this->debug_exit(__FILE__,__LINE__,0);
+                            //echo ("generate_by_list_name ");$this->debug_exit(__FILE__,__LINE__,0);
                             return redirect('admin/'.$this->node_name.'/edit1')
                             ->with('message', 'record updated');
                             break;                  
@@ -1118,28 +1118,29 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      * @return \Illuminate\Http\Response
      */
 
-    public function reportDefMenuUpdate(Request $request,$id){
+    public function reportDefMenuUpdate(Request $request,$id,$what_we_are_doing,$coming_from){
         echo('<br>reportDefMenuUpdate <br>this used to be putEdit41'.
             $this->node_name.
             "<br>we moved it to indexReports and then here");
         $this->debug_exit(__FILE__,__LINE__,0);
-        echo("<br>id ".$id); 
-         //echo("<br>what_we_are_doing".$request->Input('what_we_are_doing')); 
-       // //echo("<br>the request: reportDefEdits"); var_dump($request);
-        $record=MiscThing::find($id);
-       var_dump($id);
-        return view($this->node_name.'.reportDefMenuUpdate'    ,compact('record'))
+        echo("<br>".'id '.$id);echo('%%% '.$what_we_are_doing); 
+
+        $miscThing=MiscThing::find($id);
+       //var_dump($record);
+        return view($this->node_name.'.reportDefMenuUpdate'    ,compact('miscThing'))
         ->with('model'                            ,$this->model)
         ->with('node_name'                        ,$this->node_name)
+        ->with('what_we_are_doing'                ,$what_we_are_doing)
+        ->with('coming_from'                      ,$coming_from)
        ;
 
     //$request->input('name_of_field');
 }
 
-    public function show($id)
+    public function showx(Request $request,$id)
     {
         //
-        $this->debug_exit(__FILE__,__LINE__,0);
+        echo("show ".$id); $this->debug_exit(__FILE__,__LINE__,0);
     }
 
 
@@ -1153,6 +1154,17 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     public function update(Request $request, $id)
     {
         //
+     // $this->validate($request, ['title' => 'required','author' => 'required']);
+    //$this->debug_exit(__FILE__,__LINE__,10);
+         echo("update ".$id); $this->debug_exit(__FILE__,__LINE__,0);
+
+    $miscThingsUpdate=$request->all(); // important!!
+
+    $miscThingsings=MiscThing::find($id);
+    $miscThingsings->update($miscThingsUpdate);
+ 
+       return redirect('admin/miscThings');
+
     }
 
     /**

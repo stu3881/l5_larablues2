@@ -70,8 +70,11 @@
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "reportDefMenuUpdate";
-    Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+    $what_we_are_doing      = "what_we_are_doing";
+    $coming_from            = "coming_from";
+    //Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);  
 
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'{'.$what_we_are_doing.'}'.'{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
 
     Route::auth();
