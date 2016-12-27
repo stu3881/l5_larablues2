@@ -7,8 +7,8 @@
 	// *****/
 	$table_name = 'to_be_resolved';
 	$update_table = "";
-	//var_dump($miscThing);
-	//exit('exit in edit.blade at 12');
+	//var_dump($miscThing);echo($what_we_are_doing." ** ".$coming_from);
+	//exit('exit in reportDefMenuUpdate.blade at 12');
 	$lookups = "";
 	$encoded_field_name_array = array();
 	$lookups = "";
@@ -53,7 +53,8 @@
 		for table {{$node_name}}
 		 {{ csrf_field() }}
   
-		 {!! Form::model('MiscThing',['method' => 'PATCH','route'=>[$node_name.'.update',$miscThing->id]]) !!}
+		 {!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
 		
@@ -65,7 +66,7 @@
 					<tr class="table_no_lines">
 				    <td class="table_no_lines">
 		             	<a href="{{route($node_name.'.update',$miscThing->id)}}" >
-		             	xUpdatex Record</a>
+		             	xUpdate Record</a>
 	            	</td>
 
 					<td class="table_no_lines">

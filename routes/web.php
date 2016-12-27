@@ -69,12 +69,10 @@
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $method_name            = "reportDefMenuUpdate";
-    $what_we_are_doing      = "what_we_are_doing";
-    $coming_from            = "coming_from";
-    //Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);  
-
-    Route::get('admin/'.$node_name.'/{'.$model.'}'.'{'.$what_we_are_doing.'}'.'{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+    $method_name            = "reportDefMenuEdit";
+    $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but need to be defined here
+    $coming_from            = "coming_from"; // assigned elsewhere but need to be defined here
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
 
     Route::auth();

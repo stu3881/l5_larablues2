@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\MiscThing;
 use App\Http\Requests;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema; 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreMiscThings;
 //use App\Http\Controllers\Schema;
 
 class MiscThingsController extends DEHBaseController
@@ -136,8 +138,7 @@ class MiscThingsController extends DEHBaseController
         // the first level index 
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
-       //var_dump($request);
-        $this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
+        //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
  
     }
 
@@ -1118,16 +1119,17 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      * @return \Illuminate\Http\Response
      */
 
-    public function reportDefMenuUpdate(Request $request,$id,$what_we_are_doing,$coming_from){
-        echo('<br>reportDefMenuUpdate <br>this used to be putEdit41'.
-            $this->node_name.
-            "<br>we moved it to indexReports and then here");
-        $this->debug_exit(__FILE__,__LINE__,0);
-        echo("<br>".'id '.$id);echo('%%% '.$what_we_are_doing); 
+    public function reportDefMenuEdit($id,$what_we_are_doing,$coming_from){
+        echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
+        //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
+        //$this->debug_exit(__FILE__,__LINE__,0);
+        
+        echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
 
         $miscThing=MiscThing::find($id);
-       //var_dump($record);
-        return view($this->node_name.'.reportDefMenuUpdate'    ,compact('miscThing'))
+        //var_dump($record);
+        //echo("<br>"."right before view "); 
+       return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
         ->with('model'                            ,$this->model)
         ->with('node_name'                        ,$this->node_name)
         ->with('what_we_are_doing'                ,$what_we_are_doing)
@@ -1137,10 +1139,11 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     //$request->input('name_of_field');
 }
 
-    public function showx(Request $request,$id)
+    public function show(REQUEST $request,$id)
     {
         //
-        echo("show ".$id); $this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump($request);
+        echo("who sent us here". " show ".$id); $this->debug_exit(__FILE__,__LINE__,10);
     }
 
 

@@ -16,6 +16,8 @@
 
 <?php
 	//var_dump($all_records);exit("edit1.blade 17 ");
+	$what_we_are_doing = 'what_we_are_doing';
+	$coming_from = 'edit1';
 
 $rowcount = -1;
 // *******
@@ -154,9 +156,9 @@ $rowcount = -1;
 					@include($node_name.'/'.'genned_edit1')
 				
 				<!--	the buttons at the end of the line -->
-				<td >
-<a href="{{ URL::route($node_name.'.reportDefMenuUpdate', array($record->id, 'displaying_advanced_edits_screen','edit1')) }}" class="btn btn-danger">{{$record->$snippet_table_key_field_name.' edit'}}</a>					
-{{ Form::close() }}
+  		        <td>
+  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning">{{$record->id}} edita</a>
+					{{ Form::close() }}
 				</td>
 
 	

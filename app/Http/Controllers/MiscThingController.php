@@ -43,7 +43,7 @@ class MiscThingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(StoreMiscThings000 $request) {
     //public function store(StoreMiscThings $request) {
         
         $this->derive_validation_array();
