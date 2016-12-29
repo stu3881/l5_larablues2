@@ -64,10 +64,7 @@
 				<td colspan="4">	
 				<table id="inner_tbl_0_0" class="table_no_lines">
 					<tr class="table_no_lines">
-				    <td class="table_no_lines">
-		             	<a href="{{route($node_name.'.update',$miscThing->id)}}" >
-		             	xUpdate Record</a>
-	            	</td>
+				
 
 					<td class="table_no_lines">
 						{{ Form::submit('Update Record') }}
@@ -103,14 +100,9 @@
 			@if($coming_from == "edit1")	
 				<tr class='table_no_lines'>
 
-				<td>	
+				<td>
 					<!-- modifiable fields -->
-
-					{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit4'	,'method'=>'PUT')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
-		             	define_modifiable_fields</a>
-					{{-- Form::submit('define_modifiable_fields'				, array('class'=>'mycart-btn-row2')) --}}
-				</td>		
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'maintain_modifiable_fields')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
 				<td>
 				
 				<!-- browse_select_array fields -->

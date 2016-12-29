@@ -12,7 +12,11 @@
 @section('content')
 
 	<?php 
-		//echo"inside select_fields_blade<br>";var_dump(Input::all());exit("exit15");
+		//echo"inside select_fields_blade<br>";exit("exit15");
+		$coming_from = "reportDefMenuEdit";
+
+		 
+
 	?>
 
 		
@@ -61,21 +65,23 @@
 <body>
 {{ $message }}
 <div id="admin" style="width:460px;background-color: #aabbcc;">aa
-		{{ Form::open(array('url'=>'admin/'.$node_name.'/edit41', 'method'=>'PUT')) }}
+	
+		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		{{ Form::hidden('coming_from',$coming_from) }}
 		
-		{{ Form::hidden('encoded_column_names'				,$encoded_column_names) }}
-		{{ Form::hidden('encoded_record'					,$encoded_record) }}
-		{{ Form::hidden('encoded_working_arrays'			,$encoded_working_arrays) }}
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
 		{{ Form::hidden('edit4_option'						,'update_field_list') }}
-		{{ Form::hidden('report_key'						, Input::get('report_key')) }}
+		{{ Form::hidden('report_key'						, $miscThing->id) }}
+		@if($what_we_are_doing == "maintain_modifiable_fields")	
+			{{ Form::hidden('modifiable_fields_array'		, "") }}
+		@endif						
 
 	
 
 		<div id="abstract_div" style="background-color: #ccbb00;">cc
 				<div id="column_names_select_div">xx
 					{{ Form::select('from[]',$from_array,array(),array('multiple','size'=>15,'id'=>'from')) }}
-					<div class="controls"> yy
+					<div class="controls"> 
 						<a href="javascript:moveAll('from', 'to')">&gt;&gt;</a> 
 						<a href="javascript:moveSelected('from', 'to')">&gt;</a> 
 						<a href="javascript:moveSelected('to', 'from')">&lt;</a> 

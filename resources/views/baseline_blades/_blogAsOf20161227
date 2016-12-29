@@ -1,0 +1,22 @@
+
+just got the report name update to work in reportDefMenuEdit
+so now we're off to handle the buttons for the field name selects
+
+client sends request to the controller
+controller does any additional stuff
+and sends a response to the client
+
+were gonna add a decide statement for what we are doing inside of reportDefMenuEdit
+
+i have a bit of a dilemma.  there is this thing called #working_array the old code references it heavily so i want to use that but
+12/28
+
+i also passed around and around but i don't want to do that any more
+fuck!  
+
+there is so much the old system does that i do indeed want to use as much of that old code as possible but modernizing the links is difficult in the existing code and the old views are full of code to keep us cycling.  A monstrous waste of time in afterthought.
+
+let's see if we can get the old code executing again and stick in the new stuff we developed in reportDefMenuEdit.
+
+the old code doesn't look so bad.  i'd like to try naming the $to_array which we'd really like named after the field in which it will be stored
+
