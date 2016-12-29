@@ -102,14 +102,15 @@
 
 				<td>
 					<!-- modifiable fields -->
-	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'maintain_modifiable_fields')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
 				<td>
 				
 				<!-- browse_select_array fields -->
-				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit4' , 'method'=>'PUT')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
-		             	define_browse_fields</a>
-				{{-- Form::submit('define_browse_fields', array('class'=>'mycart-btn-row2')) --}}
+		        
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+	  		        'what_we_are_doing'=>'maintain_browse_fields',
+	  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_browse_fields</a>
+
 
 			</td>
 			

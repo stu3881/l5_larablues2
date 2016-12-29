@@ -1130,23 +1130,17 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
 
         $miscThing=MiscThing::find($id);
-        
-        //var_dump($miscThing);
-       //$this->debug_exit(__FILE__,__LINE__,10);
-        //echo($miscThing->modifiable_fields_array);
-        $array = json_decode($miscThing->modifiable_fields_array);
-        //var_dump($array);
-        //echo("<br>"."right before view "); 
-
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
+        case "maintain_browse_fields":           
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
             //var_dump($column_names_array);
             $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
             //$what_we_are_doing = 'displaying_advanced_edits_screen';
             $working_arrays     = $this->working_arrays_construct($miscThing,$ppv_array_names,$what_we_are_doing);
 
-          $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
+            $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
             $index2 = $working_arrays[$what_we_are_doing]['field_name_array']['field_name'];
             $to_array = $working_arrays[$what_we_are_doing][$index2];
             $from_array = array_diff($column_names_array,$to_array);
@@ -1164,14 +1158,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 ->with('encoded_working_arrays'             ,$request->input('encoded_working_arrays'))
                 ->with('message',''
                 );
-                    var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
-
                 break;  
-
-            $this->justModifiable($id, $working_arrays,$what_we_are_doing,$request);
-            echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
-            //$this->debug_exit(__FILE__,__LINE__,10);
-       case "maintain_browse_fields":
         case "ppv_define_query":
             $blade_routine                          = "advanced_query_getEdit_blade_gen_new";
             $blade_name                             = "_advanced_query_getEdit_blade";
@@ -1202,7 +1189,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     public function justModifiable($id,$working_arrays,$what_we_are_doing,$request)
     {
         //       
-        $this->debug_exit(__FILE__,__LINE__,0);
+        $this->debug_exit(__FILE__,__LINE__,10);
 
         $x = "maintain_modifiable_fields";
         //switch (Input::get('edit4_option')) {
@@ -1275,6 +1262,16 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     public function update(Request $request, $id)
     {
       $miscThingsUpdate=$request->all(); // important!!
+
+      if (isset($request->browse_select_array)){
+            $request->browse_select_array = $request->to;
+            //if (isset($request->modifiable_fields_array)){
+            $request->browse_select_array = $request->to;
+            $miscThingsUpdate['browse_select_array'] = 
+               array_combine($request->to,$request->to);
+                $miscThingsUpdate['browse_select_array'] =
+                json_encode($miscThingsUpdate['browse_select_array']); // important!!
+        }
       if (isset($request->modifiable_fields_array)){
             $request->modifiable_fields_array = $request->to;
             //if (isset($request->modifiable_fields_array)){
