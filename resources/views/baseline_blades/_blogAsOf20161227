@@ -14,9 +14,33 @@ i have a bit of a dilemma.  there is this thing called #working_array the old co
 i also passed around and around but i don't want to do that any more
 fuck!  
 
-there is so much the old system does that i do indeed want to use as much of that old code as possible but modernizing the links is difficult in the existing code and the old views are full of code to keep us cycling.  A monstrous waste of time in afterthought.
+there is so much the old system does that i do indeed want to use but modernizing the links is difficult in the existing code and the old views are full of code to keep us cycling.  A monstrous waste of time in afterthought.
 
 let's see if we can get the old code executing again and stick in the new stuff we developed in reportDefMenuEdit.
 
-the old code doesn't look so bad.  i'd like to try naming the $to_array which we'd really like named after the field in which it will be stored
+the old code doesn't look so bad.  i'd like to try naming the $to_array which we'd really like named after the field in which it will be stored. this allows us to skip lots of the old code which we'll no longer need, 
 
+when we create the select from to view, we know for which array we're processing: modifiable_fields
+12/30
+
+ppv_define_query
+$this->working_arrays has to be built after the report_definition is retrieved.
+12/31
+depending on which button you press on the reportDefMenuEdit screen, you really just go to one of two places. feiled select from to or pulldown pulldown value ppv. what needs to be there has already been built into working_arrays somewhere
+2017-01-02
+	i'm working on querys & bus rules now.  it's moving stuff from putedit41 into reportDefMenuEdit
+
+	#working_arrays has got all this stuff defined and loaded from the db record.  so we've got to hook thatinto our new 'architecture'
+
+2017-01-06
+	The query arrays are not the same size
+2017-01-12
+	build_report_def_arrays
+	 grep -rn 'app/Http/Controllers/' -e "snippet_str"
+	 grep -rna 'resources/views' -e 'indexmain'
+
+ 	find big datasets
+ 	get putty working on gohoooa
+ 	try to find old wordpress
+
+	

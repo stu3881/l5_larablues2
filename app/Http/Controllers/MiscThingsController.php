@@ -436,21 +436,20 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         //var_dump($report_definition);
         $report_definition = MiscThing::where('id','=',$id)->get();
         $passed_to_view_array = $this->build_report_def_arrays($report_definition);
-        //$this->debug_exit(__FILE__,__LINE__,0);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //echo("<br> passed_to_view_array<br>");var_dump($passed_to_view_array);        $this->debug_exit(__FILE__,__LINE__,10);
        //var_dump((array) $report_definition[0]);        
   
        //$miscThings = MiscThing::where('report_name','=',C->report_name)->get();
  
-        //$this->debug_exit(__FILE__,__LINE__,0);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //$miscThings = $this->execute_report_def_query($report_definition);
         if($miscThings = MiscThing::distinct('record_type')->get()){
           //$miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)->get();
-          //$this->debug_exit(__FILE__,__LINE__,0);   
+          //$this->debug_exit(__FILE__,__LINE__,10);   
           //echo("<br> report_name<br>".$miscThings[0]->report_name."**");
           //var_dump($miscThings[0]);
           //$this->debug_exit(__FILE__,__LINE__,10);  
-
         }
         
 
@@ -461,7 +460,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         $data_array_name ["report_name"] = $miscThings[0]->report_name;
         $data_array_name ["record_type"] = $miscThings[0]->record_type;
         if ($miscThings){
-             
+             //$this->debug_exit(__FILE__,__LINE__,1);
              return view('miscThings.edit2_default_browse',compact('miscThings'))
                 ->with('model_table'                ,$this->model_table)
                 ->with('generated_files_folder'    , $this->generated_files_folder)
@@ -502,7 +501,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      */
 
     public function build_report_def_arrays($report_definition) {
-        echo("build_report_def_arrays");$this->debug_exit(__FILE__,__LINE__,0);
+        //echo("build_report_def_arrays");$this->debug_exit(__FILE__,__LINE__,0);
         //var_dump($report_definition[0]);
         //$this->debug_exit(__FILE__,__LINE__,1);
         $modifiable_fields_array            = $this->decode_object_field_to_array($report_definition[0],'modifiable_fields_array');
@@ -809,6 +808,25 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         return $strx;
     }   
 
+    /**
+     * 4 functions maintain 4 entities
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function ppvEdit(Request $request, $id,$what_we_are_doing,$coming_from){
+        echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
+        //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
+        //$this->debug_exit(__FILE__,__LINE__,0);
+        
+        //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
+
+        $miscThing=MiscThing::find($id);
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
+
+        //
+    }
+
 
     /**
      * 4 functions maintain 4 entities
@@ -1014,7 +1032,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                             //var_dump($working_arrays);var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);$this->debug_exit(__FILE__,__LINE__,1);
                             //var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
 
-                            return View::make($this->node_name.'.ppv_update')
+                            return View::make($this->node_name.'.select_fields_ppv')
                                 ->with('working_arrays'                     ,$working_arrays)
                                 ->with('Input'                              ,Input::all())
                                 ->with('record'                             ,$record_array)
@@ -1162,22 +1180,21 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         case "ppv_define_query":
             $blade_routine                          = "advanced_query_getEdit_blade_gen_new";
             $blade_name                             = "_advanced_query_getEdit_blade";
-            break;
         case "ppv_define_business_rules":
             $blade_routine                          = "business_rules_getEdit_blade_gen";
             $blade_name                             = "_business_rules_getEdit";
-            break;
+       case "ppv_define_query":
+       case "ppv_define_business_rules":
+
+           return view($this->node_name.'.select_fields_ppv'    ,compact('miscThing'))
+            ->with('model'                            ,$this->model)
+            ->with('node_name'                        ,$this->node_name)
+            ->with('what_we_are_doing'                ,$what_we_are_doing)
+            ->with('coming_from'                      ,$coming_from)
+           ;
+           break;
+        }
     }
-
-       return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
-        ->with('model'                            ,$this->model)
-        ->with('node_name'                        ,$this->node_name)
-        ->with('what_we_are_doing'                ,$what_we_are_doing)
-        ->with('coming_from'                      ,$coming_from)
-       ;
-
-    //$request->input('name_of_field');
-}
 
 
     /**
