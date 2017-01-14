@@ -64,7 +64,7 @@
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $method_name            = "ppvEdit";
-    $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
+    $what_we_are_doing      = "reportDefMenuEdit"; // assigned elsewhere but needs to be defined here
     $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 

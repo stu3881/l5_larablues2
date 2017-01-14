@@ -20,16 +20,14 @@
 
 
 //var_dump($field_name_array);
-//var_dump($r_o_array);var_dump($r_o_array[1]);var_dump($second_lookup_array[$r_o_array[1]]);
- 				//@if($what_we_are_doing == "ppv_define_query")	
-// 				@if($what_we_are_doing == "ppv_define_business_rules")	
+//var_dump($var_dump($field_name_array););var_dump($r_o_array[1]);var_dump($second_lookup_array[$r_o_array[1]]);
 
 //var_dump($record2);
-//var_dump($first_lookup_array);
-//var_dump($field_name_array);
+//var_dump($first_lookup_array);var_dump($second_lookup_array);
+//var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);
 //var_dump($second_lookup_array);var_dump($field_name_array);
 //var_dump($second_lookup_array);
-//var_dump($field_name_array);
+//echo('field_name_array');var_dump($field_name_array);
 //var_dump($value_array);
 //$generated_files_folder
 //->with('record'										,$record_array)

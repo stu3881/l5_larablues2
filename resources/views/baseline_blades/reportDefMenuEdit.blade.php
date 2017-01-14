@@ -116,33 +116,30 @@
 			
 			<td>
 				<!-- advanced query fields 
-					the other buttons go thru edit4 whereas this button goes thru edit5
 				-->		
-				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit5' , 'method'=>'PUT')) --}}
-				{{-- Form::submit('advanced_query', array('class'=>'mycart-btn-row2')) --}}
-				{{-- Form::close() --}}
-		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
-		             	advanced_query</a>
-				</td>
+  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+  		        'what_we_are_doing'=>'ppv_define_query',
+  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">advanced_query
+  		        </a>
+			</td>
 			<td>
 				<!-- business rules fields 
 					the other buttons go thru edit4 whereas this button tries to go straight to edit
 				-->		
-				{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit5' , 'method'=>'PUT')) --}}
-				{{-- Form::submit('business_rules', array('class'=>'mycart-btn-row2')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="mycart-btn-row2">
-		             	business_rules</a>
-				{{-- Form::close() --}}
-				</td>
-				</tr>
-											
-					@endif
+  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+  		        'what_we_are_doing'=>'ppv_define_query',
+  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">business_rules
+  		        </a>
+			</td>
+			</tr>
+										
+			@endif
 	
-						</table>
+			</table>
 				</td>
 				</tr>
 		
-{{$miscThing->id}} {{$miscThing->report_name}} {{$coming_from}}
+			{{$miscThing->id}} {{$miscThing->report_name}} {{$coming_from}}
 
 				@if($coming_from == "edit1")	
 					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
