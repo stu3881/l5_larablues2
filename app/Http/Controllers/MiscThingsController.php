@@ -1015,7 +1015,12 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 ->with('message'                            ,'')
                 ;
         }
-
+       return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
+        ->with('model'                            ,$this->model)
+        ->with('node_name'                        ,$this->node_name)
+        ->with('what_we_are_doing'                ,$what_we_are_doing)
+        ->with('coming_from'                      ,$coming_from)
+       ;
 }
 
 
@@ -1222,7 +1227,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                     }
                 }
             }
-            var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,10);
+            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,10);
 
             //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
             return $working_arrays;
