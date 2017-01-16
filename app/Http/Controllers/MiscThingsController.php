@@ -1105,11 +1105,10 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      */
     public function update(Request $request, $id)
     {
-      $miscThingsUpdate=$request->all(); // important!!
-
-      if (isset($request->browse_select_array)){
-            $request->browse_select_array = $request->to;
-            //if (isset($request->modifiable_fields_array)){
+        $update = 0;  
+        $miscThingsUpdate=$request->all(); // important!!
+         if (isset($request->browse_select_array)){
+            $update = 1; 
             $request->browse_select_array = $request->to;
             $miscThingsUpdate['browse_select_array'] = 
                array_combine($request->to,$request->to);
@@ -1117,27 +1116,49 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 json_encode($miscThingsUpdate['browse_select_array']); // important!!
         }
       if (isset($request->modifiable_fields_array)){
+            $update = 1; 
             $request->modifiable_fields_array = $request->to;
-            //if (isset($request->modifiable_fields_array)){
-            $request->modifiable_fields_array = $request->to;
+            $miscThingsUpdate['modifiable_fields_array'] = 
+               array_combine($request->to,$request->to);
+            $miscThingsUpdate['modifiable_fields_array'] =
+                json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
+        }
+
+        if (isset($request->query_field_name_array)){
+            $update = 1; 
+            //var_dump($request->field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
+            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
+            // move the common screen names into the specific fields in the table
+            //$request->query_field_name_array    =  
+            array_combine($request->field_name_array,$request->field_name_array);
+            $request->query_field_name_array    = json_encode($request->query_field_name_array);
+            $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+       
+           $request->query_r_o_array           = json_encode($request->r_o_array);
+           $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+
+           $request->query_value_array         = json_encode($request->value_array);
+           $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+ 
+        }
+      if (isset($request->business_rules_field_name_array)){
+            $update = 1; 
+            $request->business_rules_field_name_array = $request->to;
+            $request->business_rules_r_o_array = $request->to;
+            $request->business_rules_value_array = $request->to;
             $miscThingsUpdate['modifiable_fields_array'] = 
                array_combine($request->to,$request->to);
                 $miscThingsUpdate['modifiable_fields_array'] =
                 json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
         }
-        /*
-      if (isset($request->modifiable_fields_array)){
-            $request->modifiable_fields_array = $request->to;
-            $miscThingsUpdate['modifiable_fields_array'] =
-            json_encode($request->modifiable_fields_array); // important!!
-        }
-        */
-    $miscThingsings=MiscThing::find($id);
-    $miscThingsings->update($miscThingsUpdate);
  
-       return redirect('admin/miscThings');
+        if ($update = 1){
+            $miscThingsings=MiscThing::find($id);
+            $miscThingsings->update($miscThingsUpdate);
+        }
+        return redirect('admin/miscThings');
 
-    }
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -1149,90 +1170,92 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     {
         //
     }
-            public function working_arrays_construct($record,$ppv_array_names,$what_we_are_doing) {
-            //echo("working_arrays_construct");
-            $working_arrays     = $this->working_arrays_build($record);
-            $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
-            $column_names       = $this->build_column_names_array($this->model_table);
-            $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-            $working_arrays     = $this->working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays);
-            //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
-            switch ($what_we_are_doing) {
-                case "edit2_build_default_browse":
-                    //just need assignments from record
-                    //$this->debug_exit(__FILE__,__LINE__,0);var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-    
-                    break;
-                default:
-                    //$column_names         = $this->build_column_names_array($this->model_table);
-                    //$working_arrays   = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-                    //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-                    break;
+    public function working_arrays_construct($record,$ppv_array_names,$what_we_are_doing) {
+        //echo("working_arrays_construct");
+        $working_arrays     = $this->working_arrays_build($record);
+        $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+        $column_names       = $this->build_column_names_array($this->model_table);
+        $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
+        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+        $working_arrays     = $this->working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays);
+        //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
+        switch ($what_we_are_doing) {
+            case "edit2_build_default_browse":
+                //just need assignments from record
+                //$this->debug_exit(__FILE__,__LINE__,0);var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
 
-            }
-            return $working_arrays;
+                break;
+            default:
+                //$column_names         = $this->build_column_names_array($this->model_table);
+                //$working_arrays   = $this->working_arrays_populate_lookups($working_arrays,$column_names);
+                //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+                break;
+
         }
+        //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
+        var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
+        return $working_arrays;
+    }
 
-        public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
-            
-            foreach ($ppv_array_names as $what_we_are_doing){
-                //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
-                $pop_or_fill = "f";
-                $fill_ctr = $this->no_of_blank_entries;
-                //echo(count($working_arrays[$what_we_are_doing]['field_name_array']));$this->debug_exit(__FILE__,__LINE__,01);
-                foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $field_name=>$array_name){
-                    //each of these has the name of one of the arrays we're processing
-                    //$this->debug_exit(__FILE__,__LINE__,0);echo($field_name.'**'.'<br>'); //var_dump($array_name);
-                    if ($field_name == 'field_name'){
-                        //echo($array_name.' * this is a field_name*<br>');
+    public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
+        
+        foreach ($ppv_array_names as $what_we_are_doing){
+            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
+            $pop_or_fill = "f";
+            $fill_ctr = $this->no_of_blank_entries;
+            //echo(count($working_arrays[$what_we_are_doing]['field_name_array']));$this->debug_exit(__FILE__,__LINE__,01);
+            foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $field_name=>$array_name){
+                //each of these has the name of one of the arrays we're processing
+                //$this->debug_exit(__FILE__,__LINE__,0);echo($field_name.'**'.'<br>'); //var_dump($array_name);
+                if ($field_name == 'field_name'){
+                    //echo($array_name.' * this is a field_name*<br>');
+                    $pop_or_fill = "f";
+                    // this column decides the size of the arrays
+                    if (is_array($working_arrays[$what_we_are_doing][$array_name])){
+                        $arr = array_count_values($working_arrays[$what_we_are_doing][$array_name]);
+                        //$this->debug_exit(__FILE__,__LINE__,0);
+                        //echo('*&*'.count($working_arrays[$what_we_are_doing]['field_name_array']).'*&*'.'bypassed_field_name = '.$this->bypassed_field_name .'***');
+                        //$this->debug_exit(__FILE__,__LINE__,0);
+                        //var_dump($working_arrays[$what_we_are_doing][$array_name] );
+                        if (array_key_exists($this->bypassed_field_name, $arr)) {
+                            //echo('there are already bypassed entries in array'.$arr[$this->bypassed_field_name] .'***');
+                            if ($arr[$this->bypassed_field_name] > $this->no_of_blank_entries){ 
+                                // correcting an old error
+                                $pop_or_fill = "p";
+                                $pop_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries -1;
+                                //echo ('pop ctr '.$pop_ctr);
+                            }
+                            if ($arr[$this->bypassed_field_name] < $this->no_of_blank_entries){ $pop_or_fill = "f";}
+                                $fill_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries;
+                            }
+                    else{ 
+                        $fill_ctr = $this->no_of_blank_entries;
+                        //echo('there are no bypassed entries in array'.$this->no_of_blank_entries);
+                        $this->debug_exit(__FILE__,__LINE__,0);
+
                         $pop_or_fill = "f";
-                        // this column decides the size of the arrays
-                        if (is_array($working_arrays[$what_we_are_doing][$array_name])){
-                            $arr = array_count_values($working_arrays[$what_we_are_doing][$array_name]);
-                            //$this->debug_exit(__FILE__,__LINE__,0);
-                            //echo('*&*'.count($working_arrays[$what_we_are_doing]['field_name_array']).'*&*'.'bypassed_field_name = '.$this->bypassed_field_name .'***');
-                            //$this->debug_exit(__FILE__,__LINE__,0);
-                            //var_dump($working_arrays[$what_we_are_doing][$array_name] );
-                            if (array_key_exists($this->bypassed_field_name, $arr)) {
-                                //echo('there are already bypassed entries in array'.$arr[$this->bypassed_field_name] .'***');
-                                if ($arr[$this->bypassed_field_name] > $this->no_of_blank_entries){ 
-                                    // correcting an old error
-                                    $pop_or_fill = "p";
-                                    $pop_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries -1;
-                                    //echo ('pop ctr '.$pop_ctr);
-                                }
-                                if ($arr[$this->bypassed_field_name] < $this->no_of_blank_entries){ $pop_or_fill = "f";}
-                                    $fill_ctr = $arr[$this->bypassed_field_name] - $this->no_of_blank_entries;
-                                }
-                        else{ 
-                            $fill_ctr = $this->no_of_blank_entries;
-                            //echo('there are no bypassed entries in array'.$this->no_of_blank_entries);
-                            $this->debug_exit(__FILE__,__LINE__,0);
-
-                            $pop_or_fill = "f";
-                            //$this->debug_exit(__FILE__,__LINE__,1);
-                        }
-                    }
-                } // end of 'field_name' process
-                if ($pop_or_fill == "p"){
-                    for ($i=0; $i<($pop_ctr); $i++){
-                        //echo($this->bypassed_field_name);var_dump($working_arrays[$what_we_are_doing][$array_name]);
-                        array_pop($working_arrays[$what_we_are_doing][$array_name]);
+                        //$this->debug_exit(__FILE__,__LINE__,1);
                     }
                 }
-                if ($pop_or_fill == "f"){
-                    for ($i=0; $i<($fill_ctr); $i++){
-                        $working_arrays[$what_we_are_doing][$array_name][] = 'not_used';
-                    }
+            } // end of 'field_name' process
+            if ($pop_or_fill == "p"){
+                for ($i=0; $i<($pop_ctr); $i++){
+                    //echo($this->bypassed_field_name);var_dump($working_arrays[$what_we_are_doing][$array_name]);
+                    array_pop($working_arrays[$what_we_are_doing][$array_name]);
                 }
             }
-            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,10);
-
-            //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
-            return $working_arrays;
+            if ($pop_or_fill == "f"){
+                for ($i=0; $i<($fill_ctr); $i++){
+                    $working_arrays[$what_we_are_doing][$array_name][] = 'not_used';
+                }
+            }
         }
-        }   
+        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,10);
+
+        //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,1);
+        return $working_arrays;
+        }
+    }   
 
         public function working_arrays_build($record) {
             //echo("working_arrays_build");
@@ -1258,9 +1281,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 'field_name'        => 'modifiable_fields_array'
                 );
 
-            //$working_arrays['maintain_browse_fields']['field_name']       = 'browse_select_array';
-            //$working_arrays['maintain_browse_fields'][]                   = 'browse_select_array';
-            $working_arrays
+             $working_arrays
                 ['maintain_browse_fields']['field_name_array']          = array(
                 'field_name'        => 'browse_select_array'
                 );
