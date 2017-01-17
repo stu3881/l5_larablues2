@@ -42,7 +42,7 @@
 // *****
 -->
 
-	<div id="update_active_tasks" >ppv_update
+	<div id="update_active_tasks" >ppv_update x
 	<br>
 		
 		{{-- $record2[0]->model_table --}}
@@ -79,7 +79,8 @@
 					</td>
 			
 					<td class="table_no_lines">
-						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit1', 'method'=>'GET')) }}
+				
+						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
 						{{ Form::submit('back to Reports menu') }}
 						{{ Form::close() }}
 					</td>
@@ -98,12 +99,7 @@
 					</table>
 				</td>
 				</tr>
- 				@if($what_we_are_doing == "ppv_define_query")	
- 					@include("../".$node_name.'/'.$generated_files_folder.'/'.$id.'_advanced_query_getEdit')
-				@endif	                                                    			
- 				@if($what_we_are_doing == "ppv_define_business_rules")	
- 					@include("../".$node_name.'/'.$generated_files_folder.'/'.$id.'_advanced_query_getEdit')
-				@endif	                                                    			
+ 				@include("../".$node_name.'/'.$generated_files_folder.'/'.$id.'_ppv_edit_snippet')
 				</table>
 				
 		</div>   <!-- end div_inside_update_active_tasks -->				

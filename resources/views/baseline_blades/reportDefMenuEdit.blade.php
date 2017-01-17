@@ -142,20 +142,25 @@
 			{{$miscThing->id}} {{$miscThing->report_name}} {{$coming_from}}
 
 				@if($coming_from == "edit1")	
+
 					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
-				@endif						
+				@endif		
+							
  				@if($coming_from == "edit2")	
  				
-					@include($node_name.'/'.$input['generated_files_folder'].'/'.$input['report_key'].'_modifiable_add_save_snippet')
-					@endif						
+					@include($node_name.'/'.$input['generated_files_folder'].'/'.$miscThing->id.'_modifiable_add_save_snippet')
+					@endif		
+					
  				@if($coming_from == "advanced_query")	
- 		
-						@include($node_name.'/'.$input['generated_files_folder'].'/'.$input['report_key'].'_advanced_query_getEdit_snippet')
+										
+ 					@include($node_name.'/'.$request->input('generated_files_folder').'/'.$miscThing->id.'_ppv_edit_snippet')
 				@endif	                                                    			
+						
  				@if($coming_from == "business_rules")	
  		
-						@include($node_name.'/'.$input['generated_files_folder'].'/'.$input['report_key'].'_business_rules_getEdit_snippet')
-				@endif	                                                    			
+						@include($node_name.'/'.$input['generated_files_folder'].'/'.$miscThing->id.'_ppv_edit_snippet')
+				@endif	
+                                                    			
 				</table>
 				
 		</div>   <!-- end div_inside_update_active_tasks -->				

@@ -162,7 +162,7 @@ $rowcount = -1;
 					{{ Form::hidden('node_name',$node_name) }}
 					{{ Form::hidden('what_we_are_doing'		,'displaying_advanced_edits_screen') }}			
 
-					{{ Form::submit($record->$snippet_table_key_field_name.' edit') }}
+					{{ Form::submit($record->$snippet_table_key_field_name.' edit1111111') }}
 					{{ Form::close() }}
 				</td>
 				<td >

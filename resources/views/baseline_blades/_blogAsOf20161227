@@ -53,4 +53,7 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	i think initializing 83445 willfix it.  other ones seem ok. i think padding can be much implerbut we're not looking at that right now; just making it work.
 	business_rules_getEdit_blade_gen and advanced_query_getEdit_blade_gen_new are both
 	ppv_edit_snippet_gen s (a name i just made up) we're moving to that instead.  behaviour is identical; just data changes.
+
+	at 10:08
+	business rules updated! (time to feed the dogs)
 	

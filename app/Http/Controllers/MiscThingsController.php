@@ -161,8 +161,9 @@ class MiscThingsController extends DEHBaseController
         fwrite($handle, $file_as_string);
     }
 
-        public function advanced_query_getEdit_blade_gen_new($no_of_rows){
-        // this generates the code to create a three column table 
+        public function ppv_edit_snippet_gen($no_of_rows){
+        //echo(" ppv_edit_snippet_gen ".$no_of_rows."<br>");$this->debug_exit(__FILE__,__LINE__,0);
+       // this generates the code to create a three column table 
         // the first two are pulldowns with a selected value
         // the last one is a single field
         // ***  
@@ -173,7 +174,7 @@ class MiscThingsController extends DEHBaseController
         $crlf = "\r\n";
         $strx = "";
         $j = -1;
-        for ($i=0; $i<($no_of_rows-1); $i++){
+        for ($i=0; $i<($no_of_rows); $i++){
             $j++;
             $strx .=
                 "<tr>".$crlf; // start a new row
@@ -198,39 +199,6 @@ class MiscThingsController extends DEHBaseController
     }
 
 
-
-    public function business_rules_getEdit_blade_gen($no_of_whens)
-    {
-        //$lookups['field_name'] = json_decode($lookups['field_name']);
-        //$lookups['business_rules'] = json_decode($lookups['business_rules']);
-        //echo '<br>business_rules_getEdit_blade_gen<br>';var_dump($lookups);exit("exit 91");
-        //$lookups['field_name'] = array_combine($lookups['field_name'], $lookups['field_name']);
-        
-        $crlf = "\r\n";
-        $strx = "";
-        $j = -1;
-        for ($i=0; $i<($no_of_whens); $i++){
-            $j++;
-            $strx .=
-            "<tr>".$crlf; // start a new row
-            $strx .= // first field is always field_name lookup
-            "<td style='text-align:left'>".$crlf.
-            //"{{ Form::select('field_name_array[]', $"."first_lookup_array_name,$"."field_name_array[".$j."]) }}".$crlf.
-            "{{ Form::select('field_name_array[]', $"."first_lookup_array,$"."field_name_array[".$j."],array('type' => 'numeric')) }}".$crlf.
-            "</td>".$crlf;
-            $strx .= // second field is always relational operator
-            "<td style=\"text-align:left\">".$crlf.
-            "{{ Form::select('r_o_array[]', $"."second_lookup_array,$"."r_o_array[".$j."],array('type' => 'numeric')) }}".$crlf.
-            "</td>".$crlf;
-            $strx .= // third field is always user supplied value there ain't no lookup
-            "<td style=\"text-align:left\">".$crlf.
-            "{{ Form::text('value_array[]', $"."value_array[".$j."]) }}".$crlf.
-            "</td>".$crlf;
-            $strx .=
-            "</tr>".$crlf;  // end the row
-        }  // end for
-        return $strx;
-    }
     
         public function array_node_to_array($array) {
         // *****************
@@ -729,27 +697,6 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         var_dump($arr);exit("xit 4420");
     }
 
-        public function getEdit_ppv_write_blade_new(
-            $report_key,
-            $filename,
-            $no_of_rows,
-            $blade_routine,
-            $blade_name
-            ){
-
-            echo ('getEdit_ppv_write_blade_new'.$no_of_rows."*".$blade_routine.'**');$this->debug_exit(__FILE__,__LINE__,0);
-            File::put($filename,$this->$blade_routine($no_of_rows));
-            // e.g. $blade_routine = 'advanced_query_getEdit_blade_gen_new'
-            echo ($no_of_rows."*".$blade_routine);$this->debug_exit(__FILE__,__LINE__,0);
-
-            $fnam = $this->views_files_path."/".$this->generated_files_folder."/".$report_key.$blade_name.'.blade.php';
-            File::put($fnam,$this->$blade_routine(
-                $no_of_rows
-                )
-            );
-            //echo "*".$blade_routine;$this->debug_exit(__FILE__,__LINE__,0);
-            return;
-        }
 
 
     /**
@@ -909,18 +856,6 @@ public function build_and_execute_query($fieldName_r_o_value_array,
     }   
 
 
-    /**
-     * 4 functions maintain 4 entities
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    public function reportDefEdits(Request $request,$id){
-        echo('<br>this is reportDefEdits '.'<br>this used to be putEdit41'.
-            "<br>we moved it to indexReports");$this->debug_exit(__FILE__,__LINE__,10);
-        echo("<br>id ".$id); 
-}
     public function ppvEdit(Request $request, $id,$what_we_are_doing,$coming_from){
         echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
@@ -989,33 +924,20 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
             $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
-            //var_dump($no_of_rows);$this->debug_exit(__FILE__,__LINE__,1);
+            
+            //echo("rows ".$no_of_rows);
+            //var_dump($working_arrays [$what_we_are_doing][$field_name_array_name]);$this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($field_name_array_name);$this->debug_exit(__FILE__,__LINE__,1);
 
-            switch ($what_we_are_doing) {
-                case "ppv_define_query":
-                    $blade_routine                          = "advanced_query_getEdit_blade_gen_new";
-                    $blade_name                             = "_advanced_query_getEdit";
-                    $filename = $this->views_files_path."/".$this->generated_files_folder."/".$id.$blade_name.'.blade.php';
-                    echo($filename.'name>'.$blade_name.'routine>'.$blade_routine);
-                    //* FIle
-                    File::put($filename,$this->$blade_routine($no_of_rows));
-                    //*
-                    echo("<br>A".$blade_routine); 
-                    break;         
-                case "ppv_define_business_rules":
-                    $blade_routine                          = "advanced_query_getEdit_blade_gen_new";
-                    $blade_name                             = "_business_rules_getEdit";
-                 
-                    $filename = $this->views_files_path."/".$this->generated_files_folder."/".$id.$blade_name.'.blade.php';
-                    echo($filename.'name>'.$blade_name.'routine>'.$blade_routine);
-                   //* FIle
-                   File::put($filename,$this->$blade_routine($no_of_rows));
-                   //* 
-                   echo("<br>B");  
-                   break;        
-                  
-                }
-
+            $blade_routine                          = "ppv_edit_snippet_gen";
+            $blade_name                             = "_ppv_edit_snippet";
+            $filename = $this->views_files_path."/".$this->generated_files_folder."/".$id.$blade_name.'.blade.php';
+            //echo($filename.' name> '.$blade_name.' routine> '.$blade_routine);
+            //* FIle
+            File::put($filename,$this->$blade_routine($no_of_rows));
+            //*
+     
+ 
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
            $column_names_array = array_combine(array_values($column_names_array),$column_names_array);
@@ -1025,8 +947,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
 
             //$working_arrays[$what_we_are_doing]['lookups']['field_names'],
              //$working_arrays[$what_we_are_doing]['lookups']['field_names']);
-            var_dump($working_arrays[$what_we_are_doing]['lookups'][1]);
-            $this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($working_arrays[$what_we_are_doing]['lookups'][1]);
+            //$this->debug_exit(__FILE__,__LINE__,0);
 
 
             $field_name_array_name  = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
@@ -1078,8 +1000,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         switch ($x) {
             case "maintain_modifiable_fields":
             case "field_list_select":
-            $what_we_are_doing = "maintain_modifiable_fields";
-               $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
+                $what_we_are_doing = "maintain_modifiable_fields";
+                $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
                 $index2 = $working_arrays[$what_we_are_doing]['field_name_array']['field_name'];
                 $to_array = $working_arrays[$what_we_are_doing][$index2];
                 $from_array = array_diff($column_names_array,$to_array);
@@ -1092,12 +1014,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                     ->with('what_we_are_doing'                  ,$what_we_are_doing)
                     ->with('from_array'                         ,$from_array)
                     ->with('to_array'                           ,$to_array)
-                    //->with('node_name'                          ,$this->node_name)
-                    //->with('model_table'                        ,$this->model_table)
-                    //->with('encoded_record'                     ,$request->input('encoded_record'))
-                    //->with('encoded_column_names'               ,$request->input('encoded_column_names'))
-                    //->with('encoded_working_arrays'             ,$request->input('encoded_working_arrays'))
-                    ->with('message',''
+                     ->with('message',''
                     );
                     var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
                 break;  
@@ -1175,21 +1092,21 @@ public function build_and_execute_query($fieldName_r_o_value_array,
 
         $request->query_value_array                  = json_encode($request->value_array);
         $miscThingsUpdate['query_value_array']       = $request->query_value_array;
-        }
-        if (isset($request->business_rules_field_name_array)){
-            $update = 1; 
+    }
+    if (isset($request->business_rules_field_name_array)){
+        $update = 1; 
 
-            $request->business_rules_r_o_array    = json_encode($request->r_onot_used_array);
-            $miscThingsUpdate['business_rules_r_o_array'] = $request->business_rules_r_o_array;
-       
-           $request->business_rules_r_o_array           = json_encode($request->r_o_array);
-           $miscThingsUpdate['business_rules_r_o_array'] = $request->business_rules_r_o_array;
+        $request->business_rules_field_name_array               = json_encode($request->field_name_array);
+        $miscThingsUpdate['business_rules_field_name_array']    = $request->business_rules_field_name_array;
+   
+       $request->business_rules_r_o_array           = json_encode($request->r_o_array);
+       $miscThingsUpdate['business_rules_r_o_array'] = $request->business_rules_r_o_array;
 
-           $request->business_rules_value_array         = json_encode($request->value_array);
-           $miscThingsUpdate['business_rules_value_array'] = $request->business_rules_value_array;
+       $request->business_rules_value_array         = json_encode($request->value_array);
+       $miscThingsUpdate['business_rules_value_array'] = $request->business_rules_value_array;
 
-           //var_dump($request->business_rules_field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
-       }
+       //var_dump($request->business_rules_field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
+   }
  
  
         if ($update = 1){
@@ -1246,18 +1163,18 @@ public function build_and_execute_query($fieldName_r_o_value_array,
         $tarray[] = 'not_used';
         $tarray[] = 'not_used';
         $tarray[] = 'not_used';
-        $working_arrays[$what_we_are_doing]['query_field_name_array'] = $tarray;
+        $working_arrays[$what_we_are_doing]['business_rules_field_name_array'] = $tarray;
         $tarray = array();
-        $tarray[] = "=";
-        $tarray[] = "=";
-        $tarray[] = "=";
+        $tarray[] = "required";
+        $tarray[] = "required";
+        $tarray[] = "required";
 
-        $working_arrays[$what_we_are_doing]['query_r_o_array'] = $tarray;
+        $working_arrays[$what_we_are_doing]['business_rules_r_o_array'] = $tarray;
         $tarray = array();
         $tarray[] = " ";
         $tarray[] = " ";
         $tarray[] = " ";
-        $working_arrays[$what_we_are_doing]['query_value_array'] = $tarray;
+        $working_arrays[$what_we_are_doing]['business_rules_value_array'] = $tarray;
         //}
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
         return $working_arrays;
@@ -1392,8 +1309,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
            $working_arrays['ppv_define_business_rules']['lookups'][0]                      = 
                 array_merge(array("not_used"=>"not_used"),  $columns);
             $working_arrays['ppv_define_business_rules']['lookups'][1]                      = $business_rules_relational_operators;
-            var_dump($working_arrays['ppv_define_business_rules']['lookups'][1]);
-            var_dump($working_arrays['ppv_define_business_rules']['lookups']['relational_operators']);
+            //var_dump($working_arrays['ppv_define_business_rules']['lookups'][1]);
+            //var_dump($working_arrays['ppv_define_business_rules']['lookups']['relational_operators']);
             //var_dump($business_rules_relational_operators );$this->debug_exit(__FILE__,__LINE__,1);
            return $working_arrays;         //
         }
