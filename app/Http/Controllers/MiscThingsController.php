@@ -198,6 +198,39 @@ class MiscThingsController extends DEHBaseController
     }
 
 
+
+    public function business_rules_getEdit_blade_gen($no_of_whens)
+    {
+        //$lookups['field_name'] = json_decode($lookups['field_name']);
+        //$lookups['business_rules'] = json_decode($lookups['business_rules']);
+        //echo '<br>business_rules_getEdit_blade_gen<br>';var_dump($lookups);exit("exit 91");
+        //$lookups['field_name'] = array_combine($lookups['field_name'], $lookups['field_name']);
+        
+        $crlf = "\r\n";
+        $strx = "";
+        $j = -1;
+        for ($i=0; $i<($no_of_whens); $i++){
+            $j++;
+            $strx .=
+            "<tr>".$crlf; // start a new row
+            $strx .= // first field is always field_name lookup
+            "<td style='text-align:left'>".$crlf.
+            //"{{ Form::select('field_name_array[]', $"."first_lookup_array_name,$"."field_name_array[".$j."]) }}".$crlf.
+            "{{ Form::select('field_name_array[]', $"."first_lookup_array,$"."field_name_array[".$j."],array('type' => 'numeric')) }}".$crlf.
+            "</td>".$crlf;
+            $strx .= // second field is always relational operator
+            "<td style=\"text-align:left\">".$crlf.
+            "{{ Form::select('r_o_array[]', $"."second_lookup_array,$"."r_o_array[".$j."],array('type' => 'numeric')) }}".$crlf.
+            "</td>".$crlf;
+            $strx .= // third field is always user supplied value there ain't no lookup
+            "<td style=\"text-align:left\">".$crlf.
+            "{{ Form::text('value_array[]', $"."value_array[".$j."]) }}".$crlf.
+            "</td>".$crlf;
+            $strx .=
+            "</tr>".$crlf;  // end the row
+        }  // end for
+        return $strx;
+    }
     
         public function array_node_to_array($array) {
         // *****************
@@ -903,15 +936,15 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      */
 
     public function reportDefMenuEdit(Request $request, $id,$what_we_are_doing,$coming_from){
-        echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
+        //echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
         //$this->debug_exit(__FILE__,__LINE__,0);
         
-        echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
+        //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
 
         $miscThing=MiscThing::find($id);
         //var_dump($miscThing);
-        $this->debug_exit(__FILE__,__LINE__,0);
+        //$this->debug_exit(__FILE__,__LINE__,0);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
         case "maintain_browse_fields":           
@@ -949,7 +982,10 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
             $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
             $working_arrays     = $this->working_arrays_construct($miscThing,$ppv_array_names,$what_we_are_doing);
-            var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
+
+            //$working_arrays = 
+            $this->working_arrays_fixer($working_arrays,$ppv_array_names,$what_we_are_doing);
+            //var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
             
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
             $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
@@ -989,7 +1025,8 @@ public function build_and_execute_query($fieldName_r_o_value_array,
 
             //$working_arrays[$what_we_are_doing]['lookups']['field_names'],
              //$working_arrays[$what_we_are_doing]['lookups']['field_names']);
-            //var_dump($column_names_array);$this->debug_exit(__FILE__,__LINE__,10);
+            var_dump($working_arrays[$what_we_are_doing]['lookups'][1]);
+            $this->debug_exit(__FILE__,__LINE__,0);
 
 
             $field_name_array_name  = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
@@ -999,10 +1036,11 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             $value_array_name       = ($working_arrays[$what_we_are_doing]['field_name_array']['value']);
             $value_array            = ($working_arrays[$what_we_are_doing][$value_array_name]);
         
-            echo ($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,0);
+            //echo ($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,0);
             return view($this->model_table.".ppv_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
                 ->with('id'                                 ,$id)
+                ->with('request'                  ,$request)
                 ->with('first_lookup_array'                 ,$working_arrays[$what_we_are_doing]['lookups'][0])
                 ->with('second_lookup_array'                ,$working_arrays[$what_we_are_doing]['lookups'][1])
                 ->with('field_name_array'                   ,$field_name_array)
@@ -1115,42 +1153,44 @@ public function build_and_execute_query($fieldName_r_o_value_array,
                 $miscThingsUpdate['browse_select_array'] =
                 json_encode($miscThingsUpdate['browse_select_array']); // important!!
         }
-      if (isset($request->modifiable_fields_array)){
-            $update = 1; 
-            $request->modifiable_fields_array = $request->to;
-            $miscThingsUpdate['modifiable_fields_array'] = 
-               array_combine($request->to,$request->to);
-            $miscThingsUpdate['modifiable_fields_array'] =
-                json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
+    if (isset($request->modifiable_fields_array)){
+        $update = 1; 
+        $request->modifiable_fields_array = $request->to;
+        $miscThingsUpdate['modifiable_fields_array'] = 
+        array_combine($request->to,$request->to);
+        $miscThingsUpdate['modifiable_fields_array'] =
+        json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
         }
 
-        if (isset($request->query_field_name_array)){
+    if (isset($request->query_field_name_array)){
+        $update = 1; 
+        //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
+        // move the common screen names into the specific fields in the table
+
+        $request->query_field_name_array            = json_encode($request->field_name_array);
+        $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+
+        $request->query_r_o_array                    = json_encode($request->r_o_array);
+        $miscThingsUpdate['query_r_o_array']         = $request->query_r_o_array;
+
+        $request->query_value_array                  = json_encode($request->value_array);
+        $miscThingsUpdate['query_value_array']       = $request->query_value_array;
+        }
+        if (isset($request->business_rules_field_name_array)){
             $update = 1; 
-            //var_dump($request->field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
-            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
-            // move the common screen names into the specific fields in the table
-            //$request->query_field_name_array    =  
-            array_combine($request->field_name_array,$request->field_name_array);
-            $request->query_field_name_array    = json_encode($request->query_field_name_array);
-            $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+
+            $request->business_rules_r_o_array    = json_encode($request->r_onot_used_array);
+            $miscThingsUpdate['business_rules_r_o_array'] = $request->business_rules_r_o_array;
        
-           $request->query_r_o_array           = json_encode($request->r_o_array);
-           $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+           $request->business_rules_r_o_array           = json_encode($request->r_o_array);
+           $miscThingsUpdate['business_rules_r_o_array'] = $request->business_rules_r_o_array;
 
-           $request->query_value_array         = json_encode($request->value_array);
-           $miscThingsUpdate['query_field_name_array'] = $request->query_field_name_array;
+           $request->business_rules_value_array         = json_encode($request->value_array);
+           $miscThingsUpdate['business_rules_value_array'] = $request->business_rules_value_array;
+
+           //var_dump($request->business_rules_field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
+       }
  
-        }
-      if (isset($request->business_rules_field_name_array)){
-            $update = 1; 
-            $request->business_rules_field_name_array = $request->to;
-            $request->business_rules_r_o_array = $request->to;
-            $request->business_rules_value_array = $request->to;
-            $miscThingsUpdate['modifiable_fields_array'] = 
-               array_combine($request->to,$request->to);
-                $miscThingsUpdate['modifiable_fields_array'] =
-                json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
-        }
  
         if ($update = 1){
             $miscThingsings=MiscThing::find($id);
@@ -1193,9 +1233,37 @@ public function build_and_execute_query($fieldName_r_o_value_array,
 
         }
         //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
-        var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
+        //$this->working_arrays_fixer($record,$ppv_array_names,$what_we_are_doing);
+        //echo("<br>"."exit of working_arrays_construct");var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
         return $working_arrays;
     }
+
+    public function working_arrays_fixer($working_arrays,$ppv_array_names,$what_we_are_doing) {
+        
+        //foreach ($ppv_array_names as $what_we_are_doing){
+        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
+        $tarray = array();
+        $tarray[] = 'not_used';
+        $tarray[] = 'not_used';
+        $tarray[] = 'not_used';
+        $working_arrays[$what_we_are_doing]['query_field_name_array'] = $tarray;
+        $tarray = array();
+        $tarray[] = "=";
+        $tarray[] = "=";
+        $tarray[] = "=";
+
+        $working_arrays[$what_we_are_doing]['query_r_o_array'] = $tarray;
+        $tarray = array();
+        $tarray[] = " ";
+        $tarray[] = " ";
+        $tarray[] = " ";
+        $working_arrays[$what_we_are_doing]['query_value_array'] = $tarray;
+        //}
+        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+        return $working_arrays;
+
+    }
+
 
     public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
         
@@ -1321,10 +1389,13 @@ public function build_and_execute_query($fieldName_r_o_value_array,
             $working_arrays['ppv_define_business_rules']['lookups']['field_names']          = 
                 array_merge(array("not_used"=>"not_used"),  $columns);
             $working_arrays['ppv_define_business_rules']['lookups']['relational_operators'] = $business_rules_relational_operators;
-            $working_arrays['ppv_define_business_rules']['lookups'][0]                      = 
+           $working_arrays['ppv_define_business_rules']['lookups'][0]                      = 
                 array_merge(array("not_used"=>"not_used"),  $columns);
             $working_arrays['ppv_define_business_rules']['lookups'][1]                      = $business_rules_relational_operators;
-            return $working_arrays;         //
+            var_dump($working_arrays['ppv_define_business_rules']['lookups'][1]);
+            var_dump($working_arrays['ppv_define_business_rules']['lookups']['relational_operators']);
+            //var_dump($business_rules_relational_operators );$this->debug_exit(__FILE__,__LINE__,1);
+           return $working_arrays;         //
         }
 
 

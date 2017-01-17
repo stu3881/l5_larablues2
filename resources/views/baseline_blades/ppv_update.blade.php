@@ -63,10 +63,6 @@
 			{{ Form::hidden('business_rules_value_array'		, "") }}
 		@endif						
 
-		{{ Form::hidden('edit4_option'							,'update_field_list') }}
-
-	
-
 
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
@@ -106,7 +102,7 @@
  					@include("../".$node_name.'/'.$generated_files_folder.'/'.$id.'_advanced_query_getEdit')
 				@endif	                                                    			
  				@if($what_we_are_doing == "ppv_define_business_rules")	
- 					@include("../".$node_name.'/'.$generated_files_folder.'/'.$request->Input('report_key').'_business_rules_getEdit')
+ 					@include("../".$node_name.'/'.$generated_files_folder.'/'.$id.'_advanced_query_getEdit')
 				@endif	                                                    			
 				</table>
 				

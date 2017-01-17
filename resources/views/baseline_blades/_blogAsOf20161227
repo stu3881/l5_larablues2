@@ -46,5 +46,11 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
  	fuck.  i deleted somethin before i made my last git backup (right when i was doing the save it looks like)
  	so, what i remember isn't there...
  	i know i had to make the arrays the same size and at least 5
+2017-01-17
+	advanced-query looks like it's working and business-rules
+	the missing code was a loop to initialize values that always need to be in sync but i broke that symmetry in testing.
 
+	i think initializing 83445 willfix it.  other ones seem ok. i think padding can be much implerbut we're not looking at that right now; just making it work.
+	business_rules_getEdit_blade_gen and advanced_query_getEdit_blade_gen_new are both
+	ppv_edit_snippet_gen s (a name i just made up) we're moving to that instead.  behaviour is identical; just data changes.
 	

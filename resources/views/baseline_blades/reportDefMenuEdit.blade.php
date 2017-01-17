@@ -127,7 +127,7 @@
 					the other buttons go thru edit4 whereas this button tries to go straight to edit
 				-->		
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
-  		        'what_we_are_doing'=>'ppv_define_query',
+  		        'what_we_are_doing'=>'ppv_define_business_rules',
   		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">business_rules
   		        </a>
 			</td>
