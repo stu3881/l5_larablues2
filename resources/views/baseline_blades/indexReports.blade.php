@@ -1,8 +1,10 @@
 @extends('layouts.main')
 @section('promo')
 
-<section id="promo">     
+<section id="promo">   
+	indexReports  
 	<div id="promo-details"> 
+
 		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))}} 
 
 
@@ -155,7 +157,9 @@ $rowcount = -1;
 
 					@include($node_name.'/'.'genned_edit1')
 				
-				<!--	the buttons at the end of the line -->
+		<!--	the buttons at the end of the line -->
+
+
   		        <td>
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning">{{$record->id}} edita</a>
 					{{ Form::close() }}
@@ -176,6 +180,7 @@ $rowcount = -1;
 					{{ Form::close() }}
 				</td>		
 				<td >
+
 					{{ Form::open(array('url'=>'admin/'.$node_name.'/edit2', 'method'=>'GET')) }}
 
 					{{ Form::submit('browse_edit') }}

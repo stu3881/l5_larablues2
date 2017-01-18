@@ -471,7 +471,7 @@ public function build_and_execute_query($fieldName_r_o_value_array,
      * @return \Illuminate\Http\Response
      */
 
-    public function browseEdit($id) {
+    public function browseEdit(Request $request, $id,$what_we_are_doing,$coming_from){
         echo(" browseEdit<br>");
         var_dump($id);
         //$this->debug_exit(__FILE__,__LINE__,0);

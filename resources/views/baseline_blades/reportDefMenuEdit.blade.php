@@ -72,9 +72,10 @@
 					</td>
 			
 					<td class="table_no_lines">
-						{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit1', 'method'=>'GET')) --}}
-		             	<a href="{{route($node_name.'.browseEdit',$miscThing->id)}}" class="table_no_lines">
-		             	Reports menu</a>
+						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
+						{{ Form::submit('back to Reports menu') }}
+						{{ Form::close() }}
+
 
 					</td>
 
@@ -115,20 +116,19 @@
 			</td>
 			
 			<td>
-				<!-- advanced query fields 
-				-->		
+				<!-- advanced query fields -->		
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
   		        'what_we_are_doing'=>'ppv_define_query',
-  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">advanced_query
+  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">
+  		        advanced_query
   		        </a>
 			</td>
 			<td>
-				<!-- business rules fields 
-					the other buttons go thru edit4 whereas this button tries to go straight to edit
-				-->		
+				<!-- business rules fields -->		
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
   		        'what_we_are_doing'=>'ppv_define_business_rules',
-  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">business_rules
+  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">
+  		        business_rules
   		        </a>
 			</td>
 			</tr>
