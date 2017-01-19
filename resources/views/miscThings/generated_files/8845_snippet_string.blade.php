@@ -16,3 +16,11 @@
 {{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
 </td>
 
+
+<td style="text-align:left">
+{{ Form::label("advanced_query","advanced_query") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('advanced_query',$record['advanced_query']) }}
+</td>
+

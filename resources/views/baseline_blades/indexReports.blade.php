@@ -180,22 +180,8 @@ $rowcount = -1;
 					{{ Form::close() }}
 				</td>		
 				<td >
-
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/edit2', 'method'=>'GET')) }}
-
-					{{ Form::submit('browse_edit') }}
-
-					{{ Form::hidden('key_field_name'		,$record->key_field_name) }}
-					{{ Form::hidden('data_key'				,$record->id) }}
-					{{ Form::hidden('report_key'			,$record->$snippet_table_key_field_name) }}
-					{{ Form::hidden('model_table'			,$record->model_table) }}
-					{{ Form::hidden('node_name'				,$node_name) }}
-					{{ Form::hidden('report_name'			,$record->report_name) }}
-					{{ Form::hidden('coming_from'			,'edit1_browse_button') }}
-					{{ Form::hidden('what_we_are_doing'		,'edit2_build_default_browse') }}		
-
-					{{ Form::hidden('logical_button_name'	,'executing_and_displaying_a_browse') }}
-					{{ Form::close() }}
+	  		        <a href="{{ URL::route($node_name.'.browseEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning"> 
+	  		        browseEdit</a>
 				</td>
 			</tr>
 				
