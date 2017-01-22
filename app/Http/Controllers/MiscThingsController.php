@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMiscThings;
+
+use DB;
 //use App\Http\Controllers\Schema;
 
 class MiscThingsController extends DEHBaseController
@@ -196,6 +198,7 @@ class MiscThingsController extends DEHBaseController
     }
 
 
+
     public function getEdit2defaultBrowse() {
            
             echo("getEdit2defaultBrowse");$this->debug_exit(__FILE__,__LINE__,1);
@@ -206,8 +209,9 @@ class MiscThingsController extends DEHBaseController
                 switch ($what_we_are_doing) {
                     case "edit2_build_default_browse":
                         $report_definition          = $this->execute_query_by_report_no($request->Input('report_key'));
-                        $ppv_array_names    = array('ppv_define_query','ppv_define_business_rules');
-                        $working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,$what_we_are_doing);
+                        echo("<br>"."calling working_arrays_construct ");$this->debug_exit(__FILE__,__LINE__,10);
+
+                        $working_arrays     = $this->working_arrays_construct($report_definition);
                         $errors = array();
                         $message = "";
                         if ($report_definition){
@@ -245,10 +249,10 @@ class MiscThingsController extends DEHBaseController
                 foreach($working_arrays['ppv_define_query']['field_name_array'] as $name=>$array_name){
                     $arr[] = $working_arrays['ppv_define_query'][$array_name]; 
                 }           
-                //var_dump($arr); $this->debug_exit(__FILE__,__LINE__,1);   
+                var_dump($arr); $this->debug_exit(__FILE__,__LINE__,1);   
                 $query_relational_operators_array = $this->build_query_relational_operators_array();
              
-                $db_result = $this->build_and_execute_query($arr,$this->bypassed_field_name,$query_relational_operators_array);
+                $snippet_string = $this->build_and_execute_query($arr,$this->bypassed_field_name,$query_relational_operators_array);
                 $db_result = json_encode($db_result);
                 $db_result = json_decode($db_result,1);
                 //var_dump(Input::all());
@@ -279,8 +283,9 @@ class MiscThingsController extends DEHBaseController
         $message = "";
         $what_we_are_doing = "edit2_build_default_browse";
         if ($report_definition){
-           $ppv_array_names    = array('ppv_define_query','ppv_define_business_rules');
-           $working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,$what_we_are_doing);
+            echo("<br>"."calling working_arrays_construct ");$this->debug_exit(__FILE__,__LINE__,10);
+
+            $working_arrays     = $this->working_arrays_construct($report_definition);
 
             //var_dump($report_definition[0]);
             if (is_null($report_definition[0]->browse_select_array) ){
@@ -321,40 +326,45 @@ class MiscThingsController extends DEHBaseController
 
 
     }
-public function build_and_execute_query($working_arrays,
+    public function build_and_execute_query(
+        $working_arrays,
         $bypassed_field,
         $query_relational_operators_array) {
-        echo("build_and_execute_query<br><br>");
-        //var_dump($fieldName_r_o_value_array);
-        //$this->debug_exit(__FILE__,__LINE__,10);
+        echo("<br>build_and_execute_query");
+        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
+        //
         // *******
         // this guy does a lot
         // *****
         //$fieldName_r_o_value_array);
 
-       $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
-       $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
+        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
+        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
+        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
+        //$r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
+        $r_o_array             =$working_arrays['ppv_define_query']['query_r_o_array_values'];
+
        $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
-       $field_name_array = $working_arrays['ppv_define_query'][$field_name_array_name];
-       $r_o_array        = $working_arrays['ppv_define_query'][$r_o_array_name];
-       $value_array      = $working_arrays['ppv_define_query'][$value_array_name];
+       $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
 
-        //var_dump($r_o_array);
-
-
-        //var_dump($first_lookup_array);var_dump($second_lookup_array);var_dump($value_array);
-        //$this->debug_exit(__FILE__,__LINE__,0);;
+        //$this->debug_exit(__FILE__,__LINE__,0);var_dump($query_relational_operators_array);var_dump($field_name_array);
+        //var_dump($field_name_array);var_dump($r_o_array);
+        //var_dump($value_array);$this->debug_exit(__FILE__,__LINE__,10);
         //echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
-        $first_time = true; 
-        $query = MiscThing::
+        $first_time = 0;
         $dash_gt = " ->";
         $dash_gt = " query->where";
-        foreach ($field_name_array as $index=>$value) {
-            //echo ("value ".$value);
-           if ($value <> $bypassed_field){
+        //$query = MiscThing::
+        $query = DB::connection($this->db_data_connection)->table($this->model_table);
+        echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
+
+        foreach ($field_name_array as $index=>$field_name) {
+            $value = $field_name;
+           if ($field_name <> $bypassed_field){
                 $r_o = $r_o_array [$index];
                 $v = $value_array[$index];
-                echo("357".$value.'*'.$r_o.'*'.$v.'*');
+                //echo("<BR>");$this->debug_exit(__FILE__,__LINE__,0);
+                //echo("rrr ".$field_name.'*'.$r_o.'*'.$v.'*');
                 switch ($r_o) {
                 case "=":
                 case "<>":
@@ -362,15 +372,16 @@ public function build_and_execute_query($working_arrays,
                 case "<":
                 case "<=":
                 case ">=":
-                if ($first_time) {
-                    $query = MiscThing::where($value,$r_o,$v);
+                if ($first_time ) {
+                    $query = MiscThing::where($field_name,$r_o,$v);
+                    echo(' MiscThing::where('.$field_name.' '.$r_o.'"'.$v.'")');
                     $first_time = 0;
-                    exit (' exit 155');
+                    //echo("first time");$this->debug_exit(__FILE__,__LINE__,0);
                 }
                 else{
-                   echo ($dash_gt.'where( '.$value.' '.$r_o.' '.$v);//exit (' exit 155');
-                    //$query_string .= '->where('.$value.','.$r_o.','.$v.')';
-                    $query->where($value,$r_o,$v);
+                   //echo ($dash_gt.'where( '.$field_name.' '.$r_o.' '.$v);//exit (' exit 155');
+                    //$query_string .= '->where('.$field_name.','.$r_o.','.$v.')';
+                    $query->where($field_name,$r_o,$v);
                 }
                 break;
         
@@ -383,35 +394,38 @@ public function build_and_execute_query($working_arrays,
                       $aord = "ASC";
                       if ($first_time) {
                         $query = MiscThing::orderBy($value,$aord);
+                        echo(' MiscThing::orderBy('.$value.','.$aord.')');
                         $first_time = 0;
                     }
                     else{
                         $query->orderBy($value);
-                       echo(' ->orderBy('.$value.','.$aord.')');//exit("xit226");
+                        echo(' ->orderBy('.$value.','.$aord.')');
                     }
                     break;
                 case "orderByDesc":
                     $aord = "DESC";
                     if ($first_time) {
                          $query = MiscThing::orderBy($value,$aord);
+                         echo(' MiscThing::orderBy('.$value.','.$aord.')');
                         $first_time = 0;
                     }
                     else
                     {
                         $query->orderBy($value,$aord);
-                        echo(' orderBy('.$value.','.$aord.')');//exit("xit226");
+                        echo(' ->orderBy('.$value.','.$aord.')');
                     }
                     break;
                 case "distinct":
                    if ($first_time) {
                          $query = MiscThing::distinct($value);
+                          echo(' MiscThing::distinct('.$value);
                         $first_time = 0;
                         //$this->debug_exit(__FILE__,__LINE__,10);
                     }
                     else
                     {
                     $query->distinct($value);
-                    echo(" ->distinct($value) ");//exit("xit226");
+                    echo(" ->distinct($value) ");
                     }
                     break;
                 case "xgetArray":
@@ -427,9 +441,13 @@ public function build_and_execute_query($working_arrays,
         } // end of not = "not_used"
         
     }  // end foreach
-
-    $query->get();
-    return $query;
+ 
+    if ($first_time) {
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        return("");
+    }
+    //echo ("<br>executing query");
+    return $query->get();
     
     //return  (array) $query;
     }   // end of advanced query ppv new
@@ -444,45 +462,54 @@ public function build_and_execute_query($working_arrays,
      */
 
     public function browseEdit(Request $request, $id,$what_we_are_doing,$coming_from){
-        echo($what_we_are_doing." browseEdit<br>".$id);
+        echo("<br> browseEdit ".$what_we_are_doing.$id);$this->debug_exit(__FILE__,__LINE__,0);
         //var_dump($id);$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($report_definition);
         $report_definition = MiscThing::where('id','=',$id)->get();
         //var_dump($report_definition[0]); $this->debug_exit(__FILE__,__LINE__,0);   
-        $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
-        $working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,'expandable_what_we_are_doings');
-        //var_dump($working_arrays['expandable_what_we_are_doings']);
-        foreach($working_arrays['expandable_what_we_are_doings'] as $name=>$array_name){
-            foreach($working_arrays[$array_name]['field_name_array'] as $name1=>$array_name1){
-                $working_arrays[$array_name][$array_name1] = json_decode($report_definition[0]->$array_name1);
-                echo('$array_name'. " ** ".$array_name1."<br>");
-                //var_dump($working_arrays[$array_name]);
-                //$arr[] = $working_arrays['ppv_define_query'][$array_name]; 
-            }           
-            //echo($array_name. " ** ");
-            //var_dump($working_arrays[$array_name]);
-            //$arr[] = $working_arrays['ppv_define_query'][$array_name]; 
-        }           
-        $this->debug_exit(__FILE__,__LINE__,0);   
-        $query_relational_operators_array = $this->build_query_relational_operators_array();
-     
-        $db_result = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array);
-
-
-
-        $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
-        //$working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,'ppv_define_query');
         
-        $passed_to_view_array = $this->build_report_def_arrays($report_definition);
-        //$this->debug_exit(__FILE__,__LINE__,0);
-        //echo("<br> passed_to_view_array<br>");var_dump($passed_to_view_array);        $this->debug_exit(__FILE__,__LINE__,10);
-       //var_dump((array) $report_definition[0]);        
+        $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+        //var_dump($working_arrays);
+        //var_dump($report_definition[0]);
+
+        //echo('working_arrays');
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($working_arrays['expandable_what_we_are_doings']);
+        $query_relational_operators_array = $this->build_query_relational_operators_array();
+        $miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array);
+        //var_dump($miscThings[0]);
+        $encoded_business_rules_field_name_array = array();
+        $field_names_array = array();
+        $data_array_name = array();
+        $data_array_name ["report_name"] = $report_definition[0]->report_name;
+        $data_array_name ["record_type"] = $report_definition[0]->record_type;
+        echo('<br>after build_and_execute_query');
+        if ($miscThings){         
+            //var_dump($miscThings[0]);            
+            return view($this->node_name.'.browseEdit',compact('miscThings'))
+            ->with('all_records'                ,$miscThings)
+            ->with('app_path'                   ,app_path())
+            ->with('model_table'                ,$this->model_table)
+            ->with('browse_select_field_count'  ,count($miscThings))
+            ->with('generated_files_folder'     , $this->generated_files_folder)
+            ->with('use_table_in_record'        , 'y')
+            ->with('record_table_name'          , $this->model_table)
+            ->with('key_field_value'            , $id)
+             ->with('report_key'                , $id)
+            ->with('field_names_array'          , $field_names_array)
+            ->with('lookups'                    , array_combine($field_names_array,$field_names_array))
+            ->with('key_field_name'             , 'id')
+            ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
+            //->with('data_array_name'      , $passed_to_view_array)
+            ->with('data_array_name'        , $data_array_name)
+            ->with('node_name'              ,$this->node_name);
+         //return view('miscThings.edit2_default_browse',$miscThings);
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
   
-       //$miscThings = MiscThing::where('report_name','=',C->report_name)->get();
- 
-        //$this->debug_exit(__FILE__,__LINE__,0);
-        //$miscThings = $this->execute_report_def_query($report_definition);
-   
         if($miscThings = MiscThing::distinct('record_type')->get()){
           //$miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)->get();
           //$this->debug_exit(__FILE__,__LINE__,0);   
@@ -497,8 +524,9 @@ public function build_and_execute_query($working_arrays,
         //var_dump($id);$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($report_definition);
         $report_definition = MiscThing::where('id','=',$id)->get();
-        $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
-        //$working_arrays     = $this->working_arrays_construct($report_definition,$ppv_array_names,'ppv_define_query');
+        echo("<br>"."calling working_arrays_construct ");$this->debug_exit(__FILE__,__LINE__,10);
+
+        $working_arrays     = $this->working_arrays_construct($report_definition[0]);
         
         $passed_to_view_array = $this->build_report_def_arrays($report_definition);
         //$this->debug_exit(__FILE__,__LINE__,0);
@@ -510,6 +538,32 @@ public function build_and_execute_query($working_arrays,
         //$this->debug_exit(__FILE__,__LINE__,0);
         //$miscThings = $this->execute_report_def_query($report_definition);
    
+       $encoded_business_rules_field_name_array = array();
+        $field_names_array = array();
+        $data_array_name = array();
+        $data_array_name ["report_name"] = $miscThings[0]->report_name;
+        $data_array_name ["record_type"] = $miscThings[0]->record_type;
+        if ($miscThings){
+             
+             return view('miscThings.edit2_default_browse',compact('miscThings'))
+                ->with('model_table'                ,$this->model_table)
+                ->with('generated_files_folder'    , $this->generated_files_folder)
+                ->with('report_key'    , $id)
+                ->with('field_names_array'      , $field_names_array)
+                ->with('lookups'                , array_combine($field_names_array,$field_names_array))
+                ->with('key_field_name'         , 'id')
+                ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
+                //->with('data_array_name'      , $passed_to_view_array)
+                ->with('data_array_name'        , $data_array_name)
+                ->with('node_name'              ,$this->node_name);
+         //return view('miscThings.edit2_default_browse',$miscThings);
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+
+
         if($miscThings = MiscThing::distinct('record_type')->get()){
           //$miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)->get();
           //$this->debug_exit(__FILE__,__LINE__,0);   
@@ -531,13 +585,13 @@ public function build_and_execute_query($working_arrays,
                 ->with('model_table'                ,$this->model_table)
                 ->with('generated_files_folder'    , $this->generated_files_folder)
                 ->with('report_key'    , $id)
-                ->with('field_names_array'    , $field_names_array)
-                ->with('lookups'    , array_combine($field_names_array,$field_names_array))
-                ->with('key_field_name'    , 'id')
+                ->with('field_names_array'      , $field_names_array)
+                ->with('lookups'                , array_combine($field_names_array,$field_names_array))
+                ->with('key_field_name'         , 'id')
                 ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
-                //->with('data_array_name'    , $passed_to_view_array)
-                ->with('data_array_name'    , $data_array_name)
-                ->with('node_name'                  ,$this->node_name);
+                //->with('data_array_name'      , $passed_to_view_array)
+                ->with('data_array_name'        , $data_array_name)
+                ->with('node_name'              ,$this->node_name);
          //return view('miscThings.edit2_default_browse',$miscThings);
         }
         else {
@@ -548,7 +602,115 @@ public function build_and_execute_query($working_arrays,
        return view('miscThings.edit2_default_browse',$report_definition);
     }
 
+
+    public function browse_select_blade_gen($model,$field_name_array,$version) {
+        //echo '<br>browse_select_blade_gen<br><br>';$this->debug_exit(__FILE__,__LINE__,10);
+
+        $crlf = "\r\n";
+        switch ($version)   {
+
+            case "version1":
+                $stry = "$"."record['";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name."']";
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ Form::label('', ". $strz. ") }}".$crlf.
+                            "</td>".$crlf;
+                }
+                return $strx;
+            case "version2":
+                //echo("browse_select_blade_gen");$this->debug_exit(__FILE__,__LINE__,1);
+                $stry = "$"."record['";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name."']";
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ ".$strz. " }}".$crlf.
+                            "</td>".$crlf;
+                }
+            
+                return $strx;
+                break;
+            case "version3":
+                $array_name_string = "$"."record[\'";
+                $array = array();
+                $prefix_str = "<td class=\'text_align_left select_pink\' >".$crlf;
+                $suffix_str = $crlf . "</td>" . $crlf;
+                foreach($field_name_array as $index=>$field_name) {
+                    $data_str   = $array_name_string . $field_name . "\']";
+                    $array[] = $prefix_str;
+                    //$array[] = $data_str;
+                    $array[] = $suffix_str;
+                }
+            case "version4":
+                $array_name_string = "$"."record['";
+                $array = array();
+                $prefix_str = "<td class='text_align_left select_pink' >";
+                $suffix_str = "</td>" ;
+                //foreach($field_name_array as $index=>$field_name) {
+                //  $data_str   = $array_name_string . $field_name . "']";
+                    $array[] = $prefix_str;
+                //  $array[] = $data_str;
+                    //$array[] = "xxx";
+                    $array[] = $suffix_str;
+                //}
+                //echo("browse_select_blade_gen");var_dump($array);$this->debug_exit(__FILE__,__LINE__,1);
+                return $array;
+                break;
+            }
+    }
     
+
+
+
+
+    public function browse_select_blade_files_gen($report_key) {
+        //echo ('<br>browse_select_blade_files_gen<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
+        File::put($fnam, $this->browse_select_field_names_row_gen($this->model,$_REQUEST["to"]));
+        
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_display_snippet.blade.php';
+        //print_r($_REQUEST["to"]);exit('exit258');
+        File::put($fnam,$this->browse_select_blade_gen($this->model,$_REQUEST["to"],'version1'));
+    }
+  
+    public function browse_select_field_names_row_gen($model,$field_name_array) {
+        //echo '<br>browse_select_field_names_row_gen';//exit("exit 99");
+        $crlf = "\r\n";
+        //$crlf = "";
+        $strx = "<tr>". $crlf;
+        $strx .= "<td>". "#"."</td>". $crlf;
+        foreach($field_name_array as $name=>$value) {
+            $strx .= "<td>" . $value . "</td>". $crlf;
+        }
+        $strx .= "</tr>". $crlf;
+
+        return $strx;
+    }
+
+    public function browse_select_snippets_gen_by_report($key_field_name,$key_value) {
+        //echo 'browse_select_snippets_gen_by_report';print_r($_REQUEST);exit("exit 172");
+        $nv_array = array(); 
+        foreach ($_REQUEST['to'] as $value){
+            $nv_array [$value] = $value;
+        }
+        $array = array();
+        //$array ['browse_select_display_snippet']              = $this->browse_select_display_snippet_gen($this->model,$_REQUEST["to"]);
+        $array ['browse_select_display_snippet']            = "";
+        $array ['browse_select_array']                                  = json_encode($nv_array);
+        $array ['merge_browse_select_and_modify_arrays']= json_encode(array_merge ((array) $_REQUEST["to"],$this->generated_snippets_array['modifiable_fields_array']));
+        $array ['lookup_name_value_array_gen_by_table'] = json_encode($this->lookup_name_value_array_gen_by_table($this->model_table));
+        //print_r($array);exit("exit 184");
+        $this->generated_snippets_array_update($key_field_name,$key_value,$array);
+        return;
+    }
+
+
+
     public function build_column_names_array($tbl_name) {
         //echo ('build_column_names_array'.$tbl_name);exit("exit 99");
         $column_names_array = array();
@@ -789,10 +951,9 @@ public function build_and_execute_query($working_arrays,
         ->where('node_name',    '='    ,$this->node_name)
         ->orderBy('report_name','asc')
         ->get();
-       $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
-       $what_we_are_doing = 'displaying_advanced_edits_screen';
-       $working_arrays     = $this->working_arrays_construct($miscThings,$ppv_array_names,$what_we_are_doing);
-       $record = $miscThings[0];
+        $what_we_are_doing = 'displaying_advanced_edits_screen';
+        //$working_arrays     = $this->working_arrays_construct($miscThings[0]);
+        $record = $miscThings[0];
         return view($this->node_name.'.indexReports',compact('miscThings'))
             ->with('encoded_report_description' ,json_encode($miscThings))
             ->with('encoded_record'             ,json_encode($record))
@@ -935,30 +1096,23 @@ public function build_and_execute_query($working_arrays,
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
         //$this->debug_exit(__FILE__,__LINE__,0);
         
-        //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
-
-        $miscThing=MiscThing::find($id);
-        //var_dump($miscThing);
-        //$this->debug_exit(__FILE__,__LINE__,0);
+        echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
+        $miscThing = MiscThing::where('id','=',$id)->get();
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
+        $working_arrays     = $this->working_arrays_construct($miscThing[0]);
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
         case "maintain_browse_fields":           
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
-            //var_dump($column_names_array);
-            $ppv_array_names = array(
-                'ppv_define_query',
-                'ppv_define_business_rules');
-            $working_arrays     = $this->working_arrays_construct(
-                $miscThing,
-                $ppv_array_names,
-                $what_we_are_doing);
-
+            
+            //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,10);
             $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
-            $index2 = $working_arrays[$what_we_are_doing]['field_name_array']['field_name'];
-            $to_array = $working_arrays[$what_we_are_doing][$index2];
+            $array_name = $working_arrays[$what_we_are_doing]['field_name_array']['field_name'];
+            $to_array = (array) $working_arrays[$what_we_are_doing][$array_name];
             $from_array = array_diff($column_names_array,$to_array);
             //$this->debug_exit(__FILE__,__LINE__,0);var_dump($to_array);
-            //var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
+            
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             return view($this->model_table.'.select_fields'    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
@@ -975,14 +1129,12 @@ public function build_and_execute_query($working_arrays,
         case "ppv_define_query":
         case "ppv_define_business_rules":
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
-            $ppv_array_names = array('ppv_define_query','ppv_define_business_rules');
-            $working_arrays     = $this->working_arrays_construct($miscThing,$ppv_array_names,$what_we_are_doing);
-
+            //echo('<br>1042: '.$what_we_are_doing);var_dump($miscThing );   $this->debug_exit(__FILE__,__LINE__,0);   
             //$working_arrays = 
-            $this->working_arrays_fixer($working_arrays,$ppv_array_names,$what_we_are_doing);
+            $this->working_arrays_fixer($working_arrays,$what_we_are_doing);
             //var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
-            
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
+            echo("rows ".$field_name_array_name);
             $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
             
             //echo("rows ".$no_of_rows);
@@ -1035,7 +1187,10 @@ public function build_and_execute_query($working_arrays,
                 ->with('message'                            ,'')
                 ;
         }
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,0);
+
        return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
+        ->with('id'                            ,$id)
         ->with('model'                            ,$this->model)
         ->with('node_name'                        ,$this->node_name)
         ->with('what_we_are_doing'                ,$what_we_are_doing)
@@ -1187,7 +1342,7 @@ public function build_and_execute_query($working_arrays,
     {
         //
     }
-    public function working_arrays_construct($record,$ppv_array_names,$what_we_are_doing) {
+    public function working_arrays_construct($record) {
         //echo("working_arrays_construct");
         // $working_arrays contains some handy grouping of data and arrays we need for various things
         // we used to define working_arrays based on what we were doing
@@ -1196,13 +1351,114 @@ public function build_and_execute_query($working_arrays,
         $column_names       = $this->build_column_names_array($this->model_table);
         $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
-        $working_arrays     = $this->working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays);
+        $working_arrays     = $this->working_arrays_pad_rows_for_growth($working_arrays);
         //$this->working_arrays_fixer($record,$ppv_array_names,$what_we_are_doing);
-        //echo("<br>"."exit of working_arrays_construct");var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
-        return $working_arrays;
+         return $working_arrays;
     }
 
-    public function working_arrays_fixer($working_arrays,$ppv_array_names,$what_we_are_doing) {
+      
+    public function working_arrays_define($record) {
+        //echo("working_arrays_define");
+        //var_dump($record);
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        $working_arrays = array();
+        //$working_arrays['maintain_modifiable_fields']['field_name']   = 'modifiable_fields_array';
+        //$working_arrays['maintain_modifiable_fields'][]               = 'modifiable_fields_array';
+        $working_arrays['expandable_what_we_are_doings']     = array(
+            'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
+            'maintain_browse_fields'        => 'maintain_browse_fields',
+            'ppv_define_query'              => 'ppv_define_query',
+            'ppv_define_business_rules'     => 'ppv_define_business_rules'
+            );
+        $working_arrays['advanced_edit_functions']     = array(
+            'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
+            'maintain_browse_fields'        => 'maintain_browse_fields',
+            'ppv_define_query'              => 'ppv_define_query',
+            'advanced_menu_fields_list'     => 'advanced_menu_fields_list',
+            'ppv_define_business_rules'     => 'ppv_define_business_rules'
+            );
+        $working_arrays['advanced_menu_fields_list']['field_name_array']           = array(
+            'report_name'       => 'report_name'
+            );
+
+        $working_arrays['maintain_modifiable_fields']['field_name_array'] = array(
+            'field_name'        => 'modifiable_fields_array');
+        $working_arrays['maintain_modifiable_fields']['default_values'] = array(
+            'field_name'        => $this->bypassed_field_name,
+            );
+        $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'] = 
+        json_decode($record->modifiable_fields_array);
+
+
+        $working_arrays['maintain_browse_fields']['field_name_array'] = array(
+            'field_name'        => 'browse_select_array');
+        $working_arrays['maintain_browse_fields']['default_values'] = array(
+            'field_name'        => $this->bypassed_field_name,);
+        $working_arrays['maintain_browse_fields']['browse_select_array'] = 
+        json_decode($record->browse_select_array);
+
+
+
+        $working_arrays['ppv_define_query']['field_name_array'] = array(
+            'field_name' => 'query_field_name_array',
+            'r_o'        => 'query_r_o_array',
+            'value'      => 'query_value_array'
+            );
+        $working_arrays['ppv_define_query']['default_values'] = array(
+            'field_name' => $this->bypassed_field_name,
+            'r_o'        => '=',
+            'value'      => ' '
+            );
+
+//var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
+//var_dump($record);$this->debug_exit(__FILE__,__LINE__,10);
+        $working_arrays['ppv_define_query']['query_field_name_array'] = 
+        json_decode($record->query_field_name_array);
+        $working_arrays['ppv_define_query']['query_r_o_array'] = 
+        json_decode($record->query_r_o_array);
+        $working_arrays['ppv_define_query']['query_value_array'] = 
+        json_decode($record->query_value_array);
+        $working_arrays['ppv_define_query']['query_r_o_array_values'] = array();
+        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
+        $query_relational_operators_array = $this->build_query_relational_operators_array();
+        foreach ($working_arrays['ppv_define_query']['query_r_o_array'] as $index=>$value){
+            $working_arrays['ppv_define_query']['query_r_o_array_values'][] =
+            $query_relational_operators_array[$value];
+            
+        }
+        //echo("<br>"$value."*".". $query_relational_operators_array[$value]);
+        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
+       
+
+        $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
+            'field_name' => 'business_rules_field_name_array',
+            'r_o'        => 'business_rules_r_o_array',
+            'value'      => 'business_rules_value_array'
+            );
+        $working_arrays['ppv_define_business_rules']['default_values'] = array(
+            'field_name' => $this->bypassed_field_name,
+            'r_o'        => 'required',
+            'value'      => ' '
+            );
+        $working_arrays['ppv_define_business_rules']['business_rules_field_name_array'] = 
+        json_decode($record->business_rules_field_name_array);
+        $working_arrays['ppv_define_business_rules']['business_rules_r_o_array'] = 
+        json_decode($record->business_rules_r_o_array);
+        $working_arrays['ppv_define_business_rules']['business_rules_value_array'] = 
+        json_decode($record->business_rules_value_array);
+        $working_arrays['ppv_define_query']['business_rules_r_o_array_values'] = array();
+        //$query_relational_operators_array = $this->build_query_relational_operators_array();
+        //foreach ($working_arrays['ppv_define_query']['business_rules_r_o_array'] as $index=>$value){
+        //    $working_arrays['ppv_define_query']['business_rules_r_o_array_values'][] =
+        //    $query_relational_operators_array[$value];
+        //}
+
+        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,1);
+        return($working_arrays);
+    }
+
+
+    public function working_arrays_fixer($working_arrays,$what_we_are_doing) {
         
         //foreach ($ppv_array_names as $what_we_are_doing){
         //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
@@ -1229,7 +1485,7 @@ public function build_and_execute_query($working_arrays,
     }
 
 
-    public function working_arrays_pad_rows_for_growth($ppv_array_names,$working_arrays) {
+    public function working_arrays_pad_rows_for_growth($working_arrays) {
     /*
         $working_arrays['expandable_what_we_are_doings']     = array(
             'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
@@ -1249,69 +1505,6 @@ public function build_and_execute_query($working_arrays,
        }
        return $working_arrays;
     }   
-
-
-
-        public function working_arrays_define($record) {
-            //echo("working_arrays_define");
-            //var_dump($record);//exit("exit 39");
-            $working_arrays = array();
-            //$working_arrays['maintain_modifiable_fields']['field_name']   = 'modifiable_fields_array';
-            //$working_arrays['maintain_modifiable_fields'][]               = 'modifiable_fields_array';
-            $working_arrays['expandable_what_we_are_doings']     = array(
-                'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
-                'maintain_browse_fields'        => 'maintain_browse_fields',
-                'ppv_define_query'              => 'ppv_define_query',
-                'ppv_define_business_rules'     => 'ppv_define_business_rules'
-                );
-            $working_arrays['advanced_edit_functions']     = array(
-                'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
-                'maintain_browse_fields'        => 'maintain_browse_fields',
-                'ppv_define_query'              => 'ppv_define_query',
-                'advanced_menu_fields_list'     => 'advanced_menu_fields_list',
-                'ppv_define_business_rules'     => 'ppv_define_business_rules'
-                );
-            $working_arrays['advanced_menu_fields_list']['field_name_array']           = array(
-                'report_name'       => 'report_name'
-                );
-
-            $working_arrays['maintain_modifiable_fields']['field_name_array'] = array(
-                'field_name'        => 'modifiable_fields_array');
-            $working_arrays['maintain_modifiable_fields']['default_values'] = array(
-                'field_name'        => $this->bypassed_field_name,
-                );
-
-             $working_arrays['maintain_browse_fields']['field_name_array'] = array(
-                'field_name'        => 'browse_select_array');
-            $working_arrays['maintain_browse_fields']['default_values'] = array(
-                'field_name'        => $this->bypassed_field_name,);
-
-
-            $working_arrays['ppv_define_query']['field_name_array'] = array(
-                'field_name' => 'query_field_name_array',
-                'r_o'        => 'query_r_o_array',
-                'value'      => 'query_value_array'
-                );
-            $working_arrays['ppv_define_query']['default_values'] = array(
-                'field_name' => $this->bypassed_field_name,
-                'r_o'        => '=',
-                'value'      => ' '
-                );
-
-            $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
-                'field_name' => 'business_rules_field_name_array',
-                'r_o'        => 'business_rules_r_o_array',
-                'value'      => 'business_rules_value_array'
-                );
-            $working_arrays['ppv_define_business_rules']['default_values'] = array(
-                'field_name' => $this->bypassed_field_name,
-                'r_o'        => 'required',
-                'value'      => ' '
-                );
-            //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,1);
-            return($working_arrays);
-        }
-
 
         public function working_arrays_populate_lookups($working_arrays,$columns) {
             $working_arrays['maintain_modifiable_fields']['lookups']['field_names'] = $columns;
@@ -1343,17 +1536,23 @@ public function build_and_execute_query($working_arrays,
 
         public function working_arrays_populate($working_arrays,$record) {
             //echo("working_arrays_populate");
-                                    
-            foreach($working_arrays['expandable_what_we_are_doings'] as $name=>$what_we_are_doing){
-               //var_dump($working_arrays[$what_we_are_doing]['field_name_array']); $this->debug_exit(__FILE__,__LINE__,1);
-                //echo("# 00 * ".$what_we_are_doing);
-                foreach($working_arrays[$what_we_are_doing]['field_name_array'] as $field_name){
-                    echo("*11 *".$field_name."<br>");
-                    //var_dump(json_decode($record->$field_name));
-                    //$working_arrays[$what_we_are_doing][$field_name] = json_decode($record->$field_name);
-                }
-            }
-            //var_dump($record[0]);
+        //var_dump($record);$this->debug_exit(__FILE__,__LINE__,1);
+        $query_relational_operators_array = $this->build_query_relational_operators_array();
+        foreach($working_arrays['expandable_what_we_are_doings'] as $name=>$array_name){
+            foreach($working_arrays[$array_name]['field_name_array'] as $name1=>$array_name1){
+                $working_arrays['ppv_define_query']['r_o_array'] = json_decode($record->$array_name1);
+            }           
+        }           
+        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump($query_relational_operators_array);$this->debug_exit(__FILE__,__LINE__,0);
+       //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);  
+       
+       //var_dump($working_arrays['ppv_define_query']['ppv_ro_values_array']);
+        //$this->debug_exit(__FILE       __,__LINE__,10);
+
+
+     //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);                               
+             //var_dump($record);
             //$this->debug_exit(__FILE__,__LINE__,10);
            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             $working_arrays['ppv_define_query']['lookups']['field_names']               = '';

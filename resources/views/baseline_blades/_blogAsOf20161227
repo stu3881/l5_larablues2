@@ -60,5 +60,32 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	i am currently trying to get browseEdit to work
 	i'm on the front side of building the query.  After i get the arrays matched up, everything else 'should work'
 
+	i have successfully executed the query but we need something new to build browseEditSnippet
+
+	im trying to make working_arrays_construct do everything regardless of what_we_are_doing flag.
+
+017-01-20
+	query is working
+
+	i am trying to get the browse edit to work like the other guys do now.  we'll see how close i stay to that.
+
+	Up! still seems as if it should be top priority
+
+	the routines weren't even copied into the new modules to gen the snippets for the field names row and the 'browse edit snippet'.  they are now but they properly belong as part of the update process.
+
+	there are all kinds of snippets in the record and i'm only aware of a few of them even though i created all of them. i think i should print the field names and then go thru and document or delete them.  Perhaps group them.  
+
+	a downside of breaking DEHBaseController up is I'm sure to miss something i spent a lot of time working on but there are so many clones and backups in the code.
+
+	i don't want everything in misc things.  i think the string stuff should be separate but maybe
+2017-01-21
+	i'm trying to name and load everything into $working_arrays
+	one guy is getting passed an object which he deftly handles.  then he's passed the first occurrence of an object which he chokes on maybe that's backwards but different input...
+
+	also, don't forget that the lookups are far more extensive than you remember  so hold onto the old stuff among other things
+
+
+
+
 	
 	

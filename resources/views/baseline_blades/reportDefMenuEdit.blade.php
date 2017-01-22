@@ -53,7 +53,7 @@
 		for table {{$node_name}}
 		 {{ csrf_field() }}
   
-		 {!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		 {!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$id,$what_we_are_doing,$coming_from]]) !!}
 		
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
@@ -108,7 +108,7 @@
 				
 				<!-- browse_select_array fields -->
 		        
-	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 
 	  		        'what_we_are_doing'=>'maintain_browse_fields',
 	  		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_browse_fields</a>
 

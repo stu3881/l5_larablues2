@@ -12,11 +12,12 @@
 
 <?php
 // *******
-	
+	echo("ssssssssssssssssssssssss");
 	//$key_field_name = $key_field_name;  //passed in
 	//echo("../ ".$node_name.' / '.$generated_files_folder.' / '.$report_key.' _browse_select_field_names_row ');
-
-	
+	echo($browse_select_field_count."ep");
+	//var_dump($all_records);
+	echo($node_name.'/'.$generated_files_folder.'/'.$report_key);
 	//print_r($use_table_in_record);//. $all_records[0]);
 	//print_r($all_records);//. $all_records[0]);
 	//exit('exit 17');
@@ -113,6 +114,7 @@
 			 -->
 			
 			@foreach($all_records as  $record)
+			
 				<?php 
 				$rowcount++;
 				$record = (array) $record;
@@ -129,6 +131,7 @@
 				?>
 				<tr >
 					<td class='border_left'>
+					{{$node_name}}
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit', 'method'=>'GET')) }}
 						{{ Form::label('', $rowcount) }} 
 					</td>
