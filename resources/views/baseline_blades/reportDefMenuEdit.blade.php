@@ -7,7 +7,9 @@
 	// *****/
 	$table_name = 'to_be_resolved';
 	$update_table = "";
-	//var_dump($miscThing);echo($what_we_are_doing." ** ".$coming_from);
+	//var_dump($miscThing[0]);echo($what_we_are_doing." ** ".$coming_from);
+	//echo ('<br>'.$id);
+
 	//exit('exit in reportDefMenuUpdate.blade at 12');
 	$lookups = "";
 	$encoded_field_name_array = array();
@@ -94,16 +96,13 @@
 // second row of buttons
 // *****
 --> 
-						<?php 
-	//echo ('<br>edit.blade 116<br>');print_r(Input::all());exit('exit edit.blade');
-						$coming_from = "edit1";
-						?>
+			<?php $coming_from = "edit1"; ?>
 			@if($coming_from == "edit1")	
 				<tr class='table_no_lines'>
-
+<!-- <td> {{--"just a test"--}}</td>-->
 				<td>
 					<!-- modifiable fields -->
-	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
 				<td>
 				
 				<!-- browse_select_array fields -->
@@ -117,7 +116,7 @@
 			
 			<td>
 				<!-- advanced query fields -->		
-  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 
   		        'what_we_are_doing'=>'ppv_define_query',
   		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">
   		        advanced_query
@@ -125,7 +124,7 @@
 			</td>
 			<td>
 				<!-- business rules fields -->		
-  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$miscThing->id, 
+  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 
   		        'what_we_are_doing'=>'ppv_define_business_rules',
   		        'coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">
   		        business_rules
@@ -139,29 +138,25 @@
 				</td>
 				</tr>
 		
-			{{$miscThing->id}} {{$miscThing->report_name}} {{$coming_from}}
+			
 
-				@if($coming_from == "edit1")	
-
-					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
-				@endif		
-							
- 				@if($coming_from == "edit2")	
- 				
-					@include($node_name.'/'.$input['generated_files_folder'].'/'.$miscThing->id.'_modifiable_add_save_snippet')
-					@endif		
+		@if($coming_from == "edit1")	
+			@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
+		@endif		
 					
- 				@if($coming_from == "advanced_query")	
-										
- 					@include($node_name.'/'.$request->input('generated_files_folder').'/'.$miscThing->id.'_ppv_edit_snippet')
-				@endif	                                                    			
-						
- 				@if($coming_from == "business_rules")	
- 		
-						@include($node_name.'/'.$input['generated_files_folder'].'/'.$miscThing->id.'_ppv_edit_snippet')
-				@endif	
-                                                    			
-				</table>
+		@if($coming_from == "edit2")	
+			@include($node_name.'/'.$input['generated_files_folder'].'/'.$id.'_modifiable_add_save_snippet')
+		@endif		
+			
+		@if($coming_from == "advanced_query")	
+			@include($node_name.'/'.$request->input('generated_files_folder').'/'.$id.'_ppv_edit_snippet')
+		@endif	                                                    			
+				
+		@if($coming_from == "business_rules")	
+			@include($node_name.'/'.$input['generated_files_folder'].'/'.$id.'_ppv_edit_snippet')
+		@endif	
+                                            			
+		</table>
 				
 		</div>   <!-- end div_inside_update_active_tasks -->				
 	</div>   <!-- end update_active_tasks -->	

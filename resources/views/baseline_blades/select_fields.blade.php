@@ -14,6 +14,7 @@
 	<?php 
 		//echo"inside select_fields_blade<br>";exit("exit15");
 		$coming_from = "reportDefMenuEdit";
+		//exit("17 exit select_fields");
 
 		 
 
@@ -66,12 +67,12 @@
 {{ $message }}
 <div id="admin" style="width:460px;background-color: #aabbcc;">aa
 	
-		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) !!}
 		{{ Form::hidden('coming_from',$coming_from) }}
 		
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
 		{{ Form::hidden('edit4_option'						,'update_field_list') }}
-		{{ Form::hidden('report_key'						, $miscThing->id) }}
+		{{ Form::hidden('report_key'						, $miscThing[0]->id) }}
 		@if($what_we_are_doing == "maintain_browse_fields")	
 			{{ Form::hidden('browse_select_array'		, "") }}
 		@endif						

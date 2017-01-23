@@ -83,7 +83,22 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	one guy is getting passed an object which he deftly handles.  then he's passed the first occurrence of an object which he chokes on maybe that's backwards but different input...
 
 	also, don't forget that the lookups are far more extensive than you remember  so hold onto the old stuff among other things
+2017-01-23 go falcons
+	we get to the page but nothing renders.  (a fantasy milestone) 
 
+	of course we want to create the define the file names so we don't have to pass all their components individually.
+
+	i am going back and forth between reportDefMenuEdit blowing up when i make changes in the browse.  id is not being passed consistently. still testing
+
+	i'd probably like the generators to be able to set their name and whether to gen as an object or an array
+
+	we are deciding some stuff needs to be changed and some of that will require adhocs to change the data. e.g. some records will abend whereas newer ones work just fine 
+
+	the browse works... anti-climatic
+	but i want to use it to look at things as soon as it's working so that's a good sign
+
+	NOT ALL REPORTS WORK
+	I want to make the r_o array save values instead of indexes.  some conversion will be needed
 
 
 

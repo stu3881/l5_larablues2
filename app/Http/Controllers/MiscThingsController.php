@@ -472,9 +472,6 @@ class MiscThingsController extends DEHBaseController
         //var_dump($working_arrays);
         //var_dump($report_definition[0]);
 
-        //echo('working_arrays');
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($working_arrays['expandable_what_we_are_doings']);
         $query_relational_operators_array = $this->build_query_relational_operators_array();
         $miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array);
         //var_dump($miscThings[0]);
@@ -483,26 +480,43 @@ class MiscThingsController extends DEHBaseController
         $data_array_name = array();
         $data_array_name ["report_name"] = $report_definition[0]->report_name;
         $data_array_name ["record_type"] = $report_definition[0]->record_type;
+        $field_names_row_file_name =  "../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_field_names_row';
+
+        $browse_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_display_snippet';
+
+
         echo('<br>after build_and_execute_query');
         if ($miscThings){         
             //var_dump($miscThings[0]);            
             return view($this->node_name.'.browseEdit',compact('miscThings'))
-            ->with('all_records'                ,$miscThings)
-            ->with('app_path'                   ,app_path())
-            ->with('model_table'                ,$this->model_table)
             ->with('browse_select_field_count'  ,count($miscThings))
-            ->with('generated_files_folder'     , $this->generated_files_folder)
+            ->with('node_name'              ,$this->node_name)             
+            ->with('field_names_row_file_name'     , $field_names_row_file_name)
+            ->with('browse_snippet_file_name'     , $browse_snippet_file_name)
+            
+            ->with('report_key'                , $id)
+            ->with('model_table'                ,$this->model_table)
+            ->with('key_field_name'             , 'id')
+           ->with('key_field_value'            , $id)
+            ->with('all_records'                ,$miscThings)
             ->with('use_table_in_record'        , 'y')
-            ->with('record_table_name'          , $this->model_table)
+             ->with('record_table_name'          , $this->model_table)
+           ->with('app_path'                   ,app_path())
+
+
+
+            /*
+  
             ->with('key_field_value'            , $id)
-             ->with('report_key'                , $id)
-            ->with('field_names_array'          , $field_names_array)
+             ->with('field_names_array'          , $field_names_array)
             ->with('lookups'                    , array_combine($field_names_array,$field_names_array))
             ->with('key_field_name'             , 'id')
             ->with('encoded_business_rules_field_name_array'    , $encoded_business_rules_field_name_array)
             //->with('data_array_name'      , $passed_to_view_array)
             ->with('data_array_name'        , $data_array_name)
-            ->with('node_name'              ,$this->node_name);
+
+            */
+            ;
          //return view('miscThings.edit2_default_browse',$miscThings);
         }
         else {
@@ -1080,7 +1094,7 @@ class MiscThingsController extends DEHBaseController
     public function ppvEdit(Request $request, $id,$what_we_are_doing,$coming_from){
         echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
-        $this->debug_exit(__FILE__,__LINE__,10);
+        $this->debug_exit(__FILE__,__LINE__,0);
     }
 
 
@@ -1092,9 +1106,9 @@ class MiscThingsController extends DEHBaseController
      */
 
     public function reportDefMenuEdit(Request $request, $id,$what_we_are_doing,$coming_from){
-        //echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
+        echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
-        //$this->debug_exit(__FILE__,__LINE__,0);
+        //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** ");$this->debug_exit(__FILE__,__LINE__,0);
         
         echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
         $miscThing = MiscThing::where('id','=',$id)->get();
@@ -1187,14 +1201,14 @@ class MiscThingsController extends DEHBaseController
                 ->with('message'                            ,'')
                 ;
         }
-        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
 
-       return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
-        ->with('id'                            ,$id)
-        ->with('model'                            ,$this->model)
-        ->with('node_name'                        ,$this->node_name)
-        ->with('what_we_are_doing'                ,$what_we_are_doing)
-        ->with('coming_from'                      ,$coming_from)
+       return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+        ->with('id'                                 ,$id)
+        ->with('model'                              ,$this->model)
+        ->with('node_name'                          ,$this->node_name)
+        ->with('what_we_are_doing'                  ,$what_we_are_doing)
+        ->with('coming_from'                        ,$coming_from)
        ;
 }
 

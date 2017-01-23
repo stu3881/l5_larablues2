@@ -159,7 +159,6 @@ $rowcount = -1;
 				
 		<!--	the buttons at the end of the line -->
 
-
   		        <td>
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning">{{$record->id}} edita</a>
 					{{ Form::close() }}

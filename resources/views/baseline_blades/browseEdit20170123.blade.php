@@ -1,81 +1,64 @@
-@extends('layouts.main')
+
 @section('promo')
 
-<section id="promo">   
-	browseEdit  
+<section id="promo">     
 	<div id="promo-details"> 
-
-		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))}} 
-
-
-		</div> <!-- end promo-details -->
-</section><!-- promo -->
+		browse edit
+	</div> <!-- end promo-details -->
+</section><!-- promo -->i
 @stop
 
-
 @section('content')
-		BrowseEdit Defined Reports
 
 <?php
-	//var_dump($all_records);exit("edit1.blade 17 ");
-	$what_we_are_doing = 'what_we_are_doing';
-	$coming_from = 'edit1';
-
-$rowcount = -1;
-// *******
 // *******
 
-	//exit('exit 29');
-/*	
-	//$encoded_field_name_array = json_encode($field_name_array);
-*/
-	$i = count($all_records) + 1;
-	if ($i > 1){
-		//print_r($i);print_r($_REQUEST);
-		//print_r($generated_snippets_array);exit('exit 29');
-		//exit('exit 20');
-	}
-	//print_r( $encoded_field_name_array);//exit('exit 22');
-	//print_r($all_records[0]->model_table);exit('exit 33');
-
-	//$lookup_array = $generated_snippets_array['lookup_name_value_array_gen_by_table'];
+	echo($browse_select_field_count."ep");
+	//var_dump($all_records);
 	
-	//print_r($all_records[0]->model_table);exit('$all_records[0]->model_table exit 20');
-	//$browse_select_field_count = count($browse_select_array);//$lookup_array = $lookup_array;
-	$browse_select_field_count = 7;
-	//$browse_select_field_count = $browse_select_field_count + 4;
+	//print_r($use_table_in_record);//. $all_records[0]);
+	//print_r($all_records);//. $all_records[0]);
+	//exit('exit 17');
+	//$report_key 					= $report_key;
+	//exit('exit 35');
+
+
+	// $report_generated_snippets_array is passed from getEdit2 controller
+	///$generated_snippets_array = $report_generated_snippets_array;
+	//print_r($generated_snippets_array);exit('exit edit2 25');
+	
+	///$lookup_array 							= $generated_snippets_array['lookup_name_value_array_gen_by_table'];
+	//$model_table 							= $generated_snippets_array['model_table'];
+	///$additional_key 						= $generated_snippets_array[$snippet_table_key_field_name];
 	if ($browse_select_field_count > 7) {
 		$width = "1500px";
 		
 	}else {
 		$width = "700px";
 	}
-		
+	//$browse_select_field_count = 9;
+	//$browse_select_field_count = 4;
+	//print_r($model_table);exit('exit 20');
+	//print_r($app_path);exit('exit 20');
+	//dd($width,$browse_select_field_count);
 	// *********************
 	?>
-	
-	<div id="admin" style="width:800px;height:99%">
-	
-	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
-	{{ Form::hidden('key_field_name'						,$all_records[0]->key_field_name) }}
-	{{-- Form::hidden('encoded_field_name_array'				,$encoded_field_name_array) --}}
-	{{ Form::hidden('model_table'							,$all_records[0]->model_table) }}
-	{{ Form::hidden('node_name'								,$node_name) }}
-	{{-- Form::hidden('snippet_table'							,$snippet_table) --}}
-	{{ Form::hidden('record_type'							,'report_definition') }}
-	{{ Form::hidden('coming_from'							,'edit1_define_new_report') }}
-	
-	<div id="update_active_tasks" ><br>
-	
-                      	updating   {{$all_records[0]->model_table}} table
+<div id="admin" style="width:90%;">
+
+<div id="update_active_tasks" style="width:95%" ><br>
+	update {{$model_table}}
 	<p>
+	{{ Form::open(array('url'=>'admin/'.$node_name.'/edit1', 'method'=>'GET')) }}
+	{{ Form::hidden('key_field_name',$key_field_name) }}
 	<p>		
-	<div id="div_inside_update_active_tasks" style="width:$width" >		
-		<div id="div_inside_update_active_tasks_button_bar" style="width:$width">	
-		<table id="table_inside_update_active_tasks" style="width:$width">
-	<th></th>
+	<div id="div_inside_update_active_tasks" style="width:$width" >	
+	<!--  div_inside_update_active_task -->
+	<table id="table_inside_update_active_tasks" style="width:$width" >
+	<tbody>
+
 		<tr class="table_no_lines">
 		<td colspan={{$browse_select_field_count}} >	
+		
 					<table class="table_no_lines" style="width:100%">
 			<tbody>
 				<tr class="table_no_lines">
@@ -106,35 +89,31 @@ $rowcount = -1;
 				</td>
 				</tr>
 			</tbody>
-			</table>		</td></tr>
+			</table>
+		
+		 
+		</td>
+		</tr>
 
 		<?php 
-		/*
 			$rowcount = -1;
 			$save_shift_id = "";
-			$classradio = "class=\'bottom_buttons\'";	
-		*/		
-		?>    
-	
-		
+			$classradio = "class=\'bottom_buttons\'";
+			//print_r($all_records);exit("108");		
+		?>
+			@include($field_names_row_file_name)
+			
+			
 			<!-- 			
 			// *********
 			// read loop
 			// *********
 			 -->
 			
-				<?php 
-					$rowcount++;
-					//print_r($record);exit("exit 73");
-					//print_r($record->shift_id);exit("exit 73");
-					
-					?>
-								@include($field_names_row_file_name)
-
 			@foreach($all_records as  $record)
 			
 				<?php 
-				//echo('still here');
+				echo('still here');
 				$rowcount++;
 				$record = (array) $record;
 				$key = $key_field_name;
@@ -203,17 +182,22 @@ $rowcount = -1;
 					</td>
 				</tr>
 			@endforeach
-
 		
-		
-			</table>
+		</tbody>
+		</table>
 	</div>   <!-- end center_table_div -->	
+<script>
+//document.getElementById("table_inside_update_active_tasks").style.width) = 3000;
+//alert (document.getElementById("table_inside_update_active_tasks").style.width+"*"+document.getElementById("div_inside_update_active_tasks").style.width);
+//alert ("fuck");
+
+</script>
 	<script>
 //write document.getElementById("div_inside_update_active_tasks").width = "2000px";
 if (document.getElementById("table_inside_update_active_tasks").style.width > document.getElementById("div_inside_update_active_tasks").style.width) {
-	
 	document.getElementById("table_inside_update_active_tasks ").style.background_color = "#FF8C00";
-	document.getElementById("table_inside_update_active_tasks ").style.width = "3000px";
+	document.getElementById("table_inside_update_active_tasks ").style.width = document.getElementById("table_inside_update_active_tasks").style.width="3000px";
+	//alert (document.getElementById("table_inside_update_active_tasks ").style.width);
 }
 
 </script>

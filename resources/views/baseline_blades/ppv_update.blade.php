@@ -46,12 +46,12 @@
 	<br>
 		
 		{{-- $record2[0]->model_table --}}
-		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) !!}
 		{{ Form::hidden('coming_from',$coming_from) }}
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
 
 		{{ Form::hidden('edit4_option'						,'update_field_list') }}
-		{{ Form::hidden('report_key'						, $miscThing->id) }}
+		{{ Form::hidden('report_key'						, $miscThing[0]->id) }}
 		@if($what_we_are_doing == "ppv_define_query")	
 			{{ Form::hidden('query_field_name_array', "") }}
 			{{ Form::hidden('query_r_o_array'		, "") }}
