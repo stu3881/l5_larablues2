@@ -99,7 +99,19 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 
 	NOT ALL REPORTS WORK
 	I want to make the r_o array save values instead of indexes.  some conversion will be needed
+2017-01-24
+	perhaps i should be more elated.  simple queries work. more proof of concept than gorilla testing but browse works consistently in several places
 
+	the 'short list'
+	1.make sure all browses are working
+	2.
+2017-01-26
+	i've gotten thru browse edit although there is still some bad data out there.
+	editupdate needs to have the report_definition key so it canretrieve the business rules.
+
+	we've got the key in IndexReports 
+2017-01-27
+	putEdit2new is what the old system calls for editUpdate.  it's got all kinds of lookup shit that i've kind of forgotten about so i want to copy it inside of editUpdate.  But, the old code IS old so we're gonna take a quick look (and start remembering about lookups)
 
 
 	

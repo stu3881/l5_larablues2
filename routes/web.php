@@ -29,20 +29,36 @@
         $controller_name        = 'MiscThingsController';
         Route::resource($node_name,$controller_name);
     });
+
+
+    $method_name            = "browseEdit";
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $method_name            = "browseEdit";
     $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
     $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
-    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
  
+    $method_name            = "editUpdate";
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $method_name            = "editUpdate";
-    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);
+    $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
+    $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
+    $reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs to be defined here
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/{'.$reportDefinitionKey.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+
 
     $node_name              = 'miscThings';
     $model                  = 'miscThing';

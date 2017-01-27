@@ -17,7 +17,8 @@
 		BrowseEdit Defined Reports
 
 <?php
-	//var_dump($all_records);exit("edit1.blade 17 ");
+	//var_dump($all_records[0]);
+	//exit("edit1.blade 17 ");
 	$what_we_are_doing = 'what_we_are_doing';
 	$coming_from = 'edit1';
 
@@ -36,11 +37,8 @@ $rowcount = -1;
 		//exit('exit 20');
 	}
 	//print_r( $encoded_field_name_array);//exit('exit 22');
-	//print_r($all_records[0]->model_table);exit('exit 33');
 
-	//$lookup_array = $generated_snippets_array['lookup_name_value_array_gen_by_table'];
 	
-	//print_r($all_records[0]->model_table);exit('$all_records[0]->model_table exit 20');
 	//$browse_select_field_count = count($browse_select_array);//$lookup_array = $lookup_array;
 	$browse_select_field_count = 7;
 	//$browse_select_field_count = $browse_select_field_count + 4;
@@ -57,17 +55,15 @@ $rowcount = -1;
 	<div id="admin" style="width:800px;height:99%">
 	
 	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
-	{{ Form::hidden('key_field_name'						,$all_records[0]->key_field_name) }}
-	{{-- Form::hidden('encoded_field_name_array'				,$encoded_field_name_array) --}}
-	{{ Form::hidden('model_table'							,$all_records[0]->model_table) }}
+	{{ Form::hidden('key_field_name'						,$key_field_name) }}
+	{{ Form::hidden('model_table'							,$model_table) }}
 	{{ Form::hidden('node_name'								,$node_name) }}
-	{{-- Form::hidden('snippet_table'							,$snippet_table) --}}
 	{{ Form::hidden('record_type'							,'report_definition') }}
 	{{ Form::hidden('coming_from'							,'edit1_define_new_report') }}
 	
 	<div id="update_active_tasks" ><br>
 	
-                      	updating   {{$all_records[0]->model_table}} table
+                      	updating   {{$model_table}} table
 	<p>
 	<p>		
 	<div id="div_inside_update_active_tasks" style="width:$width" >		
@@ -126,76 +122,67 @@ $rowcount = -1;
 				<?php 
 					$rowcount++;
 					//print_r($record);exit("exit 73");
-					//print_r($record->shift_id);exit("exit 73");
 					
 					?>
-								@include($field_names_row_file_name)
+			@include($field_names_row_file_name)
 
 			@foreach($all_records as  $record)
-			
 				<?php 
 				//echo('still here');
 				$rowcount++;
-				$record = (array) $record;
+				//$record = (array) $record;
 				$key = $key_field_name;
-				$submit_button_name = $record[$key_field_name] . " edit";
-				if ($use_table_in_record){
-					//echo( '$use_table_in_record'.$record['table_name']);exit('exit 187');
-					//$record_table_name = $record['table_name'];
-				}
-				else{
-					$record_table_name = $model_table;
-				}
-				//print_r($record);exit('x156');
+				$submit_button_name = "key_field_name" . " edit";
+
+
 				?>
 				<tr >
 					<td class='border_left'>
-					{{$node_name}}
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit', 'method'=>'GET')) }}
 						{{ Form::label('', $rowcount) }} 
 					</td>
 		
 					@include($browse_snippet_file_name)
 					
-					<!-- -->
-					<td class='text_align_left select_pink' >
-						{{ Form::label('', $record['record_type']) }}
-					</td>
-				<!--	-->
+	
 
-					<!--
-						the buttons at the end of the line
-					-->
-					<td >
-						{{ Form::hidden('key_field_name'			,$key_field_name) }}
-						{{ Form::hidden('key_field_value'			,$record[$key_field_name]) }}
-						{{ Form::hidden('model_table'				,$model_table) }}
-						{{ Form::hidden('record_table_name'			,$record_table_name) }}
-						{{ Form::hidden('node_name'					,$node_name) }}
-						
-						{{ Form::hidden('report_key'				,$report_key) }}
-						{{ Form::hidden('app_path'					,$app_path) }}
-						{{ Form::submit($submit_button_name) }}
-						{{ Form::close() }}
+			<!--
+				the buttons at the end of the line
+			-->
+					<td>
+						<!-- modifiable fields -->
+		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
+		  		        array(
+		  		        'id'=>$report_key, 
+		  		        'what_we_are_doing'=>'maintain_modifiable_fields',
+		  		        'coming_from'=> 'browseEdit',
+		  		        'report_definition_key'=>$record->id)
+		  		        ) }}" class="btn mycart-btn-row2">
+		  		        
+		  		        editUpdate
+
+		  		        </a>
 					</td>
+
+
 					<td >
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit', 'method'=>'GET')) }}
 						{{ Form::hidden('key_field_name'			,$key_field_name) }}
-						{{ Form::hidden('key_field_value'			,$record[$key_field_name]) }}
+						
 						{{ Form::hidden('model_table'				,$model_table) }}
 						{{ Form::hidden('record_table_name'			,$record_table_name) }}
 						{{ Form::hidden('node_name'					,$node_name) }}
 						
 						{{ Form::hidden('report_key'				,$report_key) }}
 						
-						{{ Form::hidden('app_path',$app_path) }}
+						
 						{{ Form::submit('klone_edit') }}
 						{{ Form::close() }}
 						</td>
 					<td >
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'POST')) }}
 						{{ Form::hidden('key_field_name',$key_field_name) }}
-						{{ Form::hidden('key_field_value',$record[$key_field_name]) }}
+						{{ Form::hidden('report_key',$report_key) }}
 						{{ Form::submit('delete') }}
 						{{ Form::hidden('node_name'					,$node_name) }}
 						

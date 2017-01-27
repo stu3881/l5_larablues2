@@ -1,10 +1,8 @@
 <tr>
 <td>#</td>
-<td>id</td>
 <td>table_name</td>
 <td>field_name</td>
 <td>name</td>
 <td>value</td>
 <td>record_type</td>
-<td>controller_name</td>
 </tr>

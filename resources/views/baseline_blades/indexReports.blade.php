@@ -157,7 +157,9 @@ $rowcount = -1;
 
 					@include($node_name.'/'.'genned_edit1')
 				
-		<!--	the buttons at the end of the line -->
+	<!--	
+	the buttons at the end of the line 
+	-->
 
   		        <td>
   		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning">{{$record->id}} edita</a>
@@ -179,9 +181,22 @@ $rowcount = -1;
 					{{ Form::close() }}
 				</td>		
 				<td >
-	  		        <a href="{{ URL::route($node_name.'.browseEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning"> 
+	  		        <a href=
+	  		        "{{ URL::route($node_name.'.browseEdit', $parameters = 
+	  		        array(
+	  		        'id'=>$record->id, 
+	  		        'what_we_are_doing'=>$what_we_are_doing,
+	  		        'coming_from'=> $coming_from
+	  		        )) }}" 
+	  		        class="btn btn-warning"> 
 	  		        browseEdit</a>
 				</td>
+				<!--
+				<td >
+	  		        <a href="{{-- URL::route($node_name.'.browseEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> 'var_dump')) --}}" class="btn btn-warning"> 
+	  		        var_dump(xxx)</a>
+				</td>
+				-->
 			</tr>
 				
 		@endforeach

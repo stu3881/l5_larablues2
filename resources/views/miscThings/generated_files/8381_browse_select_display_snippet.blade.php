@@ -1,44 +1,12 @@
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_connection_name']) }}
+{{ Form::label('', $record->id) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_data_connection']) }}
+{{ Form::label('', $record->record_type) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_snippet_connection']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_database']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_default']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_driver']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_host']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_password']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_prefix']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_schema']) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record['db_username']) }}
+{{ Form::label('', $record->report_name) }}
 </td>
