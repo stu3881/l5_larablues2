@@ -747,15 +747,15 @@ class MiscThingsController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
 
-    public function editUpdate(
+    public function editUpdateTemporarilyDisabled(
         Request $request, 
         $id, 
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
         echo("<br> editUpdate ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
-        var_dump($request);
-        var_dump($id);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($request);
+        //var_dump($id);$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($report_definition);
         $report_definition = MiscThing::where('id','=',$id)->get();
         //var_dump($report_definition[0]); $this->debug_exit(__FILE__,__LINE__,0);   
@@ -786,7 +786,7 @@ class MiscThingsController extends DEHBaseController
         }
         //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
         if ($miscThings){         
-            var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);           
+            var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,0);           
             return view($this->node_name.'.browseEdit',compact('miscThings'))
             ->with('browse_select_field_count'  ,count($miscThings))
             ->with('node_name'                  ,$this->node_name)             
@@ -817,6 +817,157 @@ class MiscThingsController extends DEHBaseController
         }
     }
         
+
+    //public function putEdit2new() {
+    public function editUpdate(
+        Request $request, 
+        $id, 
+        $what_we_are_doing, 
+        $coming_from,
+        $report_definition_key){
+        echo("<br> editUpdate ".$what_we_are_doing." ".$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
+        //var_dump($request);
+        //echo("putEdit2new");$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump(Input::all());
+        if (!empty($what_we_are_doing)) {
+            $report_definition  = MiscThing::where('id','=',$id)->get();
+            $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+            //var_dump($working_arrays); $this->debug_exit(__FILE__,__LINE__,10);
+
+
+            //echo($what_we_are_doing);
+            switch ($what_we_are_doing) { 
+                case "edit2_default_add":
+                case "edit2new":
+                    //This should be just like edit except blank data array?
+                case "edit2_default_edit":
+                    echo("edit2_default_edit"); 
+                case "editing_a_data_record":
+                    //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,0);
+                    //$report_definition  = $this->execute_query_by_report_no($id);
+                    $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
+
+                    $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
+                    //var_dump($lookups_array); $this->debug_exit(__FILE__,__LINE__,0);
+
+                    $xxx_array = $this->gen_lookup_name_value_array_datax($this->model_table);
+                    //$lookups_array = $this->gen_lookup_name_value_array_datax('shows');
+                    $lookups_array = array_merge($lookups_array,$xxx_array);
+                    //var_dump($lookups_array); $this->debug_exit(__FILE__,__LINE__,1);
+                    $db_result  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
+
+                    //var_dump($modifiable_fields_array);
+                    //var_dump($lookups_array);
+                    //var_dump($db_result[0]);$this->debug_exit(__FILE__,__LINE__,01);
+
+                    $snippet_string = $this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,
+                        $lookups_array,$db_result[0]);
+
+                    $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$request->input('report_key').'_snippet_string.blade.php';
+                    $this->add_delete_add_file_as_string($fnam,$this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,
+                        $lookups_array,$db_result[0]));
+
+                //case "adding_a_data_record":)
+
+                    $strx       = json_encode($db_result);
+                    //$db_result = json_encode($db_result);
+                    //$db_result = json_decode($db_result,1);
+                    //echo "<br><br>".$snippet_string;$this->debug_exit(__FILE__,__LINE__,1);
+                    //var_dump($request->Input);//var_dump($db_result); 
+                    //$this->debug_exit(__FILE__,__LINE__,1);
+
+                    $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_snippet_string';
+
+                    
+                    $passed_to_view_array = array();
+                    $passed_to_view_array['edit_snippet_file_name'] = $edit_snippet_file_name;
+                    $passed_to_view_array['id'] = $id;
+                    $passed_to_view_array['coming_from'] = $coming_from;
+                    //$passed_to_view_array['input'] = 'x';
+                    //$passed_to_view_array['input']                = Input::all();
+                    $passed_to_view_array['encoded_modifiable_fields_array'] = json_encode($modifiable_fields_array);
+                    $passed_to_view_arra2newy['data_key']                       = $request->input('data_key');
+                    $passed_to_view_array['encoded_input']                  = $request->input('encoded_input');
+                    $passed_to_view_array['snippet_name']                   ='_modifiable_fields_getEdit_snippet';
+                    $passed_to_view_array['report_definition']              = $report_definition[0];
+                    $passed_to_view_array['record']                         = $db_result[0];
+                    $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
+                    $passed_to_view_array['snippet_string']                 = $snippet_string;      
+                    $passed_to_view_array['lookups_array']                  = $lookups_array;       
+                    //echo("*".$request->input('coming_from')."*");$this->debug_exit(__FILE__,__LINE__,0);
+                    //var_dump($passed_to_view_array);
+ //$this->debug_exit(__FILE__,__LINE__,1);                   
+                    return view($this->node_name.'.edit2new',compact('miscThings'))
+                    ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                    break;          
+$this->debug_exit(__FILE__,__LINE__,1);
+                    return View::make($this->node_name.'/edit2new')
+                         //->with('message'                        , 'fart')
+                        ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                        break;              
+               
+            case "edit2_default_update":
+                //var_dump(Input::all());
+                $this->debug_exit(__FILE__,__LINE__,1);
+                $business_rules_array = 
+                $this->business_rules_ppv_build_them(
+                    $this->build_business_rules_relational_operators(),
+                    json_decode($request->input('encoded_business_rules_field_name_array'),1),
+                    json_decode($request->input('encoded_business_rules_r_o_array'),1),
+                    json_decode($request->input('encoded_business_rules_value_array'),1));
+                var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
+                $validator = Validator::make(Input::all(), $business_rules_array); //update
+                if ( $validator->fails() ) {
+                    $errors = $validator->messages();
+                    //$this->debug_exit(__FILE__,__LINE__,1);
+                    //return redirect()->back(); 
+                    //return redirect('public/admin/'.$this->node_name.'/edit2new')
+                    return View::make($this->node_name.'/edit2new')
+                        //->with('passed_to_view_array' ,$passed_to_view_array);            
+
+                    //->withErrors($errors)
+                    ->withInput();
+                      //return $validator->errors()->all();
+                    //return back()->withErrors($errors)->withInput();
+                }
+                
+                var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
+                $a = 'encoded_modifiable_fields_array';
+                $Inputo = json_decode(json_encode(Input::all()),0);
+                $modifiable_fields_array = $this->decode_object_field_to_array($Inputo,$a);
+                $modifiable_fields_name_values = array_intersect_key(Input::all(), $modifiable_fields_array);
+                //var_dump($b);
+                //var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
+                switch ($request->input('coming_from')) {
+                    
+                    case "edit2_browse_add_button":
+                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                            ->insert($modifiable_fields_name_values);
+                        break;
+                    case "edit2_edit_button":
+                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                            ->where($this->key_field_name,  '=', $request->input('data_key'))
+                            ->update($modifiable_fields_name_values);
+                        break;
+                }
+
+
+                return redirect('admin/'.$this->node_name.'/edit1')
+                ->with('message', 'record updated')
+                ->with('message', 'validation has been bypassed');
+                break;
+
+                    default:
+                        echo("<br>"."what we are doing is improperly assigned");
+                        $this->debug_exit(__FILE__,__LINE__,1);
+                        break;
+                }
+        }   
+    }
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -1102,9 +1253,6 @@ class MiscThingsController extends DEHBaseController
         return $strx;       
     }
 
-
-
-
     public function ppvEdit(Request $request, $id,$what_we_are_doing,$coming_from){
         echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
@@ -1112,6 +1260,25 @@ class MiscThingsController extends DEHBaseController
     }
 
 
+    public function return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array) {
+        //var_dump($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,1);
+         switch ($what_we_are_doing) { 
+            case "adding_a_data_record":
+            case "edit2_default_add":
+                $db_result = array();
+                foreach ($modifiable_fields_array as $name=> $value) {
+                    $db_result[0][$value] = "";
+                }
+                break;
+            case "editing_a_data_record":
+            case "edit2_default_edit":
+            case "edit2new":
+               $db_result  = MiscThing::where('id','=',$id)->get();
+                break;
+            }
+            //var_dump($db_result);$this->debug_exit(__FILE__,__LINE__,1);
+            return $db_result;
+    }
     /**
      * 4 functions maintain 4 entities
      *
@@ -1250,15 +1417,13 @@ class MiscThingsController extends DEHBaseController
                 $from_array = array_diff($column_names_array,$to_array);
                 //$this->debug_exit(__FILE__,__LINE__,0);var_dump($to_array);
                 //var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
-                 var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
+                 //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
                  return view($this->node_name.'.reportDefMenuEdit'    ,compact('miscThing'))
-                    //->with('Input'                         ,Input::all())                  
-                    //->with('edit4_return_option'              ,'field_list_save')
                     ->with('what_we_are_doing'                  ,$what_we_are_doing)
                     ->with('from_array'                         ,$from_array)
                     ->with('to_array'                           ,$to_array)
-                     ->with('message',''
-                    );
+                     ->with('message'                           ,'')
+                     ;
                     var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,0);
                 break;  
             case "update_field_list":
@@ -1292,6 +1457,32 @@ class MiscThingsController extends DEHBaseController
         //var_dump($request);
         echo("who sent us here". " show ".$id); $this->debug_exit(__FILE__,__LINE__,10);
     }
+
+
+    public function simple_data_connection_query_by_key($key_field_value,$type) {
+        //echo("simple_data_connection_query_by_key *".$key_field_value."*".$type."*");
+        //echo($this->key_field_name);$this->debug_exit(__FILE__,__LINE__,1);
+        if ($db_result = DB::connection($this->db_data_connection)->table($this->model_table)
+        ->where($this->key_field_name ,'=',$key_field_value)
+        ->get()) {
+            switch ($type) {
+                case 'obj':
+                    return $db_result;
+                    break;
+                case 'array':
+                    return $db_result = json_decode(json_encode($db_result),1);
+                    break;
+                default:
+                    return $db_result;
+                    break;
+            }
+        }
+        else{
+            echo($this->db_data_connection." * ".$this->model_table." * ".$this->key_field_name." * ".$key_field_value);
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+
+    }   
 
 
     /**

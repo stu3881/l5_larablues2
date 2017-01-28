@@ -113,6 +113,9 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 2017-01-27
 	putEdit2new is what the old system calls for editUpdate.  it's got all kinds of lookup shit that i've kind of forgotten about so i want to copy it inside of editUpdate.  But, the old code IS old so we're gonna take a quick look (and start remembering about lookups)
 
+	what_we_are_doing has already been introduced so already that was agreat idea.
+	it previously got if from input but now it's passed in. sofar so good.
+
 
 	
 	

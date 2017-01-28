@@ -145,7 +145,7 @@
 		@endif		
 					
 		@if($coming_from == "edit2")	
-			@include($node_name.'/'.$input['generated_files_folder'].'/'.$id.'_modifiable_add_save_snippet')
+			@include($node_name.'/'.$request->input('generated_files_folder').'/'.$id.'_modifiable_add_save_snippet')
 		@endif		
 			
 		@if($coming_from == "advanced_query")	
@@ -153,7 +153,7 @@
 		@endif	                                                    			
 				
 		@if($coming_from == "business_rules")	
-			@include($node_name.'/'.$input['generated_files_folder'].'/'.$id.'_ppv_edit_snippet')
+			@include($node_name.'/'.$request->input('generated_files_folder').'/'.$id.'_ppv_edit_snippet')
 		@endif	
                                             			
 		</table>
