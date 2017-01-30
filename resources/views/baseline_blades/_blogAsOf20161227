@@ -116,6 +116,28 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	what_we_are_doing has already been introduced so already that was agreat idea.
 	it previously got if from input but now it's passed in. sofar so good.
 
+	it's easier to look in the execution of the old code (with a display) to just tell us what we need to set it to.  off to train the girls.
+2017-01-28
+	editUpdate comes up in what is called edit2new.blade
+	i still don't know how the lookups popup but they do. field_names
+
+	the update hasn't been tested but the fields need to be defined so they can be updated .
+
+	i want to get the logon back into the mix but am not sure how hard that will be.  There's no sense working on the menuing till this is working again
+
+	the obvious place to start is web in the old larablues.
+2017-01-29
+	we think we want to move the string genning stuff into DEHBaseController but not quiteon the top of the list
+
+	we are not generating the editUpdate snippet.  it needs to  be built when modifiable_fields is being updated
+
+	we gen the edit snippet whenever we go into edit.  the snippet's not quite right.  perhaps we're building something other than what we're deploying.
+
+	$working_arrays has good data so we're using it.  SOme of this encoded shit isn't needed so i'm going to start eliminating them where i can
+
+	
+
+
 
 	
 	

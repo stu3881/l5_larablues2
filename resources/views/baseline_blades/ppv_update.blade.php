@@ -42,7 +42,7 @@
 // *****
 -->
 
-	<div id="update_active_tasks" >ppv_update x
+	<div id="update_active_tasks" >ppv_update 
 	<br>
 		
 		{{-- $record2[0]->model_table --}}

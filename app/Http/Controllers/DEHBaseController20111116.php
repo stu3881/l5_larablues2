@@ -713,7 +713,7 @@ public function simple_query_ppv_build(
 		// *****''
 		$crlf = "\r\n";
 		$what_we_are_doing = Input::get('what_we_are_doing');
-		//echo '<br>modifiable_fields_blade_files_gen '.$what_we_are_doing.' ';$this->debug_exit(__FILE__,__LINE__,10);
+		
 		switch ($what_we_are_doing) {
 			case "modifiable_fields_array":
 			case "maintain_modifiable_fields":
@@ -728,11 +728,11 @@ public function simple_query_ppv_build(
 				break;
 			case "browse_select_array":
 			case "maintain_browse_fields":
-				//echo '<br>modifiable_fields_blade_files_gen<br><br>';var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,10);
+				//echo '<br><br>';var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,10);
 				$this->browse_select_snippets_gen_by_report($this->snippet_table_key_field_name,Input::get('report_key'));
-				//echo ('<br>modifiable_fields_blade_files_gen<br><br>'.Input::get('report_key'));$this->debug_exit(__FILE__,__LINE__,10);
+				
 				$this->browse_select_blade_files_gen(Input::get('report_key'));
-				//echo '<br>modifiable_fields_blade_files_gen<br><br>';$this->debug_exit(__FILE__,__LINE__,10);
+				
 				return View::make($this->node_name.'.edit1')
 				->with('generated_snippets_array',$this->generated_snippets_array);
 				break;
@@ -2007,7 +2007,7 @@ public function simple_query_ppv_build(
 		$this->generated_files_folder."/".$report_key.'_modifiable_fields_getEdit_snippet.blade.php';
 		//File::put($fnam, $this->modifiable_fields_getEdit_blade_gen($this->model_table,$this->model,$nv_array));
 		$this->add_delete_add_file_as_string($fnam,$this->modifiable_fields_getEdit_blade_gen($this->model_table,$this->model,$nv_array));
-		echo '<br>AFTER modifiable_fields_blade_files_gen<br><br>';
+		echo '<br>AFTER<br>';
 		
 		$fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_modifiable_fields_putUpdate_snippet.blade.php';
 		$this->add_delete_add_file_as_string($fnam,$this->modifiable_fields_putUpdate_gen($this->model,$nv_array));

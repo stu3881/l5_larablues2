@@ -5,7 +5,7 @@
 	browseEdit  
 	<div id="promo-details"> 
 
-		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))}} 
+		{{-- HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))--}} 
 
 
 		</div> <!-- end promo-details -->
@@ -54,7 +54,8 @@ $rowcount = -1;
 	
 	<div id="admin" style="width:800px;height:99%">
 	
-	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
+
+	{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
 	{{ Form::hidden('key_field_name'						,$key_field_name) }}
 	{{ Form::hidden('model_table'							,$model_table) }}
 	{{ Form::hidden('node_name'								,$node_name) }}
@@ -78,7 +79,8 @@ $rowcount = -1;
 				<td class="table_no_lines">
 					{{ Form::submit('reports list') }}
 					{{ Form::close() }}
-				</td><td>	
+				</td>
+				<td>	
 					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
 					{{ Form::hidden('key_field_name',$key_field_name) }}
 					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}
@@ -147,7 +149,7 @@ $rowcount = -1;
 	
 
 			<!--
-				the buttons at the end of the line
+				the buttons at the end of each line
 			-->
 					<td>
 						<!-- modifiable fields -->
