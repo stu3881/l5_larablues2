@@ -134,8 +134,10 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	we gen the edit snippet whenever we go into edit.  the snippet's not quite right.  perhaps we're building something other than what we're deploying.
 
 	$working_arrays has good data so we're using it.  SOme of this encoded shit isn't needed so i'm going to start eliminating them where i can
-
-	
+2017-01-31
+	business_rules_ppv_build_them is where validation_array is currently being built
+2017-02-02
+	we are closing in on the update.   we're gonna include it in the table as business_rules_array and a file of the same name that we can include. maybe we'll build it in $working_arrays
 
 
 

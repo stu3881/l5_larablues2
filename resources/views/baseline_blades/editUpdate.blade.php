@@ -13,6 +13,16 @@
 
 
 <div id="admin" style="width:750px">
+@if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif 
+
 	</p>
 <!--  
 // *****
@@ -55,9 +65,9 @@
 		{{ $passed_to_view_array['report_definition']->model_table }}
 
 	
-		{{ Form::open(array('url'=>'admin/'.$node_name.'/editUpdate', 'method'=>'GET','class'=>'table_inside_update_active_tasks')) }}
+		{{ Form::open(array('url'=>'admin/'.$node_name.'/update', 'method'=>'PUT','class'=>'table_inside_update_active_tasks')) }}
 		{{ Form::hidden('id'							,$passed_to_view_array['id']) }}
-		{{-- Form::hidden('node_name'							,$node_name) --}}
+		{{ Form::hidden('wxyz'							,$passed_to_view_array['wxyz']) }}
 		{{ Form::hidden('coming_from'						,$passed_to_view_array['coming_from']) }}
 		{{ Form::hidden('report_definition_key'				,$passed_to_view_array['report_definition_key']) }}
 		
@@ -73,29 +83,16 @@
 				<td colspan="4">	
 				<table id="inner_tbl_0_0" class="table_no_lines">
 					<tr class="table_no_lines">
-								<td>
-		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
-		  		        array(
-		  		        'id'=>$passed_to_view_array['id'], 
-		  		        'what_we_are_doing'=>'updating_data_record',
-		  		        'coming_from'=> 'editUpdate',
-		  		        'report_definition_key'=>$passed_to_view_array['report_definition_key']
-		  		        )) }}" class="btn mycart-btn-row2">
-		  		        
-		  		        Update
-
-		  		        </a>
-			</td>
 
 					<td class="table_no_lines">
-						{{-- Form::submit('Update ') --}}
-						{{-- Form::close() --}}
+						{{ Form::submit('Update ') }}
+						{{ Form::close() }}
 					</td>
 			
-			
+		
 					<td class="table_no_lines">
 						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-						{{ Form::submit('back to Reports menu') }}
+						{{ Form::submit('Reports menu') }}
 						{{ Form::close() }}
 
 
@@ -149,7 +146,6 @@
 					the other buttons go thru edit4 whereas this button tries to go straight to edit
 				-->		
 				{{ Form::open(array('url'=>'admin/'.$node_name.'/edit' , 'method'=>'GET')) }}
-				{{-- Form::hidden('report_key',Input::get('report_key')) --}}
 				
 				{{ Form::hidden('coming_from','advanced_query') }}
 				{{ Form::hidden('button_name','update advanced_query') }}
@@ -176,8 +172,10 @@
 					</table>
 				</td>
 				</tr>
-				{{-- 'modifiable fields for report: ' . $report_name --}}
+				
  <tr>
+ {{ 'Record key: ' . $passed_to_view_array['id'] }}
+ </tr>
 <tr>
 <td style="text-align:left">
 {{ Form::label("record_type","record_type") }}

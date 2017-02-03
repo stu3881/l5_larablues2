@@ -129,6 +129,79 @@ class DEHBaseController extends Controller
 		return $business_rules_relational_operators;
 	}
 	
+	public function build_validation_array(
+		$business_rules_relational_operators,
+		$field_name_array,
+		$r_o_array,
+		$value_array)
+	{
+		//var_dump($business_rules_relational_operators);
+		//var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);$this->debug_exit(__FILE__,__LINE__,0);
+		//csrf_token();
+		//asort($field_name_array);
+		$update_array = array();
+		$save_value = "";
+		$j = -1;
+		foreach ($field_name_array as $index=>$field_name) {
+			$j++;
+			if ($field_name <> $this->bypassed_field_name) { // skip not_used
+				// this builds an array of field names and business_rules 
+				//$update_array[$field_name] = $relational_operator.$value_array[$index];
+				if (!array_key_exists($field_name,$update_array)) {
+					// the first time a field name appears. (it can repeat)
+					//echo("*<BR>".'adding '.$field_name." to update_array");$this->debug_exit(__FILE__,__LINE__,0);
+					$separator = "";
+					$update_array[$field_name] = "";	
+					//var_dump($update_array);
+				}
+				//var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);
+				//echo("<BR>".$r_o_array[$index]);$this->debug_exit(__FILE__,__LINE__,0);
+				//echo("<BR>".$business_rules_relational_operators[$r_o_array[$index]]);
+				$translated_ro_array_index = $business_rules_relational_operators[$r_o_array[$index]];
+				//$translated_ro_array_index = $business_rules_relational_operators[$index];
+				$v =  $value_array[$index];
+
+				//echo("<BR>".'$translated_ro_array_index '); echo($translated_ro_array_index); $this->debug_exit(__FILE__,__LINE__,0);
+				$var = $translated_ro_array_index.$v;
+				//echo("*<BR>".$var);$this->debug_exit(__FILE__,__LINE__,0);
+				// most use the name for syntax but a few need adjusting
+				switch ($translated_ro_array_index) {
+					case "date_format:YYYY-MM-DD":
+						$var = "date_format:".$v;
+						break;
+					case "email":
+						$var = "email".$v;
+						break;
+					case "after:YYYY-MM-DD":
+						$var = "after:".$v;
+						break;
+					case "in:foo,bar,...":
+						$var = "in:".$v;
+						break;
+					case "min:value":
+						$var = "min:".$v;
+						break;
+					case "max:value":
+						$var = "max:".$v;
+						break;
+					default:
+					echo("default");
+						//$var = $r_o_array[$index].$v;
+						break;
+				} // end switch
+				$update_array[$field_name] .= $separator.$var;
+				//echo('$update_array[$field_name]'.$update_array[$field_name]);
+				$separator = "|";
+			} // end of 'IS used'
+		}  // end foreach
+		foreach ($update_array as $name=>$value) {
+			// the whole thing has to be surrounded with quotes
+			//$update_array[$name] = $value."'";
+		}
+		//var_dump($update_array);$this->debug_exit(__FILE__,__LINE__,1);
+		return $update_array;
+	}
+	
 
 	
 	public function get_generated_snippets() {

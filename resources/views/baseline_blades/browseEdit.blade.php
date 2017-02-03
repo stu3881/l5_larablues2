@@ -155,10 +155,10 @@ $rowcount = -1;
 						<!-- modifiable fields -->
 		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
 		  		        array(
-		  		        'id'=>$report_key, 
+		  		        'id'=>$record->id,
 		  		        'what_we_are_doing'=>'edit2_default_edit',
 		  		        'coming_from'=> 'browseEdit',
-		  		        'report_definition_key'=>$record->id)
+		  		        'report_definition_key'=>$report_key)
 		  		        ) }}" class="btn mycart-btn-row2">
 		  		        
 		  		        editUpdate
