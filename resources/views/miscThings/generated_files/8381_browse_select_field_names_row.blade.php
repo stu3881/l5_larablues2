@@ -1,5 +1,6 @@
 <tr>
 <td>#</td>
-<td>id</td>
 <td>db_connection_name</td>
+<td>id</td>
+<td>user_id</td>
 </tr>

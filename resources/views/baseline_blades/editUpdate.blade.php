@@ -91,9 +91,6 @@
 						{{ Form::submit('Update ') }}
 						{{ Form::close() }}
 					</td>
-		<td class="table_no_lines">	
-	  		        <a href="{{ URL::route($node_name.'.update', $parameters = array('id'=>$passed_to_view_array['id'] )) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
-</td>
 
 
 		
