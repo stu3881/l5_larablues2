@@ -139,7 +139,10 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 2017-02-02
 	we are closing in on the update.   we're gonna include it in the table as business_rules_array and a file of the same name that we can include. maybe we'll build it in $working_arrays
 
-
+2017-02-03
+	didn't write to loretta
+	when you get to editUpdate, you've picked a data record you want to edit 
+	we use the report description key to get the fields we want to edit and build an edit snippet.  the view includes the snippet and you pass it the record you picked. why don't it work? 
 
 	
 	

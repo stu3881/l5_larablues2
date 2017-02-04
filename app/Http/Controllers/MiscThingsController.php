@@ -108,7 +108,7 @@ class MiscThingsController extends DEHBaseController
 
 
 
-        $this->required_fields_array            = $this->generated_snippets_array['required_fields_array'];
+        //$this->required_fields_array            = $this->generated_snippets_array['required_fields_array'];
         //echo $this->view_files_prefix ;exit ("exit in constructor");
 
 
@@ -750,7 +750,11 @@ class MiscThingsController extends DEHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate ".$what_we_are_doing." id is ".$id.$coming_from."**".$report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
+        echo("<br> editUpdate... ".
+            ' what_we_are_doing: '. $what_we_are_doing.
+            ", id: ".$id.
+            ', coming_from: '.$coming_from.
+            ', report_definition_key: '.$report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
         //var_dump($request);
         //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
@@ -762,7 +766,7 @@ class MiscThingsController extends DEHBaseController
                 case "edit2new":
                 case "edit2_default_edit":
                 case "editing_a_data_record":
-                //$request->input('data_key');
+                    //$request->input('data_key');
                     //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,0);
                     //$report_definition  = $this->execute_query_by_report_no($id);
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
@@ -775,58 +779,54 @@ class MiscThingsController extends DEHBaseController
                     $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
                     //var_dump($report_definition_key); $this->debug_exit(__FILE__,__LINE__,1);
 
-                    $db_result  = MiscThing::where('id','=',$id)->get();
-                    if($db_result){
+                    $MiscThing  = MiscThing::where('id','=',$id)->get();
+                    if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,01);
+                        //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
+                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
                         $snippet_string = $this->modifiable_fields_view_snippet_str_gen(
                             $modifiable_fields_array,
                             $lookups_array,
                             $array1);                   }   
 
 
-                    $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
-                   //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
-                    $this->write_file_from_string($fnam,$snippet_string);
-                    //$this->write_file_from_string($fnam,$this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,              $lookups_array,$db_result[0]));
+                        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
+                       //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
+                        $this->write_file_from_string($fnam,$snippet_string);
+                        //$this->write_file_from_string($fnam,$this->modifiable_fields_view_snippet_str_gen($modifiable_fields_array,              $lookups_array,$MiscThing[0]));
 
-                    //$strx       = json_encode($db_result);
-                    //$db_result = json_encode($db_result);
-                    //$db_result = json_decode($db_result,1);
-                    //echo "<br><br>".$snippet_string;$this->debug_exit(__FILE__,__LINE__,1);
-                    //var_dump($request->Input);//var_dump($db_result); 
-                    //$this->debug_exit(__FILE__,__LINE__,1);
+                        $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$MiscThing[0]->id.'_snippet_string';
+                        //$edit_snippet_file_name = $fnam;
+                        //debug_exit(__FILE__,__LINE__,1);   
+                        $passed_to_view_array                                   = array();
+                        $passed_to_view_array['edit_snippet_file_name']         = $edit_snippet_file_name;
+                        $passed_to_view_array['id']                             = $id;
+                        $passed_to_view_array['report_definition_key']          = $report_definition_key;
+                        $passed_to_view_array['coming_from']                    = $coming_from;
 
-                    $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_snippet_string';
-                    //$edit_snippet_file_name = $fnam;
-                    //debug_exit(__FILE__,__LINE__,1);   
-                    $passed_to_view_array = array();
-                    $passed_to_view_array['edit_snippet_file_name'] = $edit_snippet_file_name;
-                    $passed_to_view_array['id'] = $id;
-                    $passed_to_view_array['report_definition_key'] = $report_definition_key;
-                    $passed_to_view_array['coming_from'] = $coming_from;
-                    //$passed_to_view_array['input'] = 'x';
-                    //$passed_to_view_array['input']                = Input::all();
-                    $passed_to_view_array['encoded_modifiable_fields_array'] = json_encode($modifiable_fields_array);
-                    $passed_to_view_arra2newy['data_key']                       = $request->input('data_key');
-                    $passed_to_view_array['encoded_input']                  = $request->input('encoded_input');
-                    $passed_to_view_array['snippet_name']                   ='_modifiable_fields_getEdit_snippet';
-                    $passed_to_view_array['wxyz']              = 
-                        ($report_definition[0]['business_rules']);
-                    $passed_to_view_array['report_definition']              = $report_definition[0];
-                    $passed_to_view_array['record']                         = $db_result[0];
-                    $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
-                    $passed_to_view_array['snippet_string']                 = $snippet_string;      
-                    $passed_to_view_array['lookups_array']                  = $lookups_array;       
-                    //echo("*".$request->input('coming_from')."*");$this->debug_exit(__FILE__,__LINE__,0);
-                    //var_dump($passed_to_view_array['record']);$this->debug_exit(__FILE__,__LINE__,1);      
-
-                return view($this->node_name.'.editUpdate',compact('miscThings'))
-                    //->with('request'                 ,$request)            
-                    ->with('passed_to_view_array'   ,$passed_to_view_array);            
-                    break;          
+                        $passed_to_view_array['encoded_modifiable_fields_array'] = 
+                            json_encode($modifiable_fields_array);
+                        $passed_to_view_arra2newy['data_key']                   = $request->input('data_key');
+                        $passed_to_view_array['encoded_input']                  = $request->input('encoded_input');
+                        $passed_to_view_array['snippet_name']                   ='_modifiable_fields_getEdit_snippet';
+                        $passed_to_view_array['wxyz']                           = 
+                            ($report_definition[0]['business_rules']);
+                        $passed_to_view_array['report_definition']              = $report_definition[0];
+                        $passed_to_view_array['record']                         = $MiscThing[0];
+                        $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
+                        $passed_to_view_array['snippet_string']                 = $snippet_string;      
+                        $passed_to_view_array['lookups_array']                  = $lookups_array;       
+                        //echo("*".$request->input('coming_from')."*");$this->debug_exit(__FILE__,__LINE__,0);
+                        //var_dump($passed_to_view_array['record']);$this->debug_exit(__FILE__,__LINE__,1);      
+                // *****
+                // return to view
+                // *****
+                        return view($this->node_name.'.editUpdate',compact('miscThings'))
+                        ->with('node_name'   ,$this->node_name)            
+                       ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                        break;          
             case "edit2_default_update":
-            case "updating_data_record": // defined in editUpdate
+            //case "updating_data_record": // defined in editUpdate
                 //echo("<BR>".$what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
                 //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
                 $miscThingsUpdate=$request->all(); // important!!
@@ -851,7 +851,7 @@ class MiscThingsController extends DEHBaseController
                     //return back()->withErrors($errors)->withInput();
                 }
                 
-                var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,1);
+                //$this->debug_exit(__FILE__,__LINE__,1);
                 $a = 'encoded_modifiable_fields_array';
                 $Inputo = json_decode(json_encode(Input::all()),0);
                 $modifiable_fields_array = $this->decode_object_field_to_array($Inputo,$a);
@@ -1435,7 +1435,9 @@ class MiscThingsController extends DEHBaseController
     {
         $update = 0;  
         $miscThingsUpdate=$request->all(); // important!!
-        //var_dump($miscThingsUpdate);$this->debug_exit(__FILE__,__LINE__,10);
+        echo($id.' :id');
+
+        var_dump($miscThingsUpdate);$this->debug_exit(__FILE__,__LINE__,0);
         //$this->debug_exit(__FILE__,__LINE__,1);
          if (isset($request->browse_select_array)){
             $update = 1; 
@@ -1455,7 +1457,7 @@ class MiscThingsController extends DEHBaseController
             array_combine($request->to,$request->to);
             $miscThingsUpdate['modifiable_fields_array'] =
             json_encode($miscThingsUpdate['modifiable_fields_array']); // important!!
-            var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
+            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
             }
 
         if (isset($request->query_field_name_array)){
@@ -1489,32 +1491,43 @@ class MiscThingsController extends DEHBaseController
                 json_encode($request->r_o_array);
             $miscThingsUpdate['business_rules_value_array'] = 
                 json_encode($request->value_array);
- 
-
        }
+       // ******
+       // update
+       // ******
        //'what_we_are_doing' => string 'updating_data_record' 
         if ((isset($request->what_we_are_doing)&&$request->what_we_are_doing == 'updating_data_record') ){
-            //var_dump($request->business_rules_field_name_array);$this->debug_exit(__FILE__,__LINE__,1);
             $business_rules = json_decode($miscThingsUpdate['wxyz'],1 );
-            //$this->debug_exit(__FILE__,__LINE__,1);
+            $modifiable_fields_array = json_decode($request->encoded_modifiable_fields_array,1);
+            $modifiable_fields_name_values = array_intersect_key($miscThingsUpdate, $modifiable_fields_array);
+            unset($modifiable_fields_name_values[$this->snippet_table_key_field_name]);
+              var_dump($business_rules);$this->debug_exit(__FILE__,__LINE__,0);
+              $miscThingsUpdate=$request->all(); // important!!
             $this->validate($request, $business_rules);
-        }
-            // valid past here
+             // valid past here
+             var_dump($modifiable_fields_name_values);$this->debug_exit(__FILE__,__LINE__,10);
+ 
+            $update = 0; 
+             $miscThingsings = 
+             DB::connection($this->db_data_connection)->table($this->model_table)->find($id);
+            echo($id.'xx');
+            var_dump($modifiable_fields_name_values);$this->debug_exit(__FILE__,__LINE__,10);
 
-            $update = 1; 
-            //$miscThingsings=MiscThing::find($id);
-            //$miscThingsings=MiscThing::find($id);              
-            $miscThingsings = DB::connection($this->db_data_connection)->table($this->model_table)->find($id);
-var_dump($miscThingsings);$this->debug_exit(__FILE__,__LINE__,1);
-             $miscThingsings = DB::connection($this->db_data_connection)->table($this->model_table)->update($miscThingsUpdate);
-//$miscThingsings->update($miscThingsUpdate);
+             $miscThingsings = DB::connection($this->db_data_connection)->table($this->model_table)->update($modifiable_fields_name_values);
+            //$miscThingsings->update($miscThingsUpdate);
             //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
                 //->where($this->key_field_name,  '=', $request->input('data_key'))
                 //->update($modifiable_fields_name_values);
 
-var_dump($miscThingsUpdate);$this->debug_exit(__FILE__,__LINE__,1);
-           
+            var_dump($miscThingsUpdate);$this->debug_exit(__FILE__,__LINE__,1);
+        }
+          
         
+
+        if ($update = 1){
+            $miscThingsings=MiscThing::find($id);
+            $miscThingsings->update($miscThingsUpdate);
+        }
         return redirect('admin/miscThings');
 
         }

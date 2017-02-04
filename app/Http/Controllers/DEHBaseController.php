@@ -207,17 +207,21 @@ class DEHBaseController extends Controller
 	public function get_generated_snippets() {
 		//echo 'get_generated_snippets 838';//exit("exit");
 		//2014-10-13 modified query to only get 
+
+//var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
+//var_dump($ConnectionsQuery)
+
 		$array = array();
 		$arrx  = DB::connection($this->db_snippet_connection)->table($this->snippet_table)
 		->where('record_type', 		'=', 'table_snippets')
 		->where('table_name',		'=',  $this->model_table)
 		->get();
-		//print_r($arrx[0]);
+		//var_dump($arrx);
 		//print_r($array);
 		//exit("exit 292");
 		if ($arrx) {
-			$array1 = (array) $arrx[0];
-			foreach($array1 as $name=>$value) {
+			//$array1 = (array) $arrx[0];
+			foreach($arrx as $name=>$value) {
 				if (stripos($name,'array')> 0){
 					$array[$name] 	= (array) json_decode($value);
 				}
