@@ -61,6 +61,133 @@ class DEHBaseController extends Controller
 		}
 	}
 	
+	public function build_and_execute_query(
+        $working_arrays,
+        $bypassed_field,
+        $query_relational_operators_array) {
+        //echo("<br>build_and_execute_query");
+        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
+        //
+        // *******
+        // this guy does a lot
+        // *****
+        //$fieldName_r_o_value_array);
+
+        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
+        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
+        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
+        //$r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
+        $r_o_array             =$working_arrays['ppv_define_query']['query_r_o_array_values'];
+
+       $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
+       $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
+
+        //$this->debug_exit(__FILE__,__LINE__,0);var_dump($query_relational_operators_array);var_dump($field_name_array);
+        //var_dump($field_name_array);var_dump($r_o_array);
+        //var_dump($value_array);$this->debug_exit(__FILE__,__LINE__,10);
+        //echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
+        $first_time = 0;
+        $dash_gt = " ->";
+        $dash_gt = " query->where";
+        //$query = MiscThing::
+        $query = DB::connection($this->db_data_connection)->table($this->model_table);
+        echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
+        $executing_distinct = 0;
+        foreach ($field_name_array as $index=>$field_name) {
+            $value = $field_name;
+           if ($field_name <> $bypassed_field){
+                $r_o = $r_o_array [$index];
+                $v = $value_array[$index];
+                //echo("<BR>");$this->debug_exit(__FILE__,__LINE__,0);
+                //echo("rrr ".$field_name.'*'.$r_o.'*'.$v.'*');
+                switch ($r_o) {
+                case "=":
+                case "<>":
+                case ">":
+                case "<":
+                case "<=":
+                case ">=":
+                if ($first_time ) {
+                    $query = MiscThing::where($field_name,$r_o,$v);
+                    echo(' MiscThing::where('.$field_name.' '.$r_o.'"'.$v.'")');
+                    $first_time = 0;
+                    //echo("first time");$this->debug_exit(__FILE__,__LINE__,0);
+                }
+                else{
+                   //echo ($dash_gt.'where( '.$field_name.' '.$r_o.' '.$v);//exit (' exit 155');
+                    //$query_string .= '->where('.$field_name.','.$r_o.','.$v.')';
+                    $query->where($field_name,$r_o,$v);
+                }
+                break;
+        
+            case "whereBetween":
+                break;
+            } // end switch
+        
+            switch ($r_o) {
+                 case "orderBy":
+                      $aord = "ASC";
+                      if ($first_time) {
+                        $query = MiscThing::orderBy($value,$aord);
+                        echo(' MiscThing::orderBy('.$value.','.$aord.')');
+                        $first_time = 0;
+                    }
+                    else{
+                        $query->orderBy($value);
+                        echo(' ->orderBy('.$value.','.$aord.')');
+                    }
+                    break;
+                case "orderByDesc":
+                    $aord = "DESC";
+                    if ($first_time) {
+                         $query = MiscThing::orderBy($value,$aord);
+                         echo(' MiscThing::orderBy('.$value.','.$aord.')');
+                        $first_time = 0;
+                    }
+                    else
+                    {
+                        $query->orderBy($value,$aord);
+                        echo(' ->orderBy('.$value.','.$aord.')');
+                    }
+                    break;
+                case "distinct":
+             		$executing_distinct = 1;
+             		$distinct_value = $value;
+                    $query->distinct();
+                    echo(" ->distinct()");
+                   
+                    break;
+                case "xgetArray":
+                    //$query->get();
+                    break;
+                  
+                case "join":
+                    //DB::table('name')->join('table', 'name.id', '=', 'table.id')
+                    //->select('name.id', 'table.email');
+                case "whereBetween":
+                    break;
+            } // end switch
+        } // end of not = "not_used"
+        
+    }  // end foreach
+ 
+    if ($first_time) {
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        return("");
+    }
+    //echo ("<br>executing query");
+    if ($executing_distinct == 1){
+    	echo("->get([".$distinct_value."])");
+    	return $query->get(['record_type']);
+    }
+    else {
+    	echo("->get()");
+    	return $query->get();
+    }
+    
+    
+    //return  (array) $query;
+    }   // end of build_and_execute_query
 
 	public function build_query_relational_operators_array() {
 		$query_relational_operators_array = array();
