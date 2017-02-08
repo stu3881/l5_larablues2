@@ -74,7 +74,7 @@ else{
 	   	@endforeach
 	
 		<li>
-			{{ Form::open(array('url'=>'admin/main/edit6', 'method'=>'GET')) }}
+			{{ Form::open(array('url'=>'admin/main/programmerUtilities', 'method'=>'GET')) }}
 			{{ Form::hidden('edit6_option','programmer_utilities_menu') }}
 			{{ Form::submit('programmer utilities') }}
 			{{ Form::close() }}

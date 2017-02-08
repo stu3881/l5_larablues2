@@ -235,6 +235,7 @@ class MainController extends DEHBaseController {
     public function getView($id) {
         return View::make('main.view')->with('product', Product::find($id));
     }
+
 ///
     public function getCategory($cat_id) {
         return View::make('main.category')
@@ -326,6 +327,13 @@ class MainController extends DEHBaseController {
     {
         //
     }
+
+    public function programmerUtilities() {
+        //return View::make('main.view')->with('product', Product::find($id));
+        return view($this->node_name.'.programmerUtilities');
+    }
+
+
 
     /**
      * Update the specified resource in storage.
