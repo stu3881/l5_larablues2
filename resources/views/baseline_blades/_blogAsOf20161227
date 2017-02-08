@@ -143,6 +143,66 @@ depending on which button you press on the reportDefMenuEdit screen, you really 
 	didn't write to loretta
 	when you get to editUpdate, you've picked a data record you want to edit 
 	we use the report description key to get the fields we want to edit and build an edit snippet.  the view includes the snippet and you pass it the record you picked. why don't it work? 
+2017-02-04
+	not feeling quite ecstatic but update has worked for everybody.
 
+	But, I'm using the snippet_connection for everything.  it works now since i'm updating miscThings.
+
+	i think i want to get rid of all the database connections from config/database.php and insert the snippet connection and the data connection.
+
+	i also need to get the user and misc things tables linked
+
+	we need to use the db to get the default connections 
+
+	it's making it look like we need at least one more kind of lookup/setup
+	ppp pulldown pulldown pulldown
 	
+2017-02-06
 	
+https://laracasts.com/discuss/channels/eloquent/the-sql-select-distinct-statement
+Fluent:
+
+DB::table('table_name')->distinct()->get(['column_name']);
+
+Eloquent:
+
+MyModel::distinct()->get(['column_name']);
+
+we added in some of the old routes and it got started asking for a login
+
+now, we need to modify the link to indexreports in indexmain because I added id as a parameter to index reports
+
+we had to do something here
+
+PHP Youtube and Vimeo Video Downloader Script
+https://www.phpclasses.org/package/10144-PHP-Download-YouTube-or-Vimeo-videos.html
+
+2017-02-07
+	The login is somehow working again!  i know i changed (or added) something and then un-commented all of the 'new' stuff and we were back in business.  Miscthings controlller is the best guy and does the most things and uses the best technology but he's way more complicated than everybody needs to be
+
+	i want to move some of those string generators over to DEH
+
+<a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
+
+i think we can start updating the buttons 
+All buttons should work for the demo (ya think)
+ppv_update et all should return to repDefMenuEdit after update
+
+i'd like to make the query ro array store values instead of index values so i'll need something to find the bad ones and correct them as well as the logic to make what's there work after the changes.
+
+more advanced queries at least show task
+
+both snippet add and data add have yet to be upgraded
+
+i gotta get back over and get gohoooa's blog back up
+
+couldn't a query find all of the records we're looking for
+more to do but this list is already getting long
+here's lots of cleanup as well
+
+i wanna start loading the default values for the two connections from the database
+i think that will mean less has to be defined for the controller screen.
+
+update from reportDefMenuEdit should return there
+
+

@@ -4,7 +4,7 @@
 
 //echo ($queryx[0]->record_type);
 //"exit("exit 4");
-//var_dump($queryx[0]);exit("exit 4");
+//var_dump($queryx);exit("exit 4");
 /*
 
 var_dump($queryx[1]);exit("exit 4");
@@ -21,13 +21,7 @@ if (isset($queryx)){
 	//var_dump($queryx[0]);exit("exit 16");
 }
 else{
-	$queryx = array();
-	$queryx['node_name'] = "index";
-	$queryx['model_table'] = "miscThings";
-	$queryx['controller_name'][] = "a";
-	$queryx['controller_name'][] = "b";
-	$queryx['controller_name'][] = "c";
-	$queryx = (object) $queryx;
+	exit("indexmain exit 24");
 }
 
 
@@ -59,36 +53,23 @@ else{
 	<div id="admin_nav_bar_center" style="width:400px;text-align:left;background-color:#F0E68C;">	
 		<a href="#">{{ HTML::image('img/user-icon.gif', Auth::user()->firstname) }} {{ Auth::user()->firstname }} {{ HTML::image('img/down-arrow.gif', Auth::user()->firstname) }}</a>
 		<ul>
-		{{--$queryx[0]->node_name--}}
+		
 	   	@foreach($queryx as $query)
-	   		{{--  $query->node_name --}}
+	   		<?php	//var_dump($queryx);//exit("exit 16"); 
+
+				//@if((isset($query->node_name))	)
+	   		?>
+
+	   		
 	   		@if($query->node_name == "miscThings")	
 			   	<li>
-					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
-					{{ Form::hidden('what_we_are_doing','going to indexReports') }}
-					{{ Form::submit('Manage '.$query->model_table) }}
-					{{ Form::close() }}
-			   	</li>
-			   	<li>
-					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
-					{{ Form::hidden('what_we_are_doing','going to indexReports') }}
-					{{ Form::submit('indexReports '.$query->model_table) }}
-					{{ Form::close() }}
-			   	</li>
-	   		<!--
-			   	<li>
-					{{ Form::open(array('url'=>'admin/'.$query->node_name."/indexReports", 'method'=>'GET')) }}
-					{{ Form::hidden('what_we_are_doing','what_we_are_doing') }}
-					{{ Form::submit('Manage '.$query->model_table) }}
-					{{ Form::close() }}
-			   	</li>
-			-->
-			<li>
-			<!-- notice laravel code is bypassed -->
-	             	<a href="{{route($query->node_name.'.indexReports')}}" class="btn btn-warning">indexReports</a>
-			   	</li>
+			   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id)) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
 			
-			@endif						
+			   	</li>
+			@endif	
+
+
+					
 
 	   	@endforeach
 	

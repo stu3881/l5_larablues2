@@ -12,9 +12,8 @@
 
 */
 // ** this is what's working in l5_larablues
-/*
-Route::group(['middleware' => ['web']], function () {
 
+    Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return view('welcome');
@@ -22,8 +21,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::auth();
 
-    Route::controller('users','UsersController');
-*/
+   // Route::controller('users','UsersController');
+
     // This one gets you started!!
     Route::get('/', array('uses'=>'MainController@getIndex'));
 /*
@@ -69,27 +68,26 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource($node_name,$controller_name);
     });
 
-
-    $method_name            = "browseEdit";
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
-    $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
-    $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
-    Route::get('admin/'.$node_name
-        .'/{'.$model.'}'
-        .'/{'.$what_we_are_doing.'}'
-        .'/{'.$coming_from.'}'
-        .'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
- 
-    $method_name            = "editUpdate";
+    // *****
+    // these are common to all the routes that follow for this controller
+    // *****
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
     $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
     $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
     $reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs to be defined here
+
+    //*
+    $method_name            = "browseEdit";
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
+    $method_name            = "editUpdate";
     Route::get('admin/'.$node_name
         .'/{'.$model.'}'
         .'/{'.$what_we_are_doing.'}'
@@ -97,48 +95,26 @@ Route::group(['middleware' => ['web']], function () {
         .'/{'.$reportDefinitionKey.'}'
         .'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "indexRecords";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "indexReportsx";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
- 
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "ppvEdit";
-    $what_we_are_doing      = "reportDefMenuEdit"; // assigned elsewhere but needs to be defined here
-    $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-   
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "reportDefEdits";
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
+     //*
     $method_name            = "reportDefMenuEdit";
-    $what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
-    $coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+ 
+    });
 
 
  

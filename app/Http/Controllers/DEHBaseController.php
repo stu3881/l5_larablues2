@@ -60,6 +60,95 @@ class DEHBaseController extends Controller
 			exit(" exiting");
 		}
 	}
+
+
+    public function browse_select_blade_gen($model,$field_name_array,$version,$objOrArray) {
+        //echo '<br>browse_select_blade_gen<br><br>';$this->debug_exit(__FILE__,__LINE__,10);
+
+        $crlf = "\r\n";
+        switch ($objOrArray)   {
+
+            case "object":
+                $stry = "$"."record->";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name;
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ Form::label('', ". $strz. ") }}".$crlf.
+                            "</td>".$crlf;
+                    }
+                return $strx;
+                break;
+            case "array":
+                $stry = "$"."record['";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name."']";
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ Form::label('', ". $strz. ") }}".$crlf.
+                            "</td>".$crlf;
+                    }
+                return $strx;
+                break;
+
+            }
+        switch ($version)   {
+
+            case "version1":
+                $stry = "$"."record['";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name."']";
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ Form::label('', ". $strz. ") }}".$crlf.
+                            "</td>".$crlf;
+                }
+                return $strx;
+            case "version2":
+                //echo("browse_select_blade_gen");$this->debug_exit(__FILE__,__LINE__,1);
+                $stry = "$"."record['";
+                $strx = "";
+                foreach($field_name_array as $index=>$field_name) {
+                    $strx .= $crlf;
+                    $strz = $stry . $field_name."']";
+                    $strx .= "<td class='text_align_left select_pink' >".$crlf.
+                            "{{ ".$strz. " }}".$crlf.
+                            "</td>".$crlf;
+                }
+            
+                return $strx;
+                break;
+            case "version3":
+                $array_name_string = "$"."record[\'";
+                $array = array();
+                $prefix_str = "<td class=\'text_align_left select_pink\' >".$crlf;
+                $suffix_str = $crlf . "</td>" . $crlf;
+                foreach($field_name_array as $index=>$field_name) {
+                    $data_str   = $array_name_string . $field_name . "\']";
+                    $array[] = $prefix_str;
+                    //$array[] = $data_str;
+                    $array[] = $suffix_str;
+                }
+            case "version4":
+                $array_name_string = "$"."record['";
+                $array = array();
+                $prefix_str = "<td class='text_align_left select_pink' >";
+                $suffix_str = "</td>" ;
+                //foreach($field_name_array as $index=>$field_name) {
+                //  $data_str   = $array_name_string . $field_name . "']";
+                    $array[] = $prefix_str;
+                //  $array[] = $data_str;
+                    //$array[] = "xxx";
+                    $array[] = $suffix_str;
+                //}
+                //echo("browse_select_blade_gen");var_dump($array);$this->debug_exit(__FILE__,__LINE__,1);
+                return $array;
+                break;
+            }
+    }
 	
 	public function build_and_execute_query(
         $working_arrays,
@@ -76,9 +165,9 @@ class DEHBaseController extends Controller
         $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
         $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
         $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
-        //$r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
-        $r_o_array             =$working_arrays['ppv_define_query']['query_r_o_array_values'];
-
+        $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
+     //var_dump($r_o_array);$this->debug_exit(__FILE__,__LINE__,0);        
+     //var_dump($r_o_array);$this->debug_exit(__FILE__,__LINE__,10);
        $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
        $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
 
@@ -187,7 +276,7 @@ class DEHBaseController extends Controller
     
     
     //return  (array) $query;
-    }   // end of build_and_execute_query
+    }   // end of b uild_and_execute_query
 
 	public function build_query_relational_operators_array() {
 		$query_relational_operators_array = array();
