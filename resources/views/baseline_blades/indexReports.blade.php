@@ -80,12 +80,7 @@ $rowcount = -1;
 	<div id="admin" style="width:800px;height:99%">
 	
 	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
-	{{ Form::hidden('key_field_name'						,$all_records[0]->key_field_name) }}
-	{{-- Form::hidden('encoded_field_name_array'				,$encoded_field_name_array) --}}
-	{{ Form::hidden('model_table'							,$all_records[0]->model_table) }}
 	{{ Form::hidden('node_name'								,$node_name) }}
-	{{-- Form::hidden('snippet_table'							,$snippet_table) --}}
-	{{ Form::hidden('record_type'							,'report_definition') }}
 	{{ Form::hidden('coming_from'							,'edit1_define_new_report') }}
 	
 	<div id="update_active_tasks" ><br>
@@ -104,7 +99,13 @@ $rowcount = -1;
 				<td class="table_no_lines">
 					{{ Form::submit('Define_New_Report') }}
 					{{ Form::close() }}
-				</td><td>	
+				</td>
+				<td>	
+			   		<a href="{{ URL::route('miscThings'.'.create', $parameters = array()) }}" class="btn mycart-btn-row2">
+					Initialize_New_Report
+			   		</a>
+				</td>
+				<td>	
 					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
 					{{ Form::hidden('model_table',$model_table) }}
 					{{ Form::hidden('id',$all_records[0]->id) }}
@@ -112,7 +113,8 @@ $rowcount = -1;
 					{{ Form::hidden('node_name',$node_name) }}
 					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}
 					{{ Form::close() }}
-				</td><td>	
+				</td>
+				<td>	
 					{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
 					{{ Form::hidden('model_table',$all_records[0]->model_table) }}
 					{{ Form::hidden('node_name',$node_name) }}

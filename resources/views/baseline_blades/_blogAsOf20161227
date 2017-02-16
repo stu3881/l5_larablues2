@@ -205,4 +205,20 @@ i think that will mean less has to be defined for the controller screen.
 
 update from reportDefMenuEdit should return there
 
+programmerutilities menu shows up
+the adds and the menuing should probably come first
+adds for sure
+2017-02-09
+	the conversion from indexes to values continues.  it's compounded by the fact that we're trying to correct bad ones automatically. (if the value is numeric, we assume it's an indexed array and do a look up on the spot.) 
 
+	building the query isn't handling this correctly right now but it looks like we're doing the conversion right on the update
+
+2017-02-10
+	things are in better shape than they feel.
+	there are no busines rules; hence marching thru a null array abends. i'm hoping making the paddining routine in working_arrays work the way i want (how many blanks do i want on the end of each array) will fix this
+2017-02-14
+	I deleted all my cookies for other reasons.
+
+	i think i got the padding working right.  So, we're off to get all the buttons working
+
+	first are the adds.  the report definition name and the others.

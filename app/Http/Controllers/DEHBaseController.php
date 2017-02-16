@@ -172,12 +172,13 @@ class DEHBaseController extends Controller
        $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
 
         //$this->debug_exit(__FILE__,__LINE__,0);var_dump($query_relational_operators_array);var_dump($field_name_array);
-        //var_dump($field_name_array);var_dump($r_o_array);
-        //var_dump($value_array);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($field_name_array);
+       //var_dump($r_o_array);
+        //var_dump($value_array);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
-        $first_time = 0;
         $dash_gt = " ->";
-        $dash_gt = " query->where";
+        //$dash_gt = " query->where";
         //$query = MiscThing::
         $query = DB::connection($this->db_data_connection)->table($this->model_table);
         echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
@@ -187,8 +188,6 @@ class DEHBaseController extends Controller
            if ($field_name <> $bypassed_field){
                 $r_o = $r_o_array [$index];
                 $v = $value_array[$index];
-                //echo("<BR>");$this->debug_exit(__FILE__,__LINE__,0);
-                //echo("rrr ".$field_name.'*'.$r_o.'*'.$v.'*');
                 switch ($r_o) {
                 case "=":
                 case "<>":
@@ -196,17 +195,11 @@ class DEHBaseController extends Controller
                 case "<":
                 case "<=":
                 case ">=":
-                if ($first_time ) {
-                    $query = MiscThing::where($field_name,$r_o,$v);
-                    echo(' MiscThing::where('.$field_name.' '.$r_o.'"'.$v.'")');
-                    $first_time = 0;
-                    //echo("first time");$this->debug_exit(__FILE__,__LINE__,0);
-                }
-                else{
-                   //echo ($dash_gt.'where( '.$field_name.' '.$r_o.' '.$v);//exit (' exit 155');
+             
+                   echo ($dash_gt.'where( '.$field_name.' '.$r_o.' '.$v);//exit (' exit 155');
                     //$query_string .= '->where('.$field_name.','.$r_o.','.$v.')';
                     $query->where($field_name,$r_o,$v);
-                }
+               
                 break;
         
             case "whereBetween":
@@ -216,28 +209,17 @@ class DEHBaseController extends Controller
             switch ($r_o) {
                  case "orderBy":
                       $aord = "ASC";
-                      if ($first_time) {
-                        $query = MiscThing::orderBy($value,$aord);
-                        echo(' MiscThing::orderBy('.$value.','.$aord.')');
-                        $first_time = 0;
-                    }
-                    else{
+                     
                         $query->orderBy($value);
                         echo(' ->orderBy('.$value.','.$aord.')');
-                    }
+                   
                     break;
                 case "orderByDesc":
                     $aord = "DESC";
-                    if ($first_time) {
-                         $query = MiscThing::orderBy($value,$aord);
-                         echo(' MiscThing::orderBy('.$value.','.$aord.')');
-                        $first_time = 0;
-                    }
-                    else
-                    {
+                   
                         $query->orderBy($value,$aord);
                         echo(' ->orderBy('.$value.','.$aord.')');
-                    }
+                    
                     break;
                 case "distinct":
              		$executing_distinct = 1;
@@ -260,10 +242,6 @@ class DEHBaseController extends Controller
         
     }  // end foreach
  
-    if ($first_time) {
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        return("");
-    }
     //echo ("<br>executing query");
     if ($executing_distinct == 1){
     	echo("->get([".$distinct_value."])");
