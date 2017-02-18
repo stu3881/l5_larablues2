@@ -222,3 +222,29 @@ adds for sure
 	i think i got the padding working right.  So, we're off to get all the buttons working
 
 	first are the adds.  the report definition name and the others.
+2017-02-16
+	It's so much nicer doing it the new way.
+	we want to make it look like the new update
+
+	the problem with kill is you have to reload your databases.  i do need a more recent backup since i changed the way the indexing works.but not everybody is self correcting
+
+	compact is the opposite of extract 
+	extract($var_array, EXTR_PREFIX_SAME, "wddx");
+	echo "$color, $size, $shape, $wddx_size\n";
+2017-02-17
+	The adds have been a lot harder than they should have been.
+	A button points you to a route that points you at a controller and off you go
+	Input a form, validate and insert or return with errors.
+
+	I guess i need to go thru this one more time.
+
+	A resource controller gets you all of the standard crud methods
+	i don't think i'm using them in miscThings
+
+	I'm thinking i want a miscThing Controller but the miscThings controller is doing lost of other stuff and maybe we can do the sqlcalls in the table controller instead of the miscThings controller  something like ::MiscThing
+
+	Anyhow, I'm just going to try and 'clone' how we do the add in example and do the same thing with miscThings
+
+	All that create is go to a form to accept the input data
+
+

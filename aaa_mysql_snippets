@@ -271,3 +271,5 @@ snippet_name, snippet_table_key_field_name,
 
       	mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues2/no99_homestead_all20170203.sql
 		mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues2/no99_homestead_all20170203data.sql
+
+ mysql -uhomestead -p  < ~/code/l5_larablues2/no99_homestead_all20161130.sql  

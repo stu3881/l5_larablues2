@@ -31,31 +31,30 @@ class MiscThingController extends Controller
        return view('miscThings.create');
     }
 
-     public function derive_validation_array()
+    public function derive_validation_array()
     {
         //exit ('exit in MiscThing controller derive_validation_array');
        //return view('miscThings.create');
     }
 
-   /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
-    public function store(StoreMiscThings000 $request) {
-    //public function store(StoreMiscThings $request) {
-        
-        $this->derive_validation_array();
+    */
+    public function store(REQUEST $request) {
+    //var_dump(compact($request->Input['report_name']));
+    //echo($request->Input('record_type'));
+        //var_dump($request->Input('report_name'));exit("exit at 51");
+        //$this->derive_validation_array();
         $this->validate($request, 
-                [ 
+        [ 
         'record_type' => 'required',
         'report_name' => 'required',
-        'report_query' => 'required',
-        'bypassed_field_name' => 'required',
-        'report_containing_menu' => 'required'
-        ]);
-        
+        ]
+        );
+        //exit("exit at 58");
         $miscThing=$request->all(); // important!!
         MiscThing::create($miscThing);
         return redirect('miscThings');

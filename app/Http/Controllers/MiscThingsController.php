@@ -1087,6 +1087,7 @@ class MiscThingsController extends DEHBaseController
         //
         //var_dump($request);
         echo("who sent us here". " show ".$id); $this->debug_exit(__FILE__,__LINE__,10);
+
     }
 
 
@@ -1115,12 +1116,29 @@ class MiscThingsController extends DEHBaseController
 
     }   
 
+    public function store(REQUEST $request) {
+    var_dump(compact($request->Input['report_name']));
+    //echo($request->Input('record_type'));
+        //var_dump($request->Input('report_name'));exit("exit at 51");
+        //$this->derive_validation_array();
+        $this->validate($request, 
+        [ 
+        'record_type' => 'required',
+        'report_name' => 'required',
+        ]
+        );
+        //exit("exit at 58");
+        $miscThing=$request->all(); // important!!
+        MiscThing::create($miscThing);
+        return redirect('miscThings');
+    }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $idInput
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)

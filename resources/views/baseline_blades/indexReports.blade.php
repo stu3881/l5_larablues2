@@ -4,11 +4,8 @@
 <section id="promo">   
 	indexReports  
 	<div id="promo-details"> 
-
-		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))}} 
-
-
-		</div> <!-- end promo-details -->
+		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'160px'))}} 
+	</div> <!-- end promo-details -->
 </section><!-- promo -->
 @stop
 
@@ -80,13 +77,8 @@ $rowcount = -1;
 	<div id="admin" style="width:800px;height:99%">
 	
 	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
-	{{ Form::hidden('node_name'								,$node_name) }}
-	{{ Form::hidden('coming_from'							,'edit1_define_new_report') }}
 	
-	<div id="update_active_tasks" ><br>
 	
-                      	updating   {{$all_records[0]->model_table}} table
-	<p>
 	<p>		
 	<div id="div_inside_update_active_tasks" style="width:$width" >		
 		<div id="div_inside_update_active_tasks_button_bar" style="width:$width">	
@@ -96,10 +88,6 @@ $rowcount = -1;
 		<td colspan={{$browse_select_field_count}} >	
 			<table class="table_no_lines">
 				<tr class="table_no_lines">
-				<td class="table_no_lines">
-					{{ Form::submit('Define_New_Report') }}
-					{{ Form::close() }}
-				</td>
 				<td>	
 			   		<a href="{{ URL::route('miscThings'.'.create', $parameters = array()) }}" class="btn mycart-btn-row2">
 					Initialize_New_Report
@@ -205,7 +193,7 @@ $rowcount = -1;
 		
 		
 			</table>
-	</div>   <!-- end center_table_div -->	
+
 	<script>
 //write document.getElementById("div_inside_update_active_tasks").width = "2000px";
 if (document.getElementById("table_inside_update_active_tasks").style.width > document.getElementById("div_inside_update_active_tasks").style.width) {
