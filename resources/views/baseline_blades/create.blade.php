@@ -24,8 +24,7 @@
 
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
 		
-			{{ Form::open(array('url'=>'admin/miscThings', 'method'=>'POST')) }}
-			{{-- Form::open(array('url'=>'admin/'.$node_name.'/edit4'	,'method'=>'PUT')) --}}
+			{{ Form::open(array('url'=>'admin/miscThings','method'=>'POST')) }}
 
 				<table id="outer_tbl_0" class="table_inside_update_active_tasks">
 				<tr class="table_no_lines">
@@ -34,20 +33,27 @@
 					<tr class="table_no_lines">
 					<td class="table_no_lines">
 
+						{{-- Form::submit('Add') --}}
+					</td>
+
+					<td class="table_no_lines">
+						{{ Form::open(array('url'=>$node_name.'.store', 'method'=>'POST')) }}
 						{{ Form::submit('Add') }}
 						{{ Form::close() }}
 					</td>
 			
 					<td class="table_no_lines">
-						<a href="{{ URL::route('admin/'.$node_name, $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Reports menu</a>
-					
+						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
+						{{ Form::submit('Reports menu') }}
+						{{ Form::close() }}
 					</td>
-	
+						
 					<td class="table_no_lines">
-						<a href="{{-- URL::route('admin/'.main, $parameters = array('method'=>'GET')) --}}" class="btn mycart-btn-row2">Main menu</a>
+						<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 					</td>
 		
 	@include($snippet_file)    
+						{{ Form::close() }}
 
 		</div>
 @stop

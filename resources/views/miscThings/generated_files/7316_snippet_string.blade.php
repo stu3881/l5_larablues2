@@ -1,32 +1,26 @@
 <tr>
 <td style="text-align:left">
-{{ Form::label("advanced_query","advanced_query") }}
+{{ Form::label("report_name","report_name") }}
 </td>
 <td style="text-align:left">
-{{ Form::text('advanced_query',$record['advanced_query']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("class_name","class_name") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('class_name',$record['class_name']) }}
+{{ Form::text('report_name',$record['report_name']) }}
 </td>
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("controller_name","controller_name") }}
+{{ Form::label("table_name","table_name") }}
 </td>
 <td style="text-align:left">
-{{ Form::text('controller_name',$record['controller_name']) }}
+{{ Form::text('table_name',$record['table_name']) }}
 </td>
 </tr>
 <tr>
+</tr>
+<tr>
 <td style="text-align:left">
-{{ Form::label("created_at","created_at") }}
+{{ Form::label("node_name","node_name") }}
 </td>
 <td style="text-align:left">
-{{ Form::text('created_at',$record['created_at']) }}
+{{ Form::text('node_name',$record['node_name']) }}
 </td>
 </tr>

@@ -1,6 +1,8 @@
 <tr>
 <td>#</td>
-<td>id</td>
 <td>record_type</td>
-<td>business_rules</td>
+<td>id</td>
+<td>created_at</td>
+<td>updated_at</td>
+<td>report_name</td>
 </tr>

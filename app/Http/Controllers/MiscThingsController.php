@@ -21,6 +21,11 @@ class MiscThingsController extends DEHBaseController
         public function __construct(
      
         /**/
+        $buttons_in_front               = "",
+        $print_orientation              = "",
+
+
+
         $record_type                    = "table_controller", 
         //$db_connection_name             = "blues_main", 
         $db_connection_name             = "", 
@@ -44,8 +49,10 @@ class MiscThingsController extends DEHBaseController
         $field_name_list_array = "",
 
         $field_name_lists_array = "",
-        $field_name_list_array_first_index = "",
-        $my_ctr                             = 0
+        $field_name_list_array_first_index  = "",
+        $my_ctr                             = 0,
+        $report_definition_id               = 0,
+        $store_validation_id                = 0
 
         ) 
         {
@@ -144,7 +151,8 @@ class MiscThingsController extends DEHBaseController
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
- 
+        $this->report_definition_id         = 12450;
+        $this->store_validation_id          = $store_validation_id;
     }
 
 
@@ -214,8 +222,6 @@ class MiscThingsController extends DEHBaseController
         $message = "";
         $what_we_are_doing = "edit2_build_default_browse";
         if ($report_definition){
-            echo("<br>"."calling working_arrays_construct ");$this->debug_exit(__FILE__,__LINE__,10);
-
             $working_arrays     = $this->working_arrays_construct($report_definition);
 
             //var_dump($report_definition[0]);
@@ -274,10 +280,11 @@ class MiscThingsController extends DEHBaseController
         //var_dump($report_definition);
         $report_definition = MiscThing::where('id','=',$id)->get();
         //var_dump($report_definition[0]); $this->debug_exit(__FILE__,__LINE__,10);   
-        
+        global $store_validation_id;
+        $this->store_validation_id = $id;
         $working_arrays     = $this->working_arrays_construct($report_definition[0]);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($report_definition[0]);
+        //var_dump($store_validation_id);$this->debug_exit(__FILE__,__LINE__,10);
 
         $query_relational_operators_array = $this->build_query_relational_operators_array();
         if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
@@ -337,23 +344,66 @@ class MiscThingsController extends DEHBaseController
     }
         
 
-    
-
-
-
-
-    public function browse_select_blade_files_gen($report_key,$objOrArray) {
-        //echo ('<br>browse_select_blade_files_gen<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+    public function blade_files_gen_browse_select($report_key,$objOrArray) {
+        //echo ('<br>blade_files_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
 
         $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
-        File::put($fnam, $this->browse_select_field_names_row_gen($this->model,$_REQUEST["to"]));
+        File::put($fnam, $this->blade_files_gen_browse_select_field_names_row($this->model,$_REQUEST["to"]));
         
         $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_display_snippet.blade.php';
-        File::put($fnam,$this->browse_select_blade_gen($this->model,$_REQUEST["to"],'version1',$objOrArray));
+        File::put($fnam,$this->blade_files_gen_browse_select($this->model,$_REQUEST["to"],'version1',$objOrArray));
     }
   
-    public function browse_select_field_names_row_gen($model,$field_name_array) {
-        //echo '<br>browse_select_field_names_row_gen';//exit("exit 99");
+     
+
+
+
+
+    public function blade_files_gen_modifiable_fields_add($report_key,$field_name_array) {
+        //echo ('<br>blade_files_gen_modifiable_fields_add<br><br>');
+        //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $crlf = "\r\n";
+        //$crlf = "";
+        $left = '<div id="div_inside_update_active_tasks_button_bar" style="width:$width"> '. $crlf. 
+                '<table id="table_inside_update_active_tasks" style="width:$width">'. $crlf.
+                '<th></th>'. $crlf.
+                '<tr>'. $crlf.
+                '<td style="text-align:left">'. $crlf;
+        
+
+        $right = "
+            </table>
+        </div>";
+        //var_dump($field_name_array);
+        $mid = "";
+        foreach($field_name_array as $name=>$value) {
+            $mid .= "<tr>";
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::label(\"$name\",\"$name\") }}".$crlf;
+            $mid .= "</td>". $crlf;
+
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::text(\"$name\",'') }}".$crlf;
+            $mid .= "</td>". $crlf;
+            $mid .= "</tr>";
+                //echo("<br>".$name."**".$mid);$this->debug_exit(__FILE__,__LINE__,10);
+        }
+
+
+        $strx = $left. $mid. $right;
+        //echo($mid);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder.
+        "/".$report_key.'_modifiable_fields_add.blade.php';
+        //File::put($fnam, $this->blade_files_gen_modifiable_fields_add($this->model,$_REQUEST["to"]));
+        File::put($fnam, $strx);
+     }
+  
+ 
+    public function blade_files_gen_browse_select_field_names_row($model,$field_name_array) {
+        //echo '<br>blade_files_gen_browse_select_field_names_row';//exit("exit 99");
         $crlf = "\r\n";
         //$crlf = "";
         $strx = "<tr>". $crlf;
@@ -523,7 +573,6 @@ class MiscThingsController extends DEHBaseController
 
                 //var_dump($working_arrays['ppv_define_business_rules']['business_rules_r_o_array']);
                 //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
-                //$validator = $this->validate($requestFieldsArray,$business_rules_array);
                 var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
 
                 //$validator = Validator::make(Input::all(), $business_rules_array); //update
@@ -545,7 +594,6 @@ class MiscThingsController extends DEHBaseController
                 $a = 'encoded_modifiable_fields_array';
                 $Inputo = json_decode(json_encode(Input::all()),0);
                 $modifiable_fields_array = $this->decode_object_field_to_array($Inputo,$a);
-                //$modifiable_fields_name_values = array_intersect_key(Input::all(), $modifiable_fields_array);
                 //var_dump($b);
                 //$this->debug_exit(__FILE__,__LINE__,1);
                 switch ($request->input('coming_from')) {
@@ -582,7 +630,7 @@ class MiscThingsController extends DEHBaseController
         $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_editUpdate_snippet.blade.php';
         File::put($fnam,$this->editUpdate_snippet_gen($this->model,$_REQUEST["to"],'version1',$objOrArray));
         //$fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
-        //File::put($fnam, $this->browse_select_field_names_row_gen($this->model,$_REQUEST["to"]));
+        //File::put($fnam, $this->blade_files_gen_browse_select_field_names_row($this->model,$_REQUEST["to"]));
         
     }
  
@@ -595,15 +643,20 @@ class MiscThingsController extends DEHBaseController
      */
     public function create()
     {
+        global $store_validation_id;
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
+        //$snippet_file = $this->node_name."/".$this->generated_files_folder.
+        "/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
 
-        $errors = array();
-        $message = array();
-        $snippet_file= "../".'baseline_blades/'.'report_name_only';
+        //echo("<br>".$snippet_file.$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
+       //$snippet_file= "../".'baseline_blades/'.'report_name_only';
+
+        //$snippet_file= "../".'baseline_blades/'.'report_name_only';
          return view($this->node_name.'.create')
-        ->with('message'                        , $message)
+        //->with('message'                        , $message)
         ->with('snippet_file'                   , $snippet_file)
-        ->with('node_name'                        , $this->node_name)
-        ->withErrors($errors);
+        ->with('node_name'                        , $this->node_name);
+
     }
 
     /**
@@ -795,6 +848,7 @@ class MiscThingsController extends DEHBaseController
         $strx = "";
 
         $field_ctr = -1;
+        //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,10);
         foreach($field_name_array as $index=>$fieldx) {
             $field_ctr ++;
             //echo"<br>name: ";print_r($fieldx);
@@ -1117,20 +1171,20 @@ class MiscThingsController extends DEHBaseController
     }   
 
     public function store(REQUEST $request) {
-    var_dump(compact($request->Input['report_name']));
-    //echo($request->Input('record_type'));
-        //var_dump($request->Input('report_name'));exit("exit at 51");
-        //$this->derive_validation_array();
-        $this->validate($request, 
-        [ 
-        'record_type' => 'required',
-        'report_name' => 'required',
-        ]
-        );
-        //exit("exit at 58");
+        echo('store'.$this->store_validation_id);
+        var_dump($request->report_name);//$this->debug_exit(__FILE__,__LINE__,10);
+        $report_definition  = MiscThing::where('id','=',$this->store_validation_id)->get();
+        //$report_definition  = MiscThing::where('id','=',$this->report_definition_id)->get();
+        $validation_array = (array) json_decode($report_definition[0]['business_rules']);
+        
+        echo('store');
+        $requestFieldsArray=$request->all(); // important!!
+        $this->validate($request,$validation_array);
+        //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
+
         $miscThing=$request->all(); // important!!
         MiscThing::create($miscThing);
-        return redirect('miscThings');
+        return redirect('admin/miscThings');
     }
 
 
@@ -1157,7 +1211,7 @@ class MiscThingsController extends DEHBaseController
                 json_encode($requestFieldsArray['browse_select_array']); // important!!
             $objectOrArray = "object";
             //$objectOrArray = "array";
-            $this->browse_select_blade_files_gen($id,$objectOrArray);
+            $this->blade_files_gen_browse_select($id,$objectOrArray);
             }
         if (isset($request->modifiable_fields_array)){
             $update = 1; 
@@ -1165,10 +1219,11 @@ class MiscThingsController extends DEHBaseController
             $request->modifiable_fields_array = $request->to;
             $requestFieldsArray['modifiable_fields_array'] = 
             array_combine($request->to,$request->to);
+           $this->blade_files_gen_modifiable_fields_add($id,$requestFieldsArray['modifiable_fields_array']);
             //var_dump($requestFieldsArray['modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,1);
             $requestFieldsArray['modifiable_fields_array'] =
             json_encode($requestFieldsArray['modifiable_fields_array']); 
-            //var_dump($requestFieldsArray['modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,0);
+             //var_dump($requestFieldsArray['modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,10);
             }
 
         if (isset($request->query_field_name_array)){
@@ -1213,6 +1268,8 @@ class MiscThingsController extends DEHBaseController
                 json_encode($request->r_o_array);
             $requestFieldsArray['business_rules_value_array'] = 
                 json_encode($request->value_array);
+            //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+
        }
        // ******
        // update
@@ -1231,7 +1288,7 @@ class MiscThingsController extends DEHBaseController
                 $requestFieldsArray=$request->all(); // important!!
                 $this->validate($request, $business_rules);
                  // valid past here
-                 var_dump($modifiable_fields_name_values);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($modifiable_fields_name_values);$this->debug_exit(__FILE__,__LINE__,10);
      
                 $update = 0; 
                 
@@ -1524,7 +1581,7 @@ class MiscThingsController extends DEHBaseController
                 //* now we need to set pad ctr
 
                 // *****
-                // loop thru assing proper defaults
+                // loop thru assuring proper defaults
                 // *****
                 //var_dump($working_arrays[$array_group_to_be_padded]['field_name_array']);
                 for ($i=0; $i<($pad_ctr); $i++){

@@ -5,7 +5,7 @@
 	browseEdit  
 	<div id="promo-details"> 
 
-		{{-- HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))--}} 
+		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'72px'))}} 
 
 
 		</div> <!-- end promo-details -->
@@ -77,34 +77,22 @@ $rowcount = -1;
 			<tbody>
 				<tr class="table_no_lines">
 				<td class="table_no_lines">
-					{{ Form::submit('reports list') }}
+					{{ Form::submit('Reports list') }}
 					{{ Form::close() }}
 				</td>
-				<td>	
-					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
-					{{ Form::hidden('key_field_name',$key_field_name) }}
-					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}
-					{{ Form::close() }}
+				<td class="table_no_lines">
+			   		<a href="{{ URL::route('miscThings'.'.create', $parameters = array()) }}" class="btn mycart-btn-row2">
+					Add record
+			   		</a>
 				</td>
-				<td>	
-					{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-					{{ Form::hidden('model_table',$model_table) }}
-					{{ Form::submit($model_table.' menu', array('class'=>'cart-btn')) }}
-					{{ Form::close() }}
-								</td>
-				<td>	
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/add', 'method'=>'GET')) }}
-					{{ Form::hidden('key_field_name'			,$key_field_name) }}
-					
-					{{ Form::hidden('key_field_value'			,$key_field_value) }}
-					{{ Form::hidden('report_key'				,$report_key) }}
-					{{ Form::hidden('model_table'				,$model_table) }}
-					{{ Form::submit('add new record', array('class'=>'mycart-btn-row2')) }}
-					{{ Form::close() }}
+				<td class="table_no_lines">
+					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 				</td>
+
 				</tr>
 			</tbody>
-			</table>		</td></tr>
+			</table>		
+		</td></tr>
 
 		<?php 
 		/*

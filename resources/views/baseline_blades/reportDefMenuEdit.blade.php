@@ -75,7 +75,7 @@
 			
 					<td class="table_no_lines">
 						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-						{{ Form::submit('back to Reports menu') }}
+						{{ Form::submit('Reports menu') }}
 						{{ Form::close() }}
 
 

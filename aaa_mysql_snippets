@@ -273,3 +273,13 @@ snippet_name, snippet_table_key_field_name,
 		mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues2/no99_homestead_all20170203data.sql
 
  mysql -uhomestead -p  < ~/code/l5_larablues2/no99_homestead_all20161130.sql  
+2017-02-18
+  update miscThings set node_name   = "miscThings", where record_type = "report_definition" and node_name IS NULL and table_name = "miscThings";
+
+  update miscThings set node_name   = "miscThings" where record_type = "report_definition"  and table_name = "miscThings";
+
+  update miscThings set node_name   = "miscThings", table_name = "miscThings" where record_type = "report_definition";
+
+      	mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues2/no99_homestead_all_20170220.sql
+
+		mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues2/no99_homestead_data_20170220.sql

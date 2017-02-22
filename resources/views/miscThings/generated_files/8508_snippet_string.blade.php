@@ -16,24 +16,6 @@
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("field_name","field_name") }}
-</td>
-<td style='text-align:left'>
-{{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
-</td>
-</tr>
-<tr>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("report_name","report_name") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('report_name',$record['report_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
 {{ Form::label("db_snippet_connection","db_snippet_connection") }}
 </td>
 <td style="text-align:left">
@@ -119,4 +101,14 @@
 <td style="text-align:left">
 {{ Form::text('generated_files_folder',$record['generated_files_folder']) }}
 </td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("field_name","field_name") }}
+</td>
+<td style='text-align:left'>
+{{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
+</td>
+</tr>
+<tr>
 </tr>

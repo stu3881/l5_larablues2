@@ -202,11 +202,38 @@ class DEHBaseController extends Controller
                
                 break;
         
-            case "whereBetween":
-                break;
+
             } // end switch
         
             switch ($r_o) {
+				//case  "join":
+                case "join":
+                    //DB::table('name')->join('table', 'name.id', '=', 'table.id')
+                    //->select('name.id', 'table.email');		//case  "where":
+            case "whereBetween":
+            	$query->whereBetween($field_name,$value);
+            	 echo(' ->whereBetween('.$field_name.','.$aord.')');
+                break;
+            case "whereNull":
+            	$query->whereNull($field_name);
+            	 echo(' ->whereNull('.$field_name.')');
+                break;
+            case "whereNotNull":
+            	$query->whereNotNull($field_name);
+            	 echo(' ->whereNotNull('.$field_name.')');
+                break;
+		case  "groupBy":
+            	$query->groupBy($field_name);
+            	 echo(' ->groupBy('.$field_name.')');
+                break;
+		//case  "getArray":
+            	//$query->getArray($field_name);
+            	// echo(' ->getArray('.$field_name.')');
+                //break;
+
+
+
+                //**************
                  case "orderBy":
                       $aord = "ASC";
                      
@@ -232,11 +259,8 @@ class DEHBaseController extends Controller
                     //$query->get();
                     break;
                   
-                case "join":
-                    //DB::table('name')->join('table', 'name.id', '=', 'table.id')
-                    //->select('name.id', 'table.email');
-                case "whereBetween":
-                    break;
+
+
             } // end switch
         } // end of not = "not_used"
         
@@ -274,7 +298,7 @@ class DEHBaseController extends Controller
 		$query_relational_operators_array[] =  "groupBy";
 		$query_relational_operators_array[] =  "orderBy";
 		$query_relational_operators_array[] =  "orderByDesc";
-		$query_relational_operators_array[] =  "getArray";
+		//$query_relational_operators_array[] =  "getArray";
 		$query_relational_operators_array[] =  "distinct";
 		return $query_relational_operators_array;
 	}
@@ -336,6 +360,7 @@ class DEHBaseController extends Controller
 		$update_array = array();
 		$save_value = "";
 		$j = -1;
+		//var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,0);
 		foreach ($field_name_array as $index=>$field_name) {
 			$j++;
 			if ($field_name <> $this->bypassed_field_name) { // skip not_used
@@ -348,14 +373,15 @@ class DEHBaseController extends Controller
 					$update_array[$field_name] = "";	
 					//var_dump($update_array);
 				}
-				//var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);
-				//echo("<BR>".$r_o_array[$index]);$this->debug_exit(__FILE__,__LINE__,0);
-				//echo("<BR>".$business_rules_relational_operators[$r_o_array[$index]]);
-				$translated_ro_array_index = $business_rules_relational_operators[$r_o_array[$index]];
-				//$translated_ro_array_index = $business_rules_relational_operators[$index];
+				//var_dump($field_name_array);var_dump($r_o_array);var_dump($value_array);echo("<BR>");$this->debug_exit(__FILE__,__LINE__,0);
+				////echo("<BR>".$business_rules_relational_operators[$r_o_array[$index]]);
+				//$translated_ro_array_index = $business_rules_relational_operators[$r_o_array[$index]];
+				//* we used to use value as the index but we needed to use the index instead
+				$translated_ro_array_index = $business_rules_relational_operators[$index];
+				$translated_ro_array_index = $r_o_array[$index];
 				$v =  $value_array[$index];
 
-				//echo("<BR>".'$translated_ro_array_index '); echo($translated_ro_array_index); $this->debug_exit(__FILE__,__LINE__,0);
+				//echo("<BR>".'$translated_ro_array_index '); echo($translated_ro_array_index); $this->debug_exit(__FILE__,__LINE__,10);
 				$var = $translated_ro_array_index.$v;
 				//echo("*<BR>".$var);$this->debug_exit(__FILE__,__LINE__,0);
 				// most use the name for syntax but a few need adjusting
@@ -388,10 +414,7 @@ class DEHBaseController extends Controller
 				$separator = "|";
 			} // end of 'IS used'
 		}  // end foreach
-		foreach ($update_array as $name=>$value) {
-			// the whole thing has to be surrounded with quotes
-			//$update_array[$name] = $value."'";
-		}
+
 		//var_dump($update_array);$this->debug_exit(__FILE__,__LINE__,1);
 		return $update_array;
 	}

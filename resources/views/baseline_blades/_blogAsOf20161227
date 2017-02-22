@@ -246,5 +246,39 @@ adds for sure
 	Anyhow, I'm just going to try and 'clone' how we do the add in example and do the same thing with miscThings
 
 	All that create is go to a form to accept the input data
+2017-02-18-19
+	I thought it was close and then it slipped away
+	i get errors and the messages appear on an update just like they're supposed to
+	but on an add, I can see that the validation is taking place but i see no errors
+
+	i cannot see how the validation is returning the error messages in one case and not the other
+
+2017-02-20
+	Turns out i was passing an errors array to the view which (apparently) fucked up the real errors.  i removed that and we're FINALLY on to the add of the data record.
+	(a very distracted past couple weeks for no reason other than laziness?)
+
+	i don't feel i've put enough in the 'data model' controller.
+
+	i guess what i mean is that there are an awful lot of db calls in miscThings.  It looks like the example does it all in the data model; miscThings is more of an app that makes db calls
+
+	it sure is nice; now that it's working and i can use it to lookk at shit
+	i do want to see if i can get distinct to work with a raw query
+	but i want to try doing a miscThing::ceate()
+
+	maybe i can create a report_definition that accepts all the fields i need to require.  Table_name and node_name are required fields
+2017-02-21
+	feels a bit circular.
+	created report_definition_rules rport which defines the minimum fields to create a report_definition record.
+
+	i got this hooked in with the initialize a new report button and that works fine. However, just editing comes up with a different set of rules so that's not quite working.  But, being able to define the modifiable fields using the app is GREAT! (and pretty easy to implement).  We defined a property to the class asking to define the report-id for the add.
+2017-02-22
+	the above works!
+
+	i keep forgetting to mention that (i forgot)
+
+	it's always a little deceptive on the screens in that you see an add button.  What exactly are you adding a new one of. 
+
+
+
 
 

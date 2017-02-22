@@ -24,7 +24,7 @@
    // Route::controller('users','UsersController');
 
     // This one gets you started!!
-    Route::get('/', array('uses'=>'MainController@getIndex'));
+    Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
 
    // main begin_generated_node
     $node_name = 'main';
@@ -81,6 +81,18 @@
     $reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs to be defined here
 
     //*
+    $method_name            = "store";
+    Route::POST('admin/'.$node_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+ 
+    //*    
+    $method_name            = "browseEdit";
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+    //*
     $method_name            = "browseEdit";
     Route::get('admin/'.$node_name
         .'/{'.$model.'}'
@@ -118,10 +130,7 @@
      //*
     $method_name            = "create";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-    //*
-    $method_name            = "store";
-    Route::POST('admin/'.$node_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
- 
+
 // *****
 // miscThingController NOT miscThings
 // *****

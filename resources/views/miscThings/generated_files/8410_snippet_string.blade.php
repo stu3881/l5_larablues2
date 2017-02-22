@@ -1,6 +1,4 @@
 <tr>
-</tr>
-<tr>
 <td style="text-align:left">
 {{ Form::label("record_type","record_type") }}
 </td>
@@ -14,14 +12,6 @@
 </td>
 <td style="text-align:left">
 {{ Form::text('db_connection_name',$record['db_connection_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("field_name","field_name") }}
-</td>
-<td style='text-align:left'>
-{{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
 </td>
 </tr>
 <tr>
@@ -111,4 +101,14 @@
 <td style="text-align:left">
 {{ Form::text('generated_files_folder',$record['generated_files_folder']) }}
 </td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("field_name","field_name") }}
+</td>
+<td style='text-align:left'>
+{{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
+</td>
+</tr>
+<tr>
 </tr>

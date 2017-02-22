@@ -9,7 +9,6 @@
 				</td>
 				<td style="text-align:left">
 					{!! Form::text('report_name','',['class'=>'form-control']) !!}
-					{!! Form::hidden('record_type','report_description') !!}
 				</td>
 				</tr>
 			</table>

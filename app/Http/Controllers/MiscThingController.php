@@ -44,6 +44,7 @@ class MiscThingController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function store(REQUEST $request) {
+        $this->debug_exit(__FILE__,__LINE__,10);
     //var_dump(compact($request->Input['report_name']));
     //echo($request->Input('record_type'));
         //var_dump($request->Input('report_name'));exit("exit at 51");
