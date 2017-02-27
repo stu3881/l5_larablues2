@@ -14,7 +14,10 @@
 		Browse Select Defined Reports
 
 <?php
-	//var_dump($all_records);exit("edit1.blade 17 ");
+	//var_dump($all_records);
+	//var_dump($report_definition_key);
+	//exit("indexReports.blade 17 ");
+
 	$what_we_are_doing = 'what_we_are_doing';
 	$coming_from = 'edit1';
 
@@ -89,9 +92,12 @@ $rowcount = -1;
 			<table class="table_no_lines">
 				<tr class="table_no_lines">
 				<td>	
-			   		<a href="{{ URL::route('miscThings'.'.create', $parameters = array()) }}" class="btn mycart-btn-row2">
-					Initialize_New_Report
-			   		</a>
+			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
+				   		'report_definition_key'=>$report_definition_key)
+				   		) }}" class="btn mycart-btn-row2">
+						Initialize_New_Report
+				 	</a>
+
 				</td>
 				<td>	
 					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}

@@ -61,9 +61,132 @@ class DEHBaseController extends Controller
 		}
 	}
 
+     public function blade_gen_browse_select_field_names_row($model,$field_name_array) {
+        //echo '<br>blade_gen_browse_select_field_names_row';//exit("exit 99");
+        $crlf = "\r\n";
+        //$crlf = "";
+        $strx = "<tr>". $crlf;
+        $strx .= "<td>". "#"."</td>". $crlf;
+        foreach($field_name_array as $name=>$value) {
+            $strx .= "<td>" . $value . "</td>". $crlf;
+        }
+        $strx .= "</tr>". $crlf;
 
-    public function browse_select_blade_gen($model,$field_name_array,$version,$objOrArray) {
-        //echo '<br>browse_select_blade_gen<br><br>';$this->debug_exit(__FILE__,__LINE__,10);
+        return $strx;
+    }
+
+       
+
+    public function blade_gen_browse_select($report_key,$objOrArray) {
+        //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+//blade_gen_simple_add
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
+        File::put($fnam, $this->blade_gen_browse_select_field_names_row($this->model,$_REQUEST["to"]));
+       //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_display_snippet.blade.php';
+        $objOrArray = "object";
+        File::put($fnam,$this->blade_gen_browse_select_data_rows($this->model,$_REQUEST["to"],'version1',$objOrArray));
+         //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+   }
+  
+     
+    public function blade_gen_simple_add($report_key,$field_name_array) {
+        //echo ('<br>blade_gen_modifiable_fields_add<br><br>');
+        //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+
+        $crlf = "\r\n";
+        //$crlf = "";
+        $left = '<div id="div_inside_update_active_tasks_button_bar" style="width:$width"> '. $crlf. 
+                '<table id="table_inside_update_active_tasks" style="width:$width">'. $crlf.
+                '<th></th>'. $crlf.
+                '<tr>'. $crlf.
+                '<td style="text-align:left">'. $crlf;
+        
+
+        $right = "
+            </table>
+        </div>";
+        //var_dump($field_name_array);
+        $mid = "";
+        foreach($field_name_array as $name=>$value) {
+            $mid .= "<tr>";
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::label(\"$name\",\"$name\") }}".$crlf;
+            $mid .= "</td>". $crlf;
+
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::text(\"$name\",'') }}".$crlf;
+            $mid .= "</td>". $crlf;
+            $mid .= "</tr>";
+                //echo("<br>".$name."**".$mid);$this->debug_exit(__FILE__,__LINE__,10);
+        }
+
+
+        $strx = $left. $mid. $right;
+        return $strx;
+        //echo($mid);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder.
+        "/".$report_key.'_modifiable_fields_add.blade.php';
+        //File::put($fnam, $this->blade_gen_modifiable_fields_add($this->model,$_REQUEST["to"]));
+        File::put($fnam, $strx);
+        /*
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_blade_gen_simple_add.blade.php';
+        $objOrArray = 'array';
+        File::put($fnam,$this->blade_gen_simple_add($this->model,$_REQUEST["to"],'version1',$objOrArray));
+         //echo ('<br>'. $fnam.'<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+		*/
+
+     }
+  
+
+    public function blade_gen_modifiable_fields_add($report_key,$field_name_array) {
+        //echo ('<br>blade_gen_modifiable_fields_add<br><br>');
+        //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $crlf = "\r\n";
+        //$crlf = "";
+        $left = '<div id="div_inside_update_active_tasks_button_bar" style="width:$width"> '. $crlf. 
+                '<table id="table_inside_update_active_tasks" style="width:$width">'. $crlf.
+                '<th></th>'. $crlf.
+                '<tr>'. $crlf.
+                '<td style="text-align:left">'. $crlf;
+        
+
+        $right = "
+            </table>
+        </div>";
+        //var_dump($field_name_array);
+        $mid = "";
+        foreach($field_name_array as $name=>$value) {
+            $mid .= "<tr>";
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::label(\"$name\",\"$name\") }}".$crlf;
+            $mid .= "</td>". $crlf;
+
+            $mid .=  '<td style="text-align:left">'. $crlf;
+            $mid .= "{{ Form::text(\"$name\",'') }}".$crlf;
+            $mid .= "</td>". $crlf;
+            $mid .= "</tr>";
+                //echo("<br>".$name."**".$mid);$this->debug_exit(__FILE__,__LINE__,10);
+        }
+
+
+        $strx = $left. $mid. $right;
+        //echo($mid);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder.
+        "/".$report_key.'_modifiable_fields_add.blade.php';
+        //File::put($fnam, $this->blade_gen_modifiable_fields_add($this->model,$_REQUEST["to"]));
+        File::put($fnam, $strx);
+     }
+ 
+    public function blade_gen_browse_select_data_rows($model,$field_name_array,$version,$objOrArray) {
+        //echo '<br>blade_gen_browse_select_data_rows<br><br>';$this->debug_exit(__FILE__,__LINE__,10);
 
         $crlf = "\r\n";
         switch ($objOrArray)   {
@@ -108,7 +231,7 @@ class DEHBaseController extends Controller
                 }
                 return $strx;
             case "version2":
-                //echo("browse_select_blade_gen");$this->debug_exit(__FILE__,__LINE__,1);
+                //echo("blade_gen_browse_select_data_rows");$this->debug_exit(__FILE__,__LINE__,1);
                 $stry = "$"."record['";
                 $strx = "";
                 foreach($field_name_array as $index=>$field_name) {
@@ -144,7 +267,7 @@ class DEHBaseController extends Controller
                     //$array[] = "xxx";
                     $array[] = $suffix_str;
                 //}
-                //echo("browse_select_blade_gen");var_dump($array);$this->debug_exit(__FILE__,__LINE__,1);
+                //echo("blade_gen_browse_select_data_rows");var_dump($array);$this->debug_exit(__FILE__,__LINE__,1);
                 return $array;
                 break;
             }
@@ -419,7 +542,58 @@ class DEHBaseController extends Controller
 		return $update_array;
 	}
 	
+    public function snippet_gen_modifiable_fields($field_name_array,$lookups,$data_array){
+        //echo 'snippet_gen_modifiable_fields';
+        // this generates the code to create the table 
+        // for the modifiable fields view
 
+        // IT'S ALL JUST STRINGS!
+        // ***
+        // This is what your input view will look like the next time you load it
+        //$field_name_array = array_values($field_name_array);
+        $crlf = "\r\n";
+        $strx = "";
+
+        $field_ctr = -1;
+        //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,10);
+        foreach($field_name_array as $index=>$fieldx) {
+            $field_ctr ++;
+            //echo"<br>name: ";print_r($fieldx);
+            $strx .=
+            "<tr>".$crlf;
+            //$crlf;
+           if ($fieldx != $this->snippet_table_key_field_name){ // never update key
+    
+                $strx .=
+                "<td style=\"text-align:left\">".$crlf.
+                "{{ Form::label(\"$fieldx\",\"$fieldx\") }}".$crlf.
+                "</td>".$crlf;
+                //echo("<br><br>".$fieldx);$this->debug_exit(__FILE__,__LINE__,0);
+                //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,0);
+                //var_dump($lookups);var_dump($field_name_array);var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,10);
+                if (array_key_exists($fieldx,$lookups)) {
+                    $strx .=
+                    "<td style='text-align:left'>".$crlf.
+                    "{{ Form::select('".$fieldx. "',$"."lookups['".$fieldx."'] , $". "data_array_name" . "['".$fieldx."']) }}".$crlf.
+                    //"{{ Form::select('" .$fieldx. "',". $lookups[$fieldx].",  $"."record['".$fieldx."']) }}".$crlf.
+                        
+                    "</td>".$crlf;
+                }
+                else {
+                    //echo 'NOT in lookup array (OK)';$this->debug_exit(__FILE__,__LINE__,0);
+                    // actually, this is most likely
+                    $strx .=
+                    "<td style=\"text-align:left\">".$crlf.
+                    "{{ Form::text('".$fieldx."',$". "record['".$fieldx."']) }}".$crlf.
+                    //"{{ Form::text('".$fieldx."','xxx') }}".$crlf.
+                    "</td>".$crlf;
+                }
+            }
+            $strx .= "</tr>".$crlf;
+            //$strx .= $crlf;
+        }
+        return $strx;
+    } 
 	
 	public function get_generated_snippets() {
 		//echo 'get_generated_snippets 838';//exit("exit");

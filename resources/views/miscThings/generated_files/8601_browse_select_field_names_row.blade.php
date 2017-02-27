@@ -10,4 +10,5 @@
 <td>backup_node</td>
 <td>generated_files_folder</td>
 <td>key_field_name</td>
+<td>node_name</td>
 </tr>

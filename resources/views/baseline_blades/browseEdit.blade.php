@@ -81,7 +81,9 @@ $rowcount = -1;
 					{{ Form::close() }}
 				</td>
 				<td class="table_no_lines">
-			   		<a href="{{ URL::route('miscThings'.'.create', $parameters = array()) }}" class="btn mycart-btn-row2">
+			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
+			   		'report_definition_key'=>$report_key)
+			   		) }}" class="btn mycart-btn-row2">
 					Add record
 			   		</a>
 				</td>

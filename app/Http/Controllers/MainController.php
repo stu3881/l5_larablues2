@@ -226,6 +226,7 @@ class MainController extends DEHBaseController {
 
         //var_dump($query);$this->debug_exit(__FILE__,__LINE__);
         return view('main.index',compact('MiscThing'))
+            ->with('report_definition_key'   ,12450)   
             ->with('$node_name'   ,$this->node_name)   
             ->with('queryx'   ,$MiscThing);            
            

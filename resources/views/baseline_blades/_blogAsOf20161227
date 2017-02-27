@@ -277,6 +277,25 @@ adds for sure
 	i keep forgetting to mention that (i forgot)
 
 	it's always a little deceptive on the screens in that you see an add button.  What exactly are you adding a new one of. 
+2017-02-23
+	it's proving difficult to pass the business_rules_array to the create module so, i'm going to:
+	1. make a new function create_w_rules_id 
+	2. corresponding route
+	3. pass it to the create view so it can get passed to the store
+2017-02-24
+	it displays the right update and add screen but applies the report define business rules
+2017-02-25 
+	spent too much of yesterday scanning images
+	you can rotate an image one hundredth of a degree in gimp!
+	convert 100_0945.JPG -auto-level -compress none 18asample.tif
+	tesseract 12asample.tif 12aoutputfile
+
+	the business rules are tied to the report.  Either an add or modify needs to apply the same set of rules.  
+
+	  		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'192px'))}} 
+
+
+
 
 
 

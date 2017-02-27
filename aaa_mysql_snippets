@@ -283,3 +283,79 @@ snippet_name, snippet_table_key_field_name,
       	mysqldump -u homestead -psecret --all-databases > ~/code/l5_larablues2/no99_homestead_all_20170220.sql
 
 		mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/code/l5_larablues2/no99_homestead_data_20170220.sql
+
+		convert 100_0876.JPG -auto-level -compress none 1sample.tif
+		convert 100_0880.JPG -auto-level -compress none 02sample.tif
+		convert 100_0881.JPG -auto-level -compress none 03sample.tif
+		convert 100_0882.JPG -auto-level -compress none 04sample.tif
+		convert 100_0883.JPG -auto-level -compress none 05sample.tif
+		convert 100_0884.JPG -auto-level -compress none 06sample.tif
+		convert 100_0885.JPG -auto-level -compress none 07sample.tif
+		convert 100_0886.JPG -auto-level -compress none 08sample.tif
+		convert 100_0887.JPG -auto-level -compress none 09sample.tif
+		convert 100_0888.JPG -auto-level -compress none 10sample.tif
+		convert 100_0889.JPG -auto-level -compress none 11sample.tif
+		convert 100_0890.JPG -auto-level -compress none 12sample.tif
+		convert 100_0891.JPG -auto-level -compress none 13sample.tif
+		convert 100_0892.JPG -auto-level -compress none 14sample.tif
+		convert 100_0893.JPG -auto-level -compress none 15sample.tif
+		convert 100_0894.JPG -auto-level -compress none 16sample.tif
+		convert 100_0895.JPG -auto-level -compress none 17sample.tif
+		convert 100_0896.JPG -auto-level -compress none 18sample.tif
+
+tesseract 02sample.tif 02outputfile
+tesseract 03sample.tif 03outputfile
+tesseract 04sample.tif 04outputfile
+tesseract 05sample.tif 05outputfile
+tesseract 06sample.tif 06outputfile
+tesseract 07sample.tif 07outputfile
+tesseract 08sample.tif 08outputfile
+tesseract 09sample.tif 09outputfile
+tesseract 10sample.tif 10outputfile
+tesseract 11sample.tif 11outputfile
+tesseract 12sample.tif 12outputfile
+tesseract 13sample.tif 13outputfile
+tesseract 14sample.tif 14outputfile
+tesseract 15sample.tif 15outputfile
+tesseract 16sample.tif 16outputfile
+tesseract 17sample.tif 17outputfile
+tesseract 18sample.tif 18outputfile
+
+		convert 100_0911.JPG -auto-level -compress none 05asample.tif
+		convert 100_0912.JPG -auto-level -compress none 07asample.tif
+		convert 100_0913.JPG -auto-level -compress none 07bsample.tif
+		convert 100_0914.JPG -auto-level -compress none 08asample.tif
+		convert 100_0915.JPG -auto-level -compress none 08bsample.tif
+		convert 100_0916.JPG -auto-level -compress none 09asample.tif
+		convert 100_0917.JPG -auto-level -compress none 09bsample.tif
+		convert 100_0918.JPG -auto-level -compress none 09csample.tif
+		convert 100_0919.JPG -auto-level -compress none 10asample.tif
+		convert 100_0920.JPG -auto-level -compress none 11asample.tif
+
+tesseract 05asample.tif 05aoutputfile
+tesseract 07asample.tif 07aoutputfile
+tesseract 07bsample.tif 07boutputfile
+tesseract 08asample.tif 08aoutputfile
+tesseract 08bsample.tif 08boutputfile
+tesseract 09asample.tif 09aoutputfile
+tesseract 09bsample.tif 09boutputfile
+tesseract 09csample.tif 09coutputfile
+tesseract 10asample.tif 10aoutputfile
+tesseract 11asample.tif 11aoutputfile
+		convert 100_0927.JPG -auto-level -compress none 12asample.tif
+		convert 100_0929.JPG -auto-level -compress none 13asample.tif
+		convert 100_0934.JPG -auto-level -compress none 15bsample.tif
+		convert 100_0936.JPG -auto-level -compress none 16asample.tif
+		convert 100_0937.JPG -auto-level -compress none 14asample.tif
+		convert 100_0940.JPG -auto-level -compress none 17asample.tif
+		convert 100_0945.JPG -auto-level -compress none 18asample.tif
+tesseract 12asample.tif 12aoutputfile
+tesseract 13asample.tif 13aoutputfile
+tesseract 14asample.tif 14aoutputfile
+tesseract 15bsample.tif 15aoutputfile
+tesseract 16asample.tif 16aoutputfile
+tesseract 17asample.tif 17aoutputfile
+tesseract 18asample.tif 18aoutputfile
+
+
+tesseract 100_0928.tiff 12AAoutputfile

@@ -15,13 +15,12 @@ print_r(Input::all());//exit("xit index")
 //var_dump($queryx);
 //exit("exit 4");
 
-$passed_array = true;
+
 if (isset($queryx)){
 	$passed_array = false;
-	//var_dump($queryx[0]);exit("exit 16");
 }
 else{
-	exit("indexmain exit 24");
+	//exit("indexmain exit 24");
 }
 
 
@@ -63,7 +62,10 @@ else{
 	   		
 	   		@if($query->node_name == "miscThings")	
 			   	<li>
-			   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id)) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
+			   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id,
+			   			'reportDefinitionKey'=>$report_definition_key
+			   			)
+			   		) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
 			
 			   	</li>
 			@endif	

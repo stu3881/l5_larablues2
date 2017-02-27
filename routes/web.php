@@ -117,7 +117,7 @@
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
     $method_name            = "indexReports";
-    Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
     $method_name            = "ppvEdit";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -130,6 +130,18 @@
      //*
     $method_name            = "create";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
+    $method_name            = "create_w_report_id";
+    Route::get('admin/'.$node_name
+         .'/{'.$reportDefinitionKey.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
+    $method_name            = "store_w_report_id";
+    Route::get('admin/'.$node_name
+         .'/{'.$reportDefinitionKey.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
 // *****
 // miscThingController NOT miscThings
@@ -148,6 +160,18 @@ $reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs
 //*
 $method_name            = "store";
 Route::POST($node_name
+    .'/'.$method_name, 
+    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+
+$method_name            = "store_w_report_id";
+Route::POST($node_name
+    .'/{'.$reportDefinitionKey.'}'    .'/'.$method_name, 
+    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+
+     //*
+    $method_name            = "create_w_report_id";
+    Route::POST($node_name
+    .'/{'.$reportDefinitionKey.'}'
     .'/'.$method_name, 
     array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
