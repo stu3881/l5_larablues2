@@ -99,23 +99,9 @@ $rowcount = -1;
 				 	</a>
 
 				</td>
-				<td>	
-					{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
-					{{ Form::hidden('model_table',$model_table) }}
-					{{ Form::hidden('id',$all_records[0]->id) }}
-
-					{{ Form::hidden('node_name',$node_name) }}
-					{{ Form::submit('main menu', array('class'=>'cart-btn')) }}
-					{{ Form::close() }}
+				<td class="table_no_lines">
+					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 				</td>
-				<td>	
-					{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-					{{ Form::hidden('model_table',$all_records[0]->model_table) }}
-					{{ Form::hidden('node_name',$node_name) }}
-					{{-- Form::hidden('snippet_table',$snippet_table) --}}
-					{{ Form::submit($node_name.' menu', array('class'=>'cart-btn')) }}
-					{{ Form::close() }}
-				</td></tr>
 			</table>
 		</td></tr>
 

@@ -6,7 +6,8 @@
 if (isset($report_definition_key)){
 	//var_dump($report_definition_key);exit("exit 8");
 }
-
+//var_dump($encoded_business_rules);
+//exit("exit 8");
 ?>
 
 @section('promo')
@@ -42,26 +43,21 @@ if (isset($report_definition_key)){
 				<table id="inner_tbl_0_0" class="table_no_lines">
 					<tr class="table_no_lines">
 
+							
+
 					<td class="table_no_lines">
-			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-			   		'report_definition_key'=>$report_key)
-			   		) }}" class="btn mycart-btn-row2">
-					Add record
-			   		</a>
+				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_definition_key,
+			   			'reportDefinitionKey'=>$report_definition_key
+			   			)) }}" class="btn mycart-btn-row2">reports list
+			   			</a>
 					</td>
 
 					<td class="table_no_lines">
-						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-						{{ Form::submit('Reports menu') }}
-						{{ Form::close() }}
-					</td>
-						
-					<td class="table_no_lines">
-						<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
+						<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET',)) }}" class="btn mycart-btn-row2">Main menu</a>
 					</td>
 		
-	@include($snippet_file)    
-						{{ Form::close() }}
+					@include($snippet_file)    
+			{{ Form::close() }}
 
 		</div>
 @stop

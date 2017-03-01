@@ -104,7 +104,7 @@
 								
 								<td>	
 									{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-									{{ Form::submit('main menu'.' menu') }}
+									{{ Form::submit('report_list') }}
 									{{ Form::close() }}
 								</td>
 								<td>	

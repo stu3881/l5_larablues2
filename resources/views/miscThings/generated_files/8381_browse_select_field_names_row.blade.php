@@ -1,6 +1,6 @@
 <tr>
 <td>#</td>
-<td>db_connection_name</td>
-<td>id</td>
-<td>user_id</td>
+<td>record_type</td>
+<td>report_name</td>
+<td>created_at</td>
 </tr>

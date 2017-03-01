@@ -76,24 +76,29 @@ $rowcount = -1;
 					<table class="table_no_lines" style="width:100%">
 			<tbody>
 				<tr class="table_no_lines">
-				<td class="table_no_lines">
-					{{ Form::submit('Reports list') }}
-					{{ Form::close() }}
-				</td>
+
 				<td class="table_no_lines">
 			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-			   		'report_definition_key'=>$report_key)
+			   		'reportDefinitionKey'=>$report_key)
 			   		) }}" class="btn mycart-btn-row2">
-					Add record
+					Add
 			   		</a>
 				</td>
+					<td class="table_no_lines">
+				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_key,
+			   			'reportDefinitionKey'=>$report_key
+			   			)) }}" class="btn mycart-btn-row2">reports list
+			   			</a>
+					</td>
+
 				<td class="table_no_lines">
 					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 				</td>
 
 				</tr>
 			</tbody>
-			</table>		
+			</table>	
+			{{ Form::close() }}
 		</td></tr>
 
 		<?php 
