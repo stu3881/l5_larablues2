@@ -45,8 +45,8 @@ class MiscThingController extends Controller
     */
     public function store(REQUEST $request) {
         $this->debug_exit(__FILE__,__LINE__,10);
-    //var_dump(compact($request->Input['report_name']));
-    //echo($request->Input('record_type'));
+        //var_dump(compact($request->Input['report_name']));
+        //echo($request->Input('record_type'));
         //var_dump($request->Input('report_name'));exit("exit at 51");
         //$this->derive_validation_array();
         $this->validate($request, 

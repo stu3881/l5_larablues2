@@ -43,6 +43,11 @@ if (isset($report_definition_key)){
 				<table id="inner_tbl_0_0" class="table_no_lines">
 					<tr class="table_no_lines">
 
+				<td class="table_no_lines">
+			   
+					{{ Form::hidden('encoded_business_rules'	,$encoded_business_rules) }}
+				 	{{ Form::submit('form-store') }}
+				</td>
 							
 
 					<td class="table_no_lines">

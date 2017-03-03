@@ -54,13 +54,15 @@ $rowcount = -1;
 	
 	<div id="admin" style="width:800px;height:99%">
 	
+	{{ Form::open(array('url'=>'admin/miscThings','method'=>'POST')) }}
 
-	{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
+	{{-- Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) --}}
 	{{ Form::hidden('key_field_name'						,$key_field_name) }}
 	{{ Form::hidden('model_table'							,$model_table) }}
 	{{ Form::hidden('node_name'								,$node_name) }}
 	{{ Form::hidden('record_type'							,'report_definition') }}
 	{{ Form::hidden('coming_from'							,'edit1_define_new_report') }}
+	{{ Form::hidden('encoded_business_rules'				,$encoded_business_rules) }}
 	
 	<div id="update_active_tasks" ><br>
 	
@@ -76,14 +78,15 @@ $rowcount = -1;
 					<table class="table_no_lines" style="width:100%">
 			<tbody>
 				<tr class="table_no_lines">
-
 				<td class="table_no_lines">
 			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-			   		'reportDefinitionKey'=>$report_key)
-			   		) }}" class="btn mycart-btn-row2">
-					Add
-			   		</a>
+				   		'report_definition_key'=>$report_definition_key)
+				   		) }}" class="btn mycart-btn-row2">
+						Initialize_New_Report
+				 	</a>
+
 				</td>
+
 					<td class="table_no_lines">
 				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_key,
 			   			'reportDefinitionKey'=>$report_key

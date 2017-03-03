@@ -88,7 +88,7 @@
     $method_name            = "store";
     Route::POST('admin/'.$node_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
       //*
-    $method_name            = "store_w_report_id";
+    $method_name            = "store_w_rules_array";
     Route::POST('admin/'.$node_name
          .'/{'.$encoded_business_rules.'}'
         .'/'.$method_name, 

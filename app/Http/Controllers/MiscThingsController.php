@@ -52,7 +52,8 @@ class MiscThingsController extends DEHBaseController
         $field_name_list_array_first_index  = "",
         $my_ctr                             = 0,
         $report_definition_id               = 0,
-        $store_validation_id                = 0
+        $store_validation_id                = 0,
+        $business_rules_array               = 0
 
         ) 
         {
@@ -152,6 +153,7 @@ class MiscThingsController extends DEHBaseController
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
         $this->report_definition_id         = 12450;
+        $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
     }
 
@@ -276,21 +278,21 @@ class MiscThingsController extends DEHBaseController
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
         //echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
-        //var_dump($id);$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($report_definition);
-        $report_definition = MiscThing::where('id','=',$id)->get();
-        //var_dump($report_definition[0]); $this->debug_exit(__FILE__,__LINE__,10);   
-        
-        $this->store_validation_id = $id;
-        var_dump($this->store_validation_id);var_dump($id);//$this->debug_exit(__FILE__,__LINE__,10);
-        $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+    
+        $report_definition          = $this->execute_query_by_report_no($id) ;
+        $encoded_business_rules     = $report_definition[0]['business_rules'];
+
+        //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
+
+        $working_arrays             = $this->working_arrays_construct($report_definition[0]);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($store_validation_id);$this->debug_exit(__FILE__,__LINE__,10);
 
         $query_relational_operators_array = $this->build_query_relational_operators_array();
+        
         if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
-    $this->debug_exit(__FILE__,__LINE__,10);
+            echo("<BR>"."query failed");$this->debug_exit(__FILE__,__LINE__,10);
         }
+        
         //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
         $encoded_business_rules_field_name_array = array();
         $field_names_array = array();
@@ -326,7 +328,11 @@ class MiscThingsController extends DEHBaseController
             ->with('all_records'                , $miscThings)
             ->with('use_table_in_record'        ,'n')
             ->with('record_table_name'          , $this->model_table)
-            
+            ->with('encoded_business_rules'     , $encoded_business_rules)
+
+           ->with('report_definition_key'     , $id)
+
+             
             ;
          //return view('miscThings.edit2_default_browse',$miscThings);
         }
@@ -563,21 +569,7 @@ class MiscThingsController extends DEHBaseController
         //File::put($fnam, $this->blade_gen_browse_select_field_names_row($this->model,$_REQUEST["to"]));
    }
  
-    public function c1($v) {
-
-        var_dump($v);
-        $this->varray = 12666;
-        $this->c2($this->varray);
-        }
-
  
-    public function c2($v) {
-        //echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,1);
-        //$report_definition  = $this->execute_query_by_report_no($report_definition_key) ;
-        var_dump($v);var_dump($this->varray);
-        $this->debug_exit(__FILE__,__LINE__,1);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -587,9 +579,10 @@ class MiscThingsController extends DEHBaseController
         //echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,1);
         $report_definition  = $this->execute_query_by_report_no($report_definition_key) ;
         $encoded_business_rules = $report_definition[0]['business_rules'];
+        $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
         //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_modifiable_fields_add';
-        $this->c1($report_definition_key);
+        //$this->c1($report_definition_key);
          return view($this->node_name.'.create')
             ->with('encoded_business_rules' , $encoded_business_rules)
             ->with('report_definition_key'  , $report_definition_key)
@@ -607,6 +600,9 @@ class MiscThingsController extends DEHBaseController
      */
     public function create()
     {
+        //$x = Config::get('dehGlobals.business_rules_array');
+        //$this->debug_exit(__FILE__,__LINE__,10);  
+ 
         //echo("<br>".$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
         //$snippet_file = $this->node_name."/".$this->generated_files_folder.
@@ -619,6 +615,7 @@ class MiscThingsController extends DEHBaseController
          return view($this->node_name.'.create')
         //->with('message'                        , $message)
         ->with('snippet_file'                   , $snippet_file)
+        ->with('report_definition_key'  , $this->report_definition_id)
         ->with('node_name'                        , $this->node_name);
 
     }
@@ -1093,13 +1090,28 @@ class MiscThingsController extends DEHBaseController
     }   
 
     public function store(REQUEST $request) {
-        echo('store'.$this->store_validation_id);
-        var_dump($request->report_name);//$this->debug_exit(__FILE__,__LINE__,10);
-        $report_definition  = MiscThing::where('id','=',$this->store_validation_id)->get();
-        //$report_definition  = MiscThing::where('id','=',$this->report_definition_id)->get();
-        $validation_array = (array) json_decode($report_definition[0]['business_rules']);
-        
+        echo('storex');
+        var_dump($request->input('encoded_business_rules'));
+        //var_dump($request->input::all()); 
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        $validation_array = (array) json_decode($request->input('encoded_business_rules'));
+        $requestFieldsArray=$request->all(); // important!!
+        $this->validate($request,$validation_array);
+ 
+        $miscThing=$request->all(); // important!!
+        MiscThing::create($miscThing);
+        return redirect('admin/miscThings');
+    }
+
+
+
+    public function store_w_rules_array(REQUEST $request, $encoded_business_rules) {
         echo('store');
+        $this->debug_exit(__FILE__,__LINE__,10);
+        //$request->input('data_key');
+                    var_dump($request->input::all()); $this->debug_exit(__FILE__,__LINE__,10);
+        $validation_array = $this->business_rules_array;
         $requestFieldsArray=$request->all(); // important!!
         $this->validate($request,$validation_array);
         //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
@@ -1110,23 +1122,6 @@ class MiscThingsController extends DEHBaseController
     }
 
 
-
-    public function store_w_report_id(REQUEST $request,$encoded_business_rules) {
-        echo('store_w_report_id'.$encoded_business_rules);
-        //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,10);
-       // $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
-        //$report_definition  = MiscThing::where('id','=',$this->report_definition_id)->get();
-        $validation_array = (array) json_decode($encoded_business_rules);
-        var_dump($validation_array);$this->debug_exit(__FILE__,__LINE__,10);
-        echo('store');
-        $requestFieldsArray=$request->all(); // important!!
-        $this->validate($request,$validation_array);
-        //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
-
-        $miscThing=$request->all(); // important!!
-        MiscThing::create($miscThing);
-        return redirect('admin/miscThings');
-    }
 
     /*
      * Update the specified resource in storage.
