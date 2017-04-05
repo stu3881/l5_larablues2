@@ -1,0 +1,710 @@
+
+just got the report name update to work in reportDefMenuEdit
+so now we're off to handle the buttons for the field name selects
+
+client sends request to the controller
+controller does any additional stuff
+and sends a response to the client
+
+were gonna add a decide statement for what we are doing inside of reportDefMenuEdit
+
+i have a bit of a dilemma.  there is this thing called #working_array the old code references it heavily so i want to use that but
+12/28
+
+i also passed around and around but i don't want to do that any more
+fuck!  
+
+there is so much the old system does that i do indeed want to use but modernizing the links is difficult in the existing code and the old views are full of code to keep us cycling.  A monstrous waste of time in afterthought.
+
+let's see if we can get the old code executing again and stick in the new stuff we developed in reportDefMenuEdit.
+
+the old code doesn't look so bad.  i'd like to try naming the $to_array which we'd really like named after the field in which it will be stored. this allows us to skip lots of the old code which we'll no longer need, 
+
+when we create the select from to view, we know for which array we're processing: modifiable_fields
+12/30
+
+ppv_define_query
+$this->working_arrays has to be built after the report_definition is retrieved.
+12/31
+depending on which button you press on the reportDefMenuEdit screen, you really just go to one of two places. feiled select from to or pulldown pulldown value ppv. what needs to be there has already been built into working_arrays somewhere
+2017-01-02
+	i'm working on querys & bus rules now.  it's moving stuff from putedit41 into reportDefMenuEdit
+
+	#working_arrays has got all this stuff defined and loaded from the db record.  so we've got to hook thatinto our new 'architecture'
+
+2017-01-06
+	The query arrays are not the same size
+2017-01-12
+	build_report_def_arrays
+	 grep -rn 'app/Http/Controllers/' -e "snippet_str"
+	 grep -rna 'resources/views' -e 'indexmain'
+
+ 	find big datasets
+ 	get putty working on gohoooa
+ 	try to find old wordpress
+
+ 	fuck.  i deleted somethin before i made my last git backup (right when i was doing the save it looks like)
+ 	so, what i remember isn't there...
+ 	i know i had to make the arrays the same size and at least 5
+2017-01-17
+	advanced-query looks like it's working and business-rules
+	the missing code was a loop to initialize values that always need to be in sync but i broke that symmetry in testing.
+
+	i think initializing 83445 willfix it.  other ones seem ok. i think padding can be much implerbut we're not looking at that right now; just making it work.
+	business_rules_getEdit_blade_gen and advanced_query_getEdit_blade_gen_new are both
+	ppv_edit_snippet_gen s (a name i just made up) we're moving to that instead.  behaviour is identical; just data changes.
+
+	at 10:08
+	business rules updated! (time to feed the dogs)
+	2017-01-19
+	i am currently trying to get browseEdit to work
+	i'm on the front side of building the query.  After i get the arrays matched up, everything else 'should work'
+
+	i have successfully executed the query but we need something new to build browseEditSnippet
+
+	im trying to make working_arrays_construct do everything regardless of what_we_are_doing flag.
+
+017-01-20
+	query is working
+
+	i am trying to get the browse edit to work like the other guys do now.  we'll see how close i stay to that.
+
+	Up! still seems as if it should be top priority
+
+	the routines weren't even copied into the new modules to gen the snippets for the field names row and the 'browse edit snippet'.  they are now but they properly belong as part of the update process.
+
+	there are all kinds of snippets in the record and i'm only aware of a few of them even though i created all of them. i think i should print the field names and then go thru and document or delete them.  Perhaps group them.  
+
+	a downside of breaking DEHBaseController up is I'm sure to miss something i spent a lot of time working on but there are so many clones and backups in the code.
+
+	i don't want everything in misc things.  i think the string stuff should be separate but maybe
+2017-01-21
+	i'm trying to name and load everything into $working_arrays
+	one guy is getting passed an object which he deftly handles.  then he's passed the first occurrence of an object which he chokes on maybe that's backwards but different input...
+
+	also, don't forget that the lookups are far more extensive than you remember  so hold onto the old stuff among other things
+2017-01-23 go falcons
+	we get to the page but nothing renders.  (a fantasy milestone) 
+
+	of course we want to create the define the file names so we don't have to pass all their components individually.
+
+	i am going back and forth between reportDefMenuEdit blowing up when i make changes in the browse.  id is not being passed consistently. still testing
+
+	i'd probably like the generators to be able to set their name and whether to gen as an object or an array
+
+	we are deciding some stuff needs to be changed and some of that will require adhocs to change the data. e.g. some records will abend whereas newer ones work just fine 
+
+	the browse works... anti-climatic
+	but i want to use it to look at things as soon as it's working so that's a good sign
+
+	NOT ALL REPORTS WORK
+	I want to make the r_o array save values instead of indexes.  some conversion will be needed
+2017-01-24
+	perhaps i should be more elated.  simple queries work. more proof of concept than gorilla testing but browse works consistently in several places
+
+	the 'short list'
+	1.make sure all browses are working
+	2.
+2017-01-26
+	i've gotten thru browse edit although there is still some bad data out there.
+	editupdate needs to have the report_definition key so it canretrieve the business rules.
+
+	we've got the key in IndexReports 
+2017-01-27
+	putEdit2new is what the old system calls for editUpdate.  it's got all kinds of lookup shit that i've kind of forgotten about so i want to copy it inside of editUpdate.  But, the old code IS old so we're gonna take a quick look (and start remembering about lookups)
+
+	what_we_are_doing has already been introduced so already that was agreat idea.
+	it previously got if from input but now it's passed in. sofar so good.
+
+	it's easier to look in the execution of the old code (with a display) to just tell us what we need to set it to.  off to train the girls.
+2017-01-28
+	editUpdate comes up in what is called edit2new.blade
+	i still don't know how the lookups popup but they do. field_names
+
+	the update hasn't been tested but the fields need to be defined so they can be updated .
+
+	i want to get the logon back into the mix but am not sure how hard that will be.  There's no sense working on the menuing till this is working again
+
+	the obvious place to start is web in the old larablues.
+2017-01-29
+	we think we want to move the string genning stuff into DEHBaseController but not quiteon the top of the list
+
+	we are not generating the editUpdate snippet.  it needs to  be built when modifiable_fields is being updated
+
+	we gen the edit snippet whenever we go into edit.  the snippet's not quite right.  perhaps we're building something other than what we're deploying.
+
+	$working_arrays has good data so we're using it.  SOme of this encoded shit isn't needed so i'm going to start eliminating them where i can
+2017-01-31
+	business_rules_ppv_build_them is where validation_array is currently being built
+2017-02-02
+	we are closing in on the update.   we're gonna include it in the table as business_rules_array and a file of the same name that we can include. maybe we'll build it in $working_arrays
+
+2017-02-03
+	didn't write to loretta
+	when you get to editUpdate, you've picked a data record you want to edit 
+	we use the report description key to get the fields we want to edit and build an edit snippet.  the view includes the snippet and you pass it the record you picked. why don't it work? 
+2017-02-04
+	not feeling quite ecstatic but update has worked for everybody.
+
+	But, I'm using the snippet_connection for everything.  it works now since i'm updating miscThings.
+
+	i think i want to get rid of all the database connections from config/database.php and insert the snippet connection and the data connection.
+
+	i also need to get the user and misc things tables linked
+
+	we need to use the db to get the default connections 
+
+	it's making it look like we need at least one more kind of lookup/setup
+	ppp pulldown pulldown pulldown
+	
+2017-02-06
+	
+https://laracasts.com/discuss/channels/eloquent/the-sql-select-distinct-statement
+Fluent:
+
+DB::table('table_name')->distinct()->get(['column_name']);
+
+Eloquent:
+
+MyModel::distinct()->get(['column_name']);
+
+we added in some of the old routes and it got started asking for a login
+
+now, we need to modify the link to indexreports in indexmain because I added id as a parameter to index reports
+
+we had to do something here
+
+PHP Youtube and Vimeo Video Downloader Script
+https://www.phpclasses.org/package/10144-PHP-Download-YouTube-or-Vimeo-videos.html
+
+2017-02-07
+	The login is somehow working again!  i know i changed (or added) something and then un-commented all of the 'new' stuff and we were back in business.  Miscthings controlller is the best guy and does the most things and uses the best technology but he's way more complicated than everybody needs to be
+
+	i want to move some of those string generators over to DEH
+
+<a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
+
+i think we can start updating the buttons 
+All buttons should work for the demo (ya think)
+ppv_update et all should return to repDefMenuEdit after update
+
+i'd like to make the query ro array store values instead of index values so i'll need something to find the bad ones and correct them as well as the logic to make what's there work after the changes.
+
+more advanced queries at least show task
+
+both snippet add and data add have yet to be upgraded
+
+i gotta get back over and get gohoooa's blog back up
+
+couldn't a query find all of the records we're looking for
+more to do but this list is already getting long
+here's lots of cleanup as well
+
+i wanna start loading the default values for the two connections from the database
+i think that will mean less has to be defined for the controller screen.
+
+update from reportDefMenuEdit should return there
+
+programmerutilities menu shows up
+the adds and the menuing should probably come first
+adds for sure
+2017-02-09
+	the conversion from indexes to values continues.  it's compounded by the fact that we're trying to correct bad ones automatically. (if the value is numeric, we assume it's an indexed array and do a look up on the spot.) 
+
+	building the query isn't handling this correctly right now but it looks like we're doing the conversion right on the update
+
+2017-02-10
+	things are in better shape than they feel.
+	there are no busines rules; hence marching thru a null array abends. i'm hoping making the paddining routine in working_arrays work the way i want (how many blanks do i want on the end of each array) will fix this
+2017-02-14
+	I deleted all my cookies for other reasons.
+
+	i think i got the padding working right.  So, we're off to get all the buttons working
+
+	first are the adds.  the report definition name and the others.
+2017-02-16
+	It's so much nicer doing it the new way.
+	we want to make it look like the new update
+
+	the problem with kill is you have to reload your databases.  i do need a more recent backup since i changed the way the indexing works.but not everybody is self correcting
+
+	compact is the opposite of extract 
+	extract($var_array, EXTR_PREFIX_SAME, "wddx");
+	echo "$color, $size, $shape, $wddx_size\n";
+2017-02-17
+	The adds have been a lot harder than they should have been.
+	A button points you to a route that points you at a controller and off you go
+	Input a form, validate and insert or return with errors.
+
+	I guess i need to go thru this one more time.
+
+	A resource controller gets you all of the standard crud methods
+	i don't think i'm using them in miscThings
+
+	I'm thinking i want a miscThing Controller but the miscThings controller is doing lost of other stuff and maybe we can do the sqlcalls in the table controller instead of the miscThings controller  something like ::MiscThing
+
+	Anyhow, I'm just going to try and 'clone' how we do the add in example and do the same thing with miscThings
+
+	All that create is go to a form to accept the input data
+2017-02-18-19
+	I thought it was close and then it slipped away
+	i get errors and the messages appear on an update just like they're supposed to
+	but on an add, I can see that the validation is taking place but i see no errors
+
+	i cannot see how the validation is returning the error messages in one case and not the other
+
+2017-02-20
+	Turns out i was passing an errors array to the view which (apparently) fucked up the real errors.  i removed that and we're FINALLY on to the add of the data record.
+	(a very distracted past couple weeks for no reason other than laziness?)
+
+	i don't feel i've put enough in the 'data model' controller.
+
+	i guess what i mean is that there are an awful lot of db calls in miscThings.  It looks like the example does it all in the data model; miscThings is more of an app that makes db calls
+
+	it sure is nice; now that it's working and i can use it to lookk at shit
+	i do want to see if i can get distinct to work with a raw query
+	but i want to try doing a miscThing::ceate()
+
+	maybe i can create a report_definition that accepts all the fields i need to require.  Table_name and node_name are required fields
+2017-02-21
+	feels a bit circular.
+	created report_definition_rules rport which defines the minimum fields to create a report_definition record.
+
+	i got this hooked in with the initialize a new report button and that works fine. However, just editing comes up with a different set of rules so that's not quite working.  But, being able to define the modifiable fields using the app is GREAT! (and pretty easy to implement).  We defined a property to the class asking to define the report-id for the add.
+2017-02-22
+	the above works!
+
+	i keep forgetting to mention that (i forgot)
+
+	it's always a little deceptive on the screens in that you see an add button.  What exactly are you adding a new one of. 
+2017-02-23
+	it's proving difficult to pass the business_rules_array to the create module so, i'm going to:
+	1. make a new function create_w_rules_id 
+	2. corresponding route
+	3. pass it to the create view so it can get passed to the store
+2017-02-24
+	it displays the right update and add screen but applies the report define business rules
+2017-02-25 
+	spent too much of yesterday scanning images
+	you can rotate an image one hundredth of a degree in gimp!
+	convert 100_0945.JPG -auto-level -compress none 18asample.tif
+	tesseract 12asample.tif 12aoutputfile
+
+	the business rules are tied to the report.  Either an add or modify needs to apply the same set of rules.  
+2017-03-04
+	  		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'192px'))}} 
+
+	david.stokes@oracle.com
+	http://www.unofficialmysqlguide.com/
+
+	some screen shots of the lookups
+	we need a few more fields and a database backup soon
+
+	once a database is identified (in the connection), we know all the tables
+	we know who's active by matching the database tables to table controllers table names.
+	Those who are active are in the main menu
+	you can inactivate a table controller (new field) by setting a flag in the definition
+	we need new code to go out to miscThins and get the fields that we defined when we created the table_controller 
+
+2017-03-06
+	business rules isn't working for database connection 
+		snippet name is supposed to be required
+
+	ii feel invigorated now that most stuff is working
+
+	there's still a on of little things
+
+	i'm feeling like i'm finally starting to see the miscThings controller as a class.
+	All the other tables can extend miscThings and the stuff will be there for every other file as well; provided we define a controller for them. maybe we'll include
+
+	maybe we can put in the env?
+
+	left or right buttons
+	vertical or horizontal display
+	fields for the other three like business_rules (encompassing the field_name, r_o and value arrays)
+
+
+
+ive Chat Offline
+
+→hi,
+
+→i have continual battles with passwords. Am i alone? I have two domains and can not add a contact?
+
+→It says add a new one but all of a sudden it's doing an update ; (not an add?) Anyhow, i have no contacts and cannot readd any.
+
+→This doesn't feel like me. In any case, i can't fix it.
+
+→hello?
+
+Cameron: May we have your domain name please
+
+→gohoooa.org & sbblues.org
+
+→stu_3881@yahoo.com
+
+Cameron: for verification purposes can you verify the password for your client area or the password for the cpanel
+
+→314New159ton!
+
+Cameron: that is correct, can you advise where they are updating the password
+
+→it's me i'm trying to add a contact. i had one but i couldn't update him so i deleted and tried to readd.
+
+→the client area add contact
+
+→hello?
+
+→are you still looking at this?
+
+→Hello!!
+
+→Hey! How do i get your attention?
+
+This chat has ended, start typing below if you need anything else!
+
+→ you didn't help me
+
+→he went off and never came back
+
+Samantha: Thank you for contacting Jumpline, my name is Samantha can I get your name and domain name please?
+
+→i just got done doing that. don't you have my note?
+
+Samantha: Let me check one moment please
+
+→sbblues.org & gohoooa.org
+
+Samantha: Thank you, to maintain the security of your account can you please verify the first 4 characters of your cPanel password
+
+→314N
+
+Samantha: Thank you
+
+Samantha: I do see a new contact created with the email info@gohoooa.org it just hasn't been enabled yet and there is no name
+
+→i tried doing that as a test
+
+Samantha: ok
+
+→why isn't is enabled yet?
+
+Samantha: You would have had to enable it when you created it
+
+Samantha: I can enable it for you
+
+→please and tell me how to do it
+
+Samantha: It has been enabled
+
+Samantha: When you are creating the account you will see Tick to configure as a sub-account with client area access with a box beside it you need to click on that box
+
+→and i want to add the real person back. how to enable it?
+
+→i'll try it again
+
+Samantha: You could just edit the one you already have in there
+
+→i don't see the one you enabled
+
+Samantha: When you go to Contacts/Sub-Accounts it should automaitcally be on the one you created
+
+→you don't mind that i think it should apper in my client area in the section marked contacts?
+
+→appear
+
+Samantha: It does it says new contact
+
+→and where is he?
+
+Samantha: Because you didn't put a name in the name field that is what it defaults to
+
+→the one you enabled
+
+→so i can edit him; not make a newcontact
+
+Samantha: Right if you click on new contact under your contacts it will allow you to edit that one
+
+→he has a name
+
+→new, contact
+
+Samantha: Right that is the one that I enable
+
+Samantha: enabled
+
+→and where is that enable flag?
+
+Samantha: Under the phone number you will see Activate Sub-Account then Under that it says Tick to configure as a sub-account with client area access with a box with a check mark in it, before I enabled it there was no check mark
+
+→i had that checked
+
+Samantha: It wasn't checked when I went in
+
+→so you should be able to log in with that new email?
+
+Samantha: Yes with the password you set for that user
+
+→i'll reset it right now. oh, and let me change the email address while i'm here
+
+Samantha: Ok
+
+→ok it's jghere@me.com
+
+→and 20Leslee17!
+
+→are you going to try it?
+
+Samantha: I was able to get in without an issue
+
+→ok thanks
+
+Samantha: Your welcome, is there anything else I can assist you with today?
+
+→i'd like him to only be able to update sbblues.org stuff
+
+Samantha: This is only giving him access to the client area
+
+→he can't get to cpanel?
+
+Samantha: Yes he can, he would need to click on the hosting plan then login to cpanel
+
+Samantha: but he has access to both your plans not just sbblues.org
+
+→i don't know how to stop that
+
+Samantha: You can't
+
+→seems silly. All this just to change his email password without telling me
+
+Samantha: You could have just given him the cpanel login details for that domain
+
+→thankyou for your help
+
+Samantha: Your welcome, is there anything else I can assist you with today?
+
+→not yet
+
+Samantha: Have a great day !
+
+This chat has ended, start typing below if you need anything else!
+
+→Damn, i set up a new user but they want an additional password to let him into cpanel
+
+→hello?
+
+This chat has ended, start typing below if you need anything else!
+
+→ i set up a new user but they want an additional password to let him into cpanel
+
+This chat has ended, start typing below if you need anything else!
+
+→You do not have permission to login using Single Sign-On.
+
+→how do i do that
+
+This chat has ended, start typing below if you need anything else!
+
+→hello
+
+David H.: Hello
+
+→i am having the goddamnest time setting a password
+
+→did you get that
+
+→hello??
+
+David H.: I am here.
+
+David H.: What is the domain on the account .
+
+→sbblues.org gohoooa.org
+
+David H.: So what is going on exactly, you said you are having issues setting a password?
+
+David H.: is it not accepting what you are changing it to?
+
+→yes but says it does
+
+→the screen is fucked up. It shows the emil addresses where the password goes?
+
+→And, then, when Firefox asks you if you want to save the password, it shows the zip code in the email address field
+
+David H.: That's weird, have you tried it in a different browser?
+
+→No, firefox is all i run
+
+→linux
+
+→It's your code, you pass the wrong field in two places
+
+→i must have typed in the same password 30 time (2 time when you try to change it.)
+
+→It says it was successful and then the update fails
+
+David H.: What is the password you trying to set it to
+
+→the login fails. they say the update worked but it doesn't4
+
+→you don't get that same behaviour
+
+→i have two that work, but the first contact fails repeatedly for me
+
+→two contacts that i can login as
+
+→20Leslee17!
+
+→you disappeared?
+
+David H.: Sorry I am still here, I am looking into the client area right now .
+
+David H.: I did a moment ago , I am using firefox as well
+
+David H.: but then it corrected itself after I reset the browser .
+
+David H.: And now it is logging me in with no issue, using the password you supplied me .
+
+David H.: Sorry I signed on using the info@gohoooa.org contact address
+
+David H.: 20Leslee17! is what I used
+
+David H.: But it worked for info@gohoooa.org
+
+David H.: as well
+
+David H.: It worked for both on this end actually .
+
+David H.: It worked with that as well, and I just retested it with 20Leslee17! and it also worked .
+
+David H.: Something is being weird, I will have it looked at asap, I cleared my cache and it still works for me .
+
+→i don't know what to do
+
+
+https://cpanel09.myhostcenter.com:2083/logout/?locale=en
+
+2017-03-17
+	i am inn the middle or reinstalling Laravel (from scratch)
+	Starting with a brand new copy of ubuntu 16.04
+
+	downloaded and installed vagrant  
+	downloaded and installed virtualBox
+	changed Vagrantfile
+	  config.vm.box = "laravel/homestead"
+	and did vagrant init
+	it downloads laravel/homestead from hashicorp.  this takes 2 hours on my machine.
+
+	sudo chgrp -R www-data storage bootstrap/cache
+sudo chmod -R ug+rwx storage bootstrap/cache 
+
+2017-03-18
+	goddamn!  it's sounding like the problem might be virtual box and not me.
+	so... we're going to purge the existing one and reinstall 
+	sudo apt-get remove --purge virtualbox; 
+	sudo rm ~/"VirtualBox VMs" -Rf;
+	sudo rm ~/.config/VirtualBox/ -Rf;
+	sudo rm /var/*/virtualbox/* -Rf;
+2017-03-20
+	back to the beginning
+	stu@hot_sunny:~$ locate *vagrant*.deb;locate *virtualbox*.deb;
+/home/stu/Downloads/vagrant_1.9.2_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.0_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.1_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.2_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.3_x86_64.deb
+/home/stu/Downloads/virtualbox-5.1_5.1.0-108711~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/virtualbox-5.1_5.1.16-113841~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-4.3_4.3.30-101610~Ubuntu~raring_amd64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-5.1_5.1.14-112924~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-5.1_5.1.16-113841~Ubuntu~xenial_i386(1).deb
+s
+
+install deb packages
+
+    You can install it using sudo dpkg -i /path/to/deb/file followed by sudo apt-get install -f .
+    You can install it using apt-get install package_name . But first move your deb file to /var/cache/apt/archives/ directory. ...
+    Install gdebi and open your .deb file using it (Right-click -> Open with).
+
+    sudo dpkg -i /home/stu/Downloads/vagrant_1.9.2_x86_64.deb
+    sudo apt-get install -f
+
+
+
+    Oracle VM VirtualBox
+VirtualBox is a powerful PC virtualization solution allowing you to run a wide range of PC operating systems on your Linux system. This includes Windows, Linux, FreeBSD, DOS, OpenBSD and others. VirtualBox comes with a broad feature set and excellent performance, making it the premier virtualization software solution on the market. 
+
+
+
+2017-03-23
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox?action=remove
+
+2017-03-24
+	I have lost it (I hope it's temporary)
+	There are several diferent web pages related to virtualbox all purporting to have a solution for reinstalling virtualbox
+	 .  Completely uninstall?  I could still bring up the gui after one of those.  I have tried them all.  Apparently, there was abug in 5.0.16 which is what i attempted to install.  My apps would not come up and did not list in the list of shared folders during vagrant up.  i reinstalled vagrant several times but it always wants to download a fresh version of laravel/homestead which takes an hour and a half with my connection.  i finally decided vagrant was not the culprit.  this was all on my brand new 16.04 machine so i was quite unhappy.  i attempted to go back to 5.0.14 and then to 5.0.  At one point, i downloaded and attempted to install the x386 version.  I am running a 64bit i5 so that just created a big mess.  i think i did an --auto-remove and cleaned upmost of that.
+
+	i split my vagrant and virtualbox downloads into two separate folders
+2017-03-25
+	i've lost my drive on this but it's an issue that has to be resolved.
+
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox?action=remove
+
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox
+	https://help.ubuntu.com/community/VirtualBox/Installation
+
+	composer create-project --prefer-dist laravel/laravel l541_larablues
+
+
+    Delete your /vendor folder
+    Delete composer.lock
+    Run composer install
+
+Make sure your composer.json file has "laravel/framework": "5.1.*" 
+
+2017-03-27
+
+	Class 'Collective\Html\HtmlFacade' not found (View: /home/vagrant/Code/l5_larablues2/resources/views/baseline_blades/indexmain.blade.php) (View: /home/vagrant/Code/l5_larablues2/resources/views/baseline_blades/indexmain.blade.php)
+
+2017-03-28
+
+	Homstead.yaml is fucked up again
+	FUCK!! i hate this.
+
+	Vagrantfile gets changed to look like homestead.rb?
+	/home/stu/Homestead/scripts/homestead.rb
+
+	then homestead.yaml starts giving you error messages but they're not quite right and you can't seem to fix it.
+
+	i destroyed the vm and started over.  
+	i was entering my login stuff in l5_larablues2.dev so i feel pretty good that i got the app up.  the config/app.php file is improved and more up to date  I don't like having to rebuild the database but it's not that bad.  
+
+	i think it was something else besides Homestead.yaml that was to blame but we'll find out soon enough
+
+	i still need to add a few new fields but i want to insert them after some existing field.
+
+	default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+    default: The guest additions on this VM do not match the installed version of
+    default: VirtualBox! In most cases this is fine, but in rare cases it can
+    default: prevent things such as shared folders from working properly. If you see
+    default: shared folder errors, please make sure the guest additions within the
+    default: virtual machine match the version of VirtualBox you have installed on
+    default: your host and reload your VM.
+    default: 
+    default: Guest Additions Version: 5.1.10
+    default: VirtualBox Version: 5.0
+==> default: Mounting shared folders...
+    default: /vagrant => /home/stu/Homestead
+
+    sudo apt-get remove --auto-remove virtualbox
+    sudo apt-get purge --auto-remove virtualbox
+
+    sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.0
+
+    sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.1.10

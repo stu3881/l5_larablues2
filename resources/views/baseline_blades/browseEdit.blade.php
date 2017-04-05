@@ -5,7 +5,7 @@
 	browseEdit  
 	<div id="promo-details"> 
 
-		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'72px'))}} 
+		{{ HTML::image('/img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'72px'))}} 
 
 
 		</div> <!-- end promo-details -->
@@ -78,6 +78,12 @@ $rowcount = -1;
 					<table class="table_no_lines" style="width:100%">
 			<tbody>
 				<tr class="table_no_lines">
+					<td class="table_no_lines">
+				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_key,
+			   			'reportDefinitionKey'=>$report_key
+			   			)) }}" class="btn mycart-btn-row2">reports list
+			   			</a>
+					</td>
 				<td class="table_no_lines">
 			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
 				   		'report_definition_key'=>$report_definition_key)
@@ -87,12 +93,6 @@ $rowcount = -1;
 
 				</td>
 
-					<td class="table_no_lines">
-				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_key,
-			   			'reportDefinitionKey'=>$report_key
-			   			)) }}" class="btn mycart-btn-row2">reports list
-			   			</a>
-					</td>
 
 				<td class="table_no_lines">
 					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>

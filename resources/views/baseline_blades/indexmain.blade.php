@@ -12,8 +12,8 @@ var_dump($queryx[1]);exit("exit 4");
 
 print_r(Input::all());//exit("xit index")
 */
-//var_dump($queryx);
-//exit("exit 4");
+//var_dump($queryx[0]);
+exit("exit 16");
 
 
 if (isset($queryx)){
@@ -25,6 +25,9 @@ else{
 
 
 
+?>
+<?php 
+//var_dump($queryx[0]);exit("exit xx");
 ?>
 
 @section('promo')
@@ -40,8 +43,9 @@ else{
 </section>
 @stop
 
-
-
+<?php 
+var_dump($queryx[0]);exit("exit 47");
+?>
 
 
 @section('contentx')

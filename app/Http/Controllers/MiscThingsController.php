@@ -430,7 +430,7 @@ class MiscThingsController extends DEHBaseController
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.
-            ', report_definition_key: '.$report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
+            ', report_definition_key: '.$report_definition_key);$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($request);
         //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
@@ -448,7 +448,7 @@ class MiscThingsController extends DEHBaseController
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
 
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
-                    //var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
+                    var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
 
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
@@ -458,8 +458,9 @@ class MiscThingsController extends DEHBaseController
                     $MiscThing  = MiscThing::where('id','=',$id)->get();
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
+                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
+                       echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
+                        var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -1488,7 +1489,7 @@ class MiscThingsController extends DEHBaseController
                         case "value":
                              break;
                     }  // end of switch xx                    
-                    echo('<br>'.'pad_ctr: '.$pad_ctr);
+                    //echo('<br>'.'pad_ctr: '.$pad_ctr);
                     return $pad_ctr;
                     //var_dump($array_name);$this->debug_exit(__FILE__,__LINE__,10); 
                 }

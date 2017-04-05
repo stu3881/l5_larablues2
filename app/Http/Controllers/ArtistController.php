@@ -18,7 +18,7 @@ class ArtistController extends DEHBaseController {
 
         $controller_name = "ArtistController", $record_type = "table_controller", $db_database = "stu3881_main", $db_connection_name = "localhost_stu3881_main", $no_of_blank_entries = "5", $model = "Artist", $model_table = "artist", $node_name = "artist", $snippet_table = "miscThings", $snippet_table_key_field_name = "id", $backup_node = "backup_before_redirect_to_baseline", $generated_files_folder = "generated_files", $key_field_name = "artist_id", $bypassed_field_name = "not_used"
         //parm_list_start
-        //parm_list_stop
+e        //parm_list_stop
         
         /*
         $model                  = "MiscThings",

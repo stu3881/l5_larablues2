@@ -13,17 +13,15 @@
 */
 // ** this is what's working in l5_larablues
 
-    Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return view('welcome');
     })->middleware('guest');
 
-    Route::auth();
+     Route::auth();
 
-   // Route::controller('users','UsersController');
-
-
+    //Route::controller('users','UsersController');
 
     // This one gets you started!!
     Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 

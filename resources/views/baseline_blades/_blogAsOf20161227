@@ -291,13 +291,435 @@ adds for sure
 	tesseract 12asample.tif 12aoutputfile
 
 	the business rules are tied to the report.  Either an add or modify needs to apply the same set of rules.  
-
+2017-03-04
 	  		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'192px'))}} 
 
+	david.stokes@oracle.com
+	http://www.unofficialmysqlguide.com/
+
+	some screen shots of the lookups
+	we need a few more fields and a database backup soon
+
+	once a database is identified (in the connection), we know all the tables
+	we know who's active by matching the database tables to table controllers table names.
+	Those who are active are in the main menu
+	you can inactivate a table controller (new field) by setting a flag in the definition
+	we need new code to go out to miscThins and get the fields that we defined when we created the table_controller 
+
+2017-03-06
+	business rules isn't working for database connection 
+		snippet name is supposed to be required
+
+	ii feel invigorated now that most stuff is working
+
+	there's still a on of little things
+
+	i'm feeling like i'm finally starting to see the miscThings controller as a class.
+	All the other tables can extend miscThings and the stuff will be there for every other file as well; provided we define a controller for them. maybe we'll include
+
+	maybe we can put in the env?
+
+	left or right buttons
+	vertical or horizontal display
+	fields for the other three like business_rules (encompassing the field_name, r_o and value arrays)
 
 
 
 
+
+https://cpanel09.myhostcenter.com:2083/logout/?locale=en
+
+2017-03-17
+	i am inn the middle or reinstalling Laravel (from scratch)
+	Starting with a brand new copy of ubuntu 16.04
+
+	downloaded and installed vagrant  
+	downloaded and installed virtualBox
+	changed Vagrantfile
+	  config.vm.box = "laravel/homestead"
+	and did vagrant init
+	it downloads laravel/homestead from hashicorp.  this takes 2 hours on my machine.
+
+	sudo chgrp -R www-data storage bootstrap/cache
+sudo chmod -R ug+rwx storage bootstrap/cache 
+
+2017-03-18
+	goddamn!  it's sounding like the problem might be virtual box and not me.
+	so... we're going to purge the existing one and reinstall 
+	sudo apt-get remove --purge virtualbox; 
+	sudo rm ~/"VirtualBox VMs" -Rf;
+	sudo rm ~/.config/VirtualBox/ -Rf;
+	sudo rm /var/*/virtualbox/* -Rf;
+2017-03-20
+	back to the beginning
+	stu@hot_sunny:~$ locate *vagrant*.deb;locate *virtualbox*.deb;
+/home/stu/Downloads/vagrant_1.9.2_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.0_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.1_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.2_x86_64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/vagrant_1.7.3_x86_64.deb
+/home/stu/Downloads/virtualbox-5.1_5.1.0-108711~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/virtualbox-5.1_5.1.16-113841~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-4.3_4.3.30-101610~Ubuntu~raring_amd64.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-5.1_5.1.14-112924~Ubuntu~xenial_i386.deb
+/home/stu/Downloads/Vagrant_Virtualboxversions/virtualbox-5.1_5.1.16-113841~Ubuntu~xenial_i386(1).deb
+s
+
+install deb packages
+
+    You can install it using sudo dpkg -i /path/to/deb/file followed by sudo apt-get install -f .
+    You can install it using apt-get install package_name . But first move your deb file to /var/cache/apt/archives/ directory. ...
+    Install gdebi and open your .deb file using it (Right-click -> Open with).
+
+    sudo dpkg -i /home/stu/Downloads/vagrant_1.9.2_x86_64.deb
+    sudo apt-get install -f
+
+
+
+    Oracle VM VirtualBox
+VirtualBox is a powerful PC virtualization solution allowing you to run a wide range of PC operating systems on your Linux system. This includes Windows, Linux, FreeBSD, DOS, OpenBSD and others. VirtualBox comes with a broad feature set and excellent performance, making it the premier virtualization software solution on the market. 
+
+
+
+2017-03-23
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox?action=remove
+
+2017-03-24
+	I have lost it (I hope it's temporary)
+	There are several diferent web pages related to virtualbox all purporting to have a solution for reinstalling virtualbox
+	 .  Completely uninstall?  I could still bring up the gui after one of those.  I have tried them all.  Apparently, there was abug in 5.0.16 which is what i attempted to install.  My apps would not come up and did not list in the list of shared folders during vagrant up.  i reinstalled vagrant several times but it always wants to download a fresh version of laravel/homestead which takes an hour and a half with my connection.  i finally decided vagrant was not the culprit.  this was all on my brand new 16.04 machine so i was quite unhappy.  i attempted to go back to 5.0.14 and then to 5.0.  At one point, i downloaded and attempted to install the x386 version.  I am running a 64bit i5 so that just created a big mess.  i think i did an --auto-remove and cleaned upmost of that.
+
+	i split my vagrant and virtualbox downloads into two separate folders
+2017-03-25
+	i've lost my drive on this but it's an issue that has to be resolved.
+
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox?action=remove
+
+	https://www.howtoinstall.co/en/ubuntu/xenial/virtualbox
+	https://help.ubuntu.com/community/VirtualBox/Installation
+
+	composer create-project --prefer-dist laravel/laravel l541_larablues
+
+
+    Delete your /vendor folder
+    Delete composer.lock
+    Run composer install
+
+Make sure your composer.json file has "laravel/framework": "5.1.*" 
+
+2017-03-27
+
+	Class 'Collective\Html\HtmlFacade' not found (View: /home/vagrant/Code/l5_larablues2/resources/views/baseline_blades/indexmain.blade.php) (View: /home/vagrant/Code/l5_larablues2/resources/views/baseline_blades/indexmain.blade.php)
+
+2017-03-28
+
+	Homstead.yaml is fucked up again
+	FUCK!! i hate this.
+
+	Vagrantfile gets changed to look like homestead.rb?
+	/home/stu/Homestead/scripts/homestead.rb
+
+	then homestead.yaml starts giving you error messages but they're not quite right and you can't seem to fix it.
+
+	i destroyed the vm and started over.  
+	i was entering my login stuff in l5_larablues2.dev so i feel pretty good that i got the app up.  the config/app.php file is improved and more up to date  I don't like having to rebuild the database but it's not that bad.  
+
+	i think it was something else besides Homestead.yaml that was to blame but we'll find out soon enough
+
+	i still need to add a few new fields but i want to insert them after some existing field.
+
+	default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+    default: The guest additions on this VM do not match the installed version of
+    default: VirtualBox! In most cases this is fine, but in rare cases it can
+    default: prevent things such as shared folders from working properly. If you see
+    default: shared folder errors, please make sure the guest additions within the
+    default: virtual machine match the version of VirtualBox you have installed on
+    default: your host and reload your VM.
+    default: 
+    default: Guest Additions Version: 5.1.10
+    default: VirtualBox Version: 5.0
+==> default: Mounting shared folders...
+    default: /vagrant => /home/stu/Homestead
+
+    sudo apt-get remove --auto-remove virtualbox
+    sudo apt-get purge --auto-remove virtualbox
+
+    sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.0
+
+    sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.1.10
+
+
+    sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.1
+
+
+    vboxmanage --version
+stu@hot_sunny:~/Homestead$ vboxmanage --version
+5.1.10r112026
+stu@hot_sunny:~/Homestead$ 
+
+sudo apt remove virtualbox
+
+"unable to lock the administration directory (/var/lib/dpkg/) is another process using it"
+ps -A | grep apt
+
+ sudo rm /var/lib/dpkg/lock
+
+ sudo apt-get remove virtualbox-\*
+
+sudo apt-get remove virtualbox;
+ sudo apt-get remove --auto-remove virtualbox;
+ sudo rm ~/"VirtualBox VMs" -Rf;
+
+sudo rm ~/.config/VirtualBox/ -Rf;
+sudo rm /var/*/virtualbox/* -Rf;
+sudo apt-get purge --auto-remove virtualbox
+
+
+vagrant destroy
+
+Cannot get virtualbox to provision from Ubuntu 16.04
+
+stu@hot_sunny:~/Homestead$ vboxmanage -v
+5.0.32_Ubuntur112930
+stu@hot_sunny:~/Homestead$ 
+
+What is the latest working configuration for vagrant and virtualbox for Ubuntu 16.04?
+
+i have recently upgraded from Ubuntu 14.04 to 16.04 as a fresh install.  I believe i updated to a newer version of vagrant or virtualbox and now the provisioning isn't working.
+
+I'm just looking for a configuration of vagrant and virtualbox that's working for them in 16.04
+
+The only laravel documentation I could find said everything gets tested on vagrant 1.7.  So... I upgraded to 1.7
+~/Homestead/projects$ vagrant -v
+Vagrant 1.7.4
+
+~/Homestead$ vagrant up --provider=virtualbox
+The provider 'virtualbox' that was requested to back the machine
+'default' is reporting that it isn't usable on this system. The
+reason is shown below:
+
+Vagrant has detected that you have a version of VirtualBox installed
+that is not supported. Please install one of the supported versions
+listed below to use Vagrant:
+
+4.0, 4.1, 4.2, 4.3, 5.0
+
+
+How do I get provisioning working for laravel/homestead virtualbox in Ubuntu 16.04
+
+
+
+Following this link: https://help.ubuntu.com/community/VirtualBox/Installation
+I installed the default virtualbox
+
+This command installed virtualbox:
+sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.0
+
+vboxmanage -v said 5.0.36r114008
+
+when i did a vagrant up
+...
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+    default: The guest additions on this VM do not match the installed version of
+    default: VirtualBox! In most cases this is fine, but in rare cases it can
+    default: prevent things such as shared folders from working properly. If you see
+    default: shared folder errors, please make sure the guest additions within the
+    default: virtual machine match the version of VirtualBox you have installed on
+    default: your host and reload your VM.
+    default: 
+    default: Guest Additions Version: 5.1.10
+    default: VirtualBox Version: 5.0
+==> default: Mounting shared folders...
+    default: /vagrant => /home/stu/Homestead
+stu@hot_sunny:~/Homestead$ 
+
+I decide that I should upate virtualbox to 5.1 so i change the last character in the big string aboveand try again
+
+sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian '$(lsb_release -cs)' contrib non-free' > /etc/apt/sources.list.d/virtualbox.list" && wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install virtualbox-5.1
+
+
+i am loading laravel/homestead as my vm so i'm guessing that's what's 5.1.10.  i have not had much luck getting my provisioning to work in 16.04.   
+
+
+2017-03-31
+
+vagrant up --provider=virtualbox
+stu@hot_sunny:~/Homestead$ vagrant up --provider=PROVIDER^C
+stu@hot_sunny:~/Homestead$ vagrant up --provider=virtualbox
+The provider 'virtualbox' that was requested to back the machine
+'default' is reporting that it isn't usable on this system. The
+reason is shown below:
+
+Vagrant has detected that you have a version of VirtualBox installed
+that is not supported. Please install one of the supported versions
+listed below to use Vagrant:
+
+4.0, 4.1, 4.2, 4.3, 5.0
+
+sudo rm -rf /opt/vagrant;
+sudo rm -f /usr/bin/vagrant
+
+https://laravel.com/docs/5.0/homestead
+Homestead is currently built and tested using Vagrant 1.7.
+
+
+    default:
+    default: Guest Additions Version: 5.0.4
+    default: VirtualBox Version: 4.3
+==> default: Setting hostname...
+==> default: Configuring and enabling network interfaces...
+==> default: Mounting shared folders...
+    default: /vagrant => /home/stu/Homestead
+    default: /home/vagrant/code/example => /home/stu/Homestead/projects/example
+    default: /home/vagrant/code/homestead => /home/stu/Homestead/projects/homestead
+    default: /home/vagrant/code/quickstart => /home/stu/Homestead/projects/quickstart
+    default: /home/vagrant/code/l5_larablues => /home/stu/Homestead/projects/l5_larablues
+    default: /home/vagrant/code/project_flyer => /home/stu/Homestead/projects/project_flyer
+    default: /home/vagrant/code/migrations-generator => /home/stu/Homestead/projects/migrations-generator
+==> default: Running provisioner: file...
+==> default: Running provisioner: shell...
+
+2017-04-01
+i managed to find an old 14.04 disk that provisioned the vm correctly
+
+i get different stuff depending on whether i vagrant up frpm Homestead or Homestead/projects/homestead
+
+vagrantfil in Homestead looks like this:
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.box = "laravel/homestead"
+
+whereas the same file in Homestead/projects/homestead looks like this:
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'json'
+require 'yaml'
+
+VAGRANTFILE_API_VERSION ||= "2"
+confDir = $confDir ||= File.expand_path(File.dirname(__FILE__))
+
+homesteadYamlPath = confDir + "/Homestead.yaml"
+homesteadJsonPath = confDir + "/Homestead.json"
+afterScriptPath = confDir + "/after.sh"
+aliasesPath = confDir + "/aliases"
+
+require File.expand_path(File.dirname(__FILE__) + '/scripts/homestead.rb')
+
+Vagrant.require_version '>= 1.9.0'
+
+
+...
+BACK IN BUSINESS
+
+Of course I'm not sure what i did but I am sure that vagrant 1.9.2 and virtualbox 5.0.32 provision correctly in Ubuntu 16.04
+
+The ubuntu virtualbox section says click here to install and it installs 5.0.32
+
+i think i had to delete a couple of files before i reinstalled a different version of vagrant but basically i dbl clicked on the archives i downloaded and ubuntu installed them.  i'm not sure but i thought all you had to do was click on the archives for the virtualbox you wanted and ubuntu would uninstall the old vb and install the new one.
+
+vboxmanage -v is the command to see what's active.
+
+i sure am glad to be on the otehr side of this problem and i can sure tell the difference in how i feel.  i've been feeling aged out the last few days.
+
+2017-04-03
+	ctl shift Y shows progress of download
+	dbl clicking on it didn't work
+
+	==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: example.app
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: l5_larablues.dev
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: l5_larablues2.dev
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: l540_larablues.dev
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: l541_larablues.dev
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Site: l542_larablues.dev
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Restarting Nginx
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating MySQL Database: blues_main
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Creating Postgres Database: blues_main
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Clear Variables
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: inline script
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: inline script
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: inline script
+==> homestead-7: Running provisioner: shell...
+    homestead-7: Running: script: Update Composer
+
+    This is with 5.0 of homestead
+    1.92 of vagrant
+    and 5.0.32 of virtualbox
+
+    the database i restored works for example.app (example.app/books)
+    and for l5_larablues
+
+    But, it doesn't work for l5_larablues2 which used to be the closest to the laravel 5.4 upgrade before i broke provisioning in 16.04.  It's the best code but...
+
+    l5_larablues has the best front-end security
+
+    the l5_larablues2 code use values instead of indexes for looking up the query operators.  It means that the snippets have generated code incompatible with the state of the database.  They were kind of adhoc solutions.  it can be figured out.  it would be nice if i kept the code around.
+
+    For me, i want to get that front end security moved over so we're done with the old guy.
+
+    Wouldn't it be nice to be able to detect if we had an old database 'version' and could automatically rebuild the snippets that needed fixing. (snippets stored in the database)
+
+    Now it sounds like getting the database upgraded to come up in l5_larablues2 is most important.
+
+2017-04-04
+    tfo
+
+	It's brutal man. 
+	Composer keeps apps in sync inside of laravel but I need a few things on my box to configure it and get it started.  They are vagrant, virtualbox and homestead.  You also have to download the virtual machine image but that's semi-automatic.
+
+	the versions i started with on 14.04 are so old you almost can't even download them anymore.  i didn't find out until two days ago that the version number of homestead also comes into play.  i really didn't even know what homestead was, i just copied it into my projects root folder.   That has to be the folder where you start vagrant.
+
+	Anyhow, if all that shit isn't in sync, you can still get the vm up but it won't provision.  (when it provisioned, i knew it was fixed.)
+	vagrant 1.9.2
+	virtualbox 5.0.32
+	homestead 5.0
+	that last one took almost two weeks to find.  I went down to 5.0 from 5.1 and all of a sudden we're back in business
+
+	virtualbox provides you a platform on which to run.  vagrant is used to configure a virtual machine on virtualbox and i believe homestead is a laravel app that configures the laravel/machine the way it needs to and passes that off to vagrant.
+
+	So, it feels like the army.  Another battle under your belt but another awaits.
+
+	Now, I have to get my app up in laravel 5.4    it just keeps goin.
+
+	7.4.5.1 Making a Copy of a Database
+
+shell> mysqldump db1 > dump.sql
+shell> mysqladmin create db2
+shell> mysql db2 < dump.sql
 
 
 
