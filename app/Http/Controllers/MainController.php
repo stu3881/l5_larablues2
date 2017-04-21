@@ -218,10 +218,18 @@ class MainController extends DEHBaseController {
         $value = "table_controller";
         $MiscThing = DB::connection($this->db_snippet_connection)
         ->table($this->snippet_table)
+        ->distinct()
+        ->orderBy($field_name)
+        ->get([$field_name]);
+       var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
+        $field_name = "record_type";
+        $value = "table_controller";
+        $MiscThing = DB::connection($this->db_snippet_connection)
+        ->table($this->snippet_table)
         ->where($field_name,'=',$value)
         ->orderBy($field_name)
         ->get();
-       //var_dump($query);$this->debug_exit(__FILE__,__LINE__,1);
+       //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
       //return $MiscThing;
 
         //var_dump($query);$this->debug_exit(__FILE__,__LINE__);

@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Task;
-use App\MiscThing;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -32,13 +31,5 @@ class User extends Authenticatable
     public function tasks()
     {
         return $this->hasMany(Task::class);
-    }
-
-    /**
-     * Get all of the miscThings for the user.
-     */
-    public function miscThings()
-    {
-        return $this->hasMany(miscThing::class);
     }
 }

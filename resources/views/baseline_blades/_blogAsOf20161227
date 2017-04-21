@@ -721,5 +721,35 @@ shell> mysqldump db1 > dump.sql
 shell> mysqladmin create db2
 shell> mysql db2 < dump.sql
 
+2017-04-05
+	Fuck!  Almost a month to fix this.  I am just now back to where i was when i gave timmy a demo.
+	i learned a lot.  i can change releases of vagrant or virtualbox or homestead.  I am up to date with my OS 16.04 and laravel is set to 5.4 in l5_larablues2.  Oh yeah, i know how to provision without having to reload my box.  i don't feel great yet, but definitely better.
 
+	Again, i am glad to be on the other side of that wall
+	so we're gonna move a few fields around
+	alter table `miscThings` modify db_snippet_connection  after db_schema;
+	show columns in 'miscThings';
+
+ alter table `miscThings` modify db_snippet_connection   VARCHAR (100) 	AFTER  `db_schema`;
+ alter table `miscThings` modify db_data_connection  VARCHAR (100) 		AFTER  `db_schema`;
+ alter table `miscThings` modify user_id  int (11) 						AFTER  `id`;
+
+ alter table `miscThings` modify db_snippet_connection  VARCHAR (100) 	AFTER  `key_field_name`;
+ alter table `miscThings` modify db_data_connection  VARCHAR (100) 		AFTER  `db_snippet_connection`;
+ alter table `miscThings` modify user_id  int (11) 						AFTER  `db_data_connection`;
+
+
+
+alter table `miscThings` add business_rules_array varchar(100) default NULL AFTER  `business_rules`;
+alter table `miscThings` add query_array  varchar(100) default NULL 		AFTER  `query_value_array `;
+alter table `miscThings` add business_rules_array varchar(100) default NULL AFTER  `business_rules`;
+
+alter table `miscThings` drop business_rules_array ;
+alter table `miscThings` drop query_array  ;
+alter table `miscThings` drop business_rules_array;
+
+This stuff has to be done thru artisan and migrate
+
+i updated github creating v0.0.5.8
+the first backup after converting to 16.04 and laravel 5.4
 

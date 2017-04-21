@@ -87,7 +87,7 @@ class DEHBaseController extends Controller
         $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_display_snippet.blade.php';
         $objOrArray = "object";
         File::put($fnam,$this->blade_gen_browse_select_data_rows($this->model,$_REQUEST["to"],'version1',$objOrArray));
-         //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+        //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
    }
   
      
@@ -391,7 +391,7 @@ class DEHBaseController extends Controller
  
     //echo ("<br>executing query");
     if ($executing_distinct == 1){
-    	echo("->get([".$distinct_value."])");
+    	echo("->get(['".$distinct_value."'])");
     	return $query->get(['record_type']);
     }
     else {

@@ -13,7 +13,7 @@ var_dump($queryx[1]);exit("exit 4");
 print_r(Input::all());//exit("xit index")
 */
 //var_dump($queryx[0]);
-exit("exit 16");
+echo("this is an echo/exit in indexmain.php in baseline_blades");
 
 
 if (isset($queryx)){
@@ -44,7 +44,7 @@ else{
 @stop
 
 <?php 
-var_dump($queryx[0]);exit("exit 47");
+//var_dump($queryx[0]);//exit("indexmainexit 47");
 ?>
 
 

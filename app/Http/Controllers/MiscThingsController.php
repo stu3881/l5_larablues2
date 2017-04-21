@@ -353,7 +353,7 @@ class MiscThingsController extends DEHBaseController
 
  
     public function snippets_gen_browse_select($key_field_name,$key_value) {
-        //echo 'snippets_gen_browse_select';print_r($_REQUEST);exit("exit 172");
+        echo 'snippets_gen_browse_select';print_r($_REQUEST);exit("exit 172");
         $nv_array = array(); 
         foreach ($_REQUEST['to'] as $value){
             $nv_array [$value] = $value;

@@ -30,8 +30,9 @@ return array(
  	//define_default_connection_anchor
 
 	//'default' => 'defaultConnection',
-	'default' => 'blues_main',			// goes against the vm database
+	//'default' => 'blues_main',			// goes against the vm database
 	//'default' => 'localhost_stu3881_main',	// goes against the local database
+   	'default' => env('DB_CONNECTION', 'mysql'),
 
 		
 	/*
@@ -52,7 +53,40 @@ return array(
 
 	'connections' => array(
 
-		'blues_main'	=> array(
+		'blues_main' => array(
+			'driver' => 'mysql', 
+			'host' => '127.0.0.1', 
+			'database' => 'blues_main', 
+			'username' => 'homestead', 
+			'password' => 'secret', 
+			'charset' => 'utf8', 
+			'collation' => 'utf8_unicode_ci', 
+			'prefix' => '', 
+		),
+
+		'mysql' => array(
+			'driver' => 'mysql', 
+			'host' => '127.0.0.1', 
+			'database' => 'homestead', 
+			'username' => 'homestead', 
+			'password' => 'secret', 
+			'charset' => 'utf8', 
+			'collation' => 'utf8_unicode_ci', 
+			'prefix' => '', 
+		),
+
+		'defaultConnection' => array(
+			'driver' => 'mysql', 
+			'host' => '127.0.0.1', 
+			'database' => 'blues_main', 
+			'username' => 'homestead', 
+			'password' => 'secret', 
+			'charset' => 'utf8', 
+			'collation' => 'utf8_unicode_ci', 
+			'prefix' => '', 
+		),
+
+		'homestead'	=> array(
 			'driver' 	=> 'mysql', 
 			'host' 		=> '127.0.0.1', 
 			'database' 	=> 'blues_main', 
@@ -92,16 +126,6 @@ return array(
 			'prefix'   => '',
 		),
 			
-		'defaultConnection' => array(
-			'driver' => 'mysql', 
-			'host' => '127.0.0.1', 
-			'database' => 'blues_main', 
-			'username' => 'homestead', 
-			'password' => 'secret', 
-			'charset' => 'utf8', 
-			'collation' => 'utf8_unicode_ci', 
-			'prefix' => '', 
-		),
 
 
 		// generated_connections_begin_here
