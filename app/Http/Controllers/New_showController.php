@@ -16,25 +16,24 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class VolunteersController extends MiscThingsController
+class New_showController extends MiscThingsController
 {
         public function __construct(
      
         /**/
-        $controller_name                = "VolunteersController", 
-        $model_table                    = "volunteers", 
-        $node_name                      = "volunteers", 
-        $model                          = "Volunteer", 
-
         $buttons_in_front               = "",
         $print_orientation              = "",
-        $record_type                    = "table_controller", 
 
+        $record_type                    = "table_controller", 
+        //$db_connection_name             = "blues_main", 
         $db_connection_name             = "", 
         $db_snippet_connection          = "",
         $db_data_connection             = "",
-        //$db_snippet_connection          = "",
+        $controller_name                = "New_showController", 
         $no_of_blank_entries            = "5", 
+        $model                          = "New_show", 
+        $model_table                    = "new_show", 
+        $node_name                      = "new_show", 
         $snippet_table                  = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 

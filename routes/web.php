@@ -19,13 +19,13 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     })->middleware('guest');
 
-     Route::auth();
+
+         Route::auth();
 
     //Route::controller('users','UsersController');
 
     // This one gets you started!!
     Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
-
 
 
    // main begin_generated_node
@@ -65,6 +65,19 @@ Route::group(['middleware' => ['web']], function () {
     });
 */
 
+
+
+     
+    Route::group(array('prefix' => 'admin'), function() {
+        $node_name              = 'artist';
+        $controller_name        = 'ArtistController';
+        Route::resource($node_name,$controller_name);
+    });
+
+    @include('myweb_new_show.php');
+
+    @include('myweb_artists.php');
+    @include('myweb_volunteers.php');
      
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'miscThings';

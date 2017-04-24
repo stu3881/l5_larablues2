@@ -58,13 +58,13 @@ else{
 		<ul>
 		
 	   	@foreach($queryx as $query)
-	   		<?php	//var_dump($queryx);//exit("exit 16"); 
-
-				//@if((isset($query->node_name))	)
+	   		<?php	
+	   		//var_dump($queryx);exit("indexmain 62"); 
+			//echo($query);exit("indexmain 62"); 
 	   		?>
 
 	   		
-	   		@if($query->node_name == "miscThings")	
+	  
 			   	<li>
 			   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id,
 			   			'reportDefinitionKey'=>$report_definition_key
@@ -72,7 +72,7 @@ else{
 			   		) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
 			
 			   	</li>
-			@endif	
+		
 
 
 					

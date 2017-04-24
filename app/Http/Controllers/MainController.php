@@ -212,6 +212,52 @@ class MainController extends DEHBaseController {
     public function getIndex() {
         //$this->debug_exit(__FILE__,__LINE__);
         $this->middleware('auth');
+        $field_name = "record_type";
+        $field      = "node_name";
+        $value      = "table_controller";
+        $MiscThing = DB::connection($this->db_snippet_connection)
+        ->table($this->snippet_table)
+        ->where($field_name,'=',$value)
+        //->where('node_name','=','miscThings')
+        ->orderBy($field)
+        //->get([$field]);
+        ->get();
+        $snippet_node_name = 'miscThings';
+
+        //$MiscThing = $this->snippet_node_name($MiscThing,$field);
+
+        //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,0);
+        return view('main.index',compact('MiscThing'))
+            ->with('report_definition_key'   ,12450)   
+            ->with('$node_name'   ,$this->node_name)   
+            //->with('$node_name'   ,'miscThings')   
+            ->with('queryx'   ,$MiscThing);            
+           
+    }
+    public function snippet_node_name($MiscThing,$field) {
+        //$this->debug_exit(__FILE__,__LINE__);
+        $snippet_node_name = 'miscThings';
+        $arr1 = array();
+        $arr1[]= $snippet_node_name;
+        foreach ($MiscThing as $x){
+            echo($x->$field);
+            if (!($x->$field == $snippet_node_name)){
+            //$arr1['node_name'=> $x->$field];
+            $arr1 = array($x->$field=>$x->$field);
+
+               
+            }
+        }
+        $arr1 = (object) $arr1;
+        //var_dump($arr1);$this->debug_exit(__FILE__,__LINE__,1);
+        return $arr1;
+           
+           
+    }
+
+    public function getDistincttest() {
+        //$this->debug_exit(__FILE__,__LINE__);
+        $this->middleware('auth');
         //$query = $this->getMeTables("record_type");
         //        $report_definition = MiscThing::where('id','=',$id)->get();
         $field_name = "record_type";
@@ -221,18 +267,7 @@ class MainController extends DEHBaseController {
         ->distinct()
         ->orderBy($field_name)
         ->get([$field_name]);
-       var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
-        $field_name = "record_type";
-        $value = "table_controller";
-        $MiscThing = DB::connection($this->db_snippet_connection)
-        ->table($this->snippet_table)
-        ->where($field_name,'=',$value)
-        ->orderBy($field_name)
-        ->get();
-       //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
-      //return $MiscThing;
-
-        //var_dump($query);$this->debug_exit(__FILE__,__LINE__);
+        //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
         return view('main.index',compact('MiscThing'))
             ->with('report_definition_key'   ,12450)   
             ->with('$node_name'   ,$this->node_name)   

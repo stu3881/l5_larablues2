@@ -23,9 +23,6 @@ class MiscThingsController extends DEHBaseController
         /**/
         $buttons_in_front               = "",
         $print_orientation              = "",
-
-
-
         $record_type                    = "table_controller", 
         //$db_connection_name             = "blues_main", 
         $db_connection_name             = "", 
@@ -35,8 +32,9 @@ class MiscThingsController extends DEHBaseController
         $controller_name                = "miscThingsController", 
         $no_of_blank_entries            = "5", 
         $model                          = "MiscThing", 
-        $model_table                    = "miscThings", 
         $node_name                      = "miscThings", 
+        
+        $model_table                    = "miscThings", 
         $snippet_table                  = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
