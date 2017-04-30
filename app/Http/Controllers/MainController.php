@@ -149,7 +149,7 @@ class MainController extends DEHBaseController {
     }
  
     public function getMeTables($record_type) {
-        //$this->debug_exit(__FILE__,__LINE__);
+        $this->debug_exit(__FILE__,__LINE__);
 
         $field_name = "record_type";
        $query = DB::connection($this->db_snippet_connection)
@@ -210,7 +210,7 @@ class MainController extends DEHBaseController {
 
 
     public function getIndex() {
-        //$this->debug_exit(__FILE__,__LINE__);
+        $this->debug_exit(__FILE__,__LINE__);
         $this->middleware('auth');
         $field_name = "record_type";
         $field      = "node_name";

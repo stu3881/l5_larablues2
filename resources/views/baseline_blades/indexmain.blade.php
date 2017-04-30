@@ -78,6 +78,15 @@ else{
 					
 
 	   	@endforeach
+
+		<li>
+	   		<a href="{{ URL::route('programmerUtilities'.'.mainMenu', $parameters = array('id'=>$query->id,
+	   			'reportDefinitionKey'=>$report_definition_key
+	   			)
+	   		) }}" class="btn mycart-btn-row2">programmer utilities NEW2</a>
+	
+	   	</li>
+
 	
 		<li>
 			{{ Form::open(array('url'=>'admin/main/programmerUtilities', 'method'=>'GET')) }}

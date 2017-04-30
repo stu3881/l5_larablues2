@@ -7,9 +7,19 @@
 	</section><!-- promo -->
 @stop
 
-<?php //echo '<br>index<br>';print_r($_REQUEST);  exit('*exit 11 ');
-$node_name 						= 'main';
-	$menu_array_names=array(
+<?php 
+	//echo '<br>index<br>';print_r($_REQUEST);  exit('*exit 11 ');
+	$node_name 						= 'main';
+		$queryx = array('node_name'    => 'volunteersx',
+			'node_name1'    => 'volunteers',
+			'node_name2'    => 'volunteers',
+			'node_name3'    => 'volunteers',
+			);
+		var_dump($queryx);
+		$queryx = (object) $queryx;
+		var_dump($queryx);
+		//exit('programmer utilities');
+		$menu_array_names = array(
 		'maintain_database_connections', 
 		'drive_db_connection_regen_by_table_controller',
 		'change_database_connection',
@@ -53,6 +63,58 @@ $node_name 						= 'main';
 @section('hard_title')
 		<h1>{{$node_name}} Programmer Utilities Menu</h1><hr>
 @stop
+	   		<?php	
+	   		$queryx = array(
+	   		'node_name'    => 'volunteersx',
+			'node_name1'    => 'volunteers',
+			'node_name2'    => 'volunteers',
+			'node_name3'    => 'volunteers',
+			);
+		var_dump($queryx);
+		$queryy = (object) $queryx;
+		var_dump($queryy);
+		//exit('programmer utilities');
+	   		?>
+
+	   	@foreach($queryx as $name=>$value)
+   		
+	   		echo($queryx[$name]);
+	   		echo($queryy->$name);exit("Programmer Utilities 68"); 
+	
+
+
+	   	@endforeach
+
+
+@section('vertical_navigation_ul0')
+	<div id="admin_nav_bar" style="width:98%">	
+		<div id="admin_nav_bar_center" style="width:270px;text-align:left;background-color:#F0E68C;">	
+			<ul>
+			<li>
+				{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
+				{{ Form::submit('main menu') }}
+				{{ Form::close() }}
+			</li>
+			<!-- -->
+
+			<?php $label_or_sublit = "submit";?>
+			
+			<li>
+				{{ Form::open(array('url'=>'admin/'.$node_name.'/edit6', 'method'=>'GET')) }}
+				{{ Form::hidden('edit6_option',$menu_array_names[0]) }}
+				{{ Form::hidden('button_name',$menu_array_names[0]) }}
+				{{ Form::$label_or_sublit($menu_array_names[0]) }}
+				{{ Form::close() }}
+			</li>
+
+			
+			
+			</ul>
+		</div>
+	</div>
+@stop
+
+
 
 @section('vertical_navigation_ul')
 	<div id="admin_nav_bar" style="width:98%">	

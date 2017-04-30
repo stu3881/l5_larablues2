@@ -25,6 +25,7 @@ class VolunteersController extends MiscThingsController
         $model_table                    = "volunteers", 
         $node_name                      = "volunteers", 
         $model                          = "Volunteer", 
+        $key_field_name                 = "artist_id", 
 
         $buttons_in_front               = "",
         $print_orientation              = "",
@@ -39,7 +40,7 @@ class VolunteersController extends MiscThingsController
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
         $generated_files_folder         = "generated_files", 
-        $key_field_name                 = "id", 
+        
         $bypassed_field_name            = "not_used",
         $view_files_prefix = "",
 

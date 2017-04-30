@@ -531,3 +531,12 @@ mysql -u homestead -psecret
 drop database homestead;
 create database homestead;
 exit;
+
+
+mysqldump -u homestead -psecret --all-databases > ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_with_defs_new_baseline_20170420.sql;
+mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_just_data_new_baseline_20170420.sql;
+
+mysqldump -u homestead -psecret --all-databases > ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_with_defs_new_baseline_20170420.sql;
+
+mysql -u homestead -psecret < ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_with_defs_new_baseline_20170420.sql;
+
