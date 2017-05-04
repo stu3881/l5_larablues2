@@ -1,7 +1,9 @@
 <tr>
 <td>#</td>
+<td>table_reporting_active</td>
 <td>table_name</td>
 <td>field_name</td>
 <td>value</td>
 <td>name</td>
+<td>record_type</td>
 </tr>

@@ -122,7 +122,7 @@ class MiscThingsController extends DEHBaseController
  
 
         $MiscThing = new MiscThing;
-        $MiscThing->setConnection("blues_main");
+        $MiscThing->setConnection("homestead");
         $miscThings = MiscThing::where('record_type','=','table_controller')
             ->where('controller_name','='    ,"MiscThingsController")
             ->get();
@@ -133,8 +133,8 @@ class MiscThingsController extends DEHBaseController
         //var_dump($miscThings[0]);  
 
        
-        $this->db_snippet_connection            = "blues_main";
-        $this->db_data_connection               = "blues_main";
+        $this->db_snippet_connection            = "homestead";
+        $this->db_data_connection               = "homestead";
         //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
        //$this->db_data_connection               = "gohoooa_stu3881_main";
         //above here work
@@ -275,7 +275,7 @@ class MiscThingsController extends DEHBaseController
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        //echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
+        echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
     
         $report_definition          = $this->execute_query_by_report_no($id) ;
         $encoded_business_rules     = $report_definition[0]['business_rules'];
@@ -458,8 +458,8 @@ class MiscThingsController extends DEHBaseController
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                       echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
+                       //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
+                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -576,11 +576,12 @@ class MiscThingsController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
     public function create_w_report_id($report_definition_key) {
-        //echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,1);
+        echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
         $report_definition  = $this->execute_query_by_report_no($report_definition_key) ;
+        var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,0);
         $encoded_business_rules = $report_definition[0]['business_rules'];
-        $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
-        //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
+$this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
+ $this->debug_exit(__FILE__,__LINE__,0);       //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_modifiable_fields_add';
         //$this->c1($report_definition_key);
          return view($this->node_name.'.create')

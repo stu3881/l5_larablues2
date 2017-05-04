@@ -167,7 +167,7 @@ class ProgrammerUtilitiesController extends MiscThingsController
      * @return \Illuminate\Http\Response
      */
     public function mainMenu(REQUEST $request,$id,$reportDefinitionKey) {
-       $this->debug_exit(__FILE__,__LINE__,0);echo(' mainMenu');
+       $this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
        //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
        $record_type                    = "report_definition";
        $linkx = "xx";
@@ -180,15 +180,42 @@ class ProgrammerUtilitiesController extends MiscThingsController
         }
 
     public function mainMenu_active_inactive($id,$reportDefinitionKey) {
-       
+       //$this->debug_exit(__FILE__,__LINE__,1);echo('mainMenu_active_inactive');
  
-       $db_result = DB::connection($this->db_data_connection)->select('SHOW TABLES');
-        foreach($db_result as $table)
+       $db_result1 = DB::connection($this->db_snippet_connection)
+       ->select('SHOW TABLES');
+       //var_dump( $db_result1);
+        foreach($db_result1 as $table)
         {
-              //var_dump( $table);
-              echo($table->Tables_in_homestead."<br>");
+           //echo($table->Tables_in_homestead."<br>");
         }
-     
+        $db_result2 = DB::connection($this->db_snippet_connection)
+        ->table($this->model_table)
+        ->where('record_type','=','table_controller')
+        ->where('table_reporting_active','=',1)
+        //->get(['node_name AS Tables_in_homestead'])
+        ->get(['model_table'])
+        ->toArray()
+        ;
+        var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
+        var_dump($db_result2);$this->debug_exit(__FILE__,__LINE__,0);
+
+         $diff = array_udiff($db_result1, $db_result2,
+         function ($obj_a, $obj_b) {
+            //echo('diff a'.'<br>');$this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($obj_a);
+            //echo('diff b'.'<br>');$this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($obj_b);
+
+            //return $obj_a != $obj_b;
+            //return $obj_a - $obj_b;
+ 
+            // causes non-numeric value
+            return $obj_a->Tables_in_homestead - $obj_b->model_table;
+            //return $obj_b->model_table;
+          }
+        );
+        var_dump($diff);$this->debug_exit(__FILE__,__LINE__,1);
     }
 
     public function mainMenu_build_links() {

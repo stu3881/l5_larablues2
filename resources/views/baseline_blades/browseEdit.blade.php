@@ -17,8 +17,8 @@
 		BrowseEdit Defined Reports
 
 <?php
-	//var_dump($all_records[0]);
-	//exit("edit1.blade 17 ");
+	//var_dump($miscThings[0]);
+	//exit("browseEdit.blade 17 ");
 	$what_we_are_doing = 'what_we_are_doing';
 	$coming_from = 'edit1';
 

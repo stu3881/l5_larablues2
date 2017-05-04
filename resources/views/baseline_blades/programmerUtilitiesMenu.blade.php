@@ -12,8 +12,8 @@ var_dump($queryx[1]);exit("exit 4");
 
 print_r(Input::all());//exit("xit index")
 */
-var_dump($menu_array);
-echo("this is an echo/exit in programmerUtilitiesMenu in baseline_blades");
+//var_dump($menu_array);
+//echo("this is an echo/exit in programmerUtilitiesMenu in baseline_blades");
 
 
 if (isset($menu_array)){
@@ -34,7 +34,7 @@ else{
 <section id="promo">     
 	<div id="promo-details-identity"> 
 
-	programmersUtilitiesMenu
+	programmersUtilitiesMenu x
 
  	</div> 
  		<div id="promo-details"> 

@@ -110,3 +110,11 @@
 {{ Form::text('bypassed_field_name',$record['bypassed_field_name']) }}
 </td>
 </tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("table_reporting_active","table_reporting_active") }}
+</td>
+<td style='text-align:left'>
+{{ Form::select('table_reporting_active',$lookups['table_reporting_active'] , $data_array_name['table_reporting_active']) }}
+</td>
+</tr>

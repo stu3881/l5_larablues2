@@ -210,7 +210,7 @@ class MainController extends DEHBaseController {
 
 
     public function getIndex() {
-        $this->debug_exit(__FILE__,__LINE__);
+        //$this->debug_exit(__FILE__,__LINE__);
         $this->middleware('auth');
         $field_name = "record_type";
         $field      = "node_name";
