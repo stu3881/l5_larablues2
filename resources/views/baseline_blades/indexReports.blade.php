@@ -93,7 +93,7 @@ $rowcount = -1;
 				<tr class="table_no_lines">
 				<td>	
 			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-				   		'report_definition_key'=>$report_definition_key)
+				   		'report_definition_key'=>99999999)
 				   		) }}" class="btn mycart-btn-row2">
 						Initialize_New_Report
 				 	</a>

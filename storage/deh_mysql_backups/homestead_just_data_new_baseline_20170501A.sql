@@ -18,7 +18,7 @@
 --
 -- Dumping data for table `administrators`
 --
-
+use 'homestead';
 LOCK TABLES `administrators` WRITE;
 /*!40000 ALTER TABLE `administrators` DISABLE KEYS */;
 INSERT INTO `administrators` VALUES (2,'volunteerCoordinator','','user','2011-02-25','0000-00-00','','sbblues_main','blobs','image'),(3,'deh','','user','2011-02-25','0000-00-00','','sbblues_main','blobs','image'),(5,'deh1','','user','2011-02-25','0000-00-00','','sbblues_main','blobs','image'),(6,'sdmdsb','','user','2011-02-25','0000-00-00','','sbblues_main','blobs','image'),(7,'guineaPig','','user','2011-02-25','0000-00-00','','sbblues_main','blobs','image'),(8,'','reviews','directory_node','2011-02-25','0000-00-00','reviews','sbblues_main','blobs','image'),(9,'','volunteers','directory_node','2011-02-25','0000-00-00','volunteers','sbblues_main','blobs','image');

@@ -535,11 +535,11 @@ class MiscThingsController extends DEHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)
                             ->insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)
                             ->where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -576,12 +576,46 @@ class MiscThingsController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
     public function create_w_report_id($report_definition_key) {
-        echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
-        $report_definition  = $this->execute_query_by_report_no($report_definition_key) ;
-        var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,0);
-        $encoded_business_rules = $report_definition[0]['business_rules'];
-$this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
- $this->debug_exit(__FILE__,__LINE__,0);       //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
+        //echo("<br>". $report_definition_key);$this->debug_exit(__FILE__,__LINE__,0);
+        //$price = DB::table('orders')->max('price');
+
+        $array1 = array(
+            'report_name'   => "temporary_name",
+            'record_type'   => "report_definition",
+            'table_name'    => $this->snippet_table, 
+            'node_name'     => $this->node_name
+            );
+       
+        $report_definitions  = $this->execute_query_by_report_no($report_definition_key);
+        $a1 = array();
+        $a1_json = json_encode($a1);
+        $no_data = 1;
+        if($report_definitions){
+           foreach ($report_definitions as $report_definition) {
+                $no_data = 0;
+                echo('ok'.$report_definition->report_name."<br>");
+            }
+        if ($no_data){
+            $this->debug_exit(__FILE__,__LINE__,0);
+            $updatex  = DB::connection($this->db_snippet_connection)
+            ->table($this->snippet_table)
+            ->insert($array1);
+            // ****************
+            $report_definition_key  = DB::connection($this->db_snippet_connection)
+            ->table($this->snippet_table)
+            ->max('id');
+            $report_definition = $this->execute_query_by_report_no($report_definition_key);
+            echo('ok'.$report_definition_key."<br>");
+            //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
+            $encoded_business_rules = '{"record_type":"required"}';
+        $this->business_rules_array = (array) json_decode($encoded_business_rules
+        )  ; 
+        
+
+       //$this->debug_exit(__FILE__,__LINE__,1);
+ //       $encoded_business_rules = $report_definition[0]['business_rules'];
+  //      $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
+        //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_modifiable_fields_add';
         //$this->c1($report_definition_key);
          return view($this->node_name.'.create')
@@ -591,9 +625,9 @@ $this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (ar
             ->with('snippet_file'           , $snippet_file)
             ->with('node_name'              , $this->node_name);
     }
+}
 
-
-
+}
     /**
      * Show the form for creating a new resource.
      *
@@ -605,19 +639,18 @@ $this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (ar
         //$this->debug_exit(__FILE__,__LINE__,10);  
  
         //echo("<br>".$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
-        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
-        //$snippet_file = $this->node_name."/".$this->generated_files_folder.
-        "/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
+        //$snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
+        $snippet_file = $this->node_name."/".$this->generated_files_folder."/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
 
         //echo("<br>".$snippet_file.$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
        //$snippet_file= "../".'baseline_blades/'.'report_name_only';
 
         //$snippet_file= "../".'baseline_blades/'.'report_name_only';
          return view($this->node_name.'.create')
-        //->with('message'                        , $message)
-        ->with('snippet_file'                   , $snippet_file)
+        //->with('message'                , $message)
+        ->with('snippet_file'           , $snippet_file)
         ->with('report_definition_key'  , $this->report_definition_id)
-        ->with('node_name'                        , $this->node_name);
+        ->with('node_name'              , $this->node_name);
 
     }
 
@@ -867,6 +900,19 @@ $this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (ar
                 case "edit2_default_edit":
                 case "edit2new":
                    $db_result  = MiscThing::where('id','=',$id)->get();
+                   
+                   var_dump($db_result);
+                   foreach ($db_result->items as $name=> $value) {
+                        $array1[$value] = $db_result[0]->$value;
+                    }
+
+                   //var_dump($db_result->items[0]);
+                   $this->debug_exit(__FILE__,__LINE__,1);
+                   $array1 = array();
+                   if (is_null($modifiable_fields_array)){
+                        return $array1;
+                    }
+
                    if($db_result){
                     //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
                     foreach ($modifiable_fields_array as $name=> $value) {
@@ -1115,7 +1161,7 @@ $this->debug_exit(__FILE__,__LINE__,0);        $this->business_rules_array = (ar
         $validation_array = $this->business_rules_array;
         $requestFieldsArray=$request->all(); // important!!
         $this->validate($request,$validation_array);
-        //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
+        //$updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
 
         $miscThing=$request->all(); // important!!
         MiscThing::create($miscThing);
