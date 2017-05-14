@@ -1,6 +1,10 @@
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->id) }}
+{{ Form::label('', $record->node_name) }}
+</td>
+
+<td class='text_align_left select_pink' >
+{{ Form::label('', $record->record_type) }}
 </td>
 
 <td class='text_align_left select_pink' >
@@ -8,5 +12,9 @@
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->business_rules) }}
+{{ Form::label('', $record->table_name) }}
+</td>
+
+<td class='text_align_left select_pink' >
+{{ Form::label('', $record->model) }}
 </td>

@@ -1181,20 +1181,6 @@ class ProgrammerUtilitiesController extends MiscThingsController
 
 
 
-    public function store_w_rules_array(REQUEST $request, $encoded_business_rules) {
-        echo('store');
-        $this->debug_exit(__FILE__,__LINE__,10);
-        //$request->input('data_key');
-                    var_dump($request->input::all()); $this->debug_exit(__FILE__,__LINE__,10);
-        $validation_array = $this->business_rules_array;
-        $requestFieldsArray=$request->all(); // important!!
-        $this->validate($request,$validation_array);
-        //$updatex  = DB::connection($this->db_data_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
-
-        $miscThing=$request->all(); // important!!
-        MiscThing::create($miscThing);
-        return redirect('admin/miscThings');
-    }
 
 
 

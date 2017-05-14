@@ -50,15 +50,18 @@
 		'method' => 'PUT',
 		'route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) !!}
 		@if($what_we_are_doing == "ppv_define_query")	
+			{{ Form::hidden('what_we_are_doing'	, "ppv_define_query") }}
 			{{ Form::hidden('query_field_name_array', "") }}
 			{{ Form::hidden('query_r_o_array'		, "") }}
 			{{ Form::hidden('query_value_array'		, "") }}
 		@endif						
 		@if($what_we_are_doing == "ppv_define_business_rules")	
+			{{ Form::hidden('what_we_are_doing'	, "ppv_define_business_rules") }}
 			{{ Form::hidden('business_rules_field_name_array'	, "") }}
 			{{ Form::hidden('business_rules_r_o_array'			, "") }}
 			{{ Form::hidden('business_rules_value_array'		, "") }}
 			{{ Form::hidden('business_rules'					, "") }}
+			{{ Form::hidden('just_the_names_array', $just_the_names_array) }}
 		@endif						
 
 

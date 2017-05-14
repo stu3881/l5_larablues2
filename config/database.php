@@ -89,7 +89,7 @@ return array(
 		'homestead'	=> array(
 			'driver' 	=> 'mysql', 
 			'host' 		=> '127.0.0.1', 
-			'database' 	=> 'blues_main', 
+			'database' 	=> 'homestead', 
 			'username' 	=> 'homestead', 
 			'charset'	=> 'utf8', 
 			'collation' => 'utf8_unicode_ci', 

@@ -303,8 +303,8 @@ class DEHBaseController extends Controller
         $dash_gt = " ->";
         //$dash_gt = " query->where";
         //$query = MiscThing::
-        $query = DB::connection($this->db_data_connection)->table($this->model_table);
-        echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
+        $query = DB::connection($this->db_snippet_connection)->table($this->model_table);
+        echo 'DB::connection( '.$this->db_snippet_connection.')->table( '.$this->model_table.') ';
         $executing_distinct = 0;
         foreach ($field_name_array as $index=>$field_name) {
             $value = $field_name;

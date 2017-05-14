@@ -576,3 +576,39 @@ drop dataabase homestead;
 create dataabase homestead;
 
 exit;
+
+//* all databases everything
+//* ***********************
+mysqldump -u homestead -psecret --all-databases > ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_with_defs_20170506.sql;
+
+mysqldump -u homestead -psecret --all-databases --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/all_databases_just_data_20170506.sql;
+//* all databases just data
+//* ***********************
+
+update miscThings set report_name = "1450report" where id=1450
+{"table_name":"required","node_name":"required","value":"required","name":"required"}
+
+update miscThings set business_rules =
+'{"table_name":"required","node_name":"required","value":"required","name":"required"}' where id=12450
+
+update miscThings set business_rules =
+"xyz" 
+table_name= 'miscThings', node_name='miscThings'
+where id=12450
+
+        ->where('table_name',  '='    ,$this->model_table)
+        ->where('node_name',    '='    ,$this->node_name)
+
+        update miscThings set
+        table = "miscThings",
+        model = "MiscThing",
+        record_type  = "report_definition",
+ update miscThings set business_rules =
+'{"table_name":"required","node_name":"required","value":"required","name":"required"}' where id=12450
+
+update miscThings set table_name = "miscThings",model = "MiscThing",
+report_name = "___12450",
+node_name = "miscThings",
+record_type  = "report_definition"
+where id=12450;
+

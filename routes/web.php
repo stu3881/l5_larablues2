@@ -19,36 +19,21 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     })->middleware('guest');
 
-
          Route::auth();
 
     //Route::controller('users','UsersController');
 
-    // This one gets you started!!
     Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
+    // This one gets you started!!
 
 
    // main begin_generated_node
     $node_name = 'main';
     $controller_name = 'MainController';
-    Route::get('admin/'.$node_name.'/edit6'     ,$controller_name.'@getEdit6');
-    Route::get('admin/'.$node_name.'/programmerUtilities'      ,$controller_name.'@programmerUtilities');
-/*    Route::controller('admin/main','MainController');
-    Route::controller($node_name                ,$controller_name);
-    Route::controller('admin/'.$node_name       ,$controller_name);
-    Route::get('admin/'.$node_name.'/add'       ,$controller_name.'@getAdd');
-    Route::get('admin/'.$node_name.'/edit'      ,$controller_name.'@getEdit');
-    Route::put('admin/'.$node_name.'/edit1'     ,$controller_name.'@putEdit1');
-    Route::get('admin/'.$node_name.'/edit2'     ,$controller_name.'@getEdit2');
-    Route::put('admin/'.$node_name.'/edit2new'  ,$controller_name.'@putEdit2new');
-    Route::put('admin/'.$node_name.'/edit3'     ,$controller_name.'@putEdit3');
-    Route::put('admin/'.$node_name.'/edit4'     ,$controller_name.'@putEdit4');
-    Route::put('admin/'.$node_name.'/edit41'    ,$controller_name.'@putEdit41');
-    Route::put('admin/'.$node_name.'/edit5'     ,$controller_name.'@putEdit5');
+    //Route::get('admin/'.$node_name.'/edit6'     ,$controller_name.'@getEdit6');
 
-    Route::get('admin/'.$node_name.'/edit8'     ,$controller_name.'@getEdit8');
-   // main end_generated_node
-*/
+    Route::get('admin/'.$node_name.'/programmerUtilities'      ,$controller_name.'@programmerUtilities');
+
 
 
 // ** this is what's now
@@ -74,10 +59,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource($node_name,$controller_name);
     });
 
-    @include('myweb_new_show.php');
-    @include('myweb_artists.php');
-    @include('myweb_volunteers.php');
-    @include('myweb_programmerUtilities.php');
+    //@include('myweb_new_show.php');
+    //@include('myweb_artists.php');
+    //@include('myweb_volunteers.php');
+    //@include('myweb_programmerUtilities.php');
      
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'miscThings';
@@ -91,18 +76,17 @@ Route::group(['middleware' => ['web']], function () {
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
-    $what_we_are_doing      = "what_we_are_doing";      // assigned elsewhere but needs to be defined here
-    $coming_from            = "coming_from";            // assigned elsewhere but needs to be defined here
-    $reportDefinitionKey    = "reportDefinitionKey";    // assigned elsewhere but needs to be defined here
-    $encoded_business_rules = "encoded_business_rules"; // assigned elsewhere but needs to be defined here
+    $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
+    $coming_from            = "coming_from";  // needs to be defined here
+    $reportDefinitionKey    = "reportDefinitionKey";// needs to be defined here
+    $encoded_business_rules = "encoded_business_rules"; // needs to be defined here
+    $modifiable_fields_array = 'modifiable_fields_array';
     //*
-    $method_name            = "store";
-    Route::POST('admin/'.$node_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-      //*
-    $method_name            = "store_w_rules_array";
+    $method_name            = "stor_w_rules_array";
     Route::POST('admin/'.$node_name
-         .'/{'.$encoded_business_rules.'}'
-        .'/'.$method_name, 
+        //.'/{'.$encoded_business_rules.'}'
+        //.'/{'.$modifiable_fields_array.'}'
+        .'/'.$method_name,
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
     //*
     $method_name            = "browseEdit";
@@ -124,10 +108,7 @@ Route::group(['middleware' => ['web']], function () {
      //*
     $method_name            = "indexRecords";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-     //*
-    $method_name            = "indexReportsx";
-    Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-     //*
+      //*
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
@@ -168,10 +149,6 @@ Route::POST($node_name
     .'/'.$method_name, 
     array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
-$method_name            = "store_w_report_id";
-Route::POST($node_name
-    .'/{'.$reportDefinitionKey.'}'    .'/'.$method_name, 
-    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
      //*
     $method_name            = "create_w_report_id";
