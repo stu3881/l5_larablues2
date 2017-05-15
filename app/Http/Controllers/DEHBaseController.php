@@ -556,6 +556,7 @@ class DEHBaseController extends Controller
 
         $field_ctr = -1;
         //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,10);
+        if (count($field_name_array)> 0){
         foreach($field_name_array as $index=>$fieldx) {
             $field_ctr ++;
             //echo"<br>name: ";print_r($fieldx);
@@ -591,7 +592,8 @@ class DEHBaseController extends Controller
             }
             $strx .= "</tr>".$crlf;
             //$strx .= $crlf;
-        }
+        } // end foreach
+    } // end array has entries
         return $strx;
     } 
 	

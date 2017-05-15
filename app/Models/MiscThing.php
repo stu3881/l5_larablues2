@@ -99,6 +99,7 @@ class MiscThing extends Model
 			'key_field_name'
 			];
 
-
+ protected $connection = 'homestead';
+  //protected $connection = $this->db_snippet_connection;
 }
 

@@ -66,6 +66,7 @@
 
 	
 		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$passed_to_view_array['id']]]) !!}
+		{{ Form::hidden('encoded_business_rules',$encoded_business_rules) }}
 
 		{{ Form::hidden('id'							,$passed_to_view_array['id']) }}
 		{{ Form::hidden('wxyz'							,$passed_to_view_array['wxyz']) }}
@@ -75,7 +76,7 @@
 		{{ Form::hidden('report_definition_key'				,$passed_to_view_array['report_definition_key']) }}
 		
 		
-		{{ Form::hidden('what_we_are_doing'					,'updating_data_record') }}
+		{{ Form::hidden('what_we_are_doing'					,'editUpdate') }}
 
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->

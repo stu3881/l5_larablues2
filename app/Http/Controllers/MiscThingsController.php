@@ -438,9 +438,8 @@ class MiscThingsController extends DEHBaseController
             //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
-         var_dump($working_arrays);
-        $this->debug_exit(__FILE__,__LINE__,10);
-           switch ($what_we_are_doing) { 
+            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
+            switch ($what_we_are_doing) { 
                 case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
@@ -462,6 +461,7 @@ class MiscThingsController extends DEHBaseController
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
+                        //var_dump($array1); $this->debug_exit(__FILE__,__LINE__,1);
                        //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
                         //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
                         $snippet_string = $this->snippet_gen_modifiable_fields(
@@ -503,7 +503,8 @@ class MiscThingsController extends DEHBaseController
                 // *****
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
-                       ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                       ->with('encoded_business_rules'   ,$report_definition[0]['business_rules']) 
+                      ->with('passed_to_view_array'   ,$passed_to_view_array);            
                         break;          
             case "edit2_default_update":
             //case "updating_data_record": // defined in editUpdate
@@ -852,11 +853,11 @@ class MiscThingsController extends DEHBaseController
     }
 
     public function return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array) {
-        var_dump($what_we_are_doing);//$this->debug_exit(__FILE__,__LINE__,1);
-                   //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
+        //var_dump($what_we_are_doing);//$this->debug_exit(__FILE__,__LINE__,1);
+        //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
 
-                $array1 = array();
-        if (is_null($modifiable_fields_array)){
+        $array1 = array();
+        if (is_null($modifiable_fields_array)){ echo "858";
             return $array1;
         }
          switch ($what_we_are_doing) { 
@@ -872,15 +873,18 @@ class MiscThingsController extends DEHBaseController
                 case "editing_a_data_record":
                 case "edit2_default_edit":
                 case "edit2new":
-                   $db_result  = MiscThing::where('id','=',$id)->get();
-                   
-                   //var_dump($db_result);
+                    $db_result  = MiscThing::where('id','=',$id)->get();
+                    $working_arrays = $this->working_arrays_construct($db_result[0]);
+                    $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
+
+                   //var_dump($working_arrays);echo(__FILE__.__LINE__);exit();
+                    /*
                    foreach ($db_result as $name=> $value) {
                         $array1[$value] = $db_result->$value;
                     }
-
+                    */
                    //var_dump($db_result->items[0]);
-                   $this->debug_exit(__FILE__,__LINE__,1);
+                   //$this->debug_exit(__FILE__,__LINE__,1);
                    $array1 = array();
                    if (is_null($modifiable_fields_array)){
                         return $array1;
@@ -1203,10 +1207,21 @@ class MiscThingsController extends DEHBaseController
         if (!array_key_exists('what_we_are_doing',$requestFieldsArray)) {
            $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
          }
-        //$update = 0;  
+        $update = 0;  
         
-        //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($requestFieldsArray['encoded_modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,10);
         switch ($requestFieldsArray['what_we_are_doing']) {
+            
+           case "editUpdate":
+                $update = 1;
+                // this is the guy that needs validation
+                $just_the_ones_we_want = array_flip((array) json_decode($requestFieldsArray['encoded_modifiable_fields_array']));
+                
+                //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+                 break; 
+             case "updating_report_definition":
+                break; 
             case "updating_report_name":
                $update = 1; 
                $requestFieldsArray['just_the_names_array'] = array('report_name');
@@ -1269,6 +1284,7 @@ class MiscThingsController extends DEHBaseController
                     $request->r_o_array,
                     $request->value_array);
                 $business_rules = $requestFieldsArray['business_rules'];
+                $request->business_rules = json_encode($requestFieldsArray['business_rules']);
                 $requestFieldsArray['business_rules'] = 
                     json_encode($requestFieldsArray['business_rules']);
                 $requestFieldsArray['business_rules_field_name_array']    = 
@@ -1289,18 +1305,42 @@ class MiscThingsController extends DEHBaseController
         // ******
        // update
        // ******
-        if ($update){   
-            $requestFieldsArray = array_intersect_key($requestFieldsArray,$just_the_ones_we_want);
-            $requestFieldsArray['id']    = $id;
-
-            //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+        if ($update){  
+            $requestFieldsArray = array_intersect_key($requestFieldsArray,
+            $just_the_ones_we_want);
+            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+            //$validation_array = json_decode($encoded_business_rules);
+            switch ($request->what_we_are_doing) {
+             case "editUpdate":
+                // this is the guy that needs validation
+                $rules_array =  (array) json_decode($request->encoded_business_rules);
+                //var_dump($rules_array);
+                //$this->debug_exit(__FILE__,__LINE__,10);
+                $this->validate($request,$rules_array);
+                //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+                break; 
+            }
+            
+            //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
 
             //var_dump($requestFieldsArray);
+
+        
+            $updatex = MiscThing::where($this->key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+
+
+/*
+
+
              $updatex  = DB::connection($this->db_snippet_connection)
+
             ->table($this->model_table)
             ->where($this->key_field_name,  '=', $id)
             ->update($requestFieldsArray);
-
+                    return redirect('admin/miscThings')
+                       ->with('message'      , 'ok ');
+*/
         }
         if (!$update) {
 
