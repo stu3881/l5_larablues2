@@ -567,9 +567,9 @@ exit;
 
 //* homestead database only
 //* ***********************
- mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_no_migrations_20170501.sql;
-mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_no_migrations_20170501.sql;
- mysql -u homestead -psecret < ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_no_migrations_20170501.sql;
+ mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170515.sql;
+mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20170515.sql;
+ mysql -u homestead -psecret < ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20170515.sql;
 
 mysql -u homestead -psecret
 drop dataabase homestead;

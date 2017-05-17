@@ -1329,6 +1329,12 @@ class MiscThingsController extends DEHBaseController
             $updatex = MiscThing::where($this->key_field_name,  '=', $id)
             ->update($requestFieldsArray);
 
+            return redirect()->route('miscThings.reportDefMenuEdit', 
+                ['id' => $id,
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'edit1'
+                ]);
+return back()->withInput();
 
 /*
 

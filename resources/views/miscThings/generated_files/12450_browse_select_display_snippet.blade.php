@@ -1,10 +1,10 @@
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->updated_at) }}
+{{ Form::label('', $record->model) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->id) }}
+{{ Form::label('', $record->report_name) }}
 </td>
 
 <td class='text_align_left select_pink' >
@@ -12,5 +12,9 @@
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->report_name) }}
+{{ Form::label('', $record->node_name) }}
+</td>
+
+<td class='text_align_left select_pink' >
+{{ Form::label('', $record->table_name) }}
 </td>

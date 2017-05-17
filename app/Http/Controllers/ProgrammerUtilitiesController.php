@@ -183,23 +183,36 @@ class ProgrammerUtilitiesController extends MiscThingsController
        //$this->debug_exit(__FILE__,__LINE__,1);echo('mainMenu_active_inactive');
  
        $db_result1 = DB::connection($this->db_snippet_connection)
-       ->select('SHOW TABLES');
-       //var_dump( $db_result1);
+       ->select('SHOW TABLES')
+       //->toArray()
+       ;
+       var_dump( $db_result1);
         foreach($db_result1 as $table)
         {
-           //echo($table->Tables_in_homestead."<br>");
+           echo($table->Tables_in_homestead."<br>");
         }
-        $db_result2 = DB::connection($this->db_snippet_connection)
+        $db_result2 = MiscThing::
+            //where('table_reporting_active','=',1)
+            //where('record_type','=','report_definition')
+           where('record_type','=','table_controller')
+           ->get(['node_name'])
+           ->toArray()
+            ;
+        //var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
+        var_dump($db_result2);$this->debug_exit(__FILE__,__LINE__,10);
+ /*
+       $db_result2 = DB::connection($this->db_snippet_connection)
         ->table($this->model_table)
-        ->where('record_type','=','table_controller')
+        //->where('record_type','=','table_controller')
         ->where('table_reporting_active','=',1)
+        //->get()
         //->get(['node_name AS Tables_in_homestead'])
-        ->get(['model_table'])
+        ->get(['model','table_name'])
         ->toArray()
         ;
-        var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
-        var_dump($db_result2);$this->debug_exit(__FILE__,__LINE__,0);
-
+        //var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
+        var_dump($db_result2[0]->table_name);$this->debug_exit(__FILE__,__LINE__,0);
+*/
          $diff = array_udiff($db_result1, $db_result2,
          function ($obj_a, $obj_b) {
             //echo('diff a'.'<br>');$this->debug_exit(__FILE__,__LINE__,0);
@@ -211,7 +224,7 @@ class ProgrammerUtilitiesController extends MiscThingsController
             //return $obj_a - $obj_b;
  
             // causes non-numeric value
-            return $obj_a->Tables_in_homestead - $obj_b->model_table;
+            //return $obj_a->Tables_in_homestead - $obj_b->model_table;
             //return $obj_b->model_table;
           }
         );

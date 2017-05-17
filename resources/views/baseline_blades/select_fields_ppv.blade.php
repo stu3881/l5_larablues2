@@ -4,7 +4,7 @@
 
 <section id="promo">     
 	<div id="promo-details"> 
-		{{ HTML::image('img/72ferrari246.jpg', '72 ferrari dino',array('height'=>'172px'))}} 
+		{{-- HTML::image('img/72ferrari246.jpg', '72 ferrari dino',array('height'=>'172px'))--}} 
 		</div> <!-- end promo-details -->
 </section><!-- promo -->
 @stop

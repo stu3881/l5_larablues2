@@ -59,10 +59,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::resource($node_name,$controller_name);
     });
 
-    //@include('myweb_new_show.php');
-    //@include('myweb_artists.php');
-    //@include('myweb_volunteers.php');
-    //@include('myweb_programmerUtilities.php');
+    @include('myweb_new_show.php');
+    @include('myweb_artists.php');
+    @include('myweb_volunteers.php');
+    @include('myweb_programmerUtilities.php');
      
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'miscThings';
