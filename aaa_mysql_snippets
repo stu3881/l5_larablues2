@@ -612,3 +612,12 @@ node_name = "miscThings",
 record_type  = "report_definition"
 where id=12450;
 
+
+mysql -u homestead -psecret < ~/Code/l5_larablues2/storage/deh_mysql_backups/
+
+homestead_with_defs_new_baseline_20170501A.sql
+
+mysql -u homestead -psecret < ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_new_baseline_20170501A.sql
+
+
+       echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);

@@ -182,60 +182,61 @@ class ProgrammerUtilitiesController extends MiscThingsController
     public function mainMenu_active_inactive($id,$reportDefinitionKey) {
        //$this->debug_exit(__FILE__,__LINE__,1);echo('mainMenu_active_inactive');
  
-       $db_result1 = DB::connection($this->db_snippet_connection)
-       ->select('SHOW TABLES')
-       //->toArray()
-       ;
-       var_dump( $db_result1);
+
+        $arr2 = array(); 
+        $db_result2 = MiscThing::
+           where('record_type','=','table_controller')
+           ->get(['node_name']);        
+            foreach ($db_result2 as $db_result) {
+                $arr2[$db_result->node_name]=$db_result->node_name;
+            }
+        //var_dump($arr2);//$this->debug_exit(__FILE__,__LINE__,0);
+
+       $arr1 = array();
+       $db_result1 = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        //$db_result1 = DB::connection($this->db_snippet_connection)->select('SHOW TABLES');
         foreach($db_result1 as $table)
         {
-           echo($table->Tables_in_homestead."<br>");
-        }
-        $db_result2 = MiscThing::
-            //where('table_reporting_active','=',1)
-            //where('record_type','=','report_definition')
-           where('record_type','=','table_controller')
-           ->get(['node_name'])
-           ->toArray()
-            ;
-        //var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
-        var_dump($db_result2);$this->debug_exit(__FILE__,__LINE__,10);
- /*
-       $db_result2 = DB::connection($this->db_snippet_connection)
-        ->table($this->model_table)
-        //->where('record_type','=','table_controller')
-        ->where('table_reporting_active','=',1)
-        //->get()
-        //->get(['node_name AS Tables_in_homestead'])
-        ->get(['model','table_name'])
-        ->toArray()
-        ;
-        //var_dump($db_result1);$this->debug_exit(__FILE__,__LINE__,0);
-        var_dump($db_result2[0]->table_name);$this->debug_exit(__FILE__,__LINE__,0);
-*/
-         $diff = array_udiff($db_result1, $db_result2,
-         function ($obj_a, $obj_b) {
-            //echo('diff a'.'<br>');$this->debug_exit(__FILE__,__LINE__,0);
-            //var_dump($obj_a);
-            //echo('diff b'.'<br>');$this->debug_exit(__FILE__,__LINE__,0);
-            //var_dump($obj_b);
+            //var_dump($table);//$this->debug_exit(__FILE__,__LINE__,0);
+            //$arr1['table'][] = ($table);
+            if (in_array($table,$arr2)){
+                //echo('de');
+                $arr1[$table]['aord'][] = 'deactivate';
+            }else {
+                //echo('ad');
+                $arr1[$table]['aord'][] = 'activate';
+            }
+         }
+         $myStrings = array(
+            'tdBegin'   =>"<td class='text_align_left select_pink' >",
+            'tdEnd'     =>"</td>",
+            'linkBegin' =>"<a href=\"{{ URL::route('miscThings'.'.create_w_report_id', $".
+            "parameters = array('report_definition_key'=>'report_definition_key')
+                        ) }}\" class=\"btn mycart-btn-row2\">",
+            'linkEnd'     =>"</a>"
+           );
 
-            //return $obj_a != $obj_b;
-            //return $obj_a - $obj_b;
- 
-            // causes non-numeric value
-            //return $obj_a->Tables_in_homestead - $obj_b->model_table;
-            //return $obj_b->model_table;
-          }
-        );
-        var_dump($diff);$this->debug_exit(__FILE__,__LINE__,1);
+
+
+        //var_dump($arr1); $this->debug_exit(__FILE__,__LINE__,10); 
+         return view($this->node_name.'.mainlineActivateReporting')
+         ->with('arr1'           ,$arr1)
+         ->with('myStrings'      ,$myStrings)             
+         ;
+
+
+      
+       
     }
 
     public function mainMenu_build_links() {
+        echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);
         $main_menu_array = array(
-        'activate/deactivate table reporting'=>'mainMenu_active_inactive',
-        'another one'=>'mainMenu_active_inactive',
-        'and another one'=>'mainMenu_active_inactive'
+            'configure_an_unconfigured_table'   =>'mainMenu_active_inactive',
+            'activate/deactivate table reporting'   =>'mainMenu_active_inactive',
+            'gen_tbl_controller_snippet'            =>'mainMenu_active_inactive',
+            'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
+            'gen_tbl_routes_snippet'                =>'mainMenu_active_inactive'
 
 
         );
@@ -725,6 +726,65 @@ class ProgrammerUtilitiesController extends MiscThingsController
             $this->debug_exit(__FILE__,__LINE__,1);
         }
     }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function gen_tbl_controller_snippet($report_no) {
+      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
+      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
+        ->get();
+        if ($response){
+           return $response;
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function gen_tbl_model_snippet($report_no) {
+      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
+      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
+        ->get();
+        if ($response){
+           return $response;
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+    }
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function gen_tbl_route_snippet($report_no) {
+      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
+      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
+        ->get();
+        if ($response){
+           return $response;
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+    }
+
 
 
     public function bld_name_value_lookup_array($table_name) {
