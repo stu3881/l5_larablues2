@@ -16,26 +16,10 @@
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("db_database","db_database") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('db_database',$record['db_database']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
 {{ Form::label("db_connection_name","db_connection_name") }}
 </td>
 <td style="text-align:left">
 {{ Form::text('db_connection_name',$record['db_connection_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("no_of_blank_entries","no_of_blank_entries") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('no_of_blank_entries',$record['no_of_blank_entries']) }}
 </td>
 </tr>
 <tr>
@@ -80,41 +64,9 @@
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("backup_node","backup_node") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('backup_node',$record['backup_node']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("generated_files_folder","generated_files_folder") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('generated_files_folder',$record['generated_files_folder']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
 {{ Form::label("key_field_name","key_field_name") }}
 </td>
 <td style="text-align:left">
 {{ Form::text('key_field_name',$record['key_field_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("bypassed_field_name","bypassed_field_name") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('bypassed_field_name',$record['bypassed_field_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("table_reporting_active","table_reporting_active") }}
-</td>
-<td style='text-align:left'>
-{{ Form::select('table_reporting_active',$lookups['table_reporting_active'] , $data_array_name['table_reporting_active']) }}
 </td>
 </tr>

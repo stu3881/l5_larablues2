@@ -166,18 +166,17 @@ $rowcount = -1;
 
 
 					<td >
-						{{ Form::open(array('url'=>'admin/'.$node_name.'/edit', 'method'=>'GET')) }}
-						{{ Form::hidden('key_field_name'			,$key_field_name) }}
-						
-						{{ Form::hidden('model_table'				,$model_table) }}
-						{{ Form::hidden('record_table_name'			,$record_table_name) }}
-						{{ Form::hidden('node_name'					,$node_name) }}
-						
-						{{ Form::hidden('report_key'				,$report_key) }}
-						
-						
-						{{ Form::submit('klone_edit') }}
-						{{ Form::close() }}
+		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
+		  		        array(
+		  		        'id'=>$record->id,
+		  		        'what_we_are_doing'=>'klone',
+		  		        'coming_from'=> 'browseEdit',
+		  		        'report_definition_key'=>$report_key)
+		  		        ) }}" class="btn mycart-btn-row2">
+		  		        
+		  		        klone
+
+		  		        </a>
 						</td>
 					<td >
 						{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'POST')) }}

@@ -58,20 +58,13 @@ else{
 		<ul>
 		
 	   	@foreach($queryx as $query)
-	   		<?php	
-	   		//var_dump($queryx);exit("indexmain 62"); 
-			//echo($query);exit("indexmain 62"); 
-	   		?>
-
-	   		
-	  
-			   	<li>
-			   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id,
-			   			'reportDefinitionKey'=>$report_definition_key
-			   			)
-			   		) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
-			
-			   	</li>
+	   		<li>
+		   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id,
+		   			'reportDefinitionKey'=>$report_definition_key
+		   			)
+		   		) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
+		
+		   	</li>
 		
 
 

@@ -378,6 +378,7 @@ class MiscThingsController extends DEHBaseController
         sort($columns);
         $columns = array_combine($columns, $columns);
         return $columns;
+       echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);//exit('exit');
 
     }
 
@@ -426,21 +427,25 @@ class MiscThingsController extends DEHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
-            ' what_we_are_doing: '. $what_we_are_doing.
-            ", id: ".$id.
-            ', coming_from: '.$coming_from.
-            ', report_definition_key: '.$report_definition_key);
-        //$this->debug_exit(__FILE__,__LINE__,10);
+
+        //echo("<br>".
+        //    ' what_we_are_doing: '. $what_we_are_doing.
+        //    ", id: ".$id.
+        //    ', coming_from: '.$coming_from.
+        //    ', report_definition_key: '.$report_definition_key);
+        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);//exit('exit');
         //var_dump($request);
         //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
             //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
-            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
+           
+            //$this->debug_exit(__FILE__,__LINE__,10);
             switch ($what_we_are_doing) { 
-                case "edit2_default_add":
+                case "klone":
+                    break;
+               case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
                 case "editing_a_data_record":
@@ -450,20 +455,17 @@ class MiscThingsController extends DEHBaseController
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
 
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
-                    //var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
-
+ 
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
-                    $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
-                    //var_dump($report_definition_key); $this->debug_exit(__FILE__,__LINE__,1);
-
+                   $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
+ 
                     $MiscThing  = MiscThing::where('id','=',$id)->get();
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                        //var_dump($array1); $this->debug_exit(__FILE__,__LINE__,1);
-                       //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
+                        
+                       $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
+                        
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -501,6 +503,7 @@ class MiscThingsController extends DEHBaseController
                 // *****
                 // return to view
                 // *****
+                        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
                        ->with('encoded_business_rules'   ,$report_definition[0]['business_rules']) 
@@ -513,7 +516,7 @@ class MiscThingsController extends DEHBaseController
                 $requestFieldsArray=$request->all(); // important!!
 
                 //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
-                var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
+                //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
 
                 //$validator = Validator::make(Input::all(), $business_rules_array); //update
                 if ( $validator->fails() ) {
@@ -556,11 +559,11 @@ class MiscThingsController extends DEHBaseController
                 ->with('message', 'validation has been bypassed');
                 break;
 
-                    default:
-                        echo("<br>"."what we are doing is improperly assigned");
-                        $this->debug_exit(__FILE__,__LINE__,1);
-                        break;
-                }
+            default:
+                echo("<br>"."what we are doing is improperly assigned");
+                $this->debug_exit(__FILE__,__LINE__,1);
+                break;
+            }
         }   
     }
 
@@ -1386,12 +1389,15 @@ return back()->withInput();
     public function working_arrays_construct($record) {
         //echo("working_arrays_construct");
         // $working_arrays contains some handy grouping of data and arrays we need for various things
-        // we used to define working_arrays based on what we were doing
+       
         $working_arrays     = $this->working_arrays_define($record);
-        $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+
+         $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+          
         $column_names       = $this->build_column_names_array($this->model_table);
+        
         $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+          //return $working_arrays;
         $working_arrays     = $this->working_arrays_pad_rows_for_growth($working_arrays);
         //$this->working_arrays_fixer($record,$what_we_are_doing);
          return $working_arrays;
@@ -1578,8 +1584,9 @@ return back()->withInput();
         //echo('<br><br>'.'working_arrays_pad_rows_for_growth');$this->debug_exit(__FILE__,__LINE__,0);
         foreach ($working_arrays['groups_to_be_resized']as $array_group_to_be_padded){
             $pad_ctr = $this->working_arrays_set_pad_ctr($working_arrays,$array_group_to_be_padded);
-            //$this->debug_exit(__FILE__,__LINE__,10);
+            
             $working_arrays = $this->working_arrays_pad_specific_group($working_arrays,$array_group_to_be_padded,$pad_ctr);
+            //$this->debug_exit(__FILE__,__LINE__,10);
         }
        return $working_arrays;
     }
@@ -1636,7 +1643,7 @@ return back()->withInput();
     }
 
     public function working_arrays_pad_specific_group($working_arrays,$array_group_to_be_padded,$pad_ctr) {
-        echo($array_group_to_be_padded);
+        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);echo($array_group_to_be_padded);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10); 
         //var_dump($working_arrays[$array_group_to_be_padded]);$this->debug_exit(__FILE__,__LINE__,10); 
 

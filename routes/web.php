@@ -52,30 +52,44 @@ Route::group(['middleware' => ['web']], function () {
 
 
 
-     
+    
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'artist';
         $controller_name        = 'ArtistController';
         Route::resource($node_name,$controller_name);
     });
+   
+    //***********************
+    //generated_inserts_begin
 
-    @include('myweb_new_show.php');
-    @include('myweb_artists.php');
-    @include('myweb_volunteers.php');
-    @include('myweb_programmerUtilities.php');
-     
+    $node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   @include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'new_show';$model = 'new_show';$controller_name = 'New_showController';   @include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   @include('myweb.miscThingsRoutesModel.php');
+    
+    //generated_inserts_stop
+   //***********************
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'miscThings';
         $controller_name        = 'MiscThingsController';
         Route::resource($node_name,$controller_name);
     });
 
+    @include('myweb_programmerUtilities.php');
+
+    $node_name = 'miscThings';$model = 'miscThing';$controller_name = 'MiscThingsController';   @include('myweb.miscThingsRoutesModel.php');
+
+
     // *****
     // these are common to all the routes that follow for this controller
     // *****
+    /*
     $node_name              = 'miscThings';
     $model                  = 'miscThing';
     $controller_name        = 'MiscThingsController';
+
+
+
+
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here
     $reportDefinitionKey    = "reportDefinitionKey";// needs to be defined here
@@ -127,7 +141,7 @@ Route::group(['middleware' => ['web']], function () {
     $method_name            = "create_w_report_id";
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
+*/
 
 // *****
 // miscThingController NOT miscThings

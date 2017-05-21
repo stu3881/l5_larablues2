@@ -2,7 +2,7 @@
 @section('promo')
 
 <section id="promo">   
-	indexReports  
+	mainlineActivateReporting
 	<div id="promo-details"> 
 		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'160px'))}} 
 	</div> <!-- end promo-details -->
@@ -11,7 +11,7 @@
 
 
 @section('content')
-		Browse Select Defined Reports
+		Activate/Deactivate table reporting
 
 <?php
 	//var_dump($all_records);
@@ -135,20 +135,31 @@ $rowcount = -1;
 				<tr >
 				<td class='border_left'>
 					{{ Form::open(array('url'=>'admin/'.'node_name'.'/reportDefEdits', 'method'=>'GET')) }}
-					{{ Form::label('', '--') }} 
+					{{-- Form::label('', '--') --}} 
 				</td>
 
-					<?php echo($myStrings['tdBegin']);?>
+				<?php echo($myStrings['tdBegin']);?>
 					{{ $table }}
 				<?php echo($myStrings['tdEnd']);?>
 				
 				<?php echo($myStrings['tdBegin']);?>
 				<?php echo($myStrings['linkBegin']);?>
-				{{ $arr1[$table]['aord'][0] }}
+					{{ $arr1[$table]['aord'][0] }}
 				<?php echo($myStrings['linkEnd']);?>
 				<?php echo($myStrings['tdEnd']);?>
 				
-					
+				<?php echo($myStrings['tdBegin']);?>
+	  		        <a href=
+	  		        "{{-- URL::route($node_name.'.browseEdit', $parameters = 
+	  		        array(
+	  		        'id'=>$record->id, 
+	  		        'what_we_are_doing'=>$what_we_are_doing,
+	  		        'coming_from'=> $coming_from
+	  		        )) --}}" 
+	  		        class="btn btn-warning"> 
+	  		        browseEdit</a>
+				<?php echo($myStrings['tdEnd']);?>
+				
 
 			</tr>
 				

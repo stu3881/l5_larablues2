@@ -18,6 +18,15 @@
         .'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
     //*
+    $method_name            = "activateDeactivate";
+
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
     $method_name            = "browseEdit";
     Route::get('admin/'.$node_name
         .'/{'.$model.'}'
@@ -51,6 +60,9 @@
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
     //*
     $method_name            = "mainMenu_active_inactive";
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
+    $method_name            = "mainMenu_generate_routes_snippet";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $method_name            = "ppvEdit";
