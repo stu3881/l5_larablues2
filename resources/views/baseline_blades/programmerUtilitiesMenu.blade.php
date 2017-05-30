@@ -73,7 +73,9 @@ else{
 		   		
 				<li>
 			   		<a href="{{ URL::route('programmerUtilities.'.$method, $parameters = array('id'=>'query->id',
-			   			'reportDefinitionKey'=>'report_definition_key'
+			   			'reportDefinitionKey'=>'report_definition_key',
+			   			'what_are_we_doing'=>'what_are_we_doing',
+			   			'node'=>'node'
 			   			)
 			   		) }}" class="btn mycart-btn-row2">{{$name}}</a>
 			   	</li>

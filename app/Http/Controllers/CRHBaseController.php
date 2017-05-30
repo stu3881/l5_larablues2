@@ -16,7 +16,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class ProgrammerUtilitiesController extends CRHBaseController
+class CRHBaseController extends DEHBaseController
 {
         public function __construct(
      
@@ -29,12 +29,18 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $db_snippet_connection          = "",
         $db_data_connection             = "",
         //$db_snippet_connection          = "",
-        $controller_name                = "ProgrammerUtilitiesController", 
-        $no_of_blank_entries            = "5", 
-        $model                          = "MiscThing", 
-        $node_name                      = "programmerUtilities", 
+        // Automatically adjuested strings begin here    
+        //$controller_name                = "miscThingsController", 
+        //$model                          = "MiscThing", 
+        //$node_name                      = "miscThings", 
+        //$model_table                    = "miscThings", 
 
-        $model_table                    = "miscThings", 
+        $controller_name                = '#beginControllerName#endControllerName',
+        $model                          = '#beginModel#endModel',
+        $node_name                      = '#beginNodeName#endNodeName', 
+        $model_table                    = '#beginModelTable#endModelTable',
+
+        $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
@@ -102,11 +108,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $this->my_ctr = $my_ctr;
         //routes
 
-        // Automatically adjuested strings begin here  (dont change or remove line)  
-        //* everything between here (dont change or remove line) 
-
-
-        //* and here is generated automatically when file is created (dont change or remove line) 
         // these are derived
  
         $this->view_files_prefix                = $this->views_files_path;
@@ -122,12 +123,12 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->required_fields_array            = $this->generated_snippets_array['required_fields_array'];
         //echo $this->view_files_prefix ;exit ("exit in constructor");
 
-/*
+
         // THIS IS HOW WE CHANGE CONNECTIONS
  
 
         $MiscThing = new MiscThing;
-        $MiscThing->setConnection("blues_main");
+        $MiscThing->setConnection("homestead");
         $miscThings = MiscThing::where('record_type','=','table_controller')
             ->where('controller_name','='    ,"MiscThingsController")
             ->get();
@@ -138,8 +139,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //var_dump($miscThings[0]);  
 
        
-        $this->db_snippet_connection            = "blues_main";
-        $this->db_data_connection               = "blues_main";
+        $this->db_snippet_connection            = "homestead";
+        $this->db_data_connection               = "homestead";
         //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
        //$this->db_data_connection               = "gohoooa_stu3881_main";
         //above here work
@@ -156,744 +157,12 @@ class ProgrammerUtilitiesController extends CRHBaseController
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
         $this->report_definition_id         = 12450;
+        //$this->report_definition_id         = 1453;
+
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
-
-
-*/
-
     }
 
-    
-    
-    public function anchor_boundaries_insert_replace($file_as_string,$insert,$anchor,$boundary_start,$boundary_stop){
-        //!! we may want to include or not include boundary start & stop strings
-        // currently we strip them both.  if you want them, put them in the insert
-        //
-        //echo('anchor_boundaries_insert_replace');
-        // this looks for the boundary start and stop strings and replaces what's in between them with $insert
-        // if they don't exist, we create the boundary strings and wrap them around insert
-        // and insert them immediately after the anchor string
-        //echo ("length ".strlen($file_as_string));
-        //echo("80:".substr($file_as_string,0,80));
-        $crlf = "\r\n";
-        $needle = $boundary_start;
-        $i0 = stripos($file_as_string,$needle);
-        //echo "***".$i0."***".$file_as_string."***".$needle."***";exit('4629');
-        if ($i0 > 0){
-            //echo('found existing node'.$i0);//exit('2809');
-            $i1 = strlen($needle);
-            $s1 = substr($file_as_string,0,$i0-1).$crlf;
-            $needle = $boundary_stop;
-            $i0 = stripos($file_as_string,$needle);
-            if ($i0 > 0){
-                //echo('found end node'.$i0);exit('2809');
-                $i1 = strlen($needle);
-                //$s2 = $crlf.$boundary_stop.$crlf.substr($file_as_string,$i0+$i1);
-                $s2 = $crlf.substr($file_as_string,$i0+$i1);
-            }
-            else{
-                exit("<br>we should have found ".$needle." but didnt<br>".$file_as_string."didnt find boundary stop 5056 ");
-            }
-        }
-        else{  //fist time for this controller so we need to find the anchor
-            $needle = $anchor;
-            $i0 = stripos($file_as_string,$needle);
-            if ($i0 > 0){
-                $i1 = strlen($needle);
-                //$s1 = substr($file_as_string,0,$i0-1).$crlf;
-                //$s1 = substr($file_as_string,0,$i0+$i1).$crlf.$boundary_start.$crlf;
-                $s1 = substr($file_as_string,0,$i0+$i1).$crlf;
-                $s2 = $crlf.substr($file_as_string,$i0+$i1);
-                //echo '*$s1*'.$s1.$model_route_as_string.'$s2'.$s2."***";exit('4650');
-            }
-            else {
-                echo ("fatal error no anchor".$needle."<br>***<br>".$file_as_string."<br>***<br>");exit('<br>4653');
-            }
-    
-        }
-        //echo "<br>all three<br>".$s1.$insert.$s2;exit('<br> 4650');
-        //echo($s1.$insert.$s2);
-        //exit('<br>4653');
-        return $s1.$insert.$s2;
-
-    }
-
-
-     /**
-     * Execute the query and show the report you just requested
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
-    public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
-
-        //echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
-    
-        $report_definition          = $this->execute_query_by_report_no($id) ;
-        $encoded_business_rules     = $report_definition[0]['business_rules'];
-
-        //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
-
-        $working_arrays             = $this->working_arrays_construct($report_definition[0]);
-        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
-
-        $query_relational_operators_array = $this->build_query_relational_operators_array();
-        
-        if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
-            echo("<BR>"."query failed");$this->debug_exit(__FILE__,__LINE__,10);
-        }
-        
-        //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
-        $encoded_business_rules_field_name_array = array();
-        $field_names_array = array();
-        $data_array_name = array();
-        $data_array_name ["report_name"] = $report_definition[0]->report_name;
-        $data_array_name ["record_type"] = $report_definition[0]->record_type;
-        $field_names_row_file_name =  "../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_field_names_row';
-
-        $browse_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_display_snippet';
-
-
-        //echo('<br>after build_and_execute_query');$this->debug_exit(__FILE__,__LINE__,0);
-        if($coming_from == 'var_dump'){
-            var_dump($miscThings[0]);
-            var_dump($report_definition[0]);
-
-          $this->debug_exit(__FILE__,__LINE__,0);  
-        }
-        //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
-        if ($miscThings){         
-            //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
-            //$miscThings = (array) $miscThings;
-            //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,0); 
-             return view($this->node_name.'.browseEdit',compact('miscThings'))
-            ->with('browse_select_field_count'  ,count($miscThings))
-            ->with('node_name'                  ,$this->node_name)             
-            ->with('field_names_row_file_name'  , $field_names_row_file_name)
-            ->with('browse_snippet_file_name'   , $browse_snippet_file_name)
-            ->with('report_key'                 , $id)
-            ->with('model_table'                ,$this->model_table)
-            ->with('key_field_name'             ,'id')
-            ->with('key_field_value'            , $id)
-            ->with('all_records'                , $miscThings)
-            ->with('use_table_in_record'        ,'n')
-            ->with('record_table_name'          , $this->model_table)
-            ->with('encoded_business_rules'     , $encoded_business_rules)
-
-           ->with('report_definition_key'     , $id)
-
-             
-            ;
-         //return view('miscThings.edit2_default_browse',$miscThings);
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-  
-        if($miscThings = MiscThing::distinct('record_type')->get()){
-          //$miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)->get();
-          //$this->debug_exit(__FILE__,__LINE__,0);   
-          //echo("<br> report_name<br>".$miscThings[0]->report_name."**");
-          //var_dump($miscThings[0]);
-          //$this->debug_exit(__FILE__,__LINE__,10);  
-        }
-    }
-        
-
- 
-
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function mainMenu(REQUEST $request,$id,$reportDefinitionKey) {
-       $this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
-       //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
-       $record_type                    = "report_definition";
-       $linkx = "xx";
-
-        $main_menu_array = array(
-            'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
-            'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
-            'activate/deactivate table reporting'   =>'mainMenu_active_inactive',
-            'gen_tbl_controller_snippet'            =>'mainMenu_active_inactive',
-            'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
-            'gen_tbl_model'                         =>'mainMenu_generate_routes_snippet'
-            );
-
-       $main_menu_array = $this->define_menu_links();
-
-        return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
-            ->with('menu_array'               ,$main_menu_array)
-            ;
-        }
-    public function activate_deactivate($what_we_are_doing) {
-       $this->debug0();
- 
-        switch ($what_we_are_doing) { 
-        case "activating_route":
-            break;
-        case "activating_controller":
-            break;
-        case "activating_model":
-            break;
-        case "de_activating_route":
-            break;
-        case "de_activating_controller":
-            break;
-        case "de_activating_model":
-            break;
-        }
-
-        return ;
-    }
-
-     public function define_menu_links() {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $main_menu_array = array(
-            //'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
-            'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
-            'activate/deactivate table reporting'   =>'mainMenu_active_inactive'
-            //'gen_tbl_controller_snippet'            =>'mainMenu_active_inactive',
-            //'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
-            //'gen_tbl_model'                         =>'mainMenu_generate_routes_snippet'
-
-        );
-        return $main_menu_array;
-    }
-
-
-   public function build_link_array($aord,$table) {
-        
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        switch ($aord) {
-        case "deactivate":
-            $this->build_link("deactivate",$table);
-           break;
-        case "activate":
-            $this->build_link("activate",$table);
-           break;
-        }
-        //return $link_array;
-        }
-
-
-
-    public function build_link($aord,$table) {       
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-             switch ($aord) {
-                case "deactivate":
-                   break;
-                case "activate":
-                    break;
-            }
-        }
-  
-
-   public function generate_entities($entity,$table) {   
-       $link_parms_array = array(
-        'controller_name'   => ucfirst($table).'Controller',
-        'model_table'       => ucfirst($table),
-        'model'             => ucfirst($table),
-        'node_name'         => ucfirst($table)
-        );
-
-        foreach ($link_parms_array as $entity=>$name) {
-            switch ($entity) {
-                case "controller_name":
-                   break;
-                case "model_table":
-                   break;
-                case "model":
-                   break;
-                case "node_name":
-                   break;
-            }
-        }
-                 $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['model'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginModel",
-                    "#endModel"
-                );
-
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['model_table'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginModelTable",
-                    "#endModelTable"
-                );
-               $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['node_name'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginNodeName",
-                    "#endNodeName"
-                );
-
-
-
-                $this->generate_entities('table_controller',$table);
-                $this->generate_entities('model',$table);
-                $this->generate_entities('routes',$table);
-                $this->generate_entities('views',$table);
-           
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-         switch ($entity) {
-            case "table_controller":
-               $this->insure_node_integrity('controller',$table);
-               break;
-            case "model":
-                $this->insure_node_integrity('model',$table);
-                break;
-            case "routes":
-                $this->insure_node_integrity('routes',$table);
-               break;
-            case "views":
-               
-                $this->insure_node_integrity('views',$table);
-               break;
-        }
-    }
-
-
-   public function derive_entity_names_from_table($entity,$table) {       
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $link_parms_array = array(
-            'controller_name'   => ucfirst($table).'Controller',
-            'model_table'       => ucfirst($table),
-            'model'             => ucfirst($table),
-            'node_name'         => ucfirst($table)
-            );
-        echo '**'.substr($link_parms_array['model'],0,strlen($table)).'**';
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        echo '<br>'.'**'.substr($link_parms_array['model'],strlen($table)-1,1).'**';
-        if (substr($link_parms_array['model'],strlen($table)-1,1) == 's') {
-            $link_parms_array['model'] = substr($link_parms_array['model'],0,strlen($table)-1);
-        }
-        return $link_parms_array;
-    }
-
-   public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$reportDefinitionKey) {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
-       $record_type                    = "report_definition";
-       $linkx = "xx";
-
-       $main_menu_array = $this->define_menu_links();
-
-        return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
-            ->with('menu_array'               ,$main_menu_array)
-            ;
-        }
-
-//generated_inserts_begin
-    public function mainMenu_active_inactive($id,$reportDefinitionKey) {
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $arr2 = array(); 
-        $db_result2 = MiscThing::
-           where('record_type','=','table_controller')
-           ->get(['node_name']);        
-            foreach ($db_result2 as $db_result) {
-                $arr2[$db_result->node_name]=$db_result->node_name;
-            }
-        $arr1 = array();
-        $db_result1 = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-        //$db_result1 = DB::connection($this->db_snippet_connection)->select('SHOW TABLES');
-        foreach($db_result1 as $table)
-        {
-            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-            if (in_array($table,$arr2)){
-                 $arr1[$table]['aord'][] = 'deactivate';
-            }else {
-                $arr1[$table]['aord'][] = 'activate';
-            }
-         }
-         switch ($arr1[$table]['aord'][0]) {
-            case "deactivate":
-                $this->build_link_array("deactivate",$table);
-                //* point the link to the deactivate outines
-               break;
-            case "activate":
-                $this->build_link_array("activate",$table);
-                //* point the link to the deactivate outines
-        }
-
-        $method_name = "miscThings";
-        $link_strings = array(
-            'tdBegin'   =>"<td class='text_align_left select_pink' >",
-            
-            'link1of4' =>"<a href=\"{{ URL::route(",
-            'link2of4' =>"$".'node',
-            'link3of6' =>".",
-            'link4of6' =>$method_name,
-            'tdEnd'     =>"</td>"
-             );
-
-        $link_parameters = array(
-            'what_we_are_doing' =>'activating_controller',
-            'coming_from'       =>'dynamicMenu0'
-            );
-   
-     //*
-         $myStrings = array(
-            'tdBegin'   =>"<td class='text_align_left select_pink' >",
-            'tdEnd'     =>"</td>",
-            'linkBeginA' =>"<a href=\"{{ URL::route('miscThings'.'.activateDeactivate', $"."parameters =",
-            'linkBeginB' =>" array('what_we_are_doing' =>'activating_controller','coming_from'=>'dynamicMenu0')) }}\" class='btn mycart-btn-row2'>",
-            'linkEndB'     =>'</a>'
-            );
-            //var_dump($arr1);
-         var_dump($myStrings);var_dump($link_parameters);
-            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);\
-
-         return view($this->node_name.'.dynamicMenu0')
-            ->with('arr1'           ,$arr1)
-            ->with('myStrings'      ,$myStrings)             
-            ->with('parameters'     ,$link_parameters)             
-         ;
-
-
-      
-       
-    }
-
-    public function make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$field_values){
-        if (!File::isDirectory($extended_app_path."/views")) {
-            File::makeDirectory($extended_app_path."/views");
-        }
-        if (!File::isDirectory($extended_app_path."/views/".$field_values['model_table'])) {
-            echo $extended_app_path."/views/".$field_values['model_table'];//exit("tty");
-            File::makeDirectory($extended_app_path."/views/".$field_values['model_table'],0777);
-            File::makeDirectory($extended_app_path."/views/".$field_values['model_table']."/generated_files",0777);
-                    
-            $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-            $outfile = $extended_app_path."/views/".$field_values['model_table'];
-            File::copyDirectory($infile,$outfile);
-             
-            $infile = $this->storage_path."/baselines_for_generated_code/views/miscThings/generated_files";
-            $outfile = app_path()."/views/".$field_values['model_table']."/generated_files";
-            File::copyDirectory($infile,$outfile);
-        }               
-                
-        
-        return ;
-    }
-
-    
-    public function mkdir_r($start_node,$dirName,$rights){
-        $dirs = explode('/', $dirName);
-        $dir=$start_node;
-        foreach ($dirs as $part) {
-            $dir.=$part.'/';
-            if (!is_dir($dir) && strlen($dir)>0){
-                mkdir($dir, $rights);
-            }
-        }
-    }
-    
-
-    public function maintain_flat_files_for_db_connection($action,$node,$connection_storage_directory,$field_names,$values_array){
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        /*
-        i know that we must maintain flat files
-        */
-        //var_dump($field_names);
-        //echo("field_names ");var_dump($field_names);
-        //exit(" 4530");
-        switch ($action) {
-            case "table_controller_generators":
-                // when a controller definition changes, a subset of what has to be done 
-                // for a connection definition is required
-                $node = "routes";
-                $infile = $this->storage_path."/baselines_for_model_gens/Route.php";
-                $insert_string = file_get_contents($infile);
-                $insert_string = str_ireplace ('xxx_node_name', $values_array['node_name'] , $insert_string);
-                $insert_string = str_ireplace ('xxx_controller_name', $values_array['controller_name'] , $insert_string);
-                
-                $infile = $this->routes_path."/routes.php";
-                $current_routes_file = $this->routes_path."/routes.php";
-                $infile = $this->current_routes_file;
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "// Automatically adjuested strings begin here",
-                    "// ".$values_array['node_name']." begin_generated_node",
-                    "// ".$values_array['node_name']." end_generated_node"
-                );
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                File::put($outfile, $file_as_string);
-
-                //
-                $node = "config";
-                //
-                $node = "models";
-                $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                $file_as_string = str_ireplace ('$model', $values_array['model'], $file_as_string );
-                //echo ($file_as_string);
-                $output_path_dsn = $this->storage_path.'/connections/'. $values_array['model_table'] .'/models/'.$values_array['model'].'.php';
-                File::put($output_path_dsn, $file_as_string);
-                //
-                $node = "controllers";
-                $str = "";
-                foreach ($field_names as $field_name){
-                    $str .= "$".$field_name.' = "'.$values_array[$field_name].'", ';
-                }
-                $str = rtrim($str);
-                $str = substr($str, 0, -1);
-                $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = str_ireplace ('$controller_name', $values_array['controller_name'] , $file_as_string  );
-                $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                //echo ($file_as_string);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'.php';
-                File::put($output_path_dsn, $file_as_string);
-                break;
-                
-            case "initialize":              
-                echo ("initialize");//;exit(" 4585");
-                // ***************
-                $node =  "config";
-                    $extended_app_path = $this->storage_path."/connections/".$values_array['db_connection_name'];
-                $infile = $this->storage_path."/baselines_for_model_gens/config/database.php";
-                $outfile = $this->storage_path."/connections/".$values_array['db_connection_name']."/config/database.php";
-                copy($infile,$outfile);
-                $file_as_string = file_get_contents($outfile);
-                $insert_string = "'default' => '".$values_array['db_connection_name']."',";
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "//define_default_connection_anchor",
-                    "//default_connection_start",
-                    "//default_connection_stop");
-                $insert_string = $this->snippet_gen("database_connection",$field_names,$values_array);
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "// generated_connections_begin_here",
-                    "// ".$values_array['db_connection_name']."_connection_definition_start",
-                    "// ".$values_array['db_connection_name']."_connection_definition_stop"
-                    );
-                //echo ("initialize");exit(" 4606");
-                $insert_string = $this->snippet_gen("database_connection",$field_names,$values_array);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/config/database.php";
-                File::put($output_path_dsn, $file_as_string);
-                        // ****************
-                // ****************
-                $node =  "models";
-                $infile = $this->storage_path."/baselines_for_model_gens/Models";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/models";
-                //File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "controllers";
-                $infile = $this->storage_path."/baselines_for_model_gens/baseline_controllers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/controllers";
-                File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "routes";
-                echo ("init routes file");
-                $infile = $this->storage_path."/baselines_for_model_gens/routes.php";
-                $file_as_string = file_get_contents($infile);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                // ****************
-                // **************** "/storage/baselines_for_model_gens/baseline_views_folder/baseline_view_pointers"
-                $node =  "views";
-                
-                $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/miscThings";
-                File::copyDirectory($infile,$outfile);
-                                   
-                $infile = $this->storage_path."/baselines_for_generated_code/views/miscThings/generated_files";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/miscThings/generated_files";
-                File::copyDirectory($infile,$outfile);
-                //     
-                $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/volunteer";
-                File::copyDirectory($infile,$outfile);
-                $infile = $this->storage_path."/baselines_for_generated_code/views/volunteer/generated_files";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/volunteer/generated_files";
-                
-                //copy($infile."/*.php",$outfile);
-                File::copyDirectory($infile,$outfile);
-                break;
-            case "update":
-                switch ($node) {
-                    case "config":
-                        $infile = $this->storage_path."/connections/".$values_array['db_connection_name']."/config/database.php";
-                        $file_as_string = file_get_contents($infile);
-                        $insert_string = "'default' => '".$values_array['db_connection_name']."',";
-                        $file_as_string = $this->anchor_boundaries_insert_replace(
-                            $file_as_string,
-                            $insert_string,
-                            "//define_default_connection_anchor",
-                            "//default_connection_start",
-                            "//default_connection_stop");
-                        $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/config/database.php";
-                        File::put($output_path_dsn, $file_as_string);
-                        //define_default_connection_anchor
-                        // 
-                        break;
-                    case "models":
-                        $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('$model', $values_array['model'], Input::get('') , $file_as_string );
-                        //echo ($file_as_string);
-                        $output_path_dsn = $this->storage_path.'/connections/'. $values_array['model_table'] .'/models/'.$values_array['model'].'.php';
-                        File::put($output_path_dsn, $file_as_string);
-                        break;
-                    case "controllers":
-                        $str = "";
-                        foreach ($values_array_array as $name=>$value){
-                            //echo $name. " * ".Input::get($value);
-                            $str .= "$".$name.' = "'.Input::get($value).'", ';
-                        }
-                        $str = rtrim($str);
-                        $str = substr($str, 0, -1);
-                        //echo "<br><br>*".$str."*";
-                        $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$controller_name', Input::get('controller_name') , $file_as_string  );
-                        $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                        //echo ($file_as_string);
-                        $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'Controller.php';
-                        File::put($output_path_dsn, $file_as_string);
-                        break;
-                    case "routes":
-                        break;
-                }
-                break;
-            case "update_table_controller":
-                echo("update_table_controller ".$node);//exit("exit 4737");
-                switch ($node) {
-                    case "views":
-                        $extended_app_path = $this->storage_path.'/connections/'.$values_array['db_connection_name'];
-                        $this->make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$values_array);
-                        $extended_app_path = app_path();
-                        $this->make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$values_array);
-                        break;
-                    case "config":
-                        echo("config");//exit("exit 4789");
-                        
-                        break;
-                    case "models":
-                        $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('$model', $values_array['model'], $file_as_string );
-                        //echo ($file_as_string);
-                        $outfile = $this->storage_path.'/connections/'. $values_array['db_connection_name'] .'/models/'.$values_array['model'].'.php';
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        
-                        $outfile = app_path().'/Models/'.$values_array['model'].'.php';
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo("add_delete_add_file_as_string ".$outfile);//exit("exit 4757");
-                        break;
-                    case "controllers":
-                        $str = "";
-                        
-                        foreach ($field_names as $name){
-                            //echo $name. " * ".$values_array[$value);
-                            $str .= "$".$name.' = "'.$values_array[$name].'", ';
-                        }
-                         
-                        $str = rtrim($str);
-                        $str = substr($str, 0, -1);
-                        $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$controller_name', $values_array['controller_name'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                        $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'.php';
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        
-                        $outfile = $this->controllers_path."/".$values_array['controller_name'].'.php';
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        //echo("add_delete_add_file_as_string ".$outfile);exit("exit 4838");
-                        //echo("controllers ");exit("exit 4762");
-                        break;
-                    case "routes":
-                        //echo("add_delete_add_file_as_string "."routes ");exit("exit 4838");
-                        $infile = $this->storage_path."/baselines_for_model_gens/Route.php";
-                        $insert_string = file_get_contents($infile);
-                        $insert_string = str_ireplace ('xxx_node_name', $values_array['node_name'] , $insert_string);
-                        $insert_string = str_ireplace ('xxx_controller_name', $values_array['controller_name'] , $insert_string);
-                        //
-                        $infile = $this->routes_path."/routes.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = $this->anchor_boundaries_insert_replace(
-                        $file_as_string,
-                        $insert_string,
-                        "// GENERATED_CONTROLLERS_START_HERE",
-                        "// ".$values_array['node_name']." begin_generated_node",
-                        "// ".$values_array['node_name']." end_generated_node"
-                        );
-                        //echo "routes ".$insert_string;exit(' exit 4861');
-                        $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo $outfile;
-                        //exit('exit 4856');
-                        $outfile = $this->routes_path."/routes.php";
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo("add_delete_add_file_as_string ".$outfile);//exit("exit 4757");
-                        break;
-                }
-                break;
-            case "change_database_connection":
-                // ****************
-                $node =  "controllers";
-                $outfile = $this->DEHbase_controller_path ."BaseController.php";
-                $infile = $this->stored_connections_path. $values_array['db_connection_name']."/controllers/BaseController.php";
-
-                if (File::exists($outfile)){
-                    unlink ($outfile);
-                    copy($infile,$outfile);
-                }
-                // ****************
-                $node =  "config";
-                $infile = $this->stored_connections_path."/".$values_array['db_connection_name']."/config/database.php";
-                $outfile = $this->database_connection_config_path."database.php";
-                //var_dump($infile);var_dump($outfile);//$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                copy($infile,$outfile);
-                // ****************
-                $node =  "models";
-                $infile = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'.$values_array['db_connection_name']."/models";
-                $outfile = app_path()."/models";
-                File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "routes";
-                $infile = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'.$values_array['db_connection_name']."/routes.php";
-                $outfile = $this->routes_path."/routes.php";
-                echo($infile."**".$outfile);
-                $this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                if (File::exists($outfile)){
-                    unlink ($outfile);
-                    copy($infile,$outfile);
-                }
-                //echo "we got here";exit("4725");
-                
-                break;
-                
-        }  // endswitch $action
-        //exit("exit 4548");
-        return;
-    }
 
 
      /**
@@ -902,7 +171,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
 
     public function write_file_from_string($file_name,$file_as_string) {
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //echo($file_name.$file_as_string." write_file_from_string ");$this->debug_exit(__FILE__,__LINE__,0);
         if (is_file($file_name)){
             unlink($file_name); // delete it
         }
@@ -955,7 +224,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     public function execute_report_def_query($report_definition) {
         echo("execute_report_def_query<br>");
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($report_definition);
         $errors = array();
         $message = "";
@@ -977,7 +246,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 $field_name_array = array();
                 $generated_snippets_array = array();
                 //return View::to($this->node_name . "/edit1")
-                $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                $this->debug_exit(__FILE__,__LINE__,1); 
                 return redirect('admin/'.$this->node_name.'/edit1')
                     ->with('snippet_table'                  , $this->snippet_table)
                     ->with('model_table'                    , $this->model_table)
@@ -994,9 +263,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     $arr[] = $working_arrays['ppv_define_query'][$array_name]; 
                 }      
                 $arr = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
-                $this->debug0(__FILE__,__LINE__,__FUNCTION__); 
+                var_dump($arr); $this->debug_exit(__FILE__,__LINE__,1);   
                 //$query_relational_operators_array = $this->build_query_relational_operators_array();
-                //$db_result = $this->build_and_execute_query($arr,$this->bypassed_field_name,$query_relational_operators_array);
+                
             }
         } // end of if report_definition
 
@@ -1014,21 +283,20 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        //echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
+        echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
     
         $report_definition          = $this->execute_query_by_report_no($id) ;
-        $encoded_business_rules     = $report_definition[0]['business_rules'];
+        $encoded_business_rules     = $report_definition[0]->business_rules;
 
         //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
 
         $working_arrays             = $this->working_arrays_construct($report_definition[0]);
-        //var_dump($working_arrays);$this->debug1__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
 
         $query_relational_operators_array = $this->build_query_relational_operators_array();
         
         if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
-            echo("<BR>"."query failed");
-            $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            echo("<BR>"."query failed");$this->debug_exit(__FILE__,__LINE__,10);
         }
         
         //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
@@ -1042,7 +310,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $browse_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_display_snippet';
 
 
-        //echo('<br>after build_and_execute_query');$this->debug_exit(__FILE__,__LINE__,0);
+       
         if($coming_from == 'var_dump'){
             var_dump($miscThings[0]);
             var_dump($report_definition[0]);
@@ -1116,6 +384,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         sort($columns);
         $columns = array_combine($columns, $columns);
         return $columns;
+       echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);//exit('exit');
 
     }
 
@@ -1164,20 +433,40 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
-            ' what_we_are_doing: '. $what_we_are_doing.
-            ", id: ".$id.
-            ', coming_from: '.$coming_from.
-            ', report_definition_key: '.$report_definition_key);
-        //$this->debug_exit(__FILE__,__LINE__,10);
+
+        //echo("<br>".
+        //    ' what_we_are_doing: '. $what_we_are_doing.
+        //    ", id: ".$id.
+        //    ', coming_from: '.$coming_from.
+        //    ', report_definition_key: '.$report_definition_key);
+        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);//exit('exit');
         //var_dump($request);
         //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
-            //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
+            echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);
+            echo($what_we_are_doing);
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+           
+            //$this->debug_exit(__FILE__,__LINE__,10);
             switch ($what_we_are_doing) { 
-                case "edit2_default_add":
+                case "klone":
+                    echo($report_definition_key);
+                    $MiscThing  =  MiscThing::where('id','=',$id)->get();
+
+                    if($MiscThing){
+                        //var_dump($MiscThing[0]['fillable']);
+                        $arr1 = (array) $MiscThing[0]['attributes'];
+                        unset($arr1['id']);
+                        MiscThing::create($arr1);
+                        return redirect('admin/miscThings');
+                        //var_dump($MiscThing[0]['attributes']);exit();
+                        var_dump($arr1);exit();
+
+                    } 
+                    var_dump($MiscThing);exit();
+                    break;
+               case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
                 case "editing_a_data_record":
@@ -1187,19 +476,17 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
 
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
-                    //var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
-
+ 
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
-                    $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
-                    //var_dump($report_definition_key); $this->debug_exit(__FILE__,__LINE__,1);
-
+                   $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
+ 
                     $MiscThing  = MiscThing::where('id','=',$id)->get();
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                       echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
+                        
+                       $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
+                        
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -1237,9 +524,11 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 // *****
                 // return to view
                 // *****
+                        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
-                       ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                       ->with('encoded_business_rules'   ,$report_definition[0]['business_rules']) 
+                      ->with('passed_to_view_array'   ,$passed_to_view_array);            
                         break;          
             case "edit2_default_update":
             //case "updating_data_record": // defined in editUpdate
@@ -1247,9 +536,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
                 $requestFieldsArray=$request->all(); // important!!
 
-                //var_dump($working_arrays['ppv_define_business_rules']['business_rules_r_o_array']);
                 //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
-                var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
+                //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
 
                 //$validator = Validator::make(Input::all(), $business_rules_array); //update
                 if ( $validator->fails() ) {
@@ -1275,13 +563,14 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)
                             ->insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
-                            ->where($this->key_field_name,  '=', $request->input('data_key'))
-                            ->update($modifiable_fields_name_values);
+                        $updatex  = DB::connection($this->db_snippet_connection)
+                        ->table($this->model_table)
+                        ->where($this->key_field_name,  '=', $request->input('data_key'))
+                        ->update($modifiable_fields_name_values);
                         break;
                 }
 
@@ -1291,11 +580,11 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 ->with('message', 'validation has been bypassed');
                 break;
 
-                    default:
-                        echo("<br>"."what we are doing is improperly assigned");
-                        $this->debug_exit(__FILE__,__LINE__,1);
-                        break;
-                }
+            default:
+                echo("<br>"."what we are doing is improperly assigned");
+                $this->debug_exit(__FILE__,__LINE__,1);
+                break;
+            }
         }   
     }
 
@@ -1308,32 +597,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
         //File::put($fnam, $this->blade_gen_browse_select_field_names_row($this->model,$_REQUEST["to"]));
    }
- 
- 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create_w_report_id($report_definition_key) {
-        //echo("<br>".$this->store_validation_id . $report_definition_key);$this->debug_exit(__FILE__,__LINE__,1);
-        $report_definition  = $this->execute_query_by_report_no($report_definition_key) ;
-        $encoded_business_rules = $report_definition[0]['business_rules'];
-        $this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
-        //var_dump($encoded_business_rules);$this->debug_exit(__FILE__,__LINE__,1);
-        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_modifiable_fields_add';
-        //$this->c1($report_definition_key);
-         return view($this->node_name.'.create')
-            ->with('encoded_business_rules' , $encoded_business_rules)
-            ->with('report_definition_key'  , $report_definition_key)
-           //->with('report_key'              , $report_definition_key)
-            ->with('snippet_file'           , $snippet_file)
-            ->with('node_name'              , $this->node_name);
-    }
-
-
-
-    /**
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -1341,33 +605,61 @@ class ProgrammerUtilitiesController extends CRHBaseController
     public function create()
     {
         //$x = Config::get('dehGlobals.business_rules_array');
-        //$this->debug_exit(__FILE__,__LINE__,10);  
+        $this->debug_exit(__FILE__,__LINE__,10);  
  
         //echo("<br>".$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
-        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
-        //$snippet_file = $this->node_name."/".$this->generated_files_folder.
-        "/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
+        //$snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
+        $snippet_file = $this->node_name."/".$this->generated_files_folder."/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
 
         //echo("<br>".$snippet_file.$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
        //$snippet_file= "../".'baseline_blades/'.'report_name_only';
 
         //$snippet_file= "../".'baseline_blades/'.'report_name_only';
          return view($this->node_name.'.create')
-        //->with('message'                        , $message)
-        ->with('snippet_file'                   , $snippet_file)
+        //->with('message'                , $message)
+        ->with('snippet_file'           , $snippet_file)
         ->with('report_definition_key'  , $this->report_definition_id)
-        ->with('node_name'                        , $this->node_name);
+        ->with('node_name'              , $this->node_name);
 
+    }
+
+ 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function create_w_report_id($report_definition_key) {
+
+        //$report_definition_key = 12450;
+        //$this->debug_exit(__FILE__,__LINE__,1);
+        $report_definition          = 
+        $this->execute_query_by_report_no($report_definition_key) ;
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
+        $report_definition_key.'_modifiable_fields_add';  // for 12450
+        //$this->c1($report_definition_key);
+        return view($this->node_name.'.create')
+            ->with('encoded_business_rules' , $report_definition[0]->business_rules)
+            ->with('modifiable_fields_array' , 
+                $report_definition[0]->modifiable_fields_array)
+            ->with('report_definition_key'  , $report_definition_key)
+            ->with('snippet_file'           , $snippet_file)
+            ->with('node_name'              , $this->node_name
+            );
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response conn
      */
     public function execute_query_by_report_no($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
+      //echo 'execute_query_by_report_no'.$report_no.$this->snippet_table_key_field_name;$this->debug_exit(__FILE__,__LINE__,0);
+      $response = DB::connection($this->db_snippet_connection)
+        ->table($this->snippet_table)
+        ->where($this->snippet_table_key_field_name, '=', $report_no)
         ->get();
         if ($response){
            return $response;
@@ -1377,65 +669,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
             $this->debug_exit(__FILE__,__LINE__,1);
         }
     }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_controller_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_model_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_route_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
 
 
     public function bld_name_value_lookup_array($table_name) {
@@ -1644,11 +877,11 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }
 
     public function return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array) {
-        //var_dump($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,1);
-                   //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
+        //var_dump($what_we_are_doing);//$this->debug_exit(__FILE__,__LINE__,1);
+        //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
 
-                $array1 = array();
-        if (is_null($modifiable_fields_array)){
+        $array1 = array();
+        if (is_null($modifiable_fields_array)){ echo "858";
             return $array1;
         }
          switch ($what_we_are_doing) { 
@@ -1664,7 +897,23 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 case "editing_a_data_record":
                 case "edit2_default_edit":
                 case "edit2new":
-                   $db_result  = MiscThing::where('id','=',$id)->get();
+                    $db_result  = MiscThing::where('id','=',$id)->get();
+                    $working_arrays = $this->working_arrays_construct($db_result[0]);
+                    $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
+
+                   //var_dump($working_arrays);echo(__FILE__.__LINE__);exit();
+                    /*
+                   foreach ($db_result as $name=> $value) {
+                        $array1[$value] = $db_result->$value;
+                    }
+                    */
+                   //var_dump($db_result->items[0]);
+                   //$this->debug_exit(__FILE__,__LINE__,1);
+                   $array1 = array();
+                   if (is_null($modifiable_fields_array)){
+                        return $array1;
+                    }
+
                    if($db_result){
                     //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
                     foreach ($modifiable_fields_array as $name=> $value) {
@@ -1686,7 +935,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
 
     public function reportDefMenuEdit(Request $request, $id,$what_we_are_doing,$coming_from){
-        echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
+        //$requestFieldsArray=$request->all();
+        //var_dump($requestFieldsArray); // important!!);
+        //echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
         //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** ");$this->debug_exit(__FILE__,__LINE__,0);
         
@@ -1694,7 +945,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $miscThing = MiscThing::where('id','=',$id)->get();
         //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
         $working_arrays     = $this->working_arrays_construct($miscThing[0]);
-        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);        
+        //$this->debug_exit(__FILE__,__LINE__,10);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
         case "maintain_browse_fields":           
@@ -1722,9 +974,29 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 break;  
         case "ppv_define_query":
         case "ppv_define_business_rules":
+            var_dump($request[0]);//var_dump($working_arrays);
+            $just_the_ones_we_want = $working_arrays['ppv_define_business_rules']['field_name_array'];
+
+            //unset($modifiable_fields_name_values[$this->snippet_table_key_field_name]);
+            //$requestFieldsArray=$request->all(); // important!!
+            //$this->validate($request, $business_rules);
+
+           //var_dump($just_the_ones_we_want);
+           //var_dump($working_arrays['ppv_define_business_rules']['field_name_array']);
+            //var_dump($working_arrays['ppv_define_query']['field_name_array']);
+            //$this->debug_exit(__FILE__,__LINE__,10);
+             switch ($what_we_are_doing) {
+                case 'ppv_define_query':
+                    $just_the_names_array = json_encode($working_arrays['ppv_define_query']['field_name_array']);
+                    break;
+                case 'ppv_define_business_rules':
+                     $just_the_names_array = json_encode($working_arrays['ppv_define_business_rules']['field_name_array']);
+                    break;
+             }
+
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
             //echo('<br>1042: '.$what_we_are_doing);var_dump($miscThing );   $this->debug_exit(__FILE__,__LINE__,0);   
-            //$working_arrays = 
+            $working_arrays = 
             $this->working_arrays_fixer($working_arrays,$what_we_are_doing);
             //var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
@@ -1768,9 +1040,11 @@ class ProgrammerUtilitiesController extends CRHBaseController
            $value_array_name       = ($working_arrays[$what_we_are_doing]['field_name_array']['value']);
             $value_array            = ($working_arrays[$what_we_are_doing][$value_array_name]);
         
-            //echo ($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,0);
+            //echo ($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
             return view($this->model_table.".ppv_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
+               ->with('just_the_names_array'                ,$just_the_names_array)
+
                 ->with('id'                                 ,$id)
                 ->with('request'                            ,$request)
                 ->with('first_lookup_array'                 ,$working_arrays[$what_we_are_doing]['lookups'][0])
@@ -1791,7 +1065,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         ->with('id'                                 ,$id)
         ->with('model'                              ,$this->model)
         ->with('node_name'                          ,$this->node_name)
-        ->with('what_we_are_doing'                  ,$what_we_are_doing)
+        ->with('what_we_are_doing'                  ,'updating_report_name')
         ->with('coming_from'                        ,$coming_from)
        ;
 }
@@ -1836,7 +1110,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 }                                   
                 $encoded_nv_array = json_encode($nv_array);
                 $edit4_return_option = "field_list_save";
-                var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,0);
+                var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,10);
 
                 $updatex  = DB::connection($this->db_snippet_connection)->table($this->snippet_table)
                 ->where($this->snippet_table_key_field_name,    '=', $record[0][$this->snippet_table_key_field_name])
@@ -1856,8 +1130,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     public function show(REQUEST $request,$id)
     {
-        //
-        //var_dump($request);
+        $requestFieldsArray=$request->all(); // important!!
+        var_dump($requestFieldsArray);
         echo("who sent us here". " show ".$id); $this->debug_exit(__FILE__,__LINE__,10);
 
     }
@@ -1889,20 +1163,51 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }   
 
     public function store(REQUEST $request) {
-        echo('storex');
-        var_dump($request->input('encoded_business_rules'));
+        echo('store'.__FILE__.__LINE__);
+        //var_dump($request->input('encoded_business_rules'));
         //var_dump($request->input::all()); 
         //$this->debug_exit(__FILE__,__LINE__,10);
         //$this->debug_exit(__FILE__,__LINE__,10);
         $validation_array = (array) json_decode($request->input('encoded_business_rules'));
+        $modifiable_fields_array = (array) json_decode($request->input('modifiable_fields_array'));
+        var_dump($validation_array); var_dump($modifiable_fields_array); 
+        //$this->debug_exit(__FILE__,__LINE__,10);
         $requestFieldsArray=$request->all(); // important!!
         $this->validate($request,$validation_array);
  
+        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_array);
+
+        return redirect('admin/miscThings');
+    }
+
+
+    public function stor_w_rules_array(REQUEST $request) {
+        echo('stor_w_rules_array');
+        $this->debug_exit(__FILE__,__LINE__,10);
+        $validation_array = json_decode($encoded_business_rules);
+        $modifiable_fields_array = json_decode($modifiable_fields_array);
+        //$requestFieldsArray=$request->all(); // important!!
+        $this->validate($request,$validation_array);
+        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_array);
+
         $miscThing=$request->all(); // important!!
         MiscThing::create($miscThing);
         return redirect('admin/miscThings');
     }
 
+
+    public function just_the_ones_we_want(REQUEST $request,$encoded_business_rules) {
+        echo('just_the_ones_we_want');
+        $this->debug_exit(__FILE__,__LINE__,10);
+        $validation_array = json_decode($encoded_business_rules);
+        //$requestFieldsArray=$request->all(); // important!!
+        $this->validate($request,$validation_array);
+        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_name_values);
+
+        $miscThing=$request->all(); // important!!
+        MiscThing::create($miscThing);
+        return redirect('admin/miscThings');
+    }
 
 
 
@@ -1917,88 +1222,159 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
     public function update(Request $request, $id)
     {
+        //* *********************
+        // the request has every field we need but many we dont
+        // running array_intersect_key against an array of the fields we want
+        // will return an array of ONLY the data we want from the request
+        // **********************
+        $requestFieldsArray=$request->all();
+        if (!array_key_exists('what_we_are_doing',$requestFieldsArray)) {
+           $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
+         }
         $update = 0;  
-        $requestFieldsArray=$request->all(); // important!!
-        //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
-        //$this->debug_exit(__FILE__,__LINE__,0);//var_dump($requestFieldsArray);
-        //$this->debug_exit(__FILE__,__LINE__,1);
-        if (isset($request->browse_select_array)){
-            $update = 1; 
-            $request->browse_select_array = $request->to;
-            $requestFieldsArray['browse_select_array'] = 
-                array_combine($request->to,$request->to);
-            $requestFieldsArray['browse_select_array'] =
-                json_encode($requestFieldsArray['browse_select_array']); // important!!
-            //$objectOrArray = "object";
-            $objectOrArray = "array";
-            $this->blade_gen_browse_select($id,$objectOrArray);
-            }
-        if (isset($request->modifiable_fields_array)){
-            $update = 1; 
-            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,0);
-            $request->modifiable_fields_array = $request->to;
-            $requestFieldsArray['modifiable_fields_array'] = 
-            array_combine($request->to,$request->to);
-            $this->blade_gen_simple_add($id,$requestFieldsArray['modifiable_fields_array']);
-            //var_dump($requestFieldsArray['modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,1);
-            $requestFieldsArray['modifiable_fields_array'] =
-            json_encode($requestFieldsArray['modifiable_fields_array']); 
-             //var_dump($requestFieldsArray['modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,10);
-            }
-
-        if (isset($request->query_field_name_array)){
-            $update = 1; 
-            
-            $new_r_o_array = $request->r_o_array;
-            if(is_numeric($request->r_o_array[0])){
-                $new_r_o_array = array();
-                $query_relational_operators_array = $this->build_query_relational_operators_array();
-                foreach ($request->r_o_array as $index=>$value){
-                    $new_r_o_array[] =
-                    $query_relational_operators_array[$value];
-                }
-            }
-            $requestFieldsArray = array(
-                'query_field_name_array'    => json_encode($request->field_name_array),
-                'query_r_o_array'           => json_encode($new_r_o_array),
-                'query_value_array'         => json_encode($request->value_array)
-                );
-
-           // move the common screen names into the specific fields in the table
-
-        }
+        
         //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($requestFieldsArray['query_r_o_array']);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($requestFieldsArray['encoded_modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,10);
+        switch ($requestFieldsArray['what_we_are_doing']) {
+            
+           case "editUpdate":
+                $update = 1;
+                // this is the guy that needs validation
+                $just_the_ones_we_want = array_flip((array) json_decode($requestFieldsArray['encoded_modifiable_fields_array']));
+                
+                //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+                 break; 
+             case "updating_report_definition":
+                break; 
+            case "updating_report_name":
+               $update = 1; 
+               $requestFieldsArray['just_the_names_array'] = array('report_name');
+         
+                $just_the_ones_we_want = $requestFieldsArray['just_the_names_array'] ;
+                $just_the_ones_we_want = array_flip($just_the_ones_we_want);
+                break;  
+
+           case "maintain_modifiable_fields":
+                $update = 1; 
+                //var_dump($requestFieldsArray['field_name_array']);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+                $requestFieldsArray['modifiable_fields_array'] = 
+                json_encode(array_combine($request->to,$request->to));
+                //* ******************
+                $objectOrArray = "array";
+                $this->blade_gen_browse_select($id,$objectOrArray);
+                $just_the_ones_we_want = array(
+                    'modifiable_fields_array'=> 'modifiable_fields_array'
+                    );
+                break;  
+
+            case "maintain_browse_fields":           
+                $update = 1; 
+                $requestFieldsArray['browse_select_array'] = 
+                json_encode(array_combine($request->to,$request->to));
+                $objectOrArray = "array";
+                $this->blade_gen_browse_select($id,$objectOrArray);
+                $just_the_ones_we_want = array('browse_select_array'=> 'browse_select_array');
+                break;  
+            case "ppv_define_query":
+                $update = 1; 
+                $new_r_o_array = $request->r_o_array;
+                if(is_numeric($request->r_o_array[0])){
+                    $new_r_o_array = array();
+                    $query_relational_operators_array = $this->build_query_relational_operators_array();
+                    foreach ($request->r_o_array as $index=>$value){
+                        $new_r_o_array[] =
+                        $query_relational_operators_array[$value];
+                    }
+                }
+                $requestFieldsArray = array(
+                    'query_field_name_array'    => json_encode($request->field_name_array),
+                    'query_r_o_array'           => json_encode($new_r_o_array),
+                    'query_value_array'         => json_encode($request->value_array)
+                    );
+                $just_the_ones_we_want = $requestFieldsArray;
+
+                break;  
+            case "ppv_define_business_rules":
+                echo(__FILE__.__LINE__.'<br>');//exit();
+                $update = 1; 
+                //var_dump($request);//var_dump($working_arrays);
+ 
+
+                $requestFieldsArray['business_rules']             = 
+                $this->build_validation_array(
+                    $this->build_business_rules_relational_operators(),
+                    $request->field_name_array,
+                    $request->r_o_array,
+                    $request->value_array);
+                $business_rules = $requestFieldsArray['business_rules'];
+                $request->business_rules = json_encode($requestFieldsArray['business_rules']);
+                $requestFieldsArray['business_rules'] = 
+                    json_encode($requestFieldsArray['business_rules']);
+                $requestFieldsArray['business_rules_field_name_array']    = 
+                    json_encode($request->field_name_array);
+                $requestFieldsArray['business_rules_r_o_array'] = 
+                    json_encode($request->r_o_array);
+                $requestFieldsArray['business_rules_value_array'] = 
+                    json_encode($request->value_array);
 
 
-        if (isset($request->business_rules_field_name_array)){
-            $update = 1; 
-            $requestFieldsArray['business_rules']             = 
-            $this->build_validation_array(
-                $this->build_business_rules_relational_operators(),
-                $request->field_name_array,
-                $request->r_o_array,
-                $request->value_array);
-            $business_rules = $requestFieldsArray['business_rules'];
-            $requestFieldsArray['business_rules'] = 
-                json_encode($requestFieldsArray['business_rules']);
-            $requestFieldsArray['business_rules_field_name_array']    = 
-                json_encode($request->field_name_array);
-            $requestFieldsArray['business_rules_r_o_array'] = 
-                json_encode($request->r_o_array);
-            $requestFieldsArray['business_rules_value_array'] = 
-                json_encode($request->value_array);
-            //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
-
-       }
-       // ******
+                $just_the_ones_we_want = (array) json_decode($requestFieldsArray['just_the_names_array']);
+                $just_the_ones_we_want = array_flip($just_the_ones_we_want);
+                 //echo(' array_intersect_key($requestFieldsArray,$arr2 ' );var_dump($arr2);            $this->debug_exit(__FILE__,__LINE__,10);
+                break;  
+        } 
+        //$requestFieldsArray=$request->all(); // create an array of all fields on the form
+        //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
+        // ******
        // update
        // ******
-       //'what_we_are_doing' => string 'updating_data_record' 
-        //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,0);
+        if ($update){  
+            $requestFieldsArray = array_intersect_key($requestFieldsArray,
+            $just_the_ones_we_want);
+            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+            //$validation_array = json_decode($encoded_business_rules);
+            switch ($request->what_we_are_doing) {
+             case "editUpdate":
+                // this is the guy that needs validation
+                $rules_array =  (array) json_decode($request->encoded_business_rules);
+                //var_dump($rules_array);
+                //$this->debug_exit(__FILE__,__LINE__,10);
+                $this->validate($request,$rules_array);
+                //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+                break; 
+            }
+            
+            //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+
+            //var_dump($requestFieldsArray);
+
+        
+            $updatex = MiscThing::where($this->key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+
+            return redirect()->route('miscThings.reportDefMenuEdit', 
+                ['id' => $id,
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'edit1'
+                ]);
+return back()->withInput();
+
+/*
+
+
+             $updatex  = DB::connection($this->db_snippet_connection)
+
+            ->table($this->model_table)
+            ->where($this->key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+                    return redirect('admin/miscThings')
+                       ->with('message'      , 'ok ');
+*/
+        }
         if (!$update) {
 
-            //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+            var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
             if ((isset($request->what_we_are_doing)&&$request->what_we_are_doing == 'updating_data_record') ){
                 $business_rules = json_decode($requestFieldsArray['wxyz'],1 );
                 var_dump($business_rules);$this->debug_exit(__FILE__,__LINE__,0);
@@ -2008,8 +1384,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 $requestFieldsArray=$request->all(); // important!!
                 $this->validate($request, $business_rules);
                  // valid past here
-                //var_dump($modifiable_fields_name_values);$this->debug_exit(__FILE__,__LINE__,10);
-     
                 $update = 0; 
                     $miscThingsings=MiscThing::find($id);
                     $miscThingsings->update($modifiable_fields_name_values);
@@ -2017,11 +1391,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                        ->with('message'      , 'ok ');
             }
         }
-         if ($update = 1){
-            echo("<br>"." id: ".$id);var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,0);
-            $miscThingsings=MiscThing::find($id);
-            $miscThingsings->update($requestFieldsArray);
-        }
+
                 return redirect('admin/miscThings')
                 ->with('message'      , 'record updated ');
     }
@@ -2040,12 +1410,15 @@ class ProgrammerUtilitiesController extends CRHBaseController
     public function working_arrays_construct($record) {
         //echo("working_arrays_construct");
         // $working_arrays contains some handy grouping of data and arrays we need for various things
-        // we used to define working_arrays based on what we were doing
+       
         $working_arrays     = $this->working_arrays_define($record);
-        $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+
+         $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
+          
         $column_names       = $this->build_column_names_array($this->model_table);
+        
         $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names);
-        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+          //return $working_arrays;
         $working_arrays     = $this->working_arrays_pad_rows_for_growth($working_arrays);
         //$this->working_arrays_fixer($record,$what_we_are_doing);
          return $working_arrays;
@@ -2094,6 +1467,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $working_arrays['maintain_modifiable_fields']['default_values_array'] = array(
             'field_name'        => $this->bypassed_field_name,
             );
+        //var_dump($record);exit();
+
+
         $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'] = 
         json_decode($record->modifiable_fields_array);
 
@@ -2153,12 +1529,15 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
             'field_name' => 'business_rules_field_name_array',
             'r_o'        => 'business_rules_r_o_array',
-            'value'      => 'business_rules_value_array'
+            'value'      => 'business_rules_value_array',
+            'business_rules' => 'business_rules'
             );
         $working_arrays['ppv_define_business_rules']['default_values_array'] = array(
             'field_name' => $this->bypassed_field_name,
             'r_o'        => 'required',
-            'value'      => ' '
+            'value'      => ' ',
+            'business_rules' => 'business_rules'
+
             );
         $working_arrays['ppv_define_business_rules']['business_rules_field_name_array'] = 
         json_decode($record->business_rules_field_name_array);
@@ -2198,25 +1577,24 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 $column_names_array = (array) $this->build_column_names_array($this->model_table);
                 //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,10);
  
-        $tarray = array();
-        $tarray[] = $this->bypassed_field_name;
-        $tarray[] = $this->bypassed_field_name;
-        $tarray[] = $this->bypassed_field_name;
-        $working_arrays['ppv_define_business_rules']['business_rules_field_name_array'] = $tarray;
-        $tarray = array();
-        $tarray[] = "required";
-        $tarray[] = "required";
-        $tarray[] = "required";
+                $tarray = array();
+                $tarray[] = $this->bypassed_field_name;
+                $tarray[] = $this->bypassed_field_name;
+                $tarray[] = $this->bypassed_field_name;
+                $working_arrays['ppv_define_business_rules']['business_rules_field_name_array'] = $tarray;
+                $tarray = array();
+                $tarray[] = "required";
+                $tarray[] = "required";
+                $tarray[] = "required";
 
-        $working_arrays['ppv_define_business_rules']['business_rules_r_o_array'] = $tarray;
-        $tarray = array();
-        $tarray[] = " ";
-        $tarray[] = " ";
-        $tarray[] = " ";
-        $working_arrays['ppv_define_business_rules']['business_rules_value_array'] = $tarray;
-               }
+                $working_arrays['ppv_define_business_rules']['business_rules_r_o_array'] = $tarray;
+                $tarray = array();
+                $tarray[] = " ";
+                $tarray[] = " ";
+                $tarray[] = " ";
+                $working_arrays['ppv_define_business_rules']['business_rules_value_array'] = $tarray;
+            }
 
-        //}
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
         return $working_arrays;
 
@@ -2227,8 +1605,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //echo('<br><br>'.'working_arrays_pad_rows_for_growth');$this->debug_exit(__FILE__,__LINE__,0);
         foreach ($working_arrays['groups_to_be_resized']as $array_group_to_be_padded){
             $pad_ctr = $this->working_arrays_set_pad_ctr($working_arrays,$array_group_to_be_padded);
-            //$this->debug_exit(__FILE__,__LINE__,10);
+            
             $working_arrays = $this->working_arrays_pad_specific_group($working_arrays,$array_group_to_be_padded,$pad_ctr);
+            //$this->debug_exit(__FILE__,__LINE__,10);
         }
        return $working_arrays;
     }
@@ -2236,6 +1615,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
 
     public function working_arrays_set_pad_ctr($working_arrays,$array_group_to_be_padded ) {
+        // this is setting the padding at the end of the form so there's always room for growth
+        // it's more complicated because the size of one array dictates the size of all three
+
         //echo('<br>'.'working_arrays_set_pad_ctr');$this->debug_exit(__FILE__,__LINE__,0); 
         foreach($working_arrays[$array_group_to_be_padded] as $array_name=>$arrays) {
             //business_rules_field_name_array ppv_define_business_rules
@@ -2282,7 +1664,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }
 
     public function working_arrays_pad_specific_group($working_arrays,$array_group_to_be_padded,$pad_ctr) {
-        echo($array_group_to_be_padded);
+        //echo ('<BR>'.__FILE__. ' at line: '.__LINE__.' in method: ' .__FUNCTION__);echo($array_group_to_be_padded);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10); 
         //var_dump($working_arrays[$array_group_to_be_padded]);$this->debug_exit(__FILE__,__LINE__,10); 
 
