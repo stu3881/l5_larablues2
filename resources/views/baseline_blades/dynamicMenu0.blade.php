@@ -3,6 +3,7 @@
 
 <section id="promo">   
 	dynamicMenu0
+
 	<div id="promo-details"> 
 		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'160px'))}} 
 	</div> <!-- end promo-details -->
@@ -14,7 +15,7 @@
 		Activate/Deactivate table reporting
 
 <?php
-	//var_dump($all_records);
+	//var_dump($arr1);
 	//var_dump($report_definition_key);
 	//exit("indexReports.blade 17 ");
 $browse_select_field_count=3;
@@ -24,8 +25,8 @@ $browse_select_field_count=3;
 $rowcount = -1;
 
 	$i =  1;
-
-		
+	//var_dump($myStrings);var_dump($parameters);
+		//exit("exit in dynamicMenu0");
 	// *********************
 	?>
 	
@@ -79,36 +80,27 @@ $rowcount = -1;
 					
 					?>
 		@foreach($arr1 as $table=>$value)
-			 
-				<?php 
-				//var_dump($arr1);//exit("edit1.blade xx");
-				//var_dump($arr1);exit("edit1.blade xx");
-				?>
-				<tr >
-				<td class='border_left'>
-					{{ Form::open(array('url'=>'admin/'.'node_name'.'/reportDefEdits', 'method'=>'GET')) }}
-					{{-- Form::label('', '--') --}} 
-				</td>
 
-				<?php echo($myStrings['tdBegin']);?>
-					{{ $table }}
-				<?php echo($myStrings['tdEnd']);?>
-				
-				<?php echo($myStrings['tdBegin']);?>
-				<?php echo($myStrings['linkBeginA']);?>
-				<?php echo($myStrings['linkBeginB']);?>
-				<?php /*echo($myStrings['linkBeginC']);*/?>
-				<?php /*echo($myStrings['linkEndA']);*/?>
-					{{ $arr1[$table]['aord'][0] }}
-				<?php echo($myStrings['linkEndB']);?>
-				<?php echo($myStrings['tdEnd']);?>
-				
-				</tr>
+		<tr>
+			<td class='border_left'>
+				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
+				{{ $table }}
+			</td>
+			
+			<?php echo($myStrings['tdBegin']);?>
+				{{ $table }}
+				{{--$myStrings['tdEnd']--}}
+
+			
+
+			</td>
+			
+		</tr>
 				
 		@endforeach
 	
 		
-			</table>
+	</table>
 	{{ Form::close() }}
 	<script>
 //write document.getElementById("div_inside_update_active_tasks").width = "2000px";

@@ -331,8 +331,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
             ->with('menu_array'               ,$main_menu_array)
             ;
         }
-    public function activate_deactivate($what_we_are_doing) {
-       $this->debug0();
+    public function activate_deactivate(Request $request, $id, $what_we_are_doing, $coming_from) {
+       $this->debug1();
  
         switch ($what_we_are_doing) { 
         case "activating_route":
@@ -530,7 +530,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
             'tdBegin'   =>"<td class='text_align_left select_pink' >",
             
             'link1of4' =>"<a href=\"{{ URL::route(",
-            'link2of4' =>"$".'node',
+            'link2of4' =>"$".'node_name',
             'link3of6' =>".",
             'link4of6' =>$method_name,
             'tdEnd'     =>"</td>"
@@ -543,11 +543,21 @@ class ProgrammerUtilitiesController extends CRHBaseController
    
      //*
          $myStrings = array(
-            'tdBegin'   =>"<td class='text_align_left select_pink' >",
-            'tdEnd'     =>"</td>",
-            'linkBeginA' =>"<a href=\"{{ URL::route('miscThings'.'.activateDeactivate', $"."parameters =",
-            'linkBeginB' =>" array('what_we_are_doing' =>'activating_controller','coming_from'=>'dynamicMenu0')) }}\" class='btn mycart-btn-row2'>",
-            'linkEndB'     =>'</a>'
+            'what_we_are_doing' =>"activating_controller",
+            'coming_from'       =>"dynamicMenu0",
+            'tdBegin'           =>"<td class='text_align_left select_pink' >",
+            'tdEnd'             =>"</td>",
+            'linkStrA'          =>
+                "<a href= \"",
+
+            /*
+                   'linkStrBx' =>
+                {{ URL::route($".'node_name'.'.activateDeactivate'." $"."parameters =",
+            'linkStrB' =>
+                " array('what_we_are_doing'=>'activating_controller','coming_from'=>'dynamicMenu0')",
+            */
+            'linkStrC' =>"\" class='btn mycart-btn-row2'>",
+            'linkEnd'     =>'</a>'
             );
             //var_dump($arr1);
          var_dump($myStrings);var_dump($link_parameters);
@@ -555,7 +565,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
          return view($this->node_name.'.dynamicMenu0')
             ->with('arr1'           ,$arr1)
-            ->with('myStrings'      ,$myStrings)             
+            ->with('myStrings'      ,$myStrings)  
+            ->with('node_name'      ,$this->node_name)  
             ->with('parameters'     ,$link_parameters)             
          ;
 

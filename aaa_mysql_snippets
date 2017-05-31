@@ -362,3 +362,19 @@ sudo dd bs=4M if=~/Downloads/ubuntu-16.04.2-desktop-amd64.iso of=/dev/sdc1
 
 homestead_with_defs_20170520A.sql
 mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170520A.sql;
+
+select node_name, table_name, model, model_table from miscThings where record_type = 'table_controller'
+
+{{$myStrings['tdBegin']}}
+
+
+<a href="
+{{ URL::route($node_name.'.activateDeactivate', $parameters = 
+array('what_we_are_doing'=>'activating_controller','coming_from'=>'dynamicMenu0')) }}
+"
+class="btn mycart-btn-row2">Main menu</a>
+{{--$myStrings['linkStrC']--}}
+
+
+					
+{{$myStrings['tdEnd']}}
