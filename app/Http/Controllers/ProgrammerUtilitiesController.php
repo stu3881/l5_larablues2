@@ -228,80 +228,41 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
     public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
+        //echo($what_we_are_doing);
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
 
-        //echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
-    
-        $report_definition          = $this->execute_query_by_report_no($id) ;
-        $encoded_business_rules     = $report_definition[0]['business_rules'];
+       $link_parms_array = array(
+        'controller_name'   => ucfirst($table).'Controller',
+        'model_table'       => ucfirst($table),
+        'model'             => ucfirst($table),
+        'node_name'         => ucfirst($table)
+        );
 
-        //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
+        foreach ($link_parms_array as $entity=>$name) {
+                switch ($what_we_are_doing) { 
+                    case "activate":
+                    echo(app_path());
+                        $this->activate_entity($entity);
+                        break;
+                    case "deactivate":
+                        $this->deactivate_entity($entity);
+                        break;
+                }   
+           
 
-        $working_arrays             = $this->working_arrays_construct($report_definition[0]);
-        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
-
-        $query_relational_operators_array = $this->build_query_relational_operators_array();
-        
-        if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
-            echo("<BR>"."query failed");$this->debug_exit(__FILE__,__LINE__,10);
-        }
-        
-        //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
-        $encoded_business_rules_field_name_array = array();
-        $field_names_array = array();
-        $data_array_name = array();
-        $data_array_name ["report_name"] = $report_definition[0]->report_name;
-        $data_array_name ["record_type"] = $report_definition[0]->record_type;
-        $field_names_row_file_name =  "../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_field_names_row';
-
-        $browse_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_display_snippet';
-
-
-        //echo('<br>after build_and_execute_query');$this->debug_exit(__FILE__,__LINE__,0);
-        if($coming_from == 'var_dump'){
-            var_dump($miscThings[0]);
-            var_dump($report_definition[0]);
-
-          $this->debug_exit(__FILE__,__LINE__,0);  
-        }
-        //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
-        if ($miscThings){         
-            //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
-            //$miscThings = (array) $miscThings;
-            //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,0); 
-             return view($this->node_name.'.browseEdit',compact('miscThings'))
-            ->with('browse_select_field_count'  ,count($miscThings))
-            ->with('node_name'                  ,$this->node_name)             
-            ->with('field_names_row_file_name'  , $field_names_row_file_name)
-            ->with('browse_snippet_file_name'   , $browse_snippet_file_name)
-            ->with('report_key'                 , $id)
-            ->with('model_table'                ,$this->model_table)
-            ->with('key_field_name'             ,'id')
-            ->with('key_field_value'            , $id)
-            ->with('all_records'                , $miscThings)
-            ->with('use_table_in_record'        ,'n')
-            ->with('record_table_name'          , $this->model_table)
-            ->with('encoded_business_rules'     , $encoded_business_rules)
-
-           ->with('report_definition_key'     , $id)
-
-             
-            ;
-         //return view('miscThings.edit2_default_browse',$miscThings);
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-  
-        if($miscThings = MiscThing::distinct('record_type')->get()){
-          //$miscThings = MiscThing::where($this->snippet_table_key_field_name, '=', $id)->get();
-          //$this->debug_exit(__FILE__,__LINE__,0);   
-          //echo("<br> report_name<br>".$miscThings[0]->report_name."**");
-          //var_dump($miscThings[0]);
-          //$this->debug_exit(__FILE__,__LINE__,10);  
         }
     }
-        
+
+    public function activate_entity($entity) {
+        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                               $extended_app_path = app_path();
+ 
+    }        
+
+
+    public function deactivate_entity($entity) {
+        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+    }        
 
  
 
@@ -331,26 +292,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
             ->with('menu_array'               ,$main_menu_array)
             ;
         }
-    public function activate_deactivate(Request $request, $id, $what_we_are_doing, $coming_from) {
-       $this->debug1();
  
-        switch ($what_we_are_doing) { 
-        case "activating_route":
-            break;
-        case "activating_controller":
-            break;
-        case "activating_model":
-            break;
-        case "de_activating_route":
-            break;
-        case "de_activating_controller":
-            break;
-        case "de_activating_model":
-            break;
-        }
 
-        return ;
-    }
+ 
 
      public function define_menu_links() {
         $this->debug0(__FILE__,__LINE__,__FUNCTION__);
@@ -565,9 +509,10 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
          return view($this->node_name.'.dynamicMenu0')
             ->with('arr1'           ,$arr1)
-            ->with('myStrings'      ,$myStrings)  
+            ->with('id'             ,$id)
             ->with('node_name'      ,$this->node_name)  
             ->with('parameters'     ,$link_parameters)             
+            ->with('myStrings'     ,$myStrings)             
          ;
 
 

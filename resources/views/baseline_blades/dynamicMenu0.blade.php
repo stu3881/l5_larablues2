@@ -80,7 +80,6 @@ $rowcount = -1;
 					
 					?>
 		@foreach($arr1 as $table=>$value)
-
 		<tr>
 			<td class='border_left'>
 				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
@@ -88,13 +87,26 @@ $rowcount = -1;
 			</td>
 			
 			<?php echo($myStrings['tdBegin']);?>
-				{{ $table }}
-				{{--$myStrings['tdEnd']--}}
-
+				{{ $arr1[$table]['aord'][0] }}
+			<?php echo($myStrings['tdEnd']);?>		
 			
+			<?php echo($myStrings['tdBegin']);?>
+  		        <a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array('id'=>$id, 
+	  		        'what_we_are_doing'=> $arr1[$table]['aord'][0],
+	  		        'coming_from'=> 'dynamicMenu0')) }}" class="btn mycart-btn-btn">
+	  		        {{$arr1[$table]['aord'][0]." ".$table}}
+	  		        </a>
 
-			</td>
-			
+
+<!---
+			<a href="
+{{-- URL::route($node_name.'.activateDeactivate', $parameters = 
+array('what_we_are_doing'=>'activating_controller','coming_from'=>'dynamicMenu0')) --}}
+"
+class="btn mycart-btn-row2">Main menu</a>
+-->				
+			<?php echo($myStrings['tdEnd']);?>		
+
 		</tr>
 				
 		@endforeach

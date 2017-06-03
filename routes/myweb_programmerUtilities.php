@@ -19,7 +19,6 @@
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
     //*
     $method_name            = "activateDeactivate";
-
     Route::get('admin/'.$node_name
         .'/{'.$model.'}'
         .'/{'.$what_we_are_doing.'}'
@@ -53,7 +52,7 @@
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
-    $method_name            = "ppvEdit";
+    $method_name            = "browseEdit";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
       //*
     $method_name            = "mainMenu";
