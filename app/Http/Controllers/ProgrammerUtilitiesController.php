@@ -51,7 +51,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $my_ctr                             = 0,
         $report_definition_id               = 0,
         $store_validation_id                = 0,
-        $business_rules_array               = 0
+        $business_rules_array               = 0,
+        $link_parms_array                   = array()
 
         ) 
         {
@@ -65,6 +66,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
         //$this->beforeFilter('csrf', array('on'=>'post'));
         //$this->beforeFilter('admin');
+
+        $this->link_parms_array              = $link_parms_array;
+
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
@@ -164,8 +168,15 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     }
 
-    
-    
+     public function scan_replace_array($file_as_string,$search_str_array){
+         $crlf = "\r\n";
+         foreach ($search_str_array as $entity=>$search_str) {
+             echo($search_str_array[$entity] ."** ". $this->link_parms_array[$entity]);
+            $file_as_string = str_ireplace ($search_str_array[$entity], $this->link_parms_array[$entity] , $file_as_string);
+        }  
+        return  $file_as_string;       
+     }
+
     public function anchor_boundaries_insert_replace($file_as_string,$insert,$anchor,$boundary_start,$boundary_stop){
         //!! we may want to include or not include boundary start & stop strings
         // currently we strip them both.  if you want them, put them in the insert
@@ -227,41 +238,156 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
 
     //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
-    public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
+    public function activateDeactivate(Request $request, $id, $what_we_are_doing, $table){
         //echo($what_we_are_doing);
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $this->link_parms_array = $this->derive_entity_names_from_table("xx",$table);
+        $entities_array = array(
+            'table_controller'=>$this->link_parms_array['controller_name'],
+            'model'=>$this->link_parms_array['model'],
+            'routes'=>$this->link_parms_array['node_name'],
+            'views'=>$this->link_parms_array['node_name'],
+            );
+        //var_dump($this->link_parms_array);
 
-       $link_parms_array = array(
-        'controller_name'   => ucfirst($table).'Controller',
-        'model_table'       => ucfirst($table),
-        'model'             => ucfirst($table),
-        'node_name'         => ucfirst($table)
-        );
+         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
 
-        foreach ($link_parms_array as $entity=>$name) {
-                switch ($what_we_are_doing) { 
-                    case "activate":
-                    echo(app_path());
-                        $this->activate_entity($entity);
-                        break;
-                    case "deactivate":
-                        $this->deactivate_entity($entity);
-                        break;
-                }   
+
+        foreach ($entities_array as $entity=>$name) {
+            switch ($what_we_are_doing) { 
+                case "activate":
+                    $this->activate_entity($entity,$name);
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    break;
+                case "deactivate":
+                    $this->deactivate_entity($entity,$name);
+                    break;
+            }   
            
-
         }
     }
 
-    public function activate_entity($entity) {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                               $extended_app_path = app_path();
- 
+    public function activate_entity($entity,$name) {
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+
+        $search_str_array = array(
+            'controller_name'   => "@@controller_name@@",
+            'model_table'       => "@@model_table@@",
+            'model'             => "@@model@@",
+            'node_name'         => "@@node_name@@",
+            'field_name_string' => "@@field_name_string@@"
+            );
+
+        switch ($entity) { 
+            case "table_controller":
+                $file_extension = "/Http/Controllers/". $name.".php";
+                if (is_file(app_path().$file_extension)){
+                    echo "file exitsts";
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                }
+                else{
+                    $controller_model_file = app_path()."/Http/Controllers/". "generatedModelController.php";
+                    $file_as_string = file_get_contents($controller_model_file);
+                    $file_as_string = $this->scan_replace_array($file_as_string,$search_str_array);
+                    File::put(app_path().$file_extension, $file_as_string);
+                }
+                break;
+            case "model":
+               $models_directory = app_path()."/Models/";
+               $model_file_name = $models_directory. "generatedModelsModel.php";
+                if (is_file($model_file_name)){
+                    $file_as_string = file_get_contents($model_file_name);
+                    //var_dump($file_as_string);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                }
+                if (is_file($models_directory.$this->link_parms_array['model'].".php")){
+                    echo "<br>file exitsts";
+                    //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                else{
+                    echo "<br>file does not exitst";$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    //var_dump($file_as_string);exit("at 308");
+                    $this->link_parms_array['field_name_string'] = "";
+                    //var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                           
+                    $columns = Schema::getColumnListing($this->link_parms_array['node_name']);
+                    array_shift($columns); // always assume 1st element is key and drop it
+                    $crlf = "\r\n";
+                    $crlftab = "\r\n\t";
+                    $quote = "'";
+                    $field_name_str = $crlftab;
+                    foreach ($columns as $index=>$field_name) {
+                        $field_name_str .= $quote.$field_name.$quote.",".$crlftab  ;
+                    }
+                    $this->link_parms_array['field_name_string'] = $field_name_str;
+                    $file_as_string = $this->scan_replace_array($file_as_string,$search_str_array);
+                    //var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
+                    echo ("<br><br><br>file_as_string ".$file_as_string);
+                    
+                    File::put($models_directory.$this->link_parms_array['model'].".php", $file_as_string);                
+                 }
+                 break;
+            case "routes":
+                $project_path     = substr(app_path(),0,strlen(app_path())-4);
+                $routes_path = $project_path."/routes/";
+                $routes_model_file = $project_path."/routes/generatedRoutesModel.php";
+                $generated_file_name = $routes_path. "generatedRoutes.php";
+                if (is_file($routes_model_file)){
+                     echo "file exitsts";$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                }
+                if (is_file($generated_file_name)){
+                     echo "file exitsts";
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                else{
+                echo "<br>file ...".$generated_file_name."file ...<br><br>".$routes_model_file;
+                $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    $file_as_string = file_get_contents($routes_model_file);
+var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    $file_as_string = $this->scan_replace_array($file_as_string,$search_str_array);
+                    //var_dump($file_as_string);
+                    var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
+                    //File::put($generated_file_name, $file_as_string);
+                }
+                break;
+            case "views":
+                $project_path     = substr(app_path(),0,strlen(app_path())-4);
+                $dir_name = $project_path."/resources/views/". $name;
+                //echo("<br> * dir_name: ".$dir_name);
+                if (is_dir($dir_name)){
+                    //echo "Directory exitsts";
+                }
+                else{
+                    mkdir($dir_name);
+                    $infile = $project_path."/resources/views/". "generated_views_directory_model";
+                    File::copyDirectory($infile,$dir_name);
+                }
+               break;
+        }   
+
     }        
 
 
-    public function deactivate_entity($entity) {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+    public function deactivate_entity($entity,$name) {
+         $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+         switch ($entity) { 
+            case "table_controller":
+                $file_extension = "/Http/Controllers/". $name.".php";
+                $file_name = app_path().$file_extension;
+                 if (is_file(app_path().$file_extension)){
+                    echo "there";
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                echo ("<br><br>file_name: ".$file_name);
+                break;
+            case "model":
+                 break;
+            case "routes":
+                break;
+            case "views":
+                break;
+        }   
+
     }        
 
  
@@ -276,7 +402,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
        //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
        $record_type                    = "report_definition";
        $linkx = "xx";
-
+ 
         $main_menu_array = array(
             'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
             'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
@@ -343,7 +469,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         'controller_name'   => ucfirst($table).'Controller',
         'model_table'       => ucfirst($table),
         'model'             => ucfirst($table),
-        'node_name'         => ucfirst($table)
+        'node_name'         => lcfirst($table)
         );
 
         foreach ($link_parms_array as $entity=>$name) {
@@ -413,16 +539,17 @@ class ProgrammerUtilitiesController extends CRHBaseController
             'controller_name'   => ucfirst($table).'Controller',
             'model_table'       => ucfirst($table),
             'model'             => ucfirst($table),
-            'node_name'         => ucfirst($table)
+            'node_name'         => lcfirst($table)
             );
-        echo '**'.substr($link_parms_array['model'],0,strlen($table)).'**';
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        echo '<br>'.'**'.substr($link_parms_array['model'],strlen($table)-1,1).'**';
+        //echo '**'.substr($link_parms_array['model'],0,strlen($table)).'**';
+        
+        //echo '<br>'.'**'.substr($link_parms_array['model'],strlen($table)-1,1).'**';this->debug0(__FILE__,__LINE__,__FUNCTION__);
         if (substr($link_parms_array['model'],strlen($table)-1,1) == 's') {
             $link_parms_array['model'] = substr($link_parms_array['model'],0,strlen($table)-1);
         }
+
         return $link_parms_array;
-    }
+   }
 
    public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$reportDefinitionKey) {
         $this->debug0(__FILE__,__LINE__,__FUNCTION__);

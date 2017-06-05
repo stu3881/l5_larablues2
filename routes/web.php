@@ -62,7 +62,8 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     //generated_inserts_begin
 
-    $node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   @include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
+    @include('myweb.miscThingsRoutesModel.php');
     $node_name = 'new_show';$model = 'new_show';$controller_name = 'New_showController';   @include('myweb.miscThingsRoutesModel.php');
     $node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   @include('myweb.miscThingsRoutesModel.php');
     
@@ -76,7 +77,8 @@ Route::group(['middleware' => ['web']], function () {
 
     @include('myweb_programmerUtilities.php');
 
-    $node_name = 'miscThings';$model = 'miscThing';$controller_name = 'MiscThingsController';   @include('myweb.miscThingsRoutesModel.php');
+    
+    @include('miscThingsGeneratedRoutes.php');
 
 
     // *****

@@ -93,7 +93,7 @@ $rowcount = -1;
 			<?php echo($myStrings['tdBegin']);?>
   		        <a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array('id'=>$id, 
 	  		        'what_we_are_doing'=> $arr1[$table]['aord'][0],
-	  		        'coming_from'=> 'dynamicMenu0')) }}" class="btn mycart-btn-btn">
+	  		        'table'=> $table)) }}" class="btn mycart-btn-btn">
 	  		        {{$arr1[$table]['aord'][0]." ".$table}}
 	  		        </a>
 

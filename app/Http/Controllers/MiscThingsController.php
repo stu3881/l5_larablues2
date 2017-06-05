@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+// set1 unique values for table controller
+//flagStart1 dont chage or remove this line or line above
+use App\Models\MiscThing;
+//flagEnd1 dont chage or remove this line
+
 use App\Models\MiscThing;
 use App\Http\Requests;
 
@@ -29,12 +34,16 @@ class MiscThingsController extends CRHBaseController
         $db_snippet_connection          = "",
         $db_data_connection             = "",
         //$db_snippet_connection          = "",
+        // set0 unique values for table controller
+        //flagEnd0 dont chage or remove this line or line above
         $controller_name                = "miscThingsController", 
-        $no_of_blank_entries            = "5", 
+        $model_table                    = "miscThings",         
         $model                          = "MiscThing", 
         $node_name                      = "miscThings", 
+        //flagStart1 dont chage or remove this line
 
-        $model_table                    = "miscThings", 
+
+        $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 

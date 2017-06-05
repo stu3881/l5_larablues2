@@ -1,0 +1,14 @@
+<tr>
+<td>#</td>
+<td>controller_name</td>
+<td>db_connection_name</td>
+<td>model</td>
+<td>model_table</td>
+<td>no_of_blank_entries</td>
+<td>snippet_table</td>
+<td>snippet_table_key_field_name</td>
+<td>backup_node</td>
+<td>generated_files_folder</td>
+<td>key_field_name</td>
+<td>node_name</td>
+</tr>
