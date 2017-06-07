@@ -16,25 +16,27 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class ProgrammerUtilitiesController extends CRHBaseController
+class ArtistController extends MiscThingsController
 {
         public function __construct(
      
         /**/
         $buttons_in_front               = "",
         $print_orientation              = "",
+
+
+
         $record_type                    = "table_controller", 
         //$db_connection_name             = "blues_main", 
         $db_connection_name             = "", 
         $db_snippet_connection          = "",
         $db_data_connection             = "",
         //$db_snippet_connection          = "",
-        $controller_name                = "ProgrammerUtilitiesController", 
+        $controller_name                = "ArtistController", 
         $no_of_blank_entries            = "5", 
-        $model                          = "MiscThing", 
-        $node_name                      = "programmerUtilities", 
-
-        $model_table                    = "miscThings", 
+        $model                          = "Artist", 
+        $model_table                    = "artist", 
+        $node_name                      = "artist", 
         $snippet_table                  = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
@@ -51,8 +53,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $my_ctr                             = 0,
         $report_definition_id               = 0,
         $store_validation_id                = 0,
-        $business_rules_array               = 0,
-        $link_parms_array                   = array()
+        $business_rules_array               = 0
 
         ) 
         {
@@ -66,9 +67,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
         //$this->beforeFilter('csrf', array('on'=>'post'));
         //$this->beforeFilter('admin');
-
-        $this->link_parms_array              = $link_parms_array;
-
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
@@ -106,11 +104,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $this->my_ctr = $my_ctr;
         //routes
 
-        // Automatically adjuested strings begin here  (dont change or remove line)  
-        //* everything between here (dont change or remove line) 
-
-
-        //* and here is generated automatically when file is created (dont change or remove line) 
         // these are derived
  
         $this->view_files_prefix                = $this->views_files_path;
@@ -126,7 +119,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->required_fields_array            = $this->generated_snippets_array['required_fields_array'];
         //echo $this->view_files_prefix ;exit ("exit in constructor");
 
-/*
+
         // THIS IS HOW WE CHANGE CONNECTIONS
  
 
@@ -162,845 +155,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $this->report_definition_id         = 12450;
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
-
-
-*/
-
     }
 
-     public function scan_replace_str_value_arrays($file_as_string,$search_str_array,$value_str_array){
-        foreach ($search_str_array as $entity=>$search_str) {
-            echo("<br> ".$search_str_array[$entity] ." will be replaced by ". $value_str_array[$entity])."*";
-            $file_as_string = str_ireplace ($search_str_array[$entity], $value_str_array[$entity] , $file_as_string);
-        }  
-        return  $file_as_string;       
-     }
-
-    public function anchor_boundaries_insert_replace($file_as_string,$insert,$anchor,$boundary_start,$boundary_stop){
-        //!! we may want to include or not include boundary start & stop strings
-        // currently we strip them both.  if you want them, put them in the insert
-        //
-        //echo('anchor_boundaries_insert_replace');
-        // this looks for the boundary start and stop strings and replaces what's in between them with $insert
-        // if they don't exist, we create the boundary strings and wrap them around insert
-        // and insert them immediately after the anchor string
-        //echo ("length ".strlen($file_as_string));
-        //echo("80:".substr($file_as_string,0,80));
-        $crlf = "\r\n";
-        $needle = $boundary_start;
-        $i0 = stripos($file_as_string,$needle);
-        //echo "***".$i0."***".$file_as_string."***".$needle."***";exit('4629');
-        if ($i0 > 0){
-            //echo('found existing node'.$i0);//exit('2809');
-            $i1 = strlen($needle);
-            $s1 = substr($file_as_string,0,$i0-1).$crlf;
-            $needle = $boundary_stop;
-            $i0 = stripos($file_as_string,$needle);
-            if ($i0 > 0){
-                //echo('found end node'.$i0);exit('2809');
-                $i1 = strlen($needle);
-                //$s2 = $crlf.$boundary_stop.$crlf.substr($file_as_string,$i0+$i1);
-                $s2 = $crlf.substr($file_as_string,$i0+$i1);
-            }
-            else{
-                exit("<br>we should have found ".$needle." but didnt<br>".$file_as_string."didnt find boundary stop 5056 ");
-            }
-        }
-        else{  //fist time for this controller so we need to find the anchor
-            $needle = $anchor;
-            $i0 = stripos($file_as_string,$needle);
-            if ($i0 > 0){
-                $i1 = strlen($needle);
-                //$s1 = substr($file_as_string,0,$i0-1).$crlf;
-                //$s1 = substr($file_as_string,0,$i0+$i1).$crlf.$boundary_start.$crlf;
-                $s1 = substr($file_as_string,0,$i0+$i1).$crlf;
-                $s2 = $crlf.substr($file_as_string,$i0+$i1);
-                //echo '*$s1*'.$s1.$model_route_as_string.'$s2'.$s2."***";exit('4650');
-            }
-            else {
-                echo ("fatal error no anchor".$needle."<br>***<br>".$file_as_string."<br>***<br>");exit('<br>4653');
-            }
-    
-        }
-        //echo "<br>all three<br>".$s1.$insert.$s2;exit('<br> 4650');
-        //echo($s1.$insert.$s2);
-        //exit('<br>4653');
-        return $s1.$insert.$s2;
-
-    }
-
-
-     /**
-     * Execute the query and show the report you just requested
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
-    public function activateDeactivate(Request $request, $id, $what_we_are_doing, $table){
-        //echo($what_we_are_doing);
-        $this->link_parms_array = $this->derive_entity_names_from_table("xx",$table);
-        $entities_array = array(
-            'table_controller'=>$this->link_parms_array['controller_name'],
-            'model'=>$this->link_parms_array['model'],
-            'routes'=>$this->link_parms_array['node_name'],
-            'views'=>$this->link_parms_array['node_name'],
-            );
-        foreach ($entities_array as $entity=>$name) {
-            switch ($what_we_are_doing) { 
-                case "activate":
-                    $this->activate_entity($entity,$name);
-                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                    break;
-                case "deactivate":
-                    $this->deactivate_entity($entity,$name);
-                    break;
-            }   
-        }
-    }
-
-    public function activate_entity($entity,$name) {
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $crlf = "\r\n";
-        $crlftab = "\r\n\t";
-        $quote = "'";
-
-        $search_str_array = array(
-            'controller_name'   => "@@controller_name@@",
-            'model_table'       => "@@model_table@@",
-            'model'             => "@@model@@",
-            'node_name'         => "@@node_name@@",
-            'field_name_string' => "@@field_name_string@@"
-            );
-        $values_array = array(
-            'controller_name'   => $this->link_parms_array['controller_name'],
-            'model_table'       => $this->link_parms_array['model_table'],
-            'model'             => $this->link_parms_array['model'],
-            'node_name'         => $this->link_parms_array['node_name'],
-            'field_name_string' => ""
-            );
-       
-        //$search_str_array and $this->link_parms_array MUST match indexes one for one  
-
-        switch ($entity) { 
-            case "table_controller":
-                $file_extension = "/Http/Controllers/". $name.".php";
-                if (is_file(app_path().$file_extension)){
-                    echo "file exitsts";
-                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                }
-                else{
-                    $controller_model_file = app_path()."/Http/Controllers/". "generatedModelController.php";
-                    $file_as_string = file_get_contents($controller_model_file);
-                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array);
-                    File::put(app_path().$file_extension, $file_as_string);
-                }
-                break;
-            case "model":
-               $models_directory = app_path()."/Models/";
-               $model_file_name = $models_directory. "generatedModelsModel.php";
-               $this->link_parms_array['field_name_string'] = "";
-               if (is_file($model_file_name)){
-                    $file_as_string = file_get_contents($model_file_name);
-                    //var_dump($file_as_string);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                }
-                if (is_file($models_directory.$this->link_parms_array['model'].".php")){
-                    echo "<br>file exitsts";
-                    //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                }
-                else{
-                    echo "<br>file does not exitst";$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                    $columns = Schema::getColumnListing($this->link_parms_array['node_name']);
-                    array_shift($columns); // always assume 1st element is key and drop it
-                    $crlf = "\r\n";
-                    $crlftab = "\r\n\t";
-                    $quote = "'";
-                    $field_name_str = $crlftab;
-                    foreach ($columns as $index=>$field_name) {
-                        $field_name_str .= $quote.$field_name.$quote.",".$crlftab  ;
-                    }
-                    $this->link_parms_array['field_name_string'] = $field_name_str;
-                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$this->scan_replace_array);
-                    //var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                    echo ("<br><br><br>file_as_string ".$file_as_string);
-                    
-                    File::put($models_directory.$this->link_parms_array['model'].".php", $file_as_string);                
-                 }
-                 break;
-            case "routes":
-                $project_path     = substr(app_path(),0,strlen(app_path())-4);
-                $routes_path = $project_path."/routes/";
-                $routes_model_file = $project_path."/routes/GeneratedRoutesModel.php";
-                $generated_file_name = $routes_path. $this->link_parms_array['node_name']."GeneratedRoutes.php";
-                if (!is_file($routes_model_file)){
-                     echo "required file missing ";echo ($routes_model_file.'<br>');$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                }
-                if (is_file($generated_file_name)){
-                    // dont create it twice
-                }
-                else{
-                    $file_as_string = file_get_contents($routes_model_file);
-                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$this->link_parms_array);
-                    //* ****************************
-                    //* first, we need to create the routes (file)
-                    File::put($generated_file_name, $file_as_string);
-                    //* ****************************
-                    //* ****************************
-                    //* NOW, WEB.PHP HAS TO INCLUDE THAT FILE
-                    $routes_web_file    = $project_path."/routes/web.php";
-                    $file_as_string     = file_get_contents($routes_web_file);
-                    $search_str_array   = array(
-                        'start_of_generated_includes' => "//generated_inserts_begin_here" 
-                     );
-                    $values_array = array(
-                        'start_of_generated_includes' => "//generated_inserts_begin_here".$crlftab."@include('".$generated_file_name."');");
-                    // make sure it hasnt already been included
-                    $i1 = stripos($file_as_string,"@include('".$generated_file_name);
-                    if ($i1 > 0){
-                         // ok but don't add twice
-                    }
-                    else{
-                        echo ('<br> replacing web.php');$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                        copy($routes_web_file,$routes_web_file."backup");
-                        $file_as_string  = 
-                        $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array);
-                        File::put($routes_web_file, $file_as_string);
-                    }
-                }
-                break;
-            case "views":
-                $project_path     = substr(app_path(),0,strlen(app_path())-4);
-                $dir_name = $project_path."/resources/views/". $name;
-                //echo("<br> * dir_name: ".$dir_name);
-                if (is_dir($dir_name)){
-                    //echo "Directory exitsts";
-                }
-                else{
-                    mkdir($dir_name);
-                    $infile = $project_path."/resources/views/". "generated_views_directory_model";
-                    File::copyDirectory($infile,$dir_name);
-                }
-               break;
-        }   
-
-    }        
-
-
-    public function deactivate_entity($entity,$name) {
-         $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-         switch ($entity) { 
-            case "table_controller":
-                $file_extension = "/Http/Controllers/". $name.".php";
-                $file_name = app_path().$file_extension;
-                 if (is_file(app_path().$file_extension)){
-                    echo "there";
-                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                }
-                echo ("<br><br>file_name: ".$file_name);
-                break;
-            case "model":
-                 break;
-            case "routes":
-                break;
-            case "views":
-                break;
-        }   
-
-    }        
-
- 
-
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function mainMenu(REQUEST $request,$id,$reportDefinitionKey) {
-       $this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
-       //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
-       $record_type                    = "report_definition";
-       $linkx = "xx";
- 
-        $main_menu_array = array(
-            'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
-            'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
-            'activate/deactivate table reporting'   =>'mainMenu_active_inactive',
-            'gen_tbl_controller_snippet'            =>'mainMenu_active_inactive',
-            'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
-            'gen_tbl_model'                         =>'mainMenu_generate_routes_snippet'
-            );
-
-       $main_menu_array = $this->define_menu_links();
-
-        return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
-            ->with('menu_array'               ,$main_menu_array)
-            ;
-        }
- 
-
- 
-
-     public function define_menu_links() {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $main_menu_array = array(
-            //'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
-            'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
-            'activate/deactivate table reporting'   =>'mainMenu_active_inactive'
-            //'gen_tbl_controller_snippet'            =>'mainMenu_active_inactive',
-            //'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
-            //'gen_tbl_model'                         =>'mainMenu_generate_routes_snippet'
-
-        );
-        return $main_menu_array;
-    }
-
-
-   public function build_link_array($aord,$table) {
-        
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        switch ($aord) {
-        case "deactivate":
-            $this->build_link("deactivate",$table);
-           break;
-        case "activate":
-            $this->build_link("activate",$table);
-           break;
-        }
-        //return $link_array;
-        }
-
-
-
-    public function build_link($aord,$table) {       
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-             switch ($aord) {
-                case "deactivate":
-                   break;
-                case "activate":
-                    break;
-            }
-        }
-  
-
-   public function generate_entities($entity,$table) {   
-       $link_parms_array = array(
-        'controller_name'   => ucfirst($table).'Controller',
-        'model_table'       => ucfirst($table),
-        'model'             => ucfirst($table),
-        'node_name'         => lcfirst($table),
-        'field_name_string' => "" 
-
-        );
-
-        foreach ($link_parms_array as $entity=>$name) {
-            switch ($entity) {
-                case "controller_name":
-                   break;
-                case "model_table":
-                   break;
-                case "model":
-                   break;
-                case "node_name":
-                   break;
-            }
-        }
-                 $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['model'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginModel",
-                    "#endModel"
-                );
-
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['model_table'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginModelTable",
-                    "#endModelTable"
-                );
-               $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $link_parms_array['node_name'],
-                    "// Automatically adjuested strings begin here",
-                    "#beginNodeName",
-                    "#endNodeName"
-                );
-
-
-
-                $this->generate_entities('table_controller',$table);
-                $this->generate_entities('model',$table);
-                $this->generate_entities('routes',$table);
-                $this->generate_entities('views',$table);
-           
-        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
-         switch ($entity) {
-            case "table_controller":
-               $this->insure_node_integrity('controller',$table);
-               break;
-            case "model":
-                $this->insure_node_integrity('model',$table);
-                break;
-            case "routes":
-                $this->insure_node_integrity('routes',$table);
-               break;
-            case "views":
-               
-                $this->insure_node_integrity('views',$table);
-               break;
-        }
-    }
-
-
-   public function derive_entity_names_from_table($entity,$table) {       
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $link_parms_array = array(
-            'controller_name'   => ucfirst($table).'Controller',
-            'model_table'       => ucfirst($table),
-            'model'             => ucfirst($table),
-            'node_name'         => lcfirst($table)
-            );
-        //echo '**'.substr($link_parms_array['model'],0,strlen($table)).'**';
-        
-        //echo '<br>'.'**'.substr($link_parms_array['model'],strlen($table)-1,1).'**';this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        if (substr($link_parms_array['model'],strlen($table)-1,1) == 's') {
-            $link_parms_array['model'] = substr($link_parms_array['model'],0,strlen($table)-1);
-        }
-
-        return $link_parms_array;
-   }
-
-   public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$reportDefinitionKey) {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
-       $record_type                    = "report_definition";
-       $linkx = "xx";
-
-       $main_menu_array = $this->define_menu_links();
-
-        return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
-            ->with('menu_array'               ,$main_menu_array)
-            ;
-        }
-
-//generated_inserts_begin
-    public function mainMenu_active_inactive($id,$reportDefinitionKey) {
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $arr2 = array(); 
-        $db_result2 = MiscThing::
-           where('record_type','=','table_controller')
-           ->get(['node_name']);        
-            foreach ($db_result2 as $db_result) {
-                $arr2[$db_result->node_name]=$db_result->node_name;
-            }
-        $arr1 = array();
-        $db_result1 = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-        //$db_result1 = DB::connection($this->db_snippet_connection)->select('SHOW TABLES');
-        foreach($db_result1 as $table)
-        {
-            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-            if (in_array($table,$arr2)){
-                $arr1[$table]['aord'][0] = 'deactivate';
-                $arr1[$table]['class'][0] = "";
-            }
-            else {
-               $arr1[$table]['aord'][0] = 'activate';
-            //   $arr1[$table]['class'][0] = "btn mycart-btn"; // dark blue 
-               $arr1[$table]['class'][0] = "text_align_left mycart-btn"; // dark blue 
-
-            }
-            switch ($arr1[$table]['aord'][0]) {
-                case "deactivate":
-                    $this->build_link_array("deactivate",$table);
-                    break;
-                case "activate":
-                    $this->build_link_array("activate",$table);
-            }
-        }
-        $method_name = "miscThings";
-        $link_strings = array(
-            'tdBegin'   =>"<td class='text_align_left select_red' >",
-            
-            'link1of4' =>"<a href=\"{{ URL::route(",
-            'link2of4' =>"$".'node_name',
-            'link3of6' =>".",
-            'link4of6' =>$method_name,
-            'tdEnd'     =>"</td>"
-             );
-
-        $link_parameters = array(
-            'what_we_are_doing' =>'activating_controller',
-            'coming_from'       =>'dynamicMenu0'
-            );
-   
-     //*
-         $myStrings = array(
-            'what_we_are_doing' =>"activating_controller",
-            'coming_from'       =>"dynamicMenu0",
-            'tdBegin'           =>"<td class='text_align_left select_pink' >",
-            'tdEnd'             =>"</td>",
-            'linkStrA'          =>
-                "<a href= \"",
-
-            /*
-                   'linkStrBx' =>
-                {{ URL::route($".'node_name'.'.activateDeactivate'." $"."parameters =",
-            'linkStrB' =>
-                " array('what_we_are_doing'=>'activating_controller','coming_from'=>'dynamicMenu0')",
-            */
-            'linkStrC' =>"\" class='btn mycart-btn-row2'>",
-            'linkEnd'     =>'</a>'
-            );
-            //var_dump($arr1);
-            //var_dump($myStrings);var_dump($link_parameters);
-            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
-         return view($this->node_name.'.dynamicMenu0')
-            ->with('arr1'           ,$arr1)
-            ->with('id'             ,$id)
-            ->with('node_name'      ,$this->node_name)  
-            ->with('parameters'     ,$link_parameters)             
-            ->with('myStrings'     ,$myStrings)             
-         ;
-
-
-      
-       
-    }
-
-    public function make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$field_values){
-        if (!File::isDirectory($extended_app_path."/views")) {
-            File::makeDirectory($extended_app_path."/views");
-        }
-        if (!File::isDirectory($extended_app_path."/views/".$field_values['model_table'])) {
-            echo $extended_app_path."/views/".$field_values['model_table'];//exit("tty");
-            File::makeDirectory($extended_app_path."/views/".$field_values['model_table'],0777);
-            File::makeDirectory($extended_app_path."/views/".$field_values['model_table']."/generated_files",0777);
-                    
-            $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-            $outfile = $extended_app_path."/views/".$field_values['model_table'];
-            File::copyDirectory($infile,$outfile);
-             
-            $infile = $this->storage_path."/baselines_for_generated_code/views/miscThings/generated_files";
-            $outfile = app_path()."/views/".$field_values['model_table']."/generated_files";
-            File::copyDirectory($infile,$outfile);
-        }               
-                
-        
-        return ;
-    }
-
-    
-    public function mkdir_r($start_node,$dirName,$rights){
-        $dirs = explode('/', $dirName);
-        $dir=$start_node;
-        foreach ($dirs as $part) {
-            $dir.=$part.'/';
-            if (!is_dir($dir) && strlen($dir)>0){
-                mkdir($dir, $rights);
-            }
-        }
-    }
-    
-
-    public function maintain_flat_files_for_db_connection($action,$node,$connection_storage_directory,$field_names,$values_array){
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        /*
-        i know that we must maintain flat files
-        */
-        //var_dump($field_names);
-        //echo("field_names ");var_dump($field_names);
-        //exit(" 4530");
-        switch ($action) {
-            case "table_controller_generators":
-                // when a controller definition changes, a subset of what has to be done 
-                // for a connection definition is required
-                $node = "routes";
-                $infile = $this->storage_path."/baselines_for_model_gens/Route.php";
-                $insert_string = file_get_contents($infile);
-                $insert_string = str_ireplace ('xxx_node_name', $values_array['node_name'] , $insert_string);
-                $insert_string = str_ireplace ('xxx_controller_name', $values_array['controller_name'] , $insert_string);
-                
-                $infile = $this->routes_path."/routes.php";
-                $current_routes_file = $this->routes_path."/routes.php";
-                $infile = $this->current_routes_file;
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "// Automatically adjuested strings begin here",
-                    "// ".$values_array['node_name']." begin_generated_node",
-                    "// ".$values_array['node_name']." end_generated_node"
-                );
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                File::put($outfile, $file_as_string);
-
-                //
-                $node = "config";
-                //
-                $node = "models";
-                $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                $file_as_string = str_ireplace ('$model', $values_array['model'], $file_as_string );
-                //echo ($file_as_string);
-                $output_path_dsn = $this->storage_path.'/connections/'. $values_array['model_table'] .'/models/'.$values_array['model'].'.php';
-                File::put($output_path_dsn, $file_as_string);
-                //
-                $node = "controllers";
-                $str = "";
-                foreach ($field_names as $field_name){
-                    $str .= "$".$field_name.' = "'.$values_array[$field_name].'", ';
-                }
-                $str = rtrim($str);
-                $str = substr($str, 0, -1);
-                $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                $file_as_string = file_get_contents($infile);
-                $file_as_string = str_ireplace ('$controller_name', $values_array['controller_name'] , $file_as_string  );
-                $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                //echo ($file_as_string);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'.php';
-                File::put($output_path_dsn, $file_as_string);
-                break;
-                
-            case "initialize":              
-                echo ("initialize");//;exit(" 4585");
-                // ***************
-                $node =  "config";
-                    $extended_app_path = $this->storage_path."/connections/".$values_array['db_connection_name'];
-                $infile = $this->storage_path."/baselines_for_model_gens/config/database.php";
-                $outfile = $this->storage_path."/connections/".$values_array['db_connection_name']."/config/database.php";
-                copy($infile,$outfile);
-                $file_as_string = file_get_contents($outfile);
-                $insert_string = "'default' => '".$values_array['db_connection_name']."',";
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "//define_default_connection_anchor",
-                    "//default_connection_start",
-                    "//default_connection_stop");
-                $insert_string = $this->snippet_gen("database_connection",$field_names,$values_array);
-                $file_as_string = $this->anchor_boundaries_insert_replace(
-                    $file_as_string,
-                    $insert_string,
-                    "// generated_connections_begin_here",
-                    "// ".$values_array['db_connection_name']."_connection_definition_start",
-                    "// ".$values_array['db_connection_name']."_connection_definition_stop"
-                    );
-                //echo ("initialize");exit(" 4606");
-                $insert_string = $this->snippet_gen("database_connection",$field_names,$values_array);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/config/database.php";
-                File::put($output_path_dsn, $file_as_string);
-                        // ****************
-                // ****************
-                $node =  "models";
-                $infile = $this->storage_path."/baselines_for_model_gens/Models";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/models";
-                //File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "controllers";
-                $infile = $this->storage_path."/baselines_for_model_gens/baseline_controllers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/controllers";
-                File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "routes";
-                echo ("init routes file");
-                $infile = $this->storage_path."/baselines_for_model_gens/routes.php";
-                $file_as_string = file_get_contents($infile);
-                $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                // ****************
-                // **************** "/storage/baselines_for_model_gens/baseline_views_folder/baseline_view_pointers"
-                $node =  "views";
-                
-                $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/miscThings";
-                File::copyDirectory($infile,$outfile);
-                                   
-                $infile = $this->storage_path."/baselines_for_generated_code/views/miscThings/generated_files";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/miscThings/generated_files";
-                File::copyDirectory($infile,$outfile);
-                //     
-                $infile = $this->storage_path."/baselines_for_generated_code/baseline_views_folder/baseline_view_pointers";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/volunteer";
-                File::copyDirectory($infile,$outfile);
-                $infile = $this->storage_path."/baselines_for_generated_code/views/volunteer/generated_files";
-                $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/views/volunteer/generated_files";
-                
-                //copy($infile."/*.php",$outfile);
-                File::copyDirectory($infile,$outfile);
-                break;
-            case "update":
-                switch ($node) {
-                    case "config":
-                        $infile = $this->storage_path."/connections/".$values_array['db_connection_name']."/config/database.php";
-                        $file_as_string = file_get_contents($infile);
-                        $insert_string = "'default' => '".$values_array['db_connection_name']."',";
-                        $file_as_string = $this->anchor_boundaries_insert_replace(
-                            $file_as_string,
-                            $insert_string,
-                            "//define_default_connection_anchor",
-                            "//default_connection_start",
-                            "//default_connection_stop");
-                        $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/config/database.php";
-                        File::put($output_path_dsn, $file_as_string);
-                        //define_default_connection_anchor
-                        // 
-                        break;
-                    case "models":
-                        $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('$model', $values_array['model'], Input::get('') , $file_as_string );
-                        //echo ($file_as_string);
-                        $output_path_dsn = $this->storage_path.'/connections/'. $values_array['model_table'] .'/models/'.$values_array['model'].'.php';
-                        File::put($output_path_dsn, $file_as_string);
-                        break;
-                    case "controllers":
-                        $str = "";
-                        foreach ($values_array_array as $name=>$value){
-                            //echo $name. " * ".Input::get($value);
-                            $str .= "$".$name.' = "'.Input::get($value).'", ';
-                        }
-                        $str = rtrim($str);
-                        $str = substr($str, 0, -1);
-                        //echo "<br><br>*".$str."*";
-                        $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$controller_name', Input::get('controller_name') , $file_as_string  );
-                        $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                        //echo ($file_as_string);
-                        $output_path_dsn = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'Controller.php';
-                        File::put($output_path_dsn, $file_as_string);
-                        break;
-                    case "routes":
-                        break;
-                }
-                break;
-            case "update_table_controller":
-                echo("update_table_controller ".$node);//exit("exit 4737");
-                switch ($node) {
-                    case "views":
-                        $extended_app_path = $this->storage_path.'/connections/'.$values_array['db_connection_name'];
-                        $this->make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$values_array);
-                        $extended_app_path = app_path();
-                        $this->make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$values_array);
-                        break;
-                    case "config":
-                        echo("config");//exit("exit 4789");
-                        
-                        break;
-                    case "models":
-                        $infile = $this->storage_path."/baselines_for_model_gens/Model.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$model_table', $values_array['model_table'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('$model', $values_array['model'], $file_as_string );
-                        //echo ($file_as_string);
-                        $outfile = $this->storage_path.'/connections/'. $values_array['db_connection_name'] .'/models/'.$values_array['model'].'.php';
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        
-                        $outfile = app_path().'/Models/'.$values_array['model'].'.php';
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo("add_delete_add_file_as_string ".$outfile);//exit("exit 4757");
-                        break;
-                    case "controllers":
-                        $str = "";
-                        
-                        foreach ($field_names as $name){
-                            //echo $name. " * ".$values_array[$value);
-                            $str .= "$".$name.' = "'.$values_array[$name].'", ';
-                        }
-                         
-                        $str = rtrim($str);
-                        $str = substr($str, 0, -1);
-                        $infile = $this->storage_path."/baselines_for_model_gens/Controller.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = str_ireplace ('$controller_name', $values_array['controller_name'] , $file_as_string  );
-                        $file_as_string = str_ireplace ('//generated_parameter_list', $str , $file_as_string );
-                        $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name'].'/controllers/'.$values_array['controller_name'].'.php';
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        
-                        $outfile = $this->controllers_path."/".$values_array['controller_name'].'.php';
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        //echo("add_delete_add_file_as_string ".$outfile);exit("exit 4838");
-                        //echo("controllers ");exit("exit 4762");
-                        break;
-                    case "routes":
-                        //echo("add_delete_add_file_as_string "."routes ");exit("exit 4838");
-                        $infile = $this->storage_path."/baselines_for_model_gens/Route.php";
-                        $insert_string = file_get_contents($infile);
-                        $insert_string = str_ireplace ('xxx_node_name', $values_array['node_name'] , $insert_string);
-                        $insert_string = str_ireplace ('xxx_controller_name', $values_array['controller_name'] , $insert_string);
-                        //
-                        $infile = $this->routes_path."/routes.php";
-                        $file_as_string = file_get_contents($infile);
-                        $file_as_string = $this->anchor_boundaries_insert_replace(
-                        $file_as_string,
-                        $insert_string,
-                        "// GENERATED_CONTROLLERS_START_HERE",
-                        "// ".$values_array['node_name']." begin_generated_node",
-                        "// ".$values_array['node_name']." end_generated_node"
-                        );
-                        //echo "routes ".$insert_string;exit(' exit 4861');
-                        $outfile = $this->storage_path.'/connections/'.$values_array['db_connection_name']."/routes.php";
-                        $this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo $outfile;
-                        //exit('exit 4856');
-                        $outfile = $this->routes_path."/routes.php";
-                        //$this->add_delete_add_file_as_string($outfile,$file_as_string);
-                        echo("add_delete_add_file_as_string ".$outfile);//exit("exit 4757");
-                        break;
-                }
-                break;
-            case "change_database_connection":
-                // ****************
-                $node =  "controllers";
-                $outfile = $this->DEHbase_controller_path ."BaseController.php";
-                $infile = $this->stored_connections_path. $values_array['db_connection_name']."/controllers/BaseController.php";
-
-                if (File::exists($outfile)){
-                    unlink ($outfile);
-                    copy($infile,$outfile);
-                }
-                // ****************
-                $node =  "config";
-                $infile = $this->stored_connections_path."/".$values_array['db_connection_name']."/config/database.php";
-                $outfile = $this->database_connection_config_path."database.php";
-                //var_dump($infile);var_dump($outfile);//$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                copy($infile,$outfile);
-                // ****************
-                $node =  "models";
-                $infile = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'.$values_array['db_connection_name']."/models";
-                $outfile = app_path()."/models";
-                File::cleanDirectory($outfile);
-                File::copyDirectory($infile,$outfile);
-                // ****************
-                // ****************
-                $node =  "routes";
-                $infile = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'.$values_array['db_connection_name']."/routes.php";
-                $outfile = $this->routes_path."/routes.php";
-                echo($infile."**".$outfile);
-                $this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                if (File::exists($outfile)){
-                    unlink ($outfile);
-                    copy($infile,$outfile);
-                }
-                //echo "we got here";exit("4725");
-                
-                break;
-                
-        }  // endswitch $action
-        //exit("exit 4548");
-        return;
-    }
 
 
      /**
@@ -1009,7 +165,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
      */
 
     public function write_file_from_string($file_name,$file_as_string) {
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //echo($file_name.$file_as_string." write_file_from_string ");$this->debug_exit(__FILE__,__LINE__,0);
         if (is_file($file_name)){
             unlink($file_name); // delete it
         }
@@ -1062,7 +218,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     public function execute_report_def_query($report_definition) {
         echo("execute_report_def_query<br>");
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($report_definition);
         $errors = array();
         $message = "";
@@ -1084,7 +240,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 $field_name_array = array();
                 $generated_snippets_array = array();
                 //return View::to($this->node_name . "/edit1")
-                $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                $this->debug_exit(__FILE__,__LINE__,1); 
                 return redirect('admin/'.$this->node_name.'/edit1')
                     ->with('snippet_table'                  , $this->snippet_table)
                     ->with('model_table'                    , $this->model_table)
@@ -1101,7 +257,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     $arr[] = $working_arrays['ppv_define_query'][$array_name]; 
                 }      
                 $arr = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
-                $this->debug0(__FILE__,__LINE__,__FUNCTION__); 
+                var_dump($arr); $this->debug_exit(__FILE__,__LINE__,1);   
                 //$query_relational_operators_array = $this->build_query_relational_operators_array();
                 //$db_result = $this->build_and_execute_query($arr,$this->bypassed_field_name,$query_relational_operators_array);
             }
@@ -1129,13 +285,12 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
 
         $working_arrays             = $this->working_arrays_construct($report_definition[0]);
-        //var_dump($working_arrays);$this->debug1__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);
 
         $query_relational_operators_array = $this->build_query_relational_operators_array();
         
         if(!$miscThings = $this->build_and_execute_query($working_arrays,$this->bypassed_field_name,$query_relational_operators_array)) {
-            echo("<BR>"."query failed");
-            $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            echo("<BR>"."query failed");$this->debug_exit(__FILE__,__LINE__,10);
         }
         
         //var_dump($miscThings[0]);$this->debug_exit(__FILE__,__LINE__,10);
@@ -1275,8 +430,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.
-            ', report_definition_key: '.$report_definition_key);
-        //$this->debug_exit(__FILE__,__LINE__,10);
+            ', report_definition_key: '.$report_definition_key);$this->debug_exit(__FILE__,__LINE__,10);
         //var_dump($request);
         //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
@@ -1294,7 +448,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
 
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
-                    //var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
+                    var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
 
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
@@ -1484,65 +638,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
             $this->debug_exit(__FILE__,__LINE__,1);
         }
     }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_controller_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_model_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function gen_tbl_route_snippet($report_no) {
-      //echo 'execute_query_by_report_no'.$report_no;//exit("exit");
-      $response = MiscThing::where($this->snippet_table_key_field_name, '=', $report_no)
-        ->get();
-        if ($response){
-           return $response;
-        }
-        else {
-            echo 'you have a fatal error<br>';
-            $this->debug_exit(__FILE__,__LINE__,1);
-        }
-    }
-
 
 
     public function bld_name_value_lookup_array($table_name) {
@@ -2009,8 +1104,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
         MiscThing::create($miscThing);
         return redirect('admin/miscThings');
     }
-
-
 
 
 

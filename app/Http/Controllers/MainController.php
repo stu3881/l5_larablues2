@@ -227,7 +227,7 @@ class MainController extends DEHBaseController {
         //$MiscThing = $this->snippet_node_name($MiscThing,$field);
 
         //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,0);
-        return view('main.index',compact('MiscThing'))
+        return view('main.indexmain',compact('MiscThing'))
             ->with('report_definition_key'   ,12450)   
             ->with('$node_name'   ,$this->node_name)   
             //->with('$node_name'   ,'miscThings')   

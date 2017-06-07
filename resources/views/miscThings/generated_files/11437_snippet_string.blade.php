@@ -1,5 +1,37 @@
 <tr>
 <td style="text-align:left">
+{{ Form::label("table_reporting_active","table_reporting_active") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('table_reporting_active',$record['table_reporting_active']) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("table_controller_exists","table_controller_exists") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('table_controller_exists',$record['table_controller_exists']) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("table_name","table_name") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('table_name',$record['table_name']) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("key_field_name","key_field_name") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('key_field_name',$record['key_field_name']) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
 {{ Form::label("controller_name","controller_name") }}
 </td>
 <td style="text-align:left">
@@ -16,18 +48,10 @@
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("db_database","db_database") }}
+{{ Form::label("db_connection_name","db_connection_name") }}
 </td>
 <td style="text-align:left">
-{{ Form::text('db_database',$record['db_database']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("key_field_name","key_field_name") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('key_field_name',$record['key_field_name']) }}
+{{ Form::text('db_connection_name',$record['db_connection_name']) }}
 </td>
 </tr>
 <tr>
@@ -68,13 +92,5 @@
 </td>
 <td style="text-align:left">
 {{ Form::text('snippet_table_key_field_name',$record['snippet_table_key_field_name']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("generated_files_folder","generated_files_folder") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('generated_files_folder',$record['generated_files_folder']) }}
 </td>
 </tr>

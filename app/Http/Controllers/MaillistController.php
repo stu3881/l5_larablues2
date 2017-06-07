@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-// set1 unique values for table controller
-//flagStart1 dont chage or remove this line or line above
-use App\Models\MiscThing;
-//flagEnd1 dont chage or remove this line
+use App\Models\Maillist;
 
-//use App\Models\MiscThing;
+
+use App\Models\MiscThing;
 use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
@@ -21,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class MiscThingsController extends CRHBaseController
+class MaillistController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,12 +32,12 @@ class MiscThingsController extends CRHBaseController
         $db_snippet_connection          = "",
         $db_data_connection             = "",
         //$db_snippet_connection          = "",
-        // set0 unique values for table controller
-        //flagEnd0 dont chage or remove this line or line above
-        $controller_name                = "miscThingsController", 
-        $model_table                    = "miscThings",         
-        $model                          = "MiscThing", 
-        $node_name                      = "miscThings", 
+        // set unique values for table controller
+        //flagEn0 dont chage or remove this line or line above
+        $controller_name                = "MaillistController", 
+        $model_table                    = "Maillist",         
+        $model                          = "Maillist", 
+        $node_name                      = "maillist", 
         //flagStart1 dont chage or remove this line
 
 

@@ -11,75 +11,13 @@
 |
 
 */
-// ** this is what's working in l5_larablues
-
-Route::group(['middleware' => ['web']], function () {
-
-    Route::get('/', function () {
-        return view('welcome');
-    })->middleware('guest');
-
-         Route::auth();
-
-    //Route::controller('users','UsersController');
-
-    // ***************************
-    // This one gets you started!!
-    Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
-    
-
-   // main begin_generated_node
-    $node_name = 'main';
-    $controller_name = 'MainController';
-    Route::get('admin/'.$node_name.'/programmerUtilities'      ,$controller_name.'@programmerUtilities');
-
-
-    Route::group(array('prefix' => 'admin'), function() {
-        $node_name              = 'artist';
-        $controller_name        = 'ArtistController';
-        Route::resource($node_name,$controller_name);
-    });
-   
-    //***********************
-    // DONT MOVE OR CHANGE THE FILLOWING LINE
-    //generated_inserts_begin_here
-	@include('/home/vagrant/Code/l5_larablues2/routes/administratorsGeneratedRoutes.php');
-
-    
-    //generated_inserts_stop
-   //***********************
-    //$node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
-    //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/artistGeneratedRoutes.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/new_showGeneratedRoutes.php');
-    //$node_name = 'new_show';$model = 'New_show';$controller_name = 'New_showController';   
-    //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/volunteersGeneratedRoutes.php');
-  //  //$node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   
-    //@include('myweb.miscThingsRoutesModel.php');
-
-    Route::group(array('prefix' => 'admin'), function() {
-        $node_name              = 'miscThings';
-        $controller_name        = 'MiscThingsController';
-        Route::resource($node_name,$controller_name);
-    });
-    @include('/home/vagrant/Code/l5_larablues2/routes/miscThingsGeneratedRoutes.php');
-    @include('myweb_programmerUtilities.php');
-
-    
-    @include('miscThingsGeneratedRoutes.php');
-
 
     // *****
     // these are common to all the routes that follow for this controller
     // *****
-    /*
-    $node_name              = 'miscThings';
-    $model                  = 'miscThing';
-    $controller_name        = 'MiscThingsController';
-
-
-
+    $node_name              = 'artist';
+    $model                  = 'artist';
+    $controller_name        = 'ArtistsController';
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here
@@ -132,7 +70,7 @@ Route::group(['middleware' => ['web']], function () {
     $method_name            = "create_w_report_id";
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-*/
+
 
 // *****
 // miscThingController NOT miscThings
@@ -161,12 +99,5 @@ Route::POST($node_name
     .'/{'.$reportDefinitionKey.'}'
     .'/'.$method_name, 
     array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-
-
-    });  // all part of middleware - web
-
-
- 
 
 

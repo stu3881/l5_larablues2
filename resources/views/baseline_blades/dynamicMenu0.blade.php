@@ -83,28 +83,21 @@ $rowcount = -1;
 		<tr>
 			<td class='border_left'>
 				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-				{{ $table }}
-			</td>
-			
-			<?php echo($myStrings['tdBegin']);?>
-				{{ $arr1[$table]['aord'][0] }}
-			<?php echo($myStrings['tdEnd']);?>		
-			
-			<?php echo($myStrings['tdBegin']);?>
-  		        <a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array('id'=>$id, 
+			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
+				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array('id'=>$id, 
 	  		        'what_we_are_doing'=> $arr1[$table]['aord'][0],
-	  		        'table'=> $table)) }}" class="btn mycart-btn-btn">
+	  		        'table'=> $table)) }}" >
 	  		        {{$arr1[$table]['aord'][0]." ".$table}}
-	  		        </a>
+			<?php echo($myStrings['tdEnd']);?>		
+			</td>
+			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
+			<?php //echo($myStrings['tdBegin']);?>
 
-
-<!---
-			<a href="
-{{-- URL::route($node_name.'.activateDeactivate', $parameters = 
-array('what_we_are_doing'=>'activating_controller','coming_from'=>'dynamicMenu0')) --}}
-"
-class="btn mycart-btn-row2">Main menu</a>
--->				
+				@if($arr1[$table]['aord'][0] == "edit1")	
+					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
+				@endif						
+ 
+		
 			<?php echo($myStrings['tdEnd']);?>		
 
 		</tr>

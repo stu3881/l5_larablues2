@@ -23,14 +23,15 @@ Route::group(['middleware' => ['web']], function () {
 
     //Route::controller('users','UsersController');
 
-    // ***************************
-    // This one gets you started!!
     Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
-    
+    // This one gets you started!!
+
 
    // main begin_generated_node
     $node_name = 'main';
     $controller_name = 'MainController';
+    //Route::get('admin/'.$node_name.'/edit6'     ,$controller_name.'@getEdit6');
+
     Route::get('admin/'.$node_name.'/programmerUtilities'      ,$controller_name.'@programmerUtilities');
 
 
@@ -43,27 +44,23 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     // DONT MOVE OR CHANGE THE FILLOWING LINE
     //generated_inserts_begin_here
-	@include('/home/vagrant/Code/l5_larablues2/routes/administratorsGeneratedRoutes.php');
 
     
     //generated_inserts_stop
    //***********************
-    //$node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
-    //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/artistGeneratedRoutes.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/new_showGeneratedRoutes.php');
-    //$node_name = 'new_show';$model = 'New_show';$controller_name = 'New_showController';   
-    //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/volunteersGeneratedRoutes.php');
-  //  //$node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   
-    //@include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
+    @include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'new_show';$model = 'new_show';$controller_name = 'New_showController';   
+    @include('myweb.miscThingsRoutesModel.php');
+    $node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   
+    @include('myweb.miscThingsRoutesModel.php');
 
     Route::group(array('prefix' => 'admin'), function() {
         $node_name              = 'miscThings';
         $controller_name        = 'MiscThingsController';
         Route::resource($node_name,$controller_name);
     });
-    @include('/home/vagrant/Code/l5_larablues2/routes/miscThingsGeneratedRoutes.php');
+
     @include('myweb_programmerUtilities.php');
 
     
