@@ -1,4 +1,4 @@
- 
+
 
  select db_connection_name , db_host , db_database   , db_username,  db_password from miscThings where db_username IS NOT null;
 
@@ -378,3 +378,23 @@ class="btn mycart-btn-row2">Main menu</a>
 
 					
 {{$myStrings['tdEnd']}}
+
+boot-repair-disk-64bit.iso
+
+
+sudo ntfslabel /dev/sdd1 /boot/efi
+6/7/17
+
+
+update miscThings SET 
+ 	table_reporting_active = 0 
+	where record_type = 'table_controller' and
+	table_reporting_active ^= 1
+
+	'table_reporting_active'
+	select model_table, record_id, id, table_reporting_active, record_type where record_type = 'table_controller'; 
+
+	  mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170607.sql;
+
+    mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20170607.sql;
+

@@ -47,11 +47,11 @@ $snippet_table = $snippet_table;
 						<!-- -->
 			<li>
 				{{ Form::open(array('url'=>'admin/'.$model_table.'/edit4', 'method'=>'GET')) }}
-				{{ Form::hidden('edit4_option','programmer_utilities_menu') }}
-				{{ Form::hidden('snippet_table',$snippet_table) }}
-<!-- -->
+				{{-- Form::hidden('edit4_option','programmer_utilities_menu') --}}
+				{{-- Form::hidden('snippet_table',$snippet_table) --}}
+
 			<!-- -->	
-				{{ Form::hidden('model_table',$model_table) }}
+				{{-- Form::hidden('model_table',$model_table) --}}
 				{{ Form::hidden('node_name',$node_name) }}
 				{{ Form::submit('programmer utilities') }}
 				{{ Form::close() }}

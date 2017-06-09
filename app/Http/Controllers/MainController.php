@@ -217,7 +217,9 @@ class MainController extends DEHBaseController {
         $value      = "table_controller";
         $MiscThing = DB::connection($this->db_snippet_connection)
         ->table($this->snippet_table)
-        ->where($field_name,'=',$value)
+        //->where($field_name,'=',$value)
+        //->where('table_reporting_active','=',NULL)
+        ->where('table_reporting_active','=',1)
         //->where('node_name','=','miscThings')
         ->orderBy($field)
         //->get([$field]);
@@ -229,8 +231,8 @@ class MainController extends DEHBaseController {
         //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,0);
         return view('main.indexmain',compact('MiscThing'))
             ->with('report_definition_key'   ,12450)   
-            ->with('$node_name'   ,$this->node_name)   
-            //->with('$node_name'   ,'miscThings')   
+            //->with('$node_name'   ,$this->node_name)   
+            ->with('$node_name'   ,'miscThings')   
             ->with('queryx'   ,$MiscThing);            
            
     }

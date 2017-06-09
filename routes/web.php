@@ -25,8 +25,10 @@ Route::group(['middleware' => ['web']], function () {
 
     // ***************************
     // This one gets you started!!
+
     Route::get('/', array('uses'=>'MainController@getIndex'))->name('Main.getIndex'); 
     
+    // ***************************
 
    // main begin_generated_node
     $node_name = 'main';
@@ -47,14 +49,14 @@ Route::group(['middleware' => ['web']], function () {
 
     
     //generated_inserts_stop
-   //***********************
+    //***********************
     //$node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
     //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/artistGeneratedRoutes.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/new_showGeneratedRoutes.php');
+    @include('/home/vagrant/Code/l5_larablues2/routes/generated/artistGeneratedRoutes.php');
+    @include('/home/vagrant/Code/l5_larablues2/routes/generated/new_showGeneratedRoutes.php');
     //$node_name = 'new_show';$model = 'New_show';$controller_name = 'New_showController';   
     //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/volunteersGeneratedRoutes.php');
+    @include('/home/vagrant/Code/l5_larablues2/routes/generated/volunteersGeneratedRoutes.php');
   //  //$node_name = 'volunteers';$model = 'Volunteer';$controller_name = 'VolunteersController';   
     //@include('myweb.miscThingsRoutesModel.php');
 
@@ -63,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
         $controller_name        = 'MiscThingsController';
         Route::resource($node_name,$controller_name);
     });
-    @include('/home/vagrant/Code/l5_larablues2/routes/miscThingsGeneratedRoutes.php');
+    @include('/home/vagrant/Code/l5_larablues2/routes/generated/miscThingsGeneratedRoutes.php');
     @include('myweb_programmerUtilities.php');
 
     

@@ -84,7 +84,8 @@ $rowcount = -1;
 			<td class='border_left'>
 				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
 			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array('id'=>$id, 
+				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
+				 	'id'=> $arr1[$table]['key_value'][0],
 	  		        'what_we_are_doing'=> $arr1[$table]['aord'][0],
 	  		        'table'=> $table)) }}" >
 	  		        {{$arr1[$table]['aord'][0]." ".$table}}
