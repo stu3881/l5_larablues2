@@ -1,1 +1,1 @@
-@include('../'.'baseline_blades/indexmain')
+@include('../'.'baseline_blades/index')

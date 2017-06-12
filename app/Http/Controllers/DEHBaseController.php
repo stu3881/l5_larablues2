@@ -302,8 +302,7 @@ class DEHBaseController extends Controller
         $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
         $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
         $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
-     //var_dump($r_o_array);$this->debug_exit(__FILE__,__LINE__,0);        
-     //var_dump($r_o_array);$this->debug_exit(__FILE__,__LINE__,10);
+  
        $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
        $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
 
@@ -669,6 +668,31 @@ public function make_sure_table_snippet_exists($table) {
 		}
 }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request,$id)
+    {
+       //
+        $this->validate($request, 
+            [ 
+        'record_type' => 'required',
+        'report_name' => 'required',
+        'report_query' => 'required',
+        'bypassed_field_name' => 'required',
+        'report_containing_menu' => 'required'
+        ]);
+
+        $miscThingUpdate=$request->all(); // important!!
+        $miscThing=MiscThing::find($id);
+        $miscThings->update($miscThingUpdate);
+ 
+       return redirect('miscThings');
+    }
 
 
 

@@ -631,8 +631,8 @@ class CRHBaseController extends DEHBaseController
      */
      public function create_w_report_id($report_definition_key) {
 
-        //$report_definition_key = 12450;
-        //$this->debug_exit(__FILE__,__LINE__,1);
+        $report_definition_key = 12450;
+        $this->debug_exit(__FILE__,__LINE__,0);
         $report_definition          = 
         $this->execute_query_by_report_no($report_definition_key) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
@@ -795,20 +795,22 @@ class CRHBaseController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
     public function indexReports(REQUEST $request,$id,$reportDefinitionKey) {
-       $this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
-       //var_dump($request);
-        var_dump($id);
+       //$this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
+       //var_dump($reportDefinitionKey);
+       // var_dump($id);
        $record_type                    = "report_definition";
-        /*
-       $miscThings = MiscThing::where('id','=',$this->report_definition_id )
-         ->get();
-        */
-        $miscThings = MiscThing::where('record_type','=',$record_type)
+   
+        if($miscThings = MiscThing::where('record_type','=',$record_type)
          ->where('table_name',  '='    ,$this->model_table)
         ->where('node_name',    '='    ,$this->node_name)
         ->orderBy('report_name','asc')
-        ->get();
-        
+        ->get()){
+            if ($miscThings->count('items') == 0){
+                // there are NO reports so go to new report screen
+                $this->create_w_report_id($reportDefinitionKey);
+                //$this->debug_exit(__FILE__,__LINE__,1);echo(' no reports');
+        }
+        else{
         $what_we_are_doing = 'displaying_advanced_edits_screen';
         $working_arrays     = $this->working_arrays_construct($miscThings[0]);
         $record = $miscThings[0];
@@ -831,6 +833,9 @@ class CRHBaseController extends DEHBaseController
             ->with('snippet_table'               ,$this->snippet_table)
             ;
         }
+        //exit("exit 837"); 
+    }
+}
 
       /**
      

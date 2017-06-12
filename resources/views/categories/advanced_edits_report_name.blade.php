@@ -1,0 +1,1 @@
+@include('../'.'baseline_blades/advanced_edits_report_name')

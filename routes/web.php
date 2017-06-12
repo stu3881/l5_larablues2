@@ -45,6 +45,8 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     // DONT MOVE OR CHANGE THE FILLOWING LINE
     //generated_inserts_begin_here
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/categories.php');
+
 	@include('/home/vagrant/Code/l5_larablues2/routes/administratorsGeneratedRoutes.php');
 
     
@@ -52,7 +54,7 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     //$node_name = 'artist';$model = 'artist';$controller_name = 'ArtistController';   
     //@include('myweb.miscThingsRoutesModel.php');
-    @include('/home/vagrant/Code/l5_larablues2/routes/generated/artistGeneratedRoutes.php');
+    @include('/home/vagrant/Code/l5_larablues2/routes/generated/artist.php');
     @include('/home/vagrant/Code/l5_larablues2/routes/generated/new_showGeneratedRoutes.php');
     //$node_name = 'new_show';$model = 'New_show';$controller_name = 'New_showController';   
     //@include('myweb.miscThingsRoutesModel.php');
