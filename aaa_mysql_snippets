@@ -392,7 +392,7 @@ update miscThings SET
 	table_reporting_active ^= 1
 
 	'table_reporting_active'
-	select model_table, record_id, id, table_reporting_active, record_type where record_type = 'table_controller'; 
+	select model_table, record_id, id, table_reporting_active, record_type from miscThings where record_type = 'table_controller'; 
 
 	  mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170607.sql;
 

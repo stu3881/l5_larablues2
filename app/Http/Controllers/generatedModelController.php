@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\@@model@@;
 
 
 use App\Models\MiscThing;
@@ -19,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class CategoriesController extends CRHBaseController
+class @@controller_name@@ extends CRHBaseController
 {
         public function __construct(
      
@@ -34,10 +34,10 @@ class CategoriesController extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "CategoriesController", 
-        $model_table                    = "Categories",         
-        $model                          = "Categorie", 
-        $node_name                      = "categories", 
+        $controller_name                = "@@controller_name@@", 
+        $model_table                    = "@@model_table@@",         
+        $model                          = "@@model@@", 
+        $node_name                      = "@@node_name@@", 
         //flagStart1 dont chage or remove this line
 
 

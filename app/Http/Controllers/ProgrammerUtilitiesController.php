@@ -85,12 +85,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $this->bypassed_field_name              = $bypassed_field_name;     
         $this->no_of_blank_entries              = $no_of_blank_entries;
 
-        // these are derived
-        $this->views_files_path     = substr(app_path(),0,strlen(app_path())-4)."/resources/views/".$this->node_name;
-        $this->storage_path         = substr(app_path(),0,strlen(app_path())-4)."/storage";
-        $this->controllers_path     = app_path()."/Http/Controllers";
-        $this->routes_path          = app_path()."/Http";
-        $this->key_field_array      = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
+         $this->key_field_array      = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
         $this->make_sure_table_snippet_exists($this->model_table);
         //$this->debug_exit(__FILE__,__LINE__,0);
         $this->generated_snippets_array        = $this->get_generated_snippets();
@@ -100,7 +95,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
         
         //controllers
         $node =  "controllers";
-        $this->DEHbase_controller_path     = app_path()."/Http/Controllers/";
          $this->stored_connections_path = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'. $this->db_connection_name ;
 
         $this->my_ctr = $my_ctr;
@@ -120,6 +114,10 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->debug_exit(__FILE__,__LINE__);
         $this->generated_snippets_array         = $this->get_generated_snippets();
         // generated_snippets are arrays that are generated when the properties
+
+        $this->report_definition_id         = 12450; // in miscThings
+         $this->store_validation_id         = $this->report_definition_id;
+        $this->store_validation_id          = $this->report_definition_id;
 
 
 
@@ -395,7 +393,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                         //copy($routes_web_file,$routes_web_file."backup");
                         $file_as_string  = 
                         $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
-                        //var_dump(substr($file_as_string,1200));
+                     
                        //echo ("<br><br><br>values_array");var_dump($search_str_array);var_dump($values_array);
                         //var_dump($file_as_string);
                         $this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' integrating '.$this->link_parms_array['node_name'].' into web.php');
@@ -458,35 +456,105 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     }        
 
+    public function get_newest_record_type($record_type) {
+        $report_definition  = 
+            MiscThing
+            ::where('record_type','=',$record_type)
+            ->orderBy('created_at'     ,'desc')
+            ->get();
+        echo ($report_definition[0]['id']);
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        return $report_definition[0]['id'];
+    }
+
+    public function clone_generated_files_to_node_name($node_name) {
+        if ($handle = opendir($this->views_files_path."/".$node_name."/generated_files")) {
+            echo "Directory handle: $handle\n";
+            echo "Entries:\n";
+            $new_id = $this->get_newest_record_type('report_definition');
+            $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+                $haystack = "*" . $entry;
+                $i0 = stripos($haystack,$needle);
+                echo "$entry\n";
+              $new_id = $this->get_newest_record_type('report_definition');
+          }
+        }
+    }
+    // clone_file_snippets($from_id,$newest_id);
+    // partial_folder_clone($from_folder,$to_folder,$newest_id);
+
+    public function partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_string_array,$to_string_array,$displayYN) {
+        //* *************
+        //* 
+        echo($from_folder.$to_folder);
+        var_dump($from_string_array);
+        var_dump($to_string_array);
+
+        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        if ($handle = opendir($from_folder)) {
+            $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+                $new_file_name =  $this->scan_replace_str_value_arrays($entry,$from_string_array,$to_string_array,$displayYN);
+                //echo ($new_file_name.$entry);
+
+                if ($new_file_name != $entry){
+                    echo ($new_file_name);
+                    $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    copy($from_folder.'/'.$entry,$to_folder.'/'.$new_file_name);
+                }
+
+            }
+        }
+    }
+
 
     public function clone_ids_to_node_name($node_name) {
         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $ids_to_clone_array = array(
-            12450
-            );
         $new_values = array(
-            'model' => $this->link_parms_array['model'],
-            'node_name' => $this->link_parms_array['node_name'],
-            'table_name' => $this->link_parms_array['node_name']
+            'model'         => $this->link_parms_array['model'],
+            'node_name'     => $this->link_parms_array['node_name'],
+            'table_name'    => $this->link_parms_array['node_name']
             );
-
-        foreach ($ids_to_clone_array as $key => $id) {
-           $MiscThing  =  MiscThing::where('id','=',$id)->get();
+        $ids_to_clone_array = array(
+            "12450 New Report Business Rules"   =>12450,
+            "8601 Table Controllers"            =>8601,
+            "8381 Database Connections"         =>8381
+            );
+        foreach ($ids_to_clone_array as $index => $from_id) {
+           $MiscThing  =  MiscThing::where('id','=',$from_id)->get();
             if($MiscThing){
                 $arr1 = (array) $MiscThing[0]['attributes'];
                 unset($arr1['id']);
-                $arr1= array_merge ($arr1,$new_values);
-                //var_dump($arr1);
+                $arr1 = array_merge ($arr1,$new_values);
+                //dump($arr1);
                 //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
                 MiscThing::create($arr1);
-
-                return redirect('admin/miscThings');
-                //var_dump($MiscThing[0]['attributes']);exit();
-               // var_dump($arr1);exit();
-
-            } 
+                switch ($arr1['record_type']) { 
+                    case "report_definition":
+                        $to_array = array();
+                        
+                        $to_array[] = $this->get_newest_record_type($arr1['record_type']);
+                        $ids_to_clone_array = array(12450);
+                        $from_folder = $this->views_files_path.$this->snippet_table."/"."generated_files";
+                        $to_folder = $this->views_files_path."/".$node_name."/"."generated_files";
+                        $from_string_array = $ids_to_clone_array;
+                         echo($from_folder);
+                        //echo("<BR>*.$this->views_files_path."*".$from_folder);
+                        echo("**".$to_folder."**".$this->snippet_table);
+                        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                        $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$ids_to_clone_array,$to_array,'y');
+                        
+                        break;
+                }   
+                
+            }
         }
-        }
+        return redirect('admin/miscThings');
+    }
+
 
     public function deactivate_entity($entity,$name) {
          $this->debug0(__FILE__,__LINE__,__FUNCTION__);
@@ -517,7 +585,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function mainMenu(REQUEST $request,$id,$reportDefinitionKey) {
+    public function mainMenu(REQUEST $request,$id,$report_definition_id) {
        $this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
        //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
        $record_type                    = "report_definition";
@@ -673,7 +741,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         return $link_parms_array;
    }
 
-   public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$reportDefinitionKey) {
+   public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$report_definition_id) {
         $this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
        $record_type                    = "report_definition";
@@ -687,7 +755,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         }
 
 //generated_inserts_begin
-    public function mainMenu_active_inactive($id,$reportDefinitionKey) {
+    public function mainMenu_active_inactive($id,$report_definition_id) {
         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
         $active_tables = array(); 
         $view_variables_array = array();
@@ -1781,7 +1849,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexReports(REQUEST $request,$id,$reportDefinitionKey) {
+    public function indexReports(REQUEST $request,$id,$report_definition_id) {
        $this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
        //var_dump($request);
         var_dump($id);
@@ -1806,7 +1874,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
              ->with('model_table'               ,$request->input('model_table'))
              ->with('id'                        ,$request->input('id'))
              ->with('report_definition_key'      ,$this->report_definition_id)
-             ->with('reportDefinitionKey'      ,$reportDefinitionKey)
+         
 
             ->with('encoded_working_arrays'     ,json_encode($working_arrays))
             ->with('record'                     ,$record)

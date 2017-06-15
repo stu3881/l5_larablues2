@@ -56,8 +56,10 @@ class CRHBaseController extends DEHBaseController
         $field_name_list_array_first_index  = "",
         $my_ctr                             = 0,
         $report_definition_id               = 0,
+
         $store_validation_id                = 0,
-        $business_rules_array               = 0
+        $business_rules_array               = 0,
+        $project_path                       = ""
 
         ) 
         {
@@ -87,30 +89,39 @@ class CRHBaseController extends DEHBaseController
         $this->bypassed_field_name              = $bypassed_field_name;     
         $this->no_of_blank_entries              = $no_of_blank_entries;
 
-        // these are derived
-        $this->views_files_path     = substr(app_path(),0,strlen(app_path())-4)."/resources/views/".$this->node_name;
-        $this->storage_path         = substr(app_path(),0,strlen(app_path())-4)."/storage";
-        $this->controllers_path     = app_path()."/Http/Controllers";
-        $this->routes_path          = app_path()."/Http";
-        $this->key_field_array      = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
+        //* *****
+        //* PATHS
+        //* *****
+        $this->project_path             = substr(app_path(),0,strlen(app_path())-4);
+        $this->controllers_path         = app_path()."/Http/Controllers";
+        $this->routes_path              = app_path()."/Http";
+        $this->storage_path             = $this->project_path."/storage";
+        $this->views_files_path         = $this->project_path."/resources/views/";
+
+
+        $this->key_field_array          = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
         $this->make_sure_table_snippet_exists($this->model_table);
         //$this->debug_exit(__FILE__,__LINE__,0);
         $this->generated_snippets_array        = $this->get_generated_snippets();
 
        //config
-        $this->database_connection_config_path = substr(app_path(),0,strlen(app_path())-4)."/config/";
+        $this->database_connection_config_path = $this->project_path."/config/";
         
         //controllers
         $node =  "controllers";
-        $this->DEHbase_controller_path     = app_path()."/Http/Controllers/";
-         $this->stored_connections_path = substr(app_path(),0,strlen(app_path())-4).'/storage/connections/'. $this->db_connection_name ;
+
+        $this->stored_connections_path      = $this->project_path.'/storage/connections/'. $this->db_connection_name ;
+        $this->view_files_prefix                = $this->views_files_path;
+ 
+
+
 
         $this->my_ctr = $my_ctr;
         //routes
 
         // these are derived
  
-        $this->view_files_prefix                = $this->views_files_path;
+
         $this->key_field_array                  = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
         $this->key_field_name_array             = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
         $this->make_sure_table_snippet_exists($this->model_table);
@@ -156,11 +167,9 @@ class CRHBaseController extends DEHBaseController
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        $this->report_definition_id         = 12450;
-        //$this->report_definition_id         = 1453;
-
         $this->business_rules_array         = $business_rules_array;
-        $this->store_validation_id          = $this->report_definition_id;
+        //echo (" : ".$this->project_path);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
     }
 
 
@@ -631,15 +640,15 @@ class CRHBaseController extends DEHBaseController
      */
      public function create_w_report_id($report_definition_key) {
 
-        $report_definition_key = 12450;
-        $this->debug_exit(__FILE__,__LINE__,0);
+        echo $report_definition_key;
+        //$this->debug_exit(__FILE__,__LINE__,10);
         $report_definition          = 
         $this->execute_query_by_report_no($report_definition_key) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
         //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
         $report_definition_key.'_modifiable_fields_add';  // for 12450
-        //$this->c1($report_definition_key);
+        echo($report_definition_key.$this->node_name);
         return view($this->node_name.'.create')
             ->with('encoded_business_rules' , $report_definition[0]->business_rules)
             ->with('modifiable_fields_array' , 
@@ -794,9 +803,8 @@ class CRHBaseController extends DEHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexReports(REQUEST $request,$id,$reportDefinitionKey) {
+    public function indexReports(REQUEST $request,$id,$report_definition_id) {
        //$this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
-       //var_dump($reportDefinitionKey);
        // var_dump($id);
        $record_type                    = "report_definition";
    
@@ -807,7 +815,8 @@ class CRHBaseController extends DEHBaseController
         ->get()){
             if ($miscThings->count('items') == 0){
                 // there are NO reports so go to new report screen
-                $this->create_w_report_id($reportDefinitionKey);
+                //* 12450 is the report definition report which everybody needs
+                $this->create_w_report_id($report_definition_id);
                 //$this->debug_exit(__FILE__,__LINE__,1);echo(' no reports');
         }
         else{
@@ -820,8 +829,7 @@ class CRHBaseController extends DEHBaseController
             ->with('encoded_record'             ,json_encode($record))
              ->with('model_table'               ,$request->input('model_table'))
              ->with('id'                        ,$request->input('id'))
-             ->with('report_definition_key'      ,$this->report_definition_id)
-             ->with('reportDefinitionKey'      ,$reportDefinitionKey)
+             ->with('report_definition_id'      ,$this->report_definition_id)
 
             ->with('encoded_working_arrays'     ,json_encode($working_arrays))
             ->with('record'                     ,$record)

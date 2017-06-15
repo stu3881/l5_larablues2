@@ -15,7 +15,7 @@
 
 <?php
 	//var_dump($all_records);
-	//var_dump($report_definition_key);
+	//var_dump($report_definition_id);
 	//exit("indexReports.blade 17 ");
 
 	$what_we_are_doing = 'what_we_are_doing';
@@ -93,7 +93,7 @@ $rowcount = -1;
 				<tr class="table_no_lines">
 				<td>	
 			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-				   		'report_definition_key'=>$report_definition_key)
+				   		'report_definition_key'=>$report_definition_id)
 				   		) }}" class="btn mycart-btn-row2">
 						Initialize_New_Report
 				 	</a>

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\MiscThing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -315,8 +316,10 @@ class DEHBaseController extends Controller
         $dash_gt = " ->";
         //$dash_gt = " query->where";
         //$query = MiscThing::
-        $query = DB::connection($this->db_snippet_connection)->table($this->model_table);
-        echo 'DB::connection( '.$this->db_snippet_connection.')->table( '.$this->model_table.') ';
+        // *************
+        $first_time = 1;
+        
+       
         $executing_distinct = 0;
         foreach ($field_name_array as $index=>$field_name) {
             $value = $field_name;
@@ -330,10 +333,14 @@ class DEHBaseController extends Controller
                 case "<":
                 case "<=":
                 case ">=":
-             
-                   echo ($dash_gt.'where( '.$field_name.' '.$r_o.' '.$v);//exit (' exit 155');
-                    //$query_string .= '->where('.$field_name.','.$r_o.','.$v.')';
-                    $query->where($field_name,$r_o,$v);
+                    if ($first_time){
+                        $first_time = 0;
+                        $query = MiscThing::where($field_name,$r_o,$v);
+                    }
+                    else {
+                        $query->where($field_name,$r_o,$v);
+                    
+                    }
                
                 break;
         
@@ -342,9 +349,9 @@ class DEHBaseController extends Controller
         
             switch ($r_o) {
 				//case  "join":
-                case "join":
-                    //DB::table('name')->join('table', 'name.id', '=', 'table.id')
-                    //->select('name.id', 'table.email');		//case  "where":
+            case "join":
+                //DB::table('name')->join('table', 'name.id', '=', 'table.id')
+                //->select('name.id', 'table.email');		//case  "where":
             case "whereBetween":
             	$query->whereBetween($field_name,$value);
             	 echo(' ->whereBetween('.$field_name.','.$aord.')');

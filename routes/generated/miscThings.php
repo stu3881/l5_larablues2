@@ -71,33 +71,3 @@
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
-
-// *****
-// miscThingController NOT miscThings
-// *****
-// *****
-// these are common to all the routes that follow for this controller
-// *****
-
-$node_name              = 'MiscThing';
-$model                  = 'miscThing';
-$controller_name        = 'MiscThingController';
-$what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
-$coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
-$reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs to be defined here
-
-//*
-$method_name            = "store";
-Route::POST($node_name
-    .'/'.$method_name, 
-    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-
-     //*
-    $method_name            = "create_w_report_id";
-    Route::POST($node_name
-    .'/{'.$reportDefinitionKey.'}'
-    .'/'.$method_name, 
-    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-
