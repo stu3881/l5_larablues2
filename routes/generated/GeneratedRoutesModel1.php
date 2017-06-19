@@ -15,9 +15,13 @@
     // *****
     // these are common to all the routes that follow for this controller
     // *****
-    $node_name              = 'artist';
-    $model                  = 'artist';
-    $controller_name        = 'ArtistsController';
+    //$node_name              = 'miscThings';
+    //$model                  = 'miscThing';
+    //$controller_name        = 'MiscThingsController';
+
+    $controller_name        = "@@controller_name@@"; 
+    $model                  = "@@model@@";
+    $node_name              = "@@node_name@@";
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here

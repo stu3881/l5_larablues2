@@ -424,7 +424,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         ->where('node_name',  '=', $this->link_parms_array['node_name'])
         ->get()){
             if ($miscThing->count('items') == 0){
-                $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' neesds_to_be_created');
+                $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' needs_to_be_created');
                 $insert_array = array(
                 'table_reporting_active'    =>1,
                 'record_type'               =>"table_controller",
@@ -449,9 +449,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         // *******************************************
         // *******************************************
         // let's make sure some report_definition records get built
-        $ids_to_clone_array = array(
-            12450
-            );
+       
     
 
     }        
@@ -492,7 +490,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         var_dump($from_string_array);
         var_dump($to_string_array);
 
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
         if ($handle = opendir($from_folder)) {
             $this->debug0(__FILE__,__LINE__,__FUNCTION__);
             /* This is the correct way to loop over the directory. */
@@ -518,38 +516,55 @@ class ProgrammerUtilitiesController extends CRHBaseController
             'node_name'     => $this->link_parms_array['node_name'],
             'table_name'    => $this->link_parms_array['node_name']
             );
-        $ids_to_clone_array = array(
-            "12450 New Report Business Rules"   =>12450,
+        $reports_to_clone_array = array(
+            "12450 New Report Business Rules"   =>12339,
             "8601 Table Controllers"            =>8601,
             "8381 Database Connections"         =>8381
             );
-        foreach ($ids_to_clone_array as $index => $from_id) {
-           $MiscThing  =  MiscThing::where('id','=',$from_id)->get();
-            if($MiscThing){
-                $arr1 = (array) $MiscThing[0]['attributes'];
-                unset($arr1['id']);
-                $arr1 = array_merge ($arr1,$new_values);
-                //dump($arr1);
+
+        //***** see if there are any reports defined for this node
+        $Existing_reports_for_node  =  MiscThing
+            ::where('record_type','=','report_definition')
+            ->where('node_name','=',$new_values['node_name'])
+            ->get();
+        //***** if there aren't any, load the defaults
+        if ($Existing_reports_for_node->count('items') == 0){
+            echo('<br>'. 'no report_definitions for this node:  '.$new_values['node_name']);
+            //***** for each default_report 
+            foreach ($reports_to_clone_array as $index => $from_id) {
+                //echo("***".$from_id);
                 //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                MiscThing::create($arr1);
-                switch ($arr1['record_type']) { 
-                    case "report_definition":
-                        $to_array = array();
-                        
-                        $to_array[] = $this->get_newest_record_type($arr1['record_type']);
-                        $ids_to_clone_array = array(12450);
-                        $from_folder = $this->views_files_path.$this->snippet_table."/"."generated_files";
-                        $to_folder = $this->views_files_path."/".$node_name."/"."generated_files";
-                        $from_string_array = $ids_to_clone_array;
-                         echo($from_folder);
-                        //echo("<BR>*.$this->views_files_path."*".$from_folder);
-                        echo("**".$to_folder."**".$this->snippet_table);
-                        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                        $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$ids_to_clone_array,$to_array,'y');
-                        
-                        break;
-                }   
-                
+                $MiscThings  =  MiscThing
+                ::where('id','=',$from_id)
+                ->get();
+                if($MiscThings){
+                    var_dump($MiscThings);
+                    $arr1 =   $MiscThings;
+                    
+                    //unset($arr1['id']);
+                    //$arr1 = array_merge ($arr1,$new_values);
+                    var_dump($arr1);
+
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    MiscThing::create($arr1);
+                    switch ($arr1['record_type']) { 
+                        case "report_definition":
+                            $to_array = array();
+                            
+                            $to_array[] = $this->get_newest_record_type($arr1['record_type']);
+                            $from_folder = $this->views_files_path.$this->snippet_table."/"."generated_files";
+                            $to_folder = $this->views_files_path."/".$node_name."/"."generated_files";
+                            $from_string_array = $reports_to_clone_array;
+                             echo($from_folder);
+                            //echo("<BR>*.$this->views_files_path."*".$from_folder);
+                            echo("**".$to_folder."**".$this->snippet_table);
+                            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                            $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$reports_to_clone_array,$to_array,'y');
+                            
+                            break;
+                    }   
+                    
+                }
             }
         }
         return redirect('admin/miscThings');
