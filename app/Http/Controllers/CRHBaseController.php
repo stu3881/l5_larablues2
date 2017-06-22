@@ -641,7 +641,7 @@ class CRHBaseController extends DEHBaseController
      public function create_w_report_id($report_definition_key) {
 
         echo $report_definition_key;
-        //$this->debug_exit(__FILE__,__LINE__,10);
+        $this->debug_exit(__FILE__,__LINE__,10);
         $report_definition          = 
         $this->execute_query_by_report_no($report_definition_key) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;

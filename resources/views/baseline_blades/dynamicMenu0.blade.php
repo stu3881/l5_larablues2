@@ -91,6 +91,20 @@ $rowcount = -1;
 	  		        {{$arr1[$table]['aord'][0]." ".$table}}
 			<?php echo($myStrings['tdEnd']);?>		
 			</td>
+
+
+
+						<td class='border_left'>
+				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
+			<?php echo ("<td class='".$arr1[$table]['class'][1]."' >"); ?>
+				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
+				 	'id'=> $arr1[$table]['key_value'][1],
+	  		        'what_we_are_doing'=> $arr1[$table]['aord'][1],
+	  		        'table'=> $table)) }}" >
+	  		        {{$arr1[$table]['aord'][1]." ".$table}}
+			<?php echo($myStrings['tdEnd']);?>		
+			</td>
+
 			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
 			<?php //echo($myStrings['tdBegin']);?>
 

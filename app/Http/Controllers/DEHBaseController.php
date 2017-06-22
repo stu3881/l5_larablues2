@@ -65,6 +65,12 @@ class DEHBaseController extends Controller
        exit();
      }
 
+    public function debug3($file,$line,$function) {
+       //echo ('<BR>'. ' at line: '.$line.' in method: ' .$function.' of file '.$file);
+       echo ('<BR>'. $line." ");
+       
+     }
+
 
 
 
