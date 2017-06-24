@@ -165,14 +165,15 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     }
 
-     public function scan_replace_str_value_arrays($file_as_string,$search_str_array,$value_str_array,$displayYN){
+     public function scan_replace_str_value_arrays($search_string,$search_str_array,$value_str_array,$displayYN){
         foreach ($search_str_array as $entity=>$search_str) {
             if ($displayYN == 'y'){
                echo("<br> ".$search_str_array[$entity] ." will be replaced by ". $value_str_array[$entity])."*";
+               $displayYN = 'n';
             }
-             $file_as_string = str_ireplace ($search_str_array[$entity], $value_str_array[$entity] , $file_as_string);
+             $search_string = str_ireplace ($search_str_array[$entity], $value_str_array[$entity] , $search_string);
         }  
-        return  $file_as_string;       
+        return  $search_string;       
      }
 
     public function anchor_boundaries_insert_replace($file_as_string,$insert,$anchor,$boundary_start,$boundary_stop){
@@ -238,12 +239,13 @@ class ProgrammerUtilitiesController extends CRHBaseController
     //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
     public function activateDeactivate( $id, $what_we_are_doing, $table){
         //echo($what_we_are_doing);
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo('just routes');
         $this->link_parms_array = $this->derive_entity_names_from_table("xx",$table);
+
         $entities_array = array(
+            'routes'            =>$this->link_parms_array['node_name'],
             'table_controller'  =>$this->link_parms_array['controller_name'],
             'model'             =>$this->link_parms_array['model'],
-            'routes'            =>$this->link_parms_array['node_name'],
             'views'             =>$this->link_parms_array['node_name'],
             );
         foreach ($entities_array as $entity=>$name) {
@@ -314,6 +316,37 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
                     File::put($controller_file, $file_as_string);
                 }
+
+                //* ********************************
+                if ($miscThing = MiscThing    
+                ::where('record_type',  '=', "table_controller")
+                ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                ->get()){
+                    if ($miscThing->count('items') == 0){
+                        $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' is being created');
+                        $insert_array = array(
+                        'table_reporting_active'    =>1,
+                        'record_type'               =>"table_controller",
+                        'controller_name'           =>$this->link_parms_array['controller_name'],        
+                        'model'                     =>$this->link_parms_array['model'],        
+                        'model_table'               =>$this->link_parms_array['model_table'],        
+                        'node_name'                 =>$this->link_parms_array['node_name'],
+                        );        
+                        $insert = MiscThing
+                        ::insert(array($insert_array));
+                    }
+                    //var_dump($miscThing->count('items'));
+                    //$this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' already_exists');
+
+                    $updatex = MiscThing::where('record_type',  '=', "table_controller")
+                    ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                    ->update(array('table_reporting_active'=>1));                 
+                }
+                else{
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' neesds_to_be_created');
+                }
+
+
                 break;
             case "model":
                $models_directory = app_path()."/Models/";
@@ -349,20 +382,23 @@ class ProgrammerUtilitiesController extends CRHBaseController
                  }
                  break;
             case "routes":
-                $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (" : ".$entity);
+                //* ****************************
+                //* first, we need to create the routes (file) for the node
+                //* ****************************
+                //$this->debug3(__FILE__,__LINE__,__FUNCTION__);echo (" : ".$entity);exit();
                 $routes_path = $project_path."/routes/";
                 $routes_model_file = $routes_path. "generated/GeneratedRoutesModel.php";
-                $generated_file_name = $routes_path. "generated/".$this->link_parms_array['node_name'].".php";
-                if (!is_file($routes_model_file)){
+                 if (!is_file($routes_model_file)){
                      $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo " required file MISSING ";echo ($routes_model_file.'<br>');exit();
                 }
+                $generated_file_name = $routes_path. "generated/".$this->link_parms_array['node_name'].".php";
                 if (is_file($generated_file_name)){
                     //echo "rotute file exists ";echo ($routes_model_file.'<br>');
                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo($generated_file_name." already exists");
                     // dont create it twice
                 }
                 else{
-                    $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo " creating ";echo ($generated_file_name.'<br>');exit();
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo " creating ";echo ($generated_file_name.'<br>');exit();
                     $file_as_string = file_get_contents($routes_model_file);
                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (" creating routes file for ".$this->link_parms_array['node_name']);//exit();
                     $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'n');
@@ -395,16 +431,9 @@ class ProgrammerUtilitiesController extends CRHBaseController
                      // ok but don't add twice
                 }
                 else{
-                    //echo ("<br><br><br>values_array");var_dump($search_str_array);$values_array
-                    //echo ('<br> replacing web.php');$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                    //copy($routes_web_file,$routes_web_file."backup");
                     $file_as_string  = 
                     $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
-                 
-                   //echo ("<br><br><br>values_array");var_dump($search_str_array);var_dump($values_array);
-                    //var_dump($file_as_string);
-                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' integrating '.$this->link_parms_array['node_name'].' into web.php');
+                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' integrating '.$this->link_parms_array['node_name'].' into web.php');
                     File::put($routes_web_file, $file_as_string);
                 }
                 
@@ -412,54 +441,41 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
                 break;
             case "views":
-                
                 $dir_name = $project_path."/resources/views/". $this->link_parms_array['node_name'];
-                //echo("<br> * dir_name: ".$dir_name);
                 if (is_dir($dir_name)){
-                    $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' the_directory_for '.$this->link_parms_array['node_name'].' already_exists');
+                    $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo (' the_directory_for '.$this->link_parms_array['node_name'].' already_exists');
                 }
                 else{
                     mkdir($dir_name);
                     $infile = $project_path."/resources/views"."/generated_views_directory_model";
                     File::copyDirectory($infile,$dir_name);
                 }
-                $dir_name = $project_path."/resources/views/". $this->link_parms_array['node_name']/"generated_files";
+                //* ***********************
+                //* ***********************
+                $dir_name = $dir_name."/generated_files";
                 if (is_dir($dir_name)){
                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' the generated_files directory for '.$this->link_parms_array['node_name'].' already_exists'.$dir_name);
-                }
-                else{
-                    mkdir($dir_name);
                     $this->clone_ids_to_node_name($this->link_parms_array['node_name']);
                 }
+                else{
+                    if (mkdir($dir_name)){
+                        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                        if ($miscThing = MiscThing    
+                        ::where('record_type',  '=', "report_definition")
+                        ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                        ->delete()){
+                         $this->clone_ids_to_node_name($this->link_parms_array['node_name']);
+                        }
+                    }
+                    else{
+                      echo (' create failed for directory '.$dir_name);
+                        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    }
+                   
+                }
+
                break;
         }  
-        if ($miscThing = MiscThing    
-        ::where('record_type',  '=', "table_controller")
-        ->where('node_name',  '=', $this->link_parms_array['node_name'])
-        ->get()){
-            if ($miscThing->count('items') == 0){
-                $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' needs_to_be_created');
-                $insert_array = array(
-                'table_reporting_active'    =>1,
-                'record_type'               =>"table_controller",
-                'controller_name'           =>$this->link_parms_array['controller_name'],        
-                'model'                     =>$this->link_parms_array['model'],        
-                'model_table'               =>$this->link_parms_array['model_table'],        
-                'node_name'                 =>$this->link_parms_array['node_name'],
-                );        
-                $insert = MiscThing
-                ::insert(array($insert_array));
-            }
-            //var_dump($miscThing->count('items'));
-            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' already_exists');
-
-            $updatex = MiscThing::where('record_type',  '=', "table_controller")
-            ->where('node_name',  '=', $this->link_parms_array['node_name'])
-            ->update(array('table_reporting_active'=>1));                 
-        }
-        else{
-            $this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' neesds_to_be_created');
-        }
     }        
 
 
@@ -500,6 +516,22 @@ class ProgrammerUtilitiesController extends CRHBaseController
             else{
                 $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
                 echo ($entity . " is MISSING ....".$controller_file);
+            }
+
+            if ($miscThing = MiscThing    
+                ::where('record_type',  '=', "table_controller")
+                ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                ->get()){
+                    if ($miscThing->count('items') == 0){
+                        $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                        echo ('table_controller record MISSING .... '.$this->link_parms_array['node_name']);
+
+                   }
+                   else{
+                    $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                    echo ('table_controller present .... '.$this->link_parms_array['node_name']);
+
+                   }
             }
               
             $entity =  "model";
@@ -588,16 +620,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 $this->debug3(__FILE__,__LINE__,__FUNCTION__);
                 echo (' the generated_files directory is MISSING ....'.$dir_name);
             }     
-            if ($miscThing = MiscThing    
-                ::where('record_type',  '=', "table_controller")
-                ->where('node_name',  '=', $this->link_parms_array['node_name'])
-                ->get()){
-                    if ($miscThing->count('items') == 0){
-                        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                        echo ("<br>".' a_table_controller for '.$this->link_parms_array['node_name'].' needs_to_be_created');
 
-                   }
-            }
         $this->debug1(__FILE__,__LINE__,__FUNCTION__);
     }
 
@@ -646,11 +669,10 @@ class ProgrammerUtilitiesController extends CRHBaseController
             /* This is the correct way to loop over the directory. */
             while (false !== ($entry = readdir($handle))) {
                 $new_file_name =  $this->scan_replace_str_value_arrays($entry,$from_string_array,$to_string_array,$displayYN);
-                //echo ($new_file_name.$entry);
-
                 if ($new_file_name != $entry){
-                     copy($from_folder.'/'.$entry,$to_folder.'/'.$new_file_name);
-                    echo ($new_file_name." was created in ".$to_folder);
+                    //* if the names don't match, they WERE a match so create this file name
+                    copy($from_folder.'/'.$entry,   $to_folder.'/'.$new_file_name);
+                    echo ($new_file_name." was created in ". $to_folder.'/'.$new_file_name);
                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);
                 }
 
@@ -680,7 +702,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
             ->get();
         //***** if there aren't any, load the defaults
         if ($Existing_reports_for_node->count('items') == 0){
-            echo('<br>'. 'no report_definitions for this node:  '.$new_values['node_name']);
+            //echo('<br>'. 'no report_definitions for this node:  '.$new_values['node_name']);
+            //exit("702");
             //***** for each default_report 
             foreach ($reports_to_clone_array as $index => $from_id) {
                 $MiscThing  =  MiscThing
@@ -688,8 +711,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
                 if($MiscThing){
                     $arr1 = (array) $MiscThing[0]['attributes'];
                     $from_array = array('report_id'=>$from_id);
-                    
- 
                     unset($arr1['id']);
                     $arr1 = array_merge ($arr1,$new_values);
                     //var_dump($arr1);

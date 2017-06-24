@@ -15,9 +15,9 @@
     // *****
     // these are common to all the routes that follow for this controller
     // *****
-    $node_name              = "@@node_name@@";
-    $model                  = "@@model@@";
-    $controller_name        = "@@controller_name@@";
+    $node_name              = "tasks_blues";
+    $model                  = "Tasks_blue";
+    $controller_name        = "Tasks_bluesController";
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here

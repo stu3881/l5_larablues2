@@ -398,3 +398,8 @@ update miscThings SET
 
     mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20170607.sql;
 
+ select id, record_type, node_name, table_name, table_reporting_active from miscThings where record_type = 'table_controller';
+
+
+ delete from miscThings where id = 12571;
+ table_reporting_active
