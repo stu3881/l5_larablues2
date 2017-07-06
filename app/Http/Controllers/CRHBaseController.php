@@ -849,7 +849,8 @@ class CRHBaseController extends DEHBaseController
                             $first_time = 0;
                             //$query = MiscThing::where($field_name,$r_o,$v);
                             //$query = MiscThing::distinct()->select($field_name)->groupBy('user_id')->get();
-                            $query = MiscThing::distinct()->select($field_name);
+                            $model = "MiscThing";
+                            $query = $model::distinct()->select($field_name);
 
                              echo("MiscThing::distinct()->select(".$field_name.")");
                         }
@@ -866,8 +867,8 @@ class CRHBaseController extends DEHBaseController
                     case ">=":
                         if ($first_time){
                             $first_time = 0;
-                            $query = MiscThing::where($field_name,$r_o,$v);
-                            echo("MiscThing::where(".$field_name.",". $r_o. ",".$v.")");
+                            $query = $model::where($field_name,$r_o,$v);
+                            echo($model ."::where(".$field_name.",". $r_o. ",".$v.")");
                             //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
                         }
                         else {
