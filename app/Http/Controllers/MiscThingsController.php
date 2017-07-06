@@ -33,7 +33,6 @@ class MiscThingsController extends CRHBaseController
         $db_connection_name             = "", 
         $db_snippet_connection          = "",
         $db_data_connection             = "",
-        //$db_snippet_connection          = "",
         // set0 unique values for table controller
         //flagEnd0 dont chage or remove this line or line above
         $controller_name                = "miscThingsController", 
@@ -42,9 +41,10 @@ class MiscThingsController extends CRHBaseController
         $node_name                      = "miscThings", 
         //flagStart1 dont chage or remove this line
 
-
+        $report_definition_model_name   = "Report_Definition_Model",
         $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
+        $snippet_node_name              = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
         $generated_files_folder         = "generated_files", 
@@ -82,6 +82,7 @@ class MiscThingsController extends CRHBaseController
         $this->model                            = $model;
         $this->model_table                      = $model_table;
         $this->snippet_table                    = $snippet_table;
+        $this->snippet_node_name                = $snippet_node_name;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
         $this->backup_node                      = $backup_node;
@@ -158,15 +159,19 @@ class MiscThingsController extends CRHBaseController
         // the first level index 
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
-        //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        $this->report_definition_id         = 12450;
-        //$this->report_definition_id         = 1453;
+ 
+        $this->report_definition_model_name  = $report_definition_model_name;
+        $this->report_definition_id         =  $this->get_report_definition_id(
+            'report_definition',
+            $this->snippet_node_name,
+            $this->report_definition_model_name
+            );
+       //echo(" leaving constructor".$this->report_definition_id);$this->debug_exit(__FILE__,__LINE__,10); 
+ 
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
     }
-
-
 
     
 }

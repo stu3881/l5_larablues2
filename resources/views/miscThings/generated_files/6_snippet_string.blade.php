@@ -1,18 +1,26 @@
 <tr>
 <td style="text-align:left">
-{{ Form::label("record_type","record_type") }}
+{{ Form::label("report_name","report_name") }}
 </td>
 <td style="text-align:left">
-{{ Form::text('record_type',$record['record_type']) }}
+{{ Form::text('report_name',$record['report_name']) }}
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("table_name","table_name") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('table_name',$record['table_name']) }}
 </td>
 </tr>
 <tr>
 </tr>
 <tr>
 <td style="text-align:left">
-{{ Form::label("field_name","field_name") }}
+{{ Form::label("node_name","node_name") }}
 </td>
-<td style='text-align:left'>
-{{ Form::select('field_name',$lookups['field_name'] , $data_array_name['field_name']) }}
+<td style="text-align:left">
+{{ Form::text('node_name',$record['node_name']) }}
 </td>
 </tr>

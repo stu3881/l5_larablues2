@@ -403,3 +403,15 @@ update miscThings SET
 
  delete from miscThings where id = 12571;
  table_reporting_active
+
+ //* *************************
+ //* *************************
+
+	  mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_yyyymmdd.sql;
+
+    mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_yyyymmdd.sql;
+
+
+ //* *************************
+ //* *************************
+ 

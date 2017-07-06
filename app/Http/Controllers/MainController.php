@@ -15,7 +15,7 @@ use App\Http\Requests;
 
 use DB;
 
-class MainController extends DEHBaseController {
+class MainController extends CRHBaseController {
 
     /**
      * Display a listing of the resource.
@@ -56,7 +56,10 @@ class MainController extends DEHBaseController {
         $model_table                    = "miscThings", 
         $node_name                      = "main", 
         $snippet_table                  = "miscThings", 
-        $snippet_table_key_field_name   = "", 
+        $snippet_table_key_field_name   = "id", 
+        $snippet_node_name              = "miscThings",
+        $report_definition_model_name   = "Report_Definition_Model",
+
         $backup_node                    = "",  
         $generated_files_folder         = "",      
         $key_field_name                 = "", 
@@ -81,6 +84,19 @@ class MainController extends DEHBaseController {
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
+        $this->snippet_node_name                = $snippet_node_name;
+      
+        $this->report_definition_model_name     = $report_definition_model_name;
+        //* $this->report_definition_id is the same for all tables
+        //* because their node_names change, we need to define where this is
+        $this->report_definition_id             =  $this->get_report_definition_id(
+            'report_definition',
+            $this->snippet_node_name,
+            $this->report_definition_model_name
+            );
+
+
+
         $this->backup_node                      = $backup_node;
         $this->generated_files_folder           = $generated_files_folder;
         $this->key_field_name                   = $key_field_name;
@@ -230,7 +246,8 @@ class MainController extends DEHBaseController {
 
         //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,0);
         return view('main.indexmain',compact('MiscThing'))
-            ->with('report_definition_key'   ,12450)   
+            ->with('report_definition_key'   ,$this->report_definition_id)   
+
             //->with('$node_name'   ,$this->node_name)   
             ->with('$node_name'   ,'miscThings')   
             ->with('queryx'   ,$MiscThing);            
@@ -271,7 +288,7 @@ class MainController extends DEHBaseController {
         ->get([$field_name]);
         //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,1);
         return view('main.index',compact('MiscThing'))
-            ->with('report_definition_key'   ,12450)   
+            ->with('report_definition_key'   ,$this->report_definition_id)   
             ->with('$node_name'   ,$this->node_name)   
             ->with('queryx'   ,$MiscThing);            
            
@@ -358,7 +375,7 @@ class MainController extends DEHBaseController {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showx($id)
     {
         //
     }

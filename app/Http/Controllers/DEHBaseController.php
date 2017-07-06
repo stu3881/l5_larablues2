@@ -61,8 +61,15 @@ class DEHBaseController extends Controller
 
     public function debug1($file,$line,$function) {
        //echo ('<BR>'. ' at line: '.$line.' in method: ' .$function.' of file '.$file);
-       echo ('<BR>stopping: '. $line.' in method: ' .$function);
+        $i0 = strripos($file,"/");
+       echo ('<BR>stopping: '. $line.' in method: ' .$function." file: ".substr($file,$i0));
        exit();
+     }
+
+    public function debug2($file,$line,$function) {
+       //echo ('<BR>'. ' at line: '.$line.' in method: ' .$function.' of file '.$file);
+       echo ('<BR>line: '. $line.' in method: ' .$function);
+       //exit();
      }
 
     public function debug3($file,$line,$function) {
@@ -113,7 +120,7 @@ class DEHBaseController extends Controller
      
     public function blade_gen_simple_add($report_key,$field_name_array) {
         //echo ('<br>blade_gen_modifiable_fields_add<br><br>');
-        //var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+        var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
 
 
         $crlf = "\r\n";
@@ -293,140 +300,19 @@ class DEHBaseController extends Controller
             }
     }
 	
-	public function build_and_execute_query(
-        $working_arrays,
-        $bypassed_field,
-        $query_relational_operators_array) {
-        //echo("<br>build_and_execute_query");
-        //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
-        //
-        // *******
-        // this guy does a lot
-        // *****
-        //$fieldName_r_o_value_array);
 
-        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
-        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
-        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
-        $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
-  
-       $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
-       $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
+    public function convert_string_variables_to_variables($str0) {
+        if (stripos($str0,'$this->')=== 0){
+            $str1 = substr($str0,7);
+            return $this->$str1;
+            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        }
+        else {
+            return $str0;
+        }
 
-        //$this->debug_exit(__FILE__,__LINE__,0);var_dump($query_relational_operators_array);var_dump($field_name_array);
-        //var_dump($field_name_array);
-       //var_dump($r_o_array);
-        //var_dump($value_array);
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
-        $dash_gt = " ->";
-        //$dash_gt = " query->where";
-        //$query = MiscThing::
-        // *************
-        $first_time = 1;
-        
-       
-        $executing_distinct = 0;
-        foreach ($field_name_array as $index=>$field_name) {
-            $value = $field_name;
-           if ($field_name <> $bypassed_field){
-                $r_o = $r_o_array [$index];
-                $v = $value_array[$index];
-                switch ($r_o) {
-                case "=":
-                case "<>":
-                case ">":
-                case "<":
-                case "<=":
-                case ">=":
-                    if ($first_time){
-                        $first_time = 0;
-                        $query = MiscThing::where($field_name,$r_o,$v);
-                    }
-                    else {
-                        $query->where($field_name,$r_o,$v);
-                    
-                    }
-               
-                break;
-        
-
-            } // end switch
-        
-            switch ($r_o) {
-				//case  "join":
-            case "join":
-                //DB::table('name')->join('table', 'name.id', '=', 'table.id')
-                //->select('name.id', 'table.email');		//case  "where":
-            case "whereBetween":
-            	$query->whereBetween($field_name,$value);
-            	 echo(' ->whereBetween('.$field_name.','.$aord.')');
-                break;
-            case "whereNull":
-            	$query->whereNull($field_name);
-            	 echo(' ->whereNull('.$field_name.')');
-                break;
-            case "whereNotNull":
-            	$query->whereNotNull($field_name);
-            	 echo(' ->whereNotNull('.$field_name.')');
-                break;
-		case  "groupBy":
-            	$query->groupBy($field_name);
-            	 echo(' ->groupBy('.$field_name.')');
-                break;
-		//case  "getArray":
-            	//$query->getArray($field_name);
-            	// echo(' ->getArray('.$field_name.')');
-                //break;
-
-
-
-                //**************
-                 case "orderBy":
-                      $aord = "ASC";
-                     
-                        $query->orderBy($value);
-                        echo(' ->orderBy('.$value.','.$aord.')');
-                   
-                    break;
-                case "orderByDesc":
-                    $aord = "DESC";
-                   
-                        $query->orderBy($value,$aord);
-                        echo(' ->orderBy('.$value.','.$aord.')');
-                    
-                    break;
-                case "distinct":
-             		$executing_distinct = 1;
-             		$distinct_value = $value;
-                    $query->distinct();
-                    echo(" ->distinct()");
-                   
-                    break;
-                case "xgetArray":
-                    //$query->get();
-                    break;
-                  
-
-
-            } // end switch
-        } // end of not = "not_used"
-        
-    }  // end foreach
- 
-    //echo ("<br>executing query");
-    if ($executing_distinct == 1){
-    	echo("->get(['".$distinct_value."'])");
-    	return $query->get(['record_type']);
     }
-    else {
-    	echo("->get()");
-    	return $query->get();
-    }
-    
-    
-    //return  (array) $query;
-    }   // end of b uild_and_execute_query
+
 
 	public function build_query_relational_operators_array() {
 		$query_relational_operators_array = array();

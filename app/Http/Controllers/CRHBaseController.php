@@ -36,12 +36,14 @@ class CRHBaseController extends DEHBaseController
         //$model_table                    = "miscThings", 
 
         $controller_name                = '#beginControllerName#endControllerName',
+        $link_parms_array               = array(),
         $model                          = '#beginModel#endModel',
         $node_name                      = '#beginNodeName#endNodeName', 
         $model_table                    = '#beginModelTable#endModelTable',
 
         $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
+        $snippet_node_name              = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
         $generated_files_folder         = "generated_files", 
@@ -80,8 +82,10 @@ class CRHBaseController extends DEHBaseController
        
         $this->model                            = $model;
         $this->model_table                      = $model_table;
+        $this->snippet_node_name                = $snippet_node_name;
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
+        //$this->link_parms_array                 = $this->derive_entity_names_from_table(" ",$this->snippet_node_name);
         $this->node_name                        = $node_name ;
         $this->backup_node                      = $backup_node;
         $this->generated_files_folder           = $generated_files_folder;
@@ -140,33 +144,23 @@ class CRHBaseController extends DEHBaseController
 
         $MiscThing = new MiscThing;
         $MiscThing->setConnection("homestead");
-        $miscThings = MiscThing::where('record_type','=','table_controller')
+        $miscThings = MiscThing
+            ::where('record_type','=','table_controller')
             ->where('controller_name','='    ,"MiscThingsController")
             ->get();
         $this->db_snippet_connection            = $miscThings[0]->db_snippet_connection;
         $this->db_data_connection               = $miscThings[0]->db_data_connection;
-        //echo("**".$this->db_snippet_connection ."**");
-        //echo("**".$this->db_data_connection . $miscThings[0]->db_connection_name. "**");
-        //var_dump($miscThings[0]);  
-
        
         $this->db_snippet_connection            = "homestead";
         $this->db_data_connection               = "homestead";
-        //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
-       //$this->db_data_connection               = "gohoooa_stu3881_main";
-        //above here work
-        //$this->db_data_connection               = "localhost_stu3881_main";
-
-       
-        //$this->debug_exit(__FILE__,__LINE__,0);
-        $this->field_name_lists_array = $field_name_lists_array;
-        $this->field_name_list_array = "";
+ 
  
         // field_name_list_array defines the arrays depending on $what_we_are_doing
         // the first level index 
-       //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
-       $this->field_name_list_array_first_index = $field_name_list_array_first_index;
-        //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
+        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
+        $this->field_name_lists_array = $field_name_lists_array;
+        $this->field_name_list_array = "";
+        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         $this->business_rules_array         = $business_rules_array;
         //echo (" : ".$this->project_path);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
 
@@ -187,6 +181,255 @@ class CRHBaseController extends DEHBaseController
         $handle = fopen($file_name, "w");
         fwrite($handle, $file_as_string);
     }
+
+     /**
+     * Execute the query and show the report you just requested
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    //public function activateDeactivate(Request $request, $id, $what_we_are_doing, $coming_from){
+    public function activateDeactivate( $id, $what_we_are_doing, $table){
+        //echo($what_we_are_doing);
+        $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo('just routes');
+        $this->link_parms_array    = $this->derive_entity_names_from_table(" ",$table);
+
+
+        $entities_array = array(
+            'routes'            =>$this->link_parms_array['node_name'],
+            'table_controller'  =>$this->link_parms_array['controller_name'],
+            'model'             =>$this->link_parms_array['model'],
+            'views'             =>$this->link_parms_array['node_name'],
+            );
+        foreach ($entities_array as $entity=>$name) {
+            switch ($what_we_are_doing) { 
+                case "activate":
+                    $this->activate_entity($entity,$name);
+                    
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    break;
+                case "deactivate":
+                    echo($id.$what_we_are_doing);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    $updatex = MiscThing::where($this->key_field_name,  '=', $id)
+                    ->update(array('table_reporting_active'=>0));
+                    break ;
+                case "validate":
+                    //echo('validate');$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    $this->validate_entity($entity,$name);
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                    break;
+            }   
+        }
+        
+        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route('programmerUtilities.mainMenu_active_inactive', 
+                ['id' => 0,
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'dynamicMenu0'
+                ]);
+        
+    }
+
+
+
+    public function activate_entity($entity,$name) {
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo(" ".$entity);
+        $project_path     = substr(app_path(),0,strlen(app_path())-4);
+        $crlf = "\r\n";
+        $crlftab = "\r\n\t";
+        $quote = "'";
+
+        $search_str_array = array(
+            'controller_name'   => "@@controller_name@@",
+            'model_table'       => "@@model_table@@",
+            'model'             => "@@model@@",
+            'node_name'         => "@@node_name@@",
+            'field_name_string' => "@@field_name_string@@"
+            );
+        $values_array = array(
+            'controller_name'   => $this->link_parms_array['controller_name'],
+            'model_table'       => $this->link_parms_array['model_table'],
+            'model'             => $this->link_parms_array['model'],
+            'node_name'         => $this->link_parms_array['node_name'],
+            'field_name_string' => ""
+            );
+       
+ 
+        switch ($entity) {
+            case "table_controller":
+
+                $controller_file = app_path()."/Http/Controllers/".  $this->link_parms_array['controller_name'].".php";
+                if (is_file($controller_file)){
+                   $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' already_exists');
+
+                }
+                else{
+                    $controller_model_file = app_path()."/Http/Controllers/". "ModelForGeneratedControllers.php";
+                    $file_as_string = file_get_contents($controller_model_file);
+                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
+                    File::put($controller_file, $file_as_string);
+                }
+
+                //* ********************************
+                if ($miscThing = MiscThing    
+                ::where('record_type',  '=', "table_controller")
+                ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                ->get()){
+                   $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                    if ($miscThing->count('items') == 0){
+                        $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' is being created');
+                        $insert_array = array(
+                        'table_reporting_active'    =>1,
+                        'record_type'               =>"table_controller",
+                        'controller_name'           =>$this->link_parms_array['controller_name'],        
+                        'model'                     =>$this->link_parms_array['model'],        
+                        'model_table'               =>$this->link_parms_array['model_table'],        
+                        'node_name'                 =>$this->link_parms_array['node_name'],
+                        );        
+                        $insert = MiscThing
+                        ::insert(array($insert_array));
+                    }
+                    //var_dump($miscThing->count('items'));
+
+                    $updatex = MiscThing::where('record_type',  '=', "table_controller")
+                    ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                    ->update(array('table_reporting_active'=>1));                 
+                     //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
+                }
+                else{
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' a_table_controller for '.$this->link_parms_array['node_name'].' neesds_to_be_created');
+                }
+
+
+                break;
+            case "model":
+               $models_directory = app_path()."/Models/";
+               $model_file_name = $models_directory. "generatedModelsModel.php";
+               
+               if (is_file($model_file_name)){
+                    $file_as_string = file_get_contents($model_file_name);
+                    //echo ("<br><br><br>file_as_string ");
+                    //var_dump($file_as_string);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                if (is_file($models_directory.$this->link_parms_array['model'].".php")){
+                    //echo "<br>".$entity." ".$this->link_parms_array['model']." exists";$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                else{
+                    //echo "<br>file does not exitst";$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    $columns = Schema::getColumnListing($this->link_parms_array['node_name']);
+                    array_shift($columns); // always assume 1st element is key and drop it
+                    $crlf = "\r\n";
+                    $crlftab = "\r\n\t";
+                    $quote = "'";
+                    $field_name_str = $crlftab;
+                    foreach ($columns as $index=>$field_name) {
+                        $field_name_str .= $quote.$field_name.$quote.",".$crlftab  ;
+                    } 
+                    //$values_array = array();
+                    //$values_array['controller_name']         = $this->link_parms_array['controller_name'];
+                    //$values_array['model_table']         = $this->link_parms_array['model_table'];
+                    $values_array['field_name_string']   = $field_name_str;
+                    //echo ("<br><br><br>file_as_string ".$file_as_string);
+                    //echo ("<br><br><br>values_array");var_dump($search_str_array);$values_array
+                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
+                    File::put($models_directory.$this->link_parms_array['model'].".php", $file_as_string);                
+                 }
+                 break;
+            case "routes":
+                //* ****************************
+                //* first, we need to create the routes (file) for the node
+                //* ****************************
+                //$this->debug3(__FILE__,__LINE__,__FUNCTION__);echo (" : ".$entity);exit();
+                $routes_path = $project_path."/routes/";
+                $routes_model_file = $routes_path. "generated/GeneratedRoutesModel.php";
+                 if (!is_file($routes_model_file)){
+                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo " required file MISSING ";echo ($routes_model_file.'<br>');exit();
+                }
+                $generated_file_name = $routes_path. "generated/".$this->link_parms_array['node_name'].".php";
+                if (is_file($generated_file_name)){
+                    //echo "rotute file exists ";echo ($routes_model_file.'<br>');
+                    $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo($generated_file_name." already exists");
+                    // dont create it twice
+                }
+                else{
+                    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo " creating ";echo ($generated_file_name.'<br>');exit();
+                    $file_as_string = file_get_contents($routes_model_file);
+                    $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (" creating routes file for ".$this->link_parms_array['node_name']);//exit();
+                    $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'n');
+                    File::put($generated_file_name, $file_as_string);
+                }
+                //* ****************************
+                //* first, we need to create the routes (file)
+                //File::put($generated_file_name, $file_as_string);
+                //* ****************************
+                //* ****************************
+                //* NOW, WEB.PHP HAS TO INCLUDE THAT FILE
+                $routes_web_file    = $project_path."/routes/web.php";
+                $file_as_string     = file_get_contents($routes_web_file);
+                
+                $search_str_array   = array(
+                    'start_of_generated_includes' => "//generated_inserts_begin_here" 
+                 );
+                $values_array = 
+                array(
+                    'start_of_generated_includes' => 
+                    "//generated_inserts_begin_here".$crlftab."@include('".$generated_file_name.
+                    "');"
+                    );
+                // make sure it hasnt already been included
+                $i1 = stripos("*".$file_as_string,"@include('".$generated_file_name);
+                if ($i1 > 0){
+                    $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                    echo ("the include in web.php for ".$this->link_parms_array['node_name'].
+                        " already exists ");
+                     // ok but don't add twice
+                }
+                else{
+                    $file_as_string  = 
+                    $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$values_array,'y');
+                     $this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' integrating '.$this->link_parms_array['node_name'].' into web.php');
+                    File::put($routes_web_file, $file_as_string);
+                }
+                
+                //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (' exit for testing ');exit();
+
+                break;
+            case "views":
+                $dir_name = $project_path."/resources/views/". $this->link_parms_array['node_name'];
+                if (is_dir($dir_name)){
+                    $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo (' the_directory_for '.$this->link_parms_array['node_name'].' already_exists');
+                }
+                else{
+                    mkdir($dir_name);
+                    $infile = $project_path."/resources/views"."/generated_views_directory_model";
+                    File::copyDirectory($infile,$dir_name);
+                }
+                //* ***********************
+                //* ***********************
+                $dir_name = $dir_name."/generated_files";
+                if (is_dir($dir_name)){
+                }
+                else{
+                    if (mkdir($dir_name)){
+                        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                        if ($miscThing = MiscThing    
+                        ::where('record_type',  '=', "report_definition")
+                        ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                        ->delete()){
+                            $this->clone_ids_to_node_name($this->link_parms_array['node_name']);
+                        }
+                    }
+                    else{
+                      echo (' create failed for directory '.$dir_name);
+                        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                    }
+                   
+                }
+                $this->clone_ids_to_node_name($this->link_parms_array['node_name']);
+                break;
+            } // end of entities switch  
+    }        
 
 
     
@@ -222,6 +465,199 @@ class CRHBaseController extends DEHBaseController
         var_dump($arr);exit("xit 4420");
     }
 
+
+
+
+    public function validate_entity($entity,$name) {
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo(" ".$entity);
+        $project_path     = substr(app_path(),0,strlen(app_path())-4);
+        $crlf = "\r\n";
+        $crlftab = "\r\n\t";
+       
+        $quote = "'";
+
+        $search_str_array = array(
+            'controller_name'   => "@@controller_name@@",
+            'model_table'       => "@@model_table@@",
+            'model'             => "@@model@@",
+            'node_name'         => "@@node_name@@",
+            'field_name_string' => "@@field_name_string@@"
+            );
+        $values_array = array(
+            'controller_name'   => $this->link_parms_array['controller_name'],
+            'model_table'       => $this->link_parms_array['model_table'],
+            'model'             => $this->link_parms_array['model'],
+            'node_name'         => $this->link_parms_array['node_name'],
+            'field_name_string' => ""
+            );
+       
+        //$search_str_array and $this->link_parms_array MUST match indexes one for one  
+
+             $entity =  "table_controller";
+            //* *****
+            $controller_file = app_path()."/Http/Controllers/".  $this->link_parms_array['controller_name'].".php";
+            if (is_file($controller_file)){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo ($entity . " is present ....".$controller_file);
+            }
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo ($entity . " is MISSING ....".$controller_file);
+            }
+
+            if ($miscThing = MiscThing    
+                ::where('record_type',  '=', "table_controller")
+                ->where('node_name',  '=', $this->link_parms_array['node_name'])
+                ->get()){
+                    if ($miscThing->count('items') == 0){
+                        $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                        echo ('table_controller record MISSING .... '.$this->link_parms_array['node_name']);
+
+                   }
+                   else{
+                    $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                    echo ('table_controller present .... '.$this->link_parms_array['node_name']);
+
+                   }
+            }
+              
+            $entity =  "model";
+            //* *****
+            $models_directory = app_path()."/Models/";
+            $model_file_name = $models_directory. "generatedModelsModel.php";    
+            if (is_file($models_directory.$this->link_parms_array['model'].".php")){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo ($entity . " is present ....". $models_directory.$this->link_parms_array['model'].".php");
+            }
+
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo($entity . " is MISSING ....". $models_directory.$this->link_parms_array['model'].".php");
+            }
+          
+            $entity =  "routes";
+            //* *****
+
+            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);echo (" : ".$entity);
+            $routes_path = $project_path."/routes/";
+            $routes_model_file = $routes_path. "generated/GeneratedRoutesModel.php";
+            $generated_file_name = $routes_path. "generated/".$this->link_parms_array['node_name'].".php";
+            if (!is_file($routes_model_file)){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo "<br>"." required file MISSING ....";echo ($routes_model_file.'<br>');
+            }
+            if (is_file($generated_file_name)){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo ($entity . " is present ....".$generated_file_name);                }
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo (" ". $entity . " is MISSING ".".....".$generated_file_name);     
+            }
+            //* ****************************
+            //* first, we need to create the routes (file)
+            //File::put($generated_file_name, $file_as_string);
+            //* ****************************
+            //* ****************************
+            //* NOW, WEB.PHP HAS TO INCLUDE THAT FILE
+            $routes_web_file    = $project_path."/routes/web.php";
+            $file_as_string     = file_get_contents($routes_web_file);
+            
+            $search_str_array   = array(
+                'start_of_generated_includes' => "//generated_inserts_begin_here" 
+             );
+            $values_array = 
+            array(
+                'start_of_generated_includes' => 
+                "//generated_inserts_begin_here".$crlftab."@include('".$generated_file_name.
+                "');"
+                );
+            // make sure it hasnt already been included
+            $i1 = stripos("*".$file_as_string,"@include('".$generated_file_name);
+            if ($i1 > 0){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                echo ("include is present .... in web.php for ".$this->link_parms_array['node_name']);
+                echo (" ...."."@include('".$generated_file_name);
+                 // ok but don't add twice
+            }
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                echo ("include is MISSING .... in web.php for ".$this->link_parms_array['node_name'].
+                " @include('".$generated_file_name); 
+                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);echo (' integrating '.$this->link_parms_array['node_name'].' into web.php');
+                //File::put($routes_web_file, $file_as_string);
+            }      
+            $entity =  "views";
+            //* *****
+            $dir_name = $project_path."/resources/views/". $this->link_parms_array['node_name'];
+            //echo("<br> * dir_name: ".$dir_name);
+            if (is_dir($dir_name)){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                echo ('the views directory is present ....'.$dir_name);
+            }
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__); //just line-no
+                echo ('the views directory '.'is MISSING ....'.$dir_name);
+            }    
+            $dir_name = $project_path."/resources/views/". $this->link_parms_array['node_name'].'/generated_files'; 
+            if (is_dir($dir_name)){
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                echo (' the generated_files directory is present .... '.$dir_name);
+            }
+            else{
+                $this->debug3(__FILE__,__LINE__,__FUNCTION__);
+                echo (' the generated_files directory is MISSING ....'.$dir_name);
+            }     
+
+        //echo ("<br>"."normal exit");
+        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+    }
+
+
+
+
+
+ 
+
+    public function deactivate_entity($entity,$name) {
+         $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+         switch ($entity) { 
+            case "table_controller":
+                $file_extension = "/Http/Controllers/". $name.".php";
+                $file_name = app_path().$file_extension;
+                 if (is_file(app_path().$file_extension)){
+                    echo "there";
+                    $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                }
+                echo ("<br><br>file_name: ".$file_name);
+                break;
+            case "model":
+                 break;
+            case "routes":
+                break;
+            case "views":
+                break;
+        }   
+
+    }        
+
+
+   public function derive_entity_names_from_table($entity,$table) {       
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        $link_parms_array = array(
+            'controller_name'   => ucfirst($table).'Controller',
+            'model_table'       => $table,
+            'model'             => ucfirst($table),
+            'node_name'         => lcfirst($table)
+            );
+        //echo '**'.substr($link_parms_array['model'],0,strlen($table)).'**';
+        
+        //echo '<br>'.'**'.substr($link_parms_array['model'],strlen($table)-1,1).'**';this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        if (substr($link_parms_array['model'],strlen($table)-1,1) == 's') {
+            $link_parms_array['model'] = substr($link_parms_array['model'],0,strlen($table)-1);
+        }
+
+        return $link_parms_array;
+   }
 
 
 
@@ -292,7 +728,7 @@ class CRHBaseController extends DEHBaseController
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        echo("<br> browseEdit ".$what_we_are_doing.$id.$coming_from);$this->debug_exit(__FILE__,__LINE__,0);
+        //$this->debug2(__FILE__,__LINE__,__FUNCTION__);echo(" ".$what_we_are_doing.$id.$coming_from);
     
         $report_definition          = $this->execute_query_by_report_no($id) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
@@ -328,7 +764,7 @@ class CRHBaseController extends DEHBaseController
         }
         //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
         if ($miscThings){         
-            //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
+            var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
             //$miscThings = (array) $miscThings;
             //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,0); 
              return view($this->node_name.'.browseEdit',compact('miscThings'))
@@ -365,6 +801,145 @@ class CRHBaseController extends DEHBaseController
         }
     }
         
+    public function build_and_execute_query(
+        $working_arrays,
+        $bypassed_field,
+        $query_relational_operators_array) {
+        echo("<br>build_and_execute_query");
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($working_arrays['ppv_define_query']);
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        //
+        // *******
+        // this guy does a lot
+        // *****
+        //$fieldName_r_o_value_array);
+
+        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
+        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
+        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
+        $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
+  
+       $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
+       $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
+
+        //$this->debug_exit(__FILE__,__LINE__,0);var_dump($query_relational_operators_array);var_dump($field_name_array);
+        //var_dump($field_name_array);
+       //var_dump($r_o_array);
+        //var_dump($value_array);
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        //echo 'DB::connection( '.$this->db_data_connection.')->table( '.$this->model_table.') ';
+        $dash_gt = " ->";
+        //$dash_gt = " query->where";
+        //$query = MiscThing::
+        // *************
+        $first_time = 1;
+        //echo $this->model;$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $executing_distinct = 0;
+        foreach ($field_name_array as $index=>$field_name) {
+            $value = $field_name;
+           if ($field_name <> $bypassed_field){
+                $r_o = $r_o_array [$index];
+                $v = $value_array[$index];
+                $v = $this->convert_string_variables_to_variables($v);
+                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                switch ($r_o) {
+                    case "distinct":
+                        if ($first_time){
+                            $first_time = 0;
+                            //$query = MiscThing::where($field_name,$r_o,$v);
+                            //$query = MiscThing::distinct()->select($field_name)->groupBy('user_id')->get();
+                            $query = MiscThing::distinct()->select($field_name);
+
+                             echo("MiscThing::distinct()->select(".$field_name.")");
+                        }
+                        else {
+                            $query->where($field_name,$r_o,$v);
+                             echo("->where(".$field_name." $r_o ".$v.")");
+                        }
+                        break;
+                    case "=":
+                    case "<>":
+                    case ">":
+                    case "<":
+                    case "<=":
+                    case ">=":
+                        if ($first_time){
+                            $first_time = 0;
+                            $query = MiscThing::where($field_name,$r_o,$v);
+                            echo("MiscThing::where(".$field_name.",". $r_o. ",".$v.")");
+                            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+                        }
+                        else {
+                            $query->where($field_name,$r_o,$v);
+                            echo("->where(".$field_name." $r_o ".$v.")");
+                            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
+                        }
+                        break;
+                    }
+  //echo $this->model;$this->debug0(__FILE__,__LINE__,__FUNCTION__);    
+                switch ($r_o) {
+                    //case  "join":
+                    case "join":
+                        //DB::table('name')->join('table', 'name.id', '=', 'table.id')
+                        //->select('name.id', 'table.email');       
+                        //case  "where":
+                    case "whereBetween":
+                        $query->whereBetween($field_name,$value);
+                         echo(' ->whereBetween('.$field_name.','.$aord.')');
+                        break;
+                    case "whereNull":
+                        $query->whereNull($field_name);
+                         echo(' ->whereNull('.$field_name.')');
+                        break;
+                    case "whereNotNull":
+                        $query->whereNotNull($field_name);
+                         echo(' ->whereNotNull('.$field_name.')');
+                        break;
+                    case  "groupBy":
+                            $query->groupBy($field_name);
+                             echo(' ->groupBy('.$field_name.')');
+                            break;
+
+                    case "orderBy":
+                          $aord = "ASC";
+                            $query->orderBy($value);
+                            echo(' ->orderBy('.$value.','.$aord.')');
+                       
+                        break;
+                    case "orderByDesc":
+                        $aord = "DESC";     
+                            $query->orderBy($value,$aord);
+                            echo(' ->orderBy('.$value.','.$aord.')');
+                        
+                        break;
+                    case "distinct":
+                        $executing_distinct = 1;
+                        //$distinct_value = $value;
+                        //$query->distinct();
+                        //echo(" ->distinct()");
+                       
+                        break;
+                    case "xgetArray":
+                        //$query->get();
+                        break;
+                } // end switch      
+
+ 
+        } // end of not bypassed
+
+        
+    }  // end foreach
+                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            echo(' ->get()');
+            return $query->get();
+
+    //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+ 
+
+    //return  (array) $query;
+    }   // end of b uild_and_execute_query
 
  
     public function snippets_gen_browse_select($key_field_name,$key_value) {
@@ -611,6 +1186,71 @@ class CRHBaseController extends DEHBaseController
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+    public function clone_id_to_node($from_id,$name_values_array,$node_name) {
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $MiscThing  =  MiscThing
+        ::where('id','=',$from_id)->get();
+        if($MiscThing){
+            $arr1 = (array) $MiscThing[0]['attributes'];
+            $from_array = array('report_id'=>$from_id);
+            unset($arr1['id']);
+            $arr1 = array_merge ($arr1,$name_values_array);
+            //var_dump($arr1);
+            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            MiscThing::create($arr1);
+            switch ($arr1['record_type']) { 
+            case "report_definition":
+                $from_folder = $this->views_files_path."/"."generated_files";
+                $to_folder = $this->views_files_path."/"."generated_files";
+                echo($from_folder."**".$to_folder."**");
+                $new_id = $this->get_newest_record_type('report_definition');
+                $to_array   = array('report_id'=>$new_id);
+                //echo("<BR>*.$this->views_files_path."*".$from_folder);
+                //echo("**".$to_folder."**".$this->snippet_table);
+                var_dump($from_array);var_dump($to_array);
+                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_array,$to_array,'y');
+                break;
+            }         
+        }
+        return redirect('admin/miscThings');
+    }
+
+
+
+
+    public function clone_ids_to_node_name($node_name) {
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $new_values = array(
+            'model'         => $this->link_parms_array['model'],
+            'node_name'     => $this->link_parms_array['node_name'],
+            'table_name'    => $this->link_parms_array['node_name']
+            );
+        $reports_to_clone_array = array(
+             $this->report_definition_model_name =>$this->report_definition_id  
+              );
+
+        //***** see if there are any reports defined for this node
+        $Existing_reports_for_node  =  MiscThing
+            ::where('record_type','=','report_definition')
+            ->where('node_name','=',$new_values['node_name'])
+            ->get();
+        //***** if there aren't any, load the defaults
+        if ($Existing_reports_for_node->count('items') == 0){
+            //echo('<br>'. 'no report_definitions for this node:  '.$new_values['node_name']);
+            //exit("702");
+            //***** for each default_report 
+            foreach ($reports_to_clone_array as $index => $from_id) {
+                $this->clone_id_to_node($from_id,$new_values,$node_name); 
+            }
+        }
+        return redirect('admin/miscThings');
+    }
+
+
     public function create()
     {
         //$x = Config::get('dehGlobals.business_rules_array');
@@ -618,13 +1258,26 @@ class CRHBaseController extends DEHBaseController
  
         //echo("<br>".$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
         //$snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$this->store_validation_id.'_modifiable_fields_add';
-        $snippet_file = $this->node_name."/".$this->generated_files_folder."/".$this->report_definition_id.'_modifiable_fields_add.blade.php';
 
-        //echo("<br>".$snippet_file.$this->store_validation_id );$this->debug_exit(__FILE__,__LINE__,1);
-       //$snippet_file= "../".'baseline_blades/'.'report_name_only';
-
-        //$snippet_file= "../".'baseline_blades/'.'report_name_only';
-         return view($this->node_name.'.create')
+        $snippet_file = $this->node_name."/".$this->generated_files_folder."/".$this->report_definition_id.
+        '_modifiable_fields_add.blade.php';
+        //File::put($snippet_file,$this->$blade_routine($no_of_rows));
+        $report_definition = 
+        $this->execute_query_by_report_no($$this->report_definition_id) ;
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        $modifiable_fields_array    = $report_definition[0]->modifiable_fields_array;
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
+        $report_definition_key.'_modifiable_fields_add';  
+        $this->blade_gen_simple_add($this->report_definition_id,$modifiable_fields_array);
+         echo($report_definition_key.$this->node_name);
+        return view($this->node_name.'.create')
+            ->with('encoded_business_rules' , $report_definition[0]->business_rules)
+            ->with('modifiable_fields_array' , 
+                $report_definition[0]->modifiable_fields_array)
+            ->with('report_definition_key'  , $report_definition_key)
+            ->with('snippet_file'           , $snippet_file)
+            ->with('node_name'              , $this->node_name
+            );         return view($this->node_name.'.create')
         //->with('message'                , $message)
         ->with('snippet_file'           , $snippet_file)
         ->with('report_definition_key'  , $this->report_definition_id)
@@ -639,15 +1292,16 @@ class CRHBaseController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
      public function create_w_report_id($report_definition_key) {
-
+        //$report_definition_key = $this->report_definition_key;
         echo $report_definition_key;
-        $this->debug_exit(__FILE__,__LINE__,10);
-        $report_definition          = 
+        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        $report_definition = 
         $this->execute_query_by_report_no($report_definition_key) ;
-        $encoded_business_rules     = $report_definition[0]->business_rules;
         //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        
         $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
-        $report_definition_key.'_modifiable_fields_add';  // for 12450
+        $report_definition_key.'_modifiable_fields_add';  
         echo($report_definition_key.$this->node_name);
         return view($this->node_name.'.create')
             ->with('encoded_business_rules' , $report_definition[0]->business_rules)
@@ -658,7 +1312,6 @@ class CRHBaseController extends DEHBaseController
             ->with('node_name'              , $this->node_name
             );
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -691,6 +1344,64 @@ class CRHBaseController extends DEHBaseController
         }
         return $array;
     }
+
+
+    public function clone_generated_files_to_node_name($node_name) {
+        if ($handle = opendir($this->views_files_path."/".$node_name."/generated_files")) {
+            echo "Directory handle: $handle\n";
+            echo "Entries:\n";
+            $new_id = $this->get_newest_record_type('report_definition');
+            $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+                $haystack = "*" . $entry;
+                $i0 = stripos($haystack,$needle);
+                echo "$entry\n";
+              $new_id = $this->get_newest_record_type('report_definition');
+          }
+        }
+    }
+ 
+    public function get_newest_record_type($record_type) {
+        $report_definition  = 
+            MiscThing
+            ::where('record_type','=',$record_type)
+            ->orderBy('created_at'     ,'desc')
+            ->get();
+        echo ($report_definition[0]['id']);
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        return $report_definition[0]['id'];
+    }
+
+
+   public function get_report_definition_id(
+        $record_type,
+        $node_name,
+        $like_report_name
+        ) {
+        //echo 'get_report_definition_id';
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        $response = MiscThing
+            ::where('record_type','=',$record_type)
+            ->where('node_name','='     ,$this->snippet_node_name)
+            ->where('report_name','like','%'.$like_report_name.'%')
+            ->get();
+
+        if ($response){
+            //var_dump($response[0]['id']);$this->debug_exit(__FILE__,__LINE__,10);
+            return $response[0]['id'];
+        }
+        else {
+            echo 'you have a fatal error<br>';
+            $this->debug_exit(__FILE__,__LINE__,1);
+        }
+    }
+
+
+
+
+
+
 
 
     public function getEdit8_array_node_to_array($array) {
@@ -809,41 +1520,42 @@ class CRHBaseController extends DEHBaseController
        $record_type                    = "report_definition";
    
         if($miscThings = MiscThing::where('record_type','=',$record_type)
-         ->where('table_name',  '='    ,$this->model_table)
-        ->where('node_name',    '='    ,$this->node_name)
-        ->orderBy('report_name','asc')
-        ->get()){
+            ->where('table_name',  '='    ,$this->model_table)
+            ->where('node_name',    '='    ,$this->node_name)
+            ->orderBy('report_name','asc')
+            ->get()){
             if ($miscThings->count('items') == 0){
                 // there are NO reports so go to new report screen
-                //* 12450 is the report definition report which everybody needs
+                echo(' no reports');$this->debug_exit(__FILE__,__LINE__,0);
                 $this->create_w_report_id($report_definition_id);
                 //$this->debug_exit(__FILE__,__LINE__,1);echo(' no reports');
-        }
-        else{
-        $what_we_are_doing = 'displaying_advanced_edits_screen';
-        $working_arrays     = $this->working_arrays_construct($miscThings[0]);
-        $record = $miscThings[0];
-        //var_dump($this->report_definition_id);$this->debug_exit(__FILE__,__LINE__,10);
-        return view($this->node_name.'.indexReports',compact('miscThings'))
-            ->with('encoded_report_description' ,json_encode($miscThings))
-            ->with('encoded_record'             ,json_encode($record))
-             ->with('model_table'               ,$request->input('model_table'))
-             ->with('id'                        ,$request->input('id'))
-             ->with('report_definition_id'      ,$this->report_definition_id)
+            }
+            else{
+                $what_we_are_doing = 'displaying_advanced_edits_screen';
+                $working_arrays     = $this->working_arrays_construct($miscThings[0]);
+                $record = $miscThings[0];
+                var_dump($this->report_definition_id);
+                //$this->debug_exit(__FILE__,__LINE__,10);
+                return view($this->node_name.'.indexReports',compact('miscThings'))
+                    ->with('encoded_report_description' ,json_encode($miscThings))
+                    ->with('encoded_record'             ,json_encode($record))
+                    ->with('model_table'               ,$request->input('model_table'))
+                    ->with('id'                        ,$request->input('id'))
+                    ->with('report_definition_id'      ,$this->report_definition_id)
 
-            ->with('encoded_working_arrays'     ,json_encode($working_arrays))
-            ->with('record'                     ,$record)
-            ->with('all_records'                ,$miscThings)
-           ->with('report_key'                  ,$this->report_definition_id)
-            //->with('report_key'                  ,$request->input('report_key'))
-            ->with('node_name'                  ,$this->node_name)
-            ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
-            ->with('snippet_table'               ,$this->snippet_table)
-            ;
-        }
+                    ->with('encoded_working_arrays'     ,json_encode($working_arrays))
+                    ->with('record'                     ,$record)
+                    ->with('all_records'                ,$miscThings)
+                    ->with('report_key'                  ,$this->report_definition_id)
+                    //->with('report_key'                  ,$request->input('report_key'))
+                    ->with('node_name'                  ,$this->node_name)
+                    ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
+                    ->with('snippet_table'               ,$this->snippet_table)
+                    ;
+            }
         //exit("exit 837"); 
+        }
     }
-}
 
       /**
      
@@ -953,8 +1665,7 @@ class CRHBaseController extends DEHBaseController
         //echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
         //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
         //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** ");$this->debug_exit(__FILE__,__LINE__,0);
-        
-        echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** "); 
+        //$this->debug3(__FILE__,__LINE__,__FUNCTION__);echo($id.' * '.$what_we_are_doing.' * '.$coming_from); 
         $miscThing = MiscThing::where('id','=',$id)->get();
         //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
         $working_arrays     = $this->working_arrays_construct($miscThing[0]);
@@ -975,6 +1686,7 @@ class CRHBaseController extends DEHBaseController
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             return view($this->model_table.'.select_fields'    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
+                ->with('report_definition_id'               ,$this->report_definition_id)
                 ->with('from_array'                         ,$from_array)
                 ->with('to_array'                           ,$to_array)
                 ->with('node_name'                          ,$this->node_name)
@@ -987,7 +1699,7 @@ class CRHBaseController extends DEHBaseController
                 break;  
         case "ppv_define_query":
         case "ppv_define_business_rules":
-            var_dump($request[0]);//var_dump($working_arrays);
+            //var_dump($request[0]);//var_dump($working_arrays);
             $just_the_ones_we_want = $working_arrays['ppv_define_business_rules']['field_name_array'];
 
             //unset($modifiable_fields_name_values[$this->snippet_table_key_field_name]);
@@ -1013,7 +1725,7 @@ class CRHBaseController extends DEHBaseController
             $this->working_arrays_fixer($working_arrays,$what_we_are_doing);
             //var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
-            echo("rows ".$field_name_array_name);
+            //echo("rows ".$field_name_array_name);
             $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
             
             //echo("rows ".$no_of_rows);
@@ -1057,6 +1769,7 @@ class CRHBaseController extends DEHBaseController
             return view($this->model_table.".ppv_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
                ->with('just_the_names_array'                ,$just_the_names_array)
+                ->with('report_definition_id'               ,$this->report_definition_id)
 
                 ->with('id'                                 ,$id)
                 ->with('request'                            ,$request)
@@ -1076,6 +1789,8 @@ class CRHBaseController extends DEHBaseController
 
        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
         ->with('id'                                 ,$id)
+        ->with('report_definition_id'               ,$this->report_definition_id)
+
         ->with('model'                              ,$this->model)
         ->with('node_name'                          ,$this->node_name)
         ->with('what_we_are_doing'                  ,'updating_report_name')
@@ -1138,6 +1853,36 @@ class CRHBaseController extends DEHBaseController
         }       
     }
 
+   // clone_file_snippets($from_id,$newest_id);
+ 
+    public function partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_string_array,$to_string_array,$displayYN) {
+        //* *************
+        //* 
+           echo($from_folder."  ".$to_folder);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+         if ($handle = opendir($from_folder)) {
+             /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+                $new_file_name =  $this->scan_replace_str_value_arrays($entry,$from_string_array,$to_string_array,$displayYN);
+                if ($new_file_name != $entry){
+                    //* if the names don't match, they WERE a match so create this file name
+                    copy($from_folder.'/'.$entry,   $to_folder.'/'.$new_file_name);
+                    echo ("<br>".$new_file_name." was created ");
+                }
+            }
+        }
+    }
+
+
+     public function scan_replace_str_value_arrays($search_string,$search_str_array,$value_str_array,$displayYN){
+        foreach ($search_str_array as $entity=>$search_str) {
+            if ($displayYN == 'y'){
+               //echo("<br> ".$search_str_array[$entity] ." will be replaced by ". $value_str_array[$entity])."*";
+               $displayYN = 'n';
+            }
+             $search_string = str_ireplace ($search_str_array[$entity], $value_str_array[$entity] , $search_string);
+        }  
+        return  $search_string;       
+     }
 
 
 
@@ -1176,19 +1921,39 @@ class CRHBaseController extends DEHBaseController
     }   
 
     public function store(REQUEST $request) {
-        echo('store'.__FILE__.__LINE__);
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
         //var_dump($request->input('encoded_business_rules'));
-        //var_dump($request->input::all()); 
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        $validation_array = (array) json_decode($request->input('encoded_business_rules'));
+        $requestFieldsArray     = $request->all(); // important!!
+        $validation_array       = (array) json_decode($request->input('encoded_business_rules'));
         $modifiable_fields_array = (array) json_decode($request->input('modifiable_fields_array'));
-        var_dump($validation_array); var_dump($modifiable_fields_array); 
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        $requestFieldsArray=$request->all(); // important!!
+        unset($modifiable_fields_array['id']);
+        var_dump($requestFieldsArray); $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        
+        $new_values = array(
+            'model'         => $this->link_parms_array['model'],
+            'node_name'     => $this->link_parms_array['node_name'],
+            'table_name'    => $this->link_parms_array['node_name']
+            );
+        $array1 = array_intersect_key($requestFieldsArray,$modifiable_fields_array);
+        $array3 = array_intersect_key($new_values,$modifiable_fields_array);
+        $array2 = array_merge($array1,$array3);
         $this->validate($request,$validation_array);
- 
-        $updatex  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_array);
+        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        //$insertx  = DB::connection($this->db_snippet_connection)->table($this->model_table)->insert($modifiable_fields_array);
+        $this->clone_id_to_node($requestFieldsArray['id'],$array2, $new_values['node_name']);
+//$this->debug_exit(__FILE__,__LINE__,10);
+
+        $snippet_file = $this->node_name."/".$this->generated_files_folder."/".$this->report_definition_id.
+        '_modifiable_fields_add.blade.php';
+        //File::put($snippet_file,$this->$blade_routine($no_of_rows));
+        $report_definition = 
+        $this->execute_query_by_report_no($this->report_definition_id) ;
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        $modifiable_fields_array    = $report_definition[0]->modifiable_fields_array;
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
+        $this->report_definition_id.'_modifiable_fields_add';  
+        $this->blade_gen_simple_add($this->report_definition_id,$modifiable_fields_array);
+
 
         return redirect('admin/miscThings');
     }

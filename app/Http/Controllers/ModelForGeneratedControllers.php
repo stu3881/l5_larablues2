@@ -40,6 +40,7 @@ class @@controller_name@@ extends CRHBaseController
         $node_name                      = "@@node_name@@", 
         //flagStart1 dont chage or remove this line
 
+        $report_definition_model_name   = "Report_Definition_Model",
 
         $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
@@ -82,6 +83,19 @@ class @@controller_name@@ extends CRHBaseController
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
+
+        $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+
+        $this->report_definition_model_name     = $report_definition_model_name;
+        //* $this->report_definition_id is the same for all tables
+        //* because their node_names change, we need to define where this is
+        $this->report_definition_id             =  $this->get_report_definition_id(
+            'report_definition',
+            $this->snippet_node_name,
+            $this->report_definition_model_name
+            );
+
+
         $this->backup_node                      = $backup_node;
         $this->generated_files_folder           = $generated_files_folder;
         $this->key_field_name                   = $key_field_name;
@@ -157,7 +171,7 @@ class @@controller_name@@ extends CRHBaseController
        //$this->field_name_list_array = (array) $this->initialize_field_name_list_array();
        $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        $this->report_definition_id         = 12450;
+        $this->report_definition_id         = $this->report_definition_id;
         //$this->report_definition_id         = 1453;
 
         $this->business_rules_array         = $business_rules_array;

@@ -80,17 +80,17 @@
 					</td>
 			
 					<td class="table_no_lines">
-				
-						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-						{{ Form::submit('Reports menu') }}
-						{{ Form::close() }}
+				   		<a href="{{ URL::route($miscThing[0]->node_name.'.indexReports', 
+					   		$parameters = array(
+					   		'id'=>$miscThing[0]->id,
+			   				'reportDefinitionKey'=>$report_definition_id
+			   				)
+		   				) }}" class="btn mycart-btn-row2">Reports menu</a>
 					</td>
 	
-					<td class="table_no_lines">
-						{{ Form::open(array('url'=>'admin/main', 'method'=>'GET')) }}
-						{{ Form::submit('Main menu' ) }}
-						{{ Form::close() }}
-					</td>
+				<td class="table_no_lines">
+					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
+				</td>
 		</div>			
 						</tr>
 						

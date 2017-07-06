@@ -3,6 +3,7 @@
 
 <section id="promo">     
 	<div id="promo-details"> 
+	{{__FILE__}}
 		{{ HTML::image('/img/Alfa120pct.JPG', '69 myalfa',array('height'=>'172px'))}} 
 
 
