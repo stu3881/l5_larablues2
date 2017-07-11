@@ -143,10 +143,10 @@ class @@controller_name@@ extends CRHBaseController
         $this->snippet_model_parms = $this->derive_entity_names_from_table(" ",$this->snippet_table);
         $snippetController = $this->snippet_model_parms['controller_name'];
         $snippetModel = $this->snippet_model_parms['model'];
-        echo($snippetModel);exit("exit at 146");
-        $MiscThing = new $snippetModel;
-        $MiscThing->setConnection("homestead");
-        $miscThings = $MiscThing
+        //echo($snippetModel);exit("exit at 146");
+        //$MiscThing = new $snippetModel;
+        //$MiscThing->setConnection("homestead");
+        $miscThings = MiscThing
             ::where('record_type'       ,'='    ,'table_controller')
             ->where('controller_name'   ,'='    ,"MiscThingsController")
             ->get();
@@ -172,7 +172,34 @@ class @@controller_name@@ extends CRHBaseController
         $this->store_validation_id          = $this->report_definition_id;
     }
 
-    //public function putEdit2new() {
+    public function initialize_query($distinct_regular,$field_name,$r_o,$v) {
+    // *****************
+    // this initializes the query pointing to the correct model
+    // ****************
+        switch ($distinct_regular) { 
+            case "distinct":
+                $query = @@model@@::distinct()->select($field_name);
+                echo("@@model@@::distinct()->select(".$field_name.")");
+                break;
+            case "regular":
+                $query = @@model@@::where($field_name,$r_o,$v);
+                echo("@@model@@::where(".$field_name.",". $r_o. ",".$v.")");
+                //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+
+                 break;
+       }   
+       return $query;
+
+    }
+
+
+
+
+
+
+
+
+ 
     public function editUpdate(
         Request $request, 
         $id, 
@@ -213,8 +240,8 @@ class @@controller_name@@ extends CRHBaseController
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                       echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
+                       //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
+                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -240,7 +267,7 @@ class @@controller_name@@ extends CRHBaseController
                         $passed_to_view_arra2newy['data_key']                   = $request->input('data_key');
                         $passed_to_view_array['encoded_input']                  = $request->input('encoded_input');
                         $passed_to_view_array['snippet_name']                   ='_modifiable_fields_getEdit_snippet';
-                        $passed_to_view_array['wxyz']                           = 
+                        $passed_to_view_array['encoded_business_rules']                           = 
                             ($report_definition[0]['business_rules']);
                         $passed_to_view_array['report_definition']              = $report_definition[0];
                         $passed_to_view_array['record']                         = $MiscThing[0];
@@ -252,9 +279,11 @@ class @@controller_name@@ extends CRHBaseController
                 // *****
                 // return to view
                 // *****
+                        var_dump($request->input);$this->debug_exit(__FILE__,__LINE__,1);
+
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
-                       ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                        ->with('passed_to_view_array'   ,$passed_to_view_array);            
                         break;          
             case "edit2_default_update":
             //case "updating_data_record": // defined in editUpdate

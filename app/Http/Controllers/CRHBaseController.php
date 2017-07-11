@@ -800,13 +800,141 @@ class CRHBaseController extends DEHBaseController
           //$this->debug_exit(__FILE__,__LINE__,10);  
         }
     }
-        
+
+    public function initialize_query($distinct,$field_name,$r_o,$v){
+        echo ($this->debug1(__FILE__,__LINE__,__FUNCTION__));
+
+    }
     public function build_and_execute_query(
         $working_arrays,
         $bypassed_field,
         $query_relational_operators_array) {
-        echo("<br>build_and_execute_query");
+        //echo("<br>build_and_execute_query");
+        $this->debug4(__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($working_arrays['ppv_define_query']);
+        //$this->debug_exit(__FILE__,__LINE__,10);
+        //
+        // *******
+        // this guy does a lot
+        // *****
+        //$fieldName_r_o_value_array);
+
+        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
+        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
+        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
+        $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
+  
+        $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
+        $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
+
+        //* ********************
+        $dash_gt = " ->";
+        $first_time = 1;
+        //echo $this->model;$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $executing_distinct = 0;
+        $model = $this->node_name;
+
+        foreach ($field_name_array as $index=>$field_name) {
+            $value = $field_name;
+           if ($field_name <> $bypassed_field){
+                $r_o = $r_o_array [$index];
+                $v = $value_array[$index];
+                $v = $this->convert_string_variables_to_variables($v);
+                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+                switch ($r_o) {
+                    case "distinct":
+                        if ($first_time){
+                            $first_time = 0;
+                            $model = $this->model_name;
+                            $query = $this->initialize_query('distinct',$field_name,$r_o,$v);
+                        }
+                        else {
+                            $query->where($field_name,$r_o,$v);
+                             echo("->where(".$field_name." $r_o ".$v.")");
+                        }
+                        break;
+                    case "=":
+                    case "<>":
+                    case ">":
+                    case "<":
+                    case "<=":
+                    case ">=":
+                        if ($first_time){
+                            $first_time = 0;
+                            
+                            $query = $this->initialize_query('regular',$field_name,$r_o,$v);
+                        }
+                        else {
+                            $query->where($field_name,$r_o,$v);
+                            echo("->where(".$field_name." $r_o ".$v.")");
+                            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+
+                        }
+                        break;
+                    }
+  //echo $this->model;$this->debug0(__FILE__,__LINE__,__FUNCTION__);    
+                switch ($r_o) {
+                    //case  "join":
+                    case "join":
+                        //DB::table('name')->join('table', 'name.id', '=', 'table.id')
+                        //->select('name.id', 'table.email');       
+                        //case  "where":
+                    case "whereBetween":
+                        $query->whereBetween($field_name,$value);
+                         echo(' ->whereBetween('.$field_name.','.$aord.')');
+                        break;
+                    case "whereNull":
+                        $query->whereNull($field_name);
+                         echo(' ->whereNull('.$field_name.')');
+                        break;
+                    case "whereNotNull":
+                        $query->whereNotNull($field_name);
+                         echo(' ->whereNotNull('.$field_name.')');
+                        break;
+                    case  "groupBy":
+                            $query->groupBy($field_name);
+                             echo(' ->groupBy('.$field_name.')');
+                            break;
+
+                    case "orderBy":
+                          $aord = "ASC";
+                            $query->orderBy($value);
+                            echo(' ->orderBy('.$value.','.$aord.')');
+                       
+                        break;
+                    case "orderByDesc":
+                        $aord = "DESC";     
+                            $query->orderBy($value,$aord);
+                            echo(' ->orderBy('.$value.','.$aord.')');
+                        
+                        break;
+                    case "distinct":
+                        $executing_distinct = 1;
+                        //$distinct_value = $value;
+                        //$query->distinct();
+                        //echo(" ->distinct()");
+                       
+                        break;
+                    case "xgetArray":
+                        //$query->get();
+                        break;
+                } // end switch      
+
+ 
+            } // end of not bypassed
+
+            
+        }  // end foreach
         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        echo(' ->get()');
+        return $query->get();
+    }   // end of b uild_and_execute_query        
+    public function build_and_execute_queryOLD(
+        $working_arrays,
+        $bypassed_field,
+        $query_relational_operators_array) {
+        //echo("<br>build_and_execute_query");
+        $this->debug4(__FILE__,__LINE__,__FUNCTION__);
         //var_dump($working_arrays['ppv_define_query']);
         //$this->debug_exit(__FILE__,__LINE__,10);
         //
@@ -850,7 +978,7 @@ class CRHBaseController extends DEHBaseController
                             $first_time = 0;
                             //$query = MiscThing::where($field_name,$r_o,$v);
                             //$query = MiscThing::distinct()->select($field_name)->groupBy('user_id')->get();
-                            $model = $this->node_name;
+                            $model = $this->model_name;
                             $query = $model::distinct()->select($field_name);
 
                              echo("MiscThing::distinct()->select(".$field_name.")");

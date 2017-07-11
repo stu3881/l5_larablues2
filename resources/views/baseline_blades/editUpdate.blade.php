@@ -32,12 +32,12 @@
 <?php 
 /* */
 
-	//var_dump($passed_to_view_array);
-//exit("editUpdate exit 16"); 	
+	//var_dump($passed_to_view_array);exit("editUpdate exit 36"); 	
 	$node_name 							= $passed_to_view_array['report_definition']->node_name;
 	$report_name 						= $passed_to_view_array['report_definition']->report_name;
 	$snippet_name 						= $passed_to_view_array['snippet_name'];
 	$encoded_input 						= $passed_to_view_array['encoded_input'];
+	$encoded_business_rules 			= $passed_to_view_array['encoded_business_rules'];
 	$encoded_report_definition 			= $passed_to_view_array['encoded_report_definition'];
 	$encoded_modifiable_fields_array 	= $passed_to_view_array['encoded_modifiable_fields_array'];
 	$snippet_string 					= $passed_to_view_array['snippet_string'];
@@ -69,7 +69,7 @@
 		{{ Form::hidden('encoded_business_rules',$encoded_business_rules) }}
 
 		{{ Form::hidden('id'							,$passed_to_view_array['id']) }}
-		{{ Form::hidden('wxyz'							,$passed_to_view_array['wxyz']) }}
+		{{ Form::hidden('encoded_business_rules'		,$passed_to_view_array['encoded_business_rules']) }}
 		{{ Form::hidden('encoded_modifiable_fields_array'							,$passed_to_view_array['encoded_modifiable_fields_array']) }}
 
 		{{ Form::hidden('coming_from'						,$passed_to_view_array['coming_from']) }}
