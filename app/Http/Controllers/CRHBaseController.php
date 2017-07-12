@@ -87,6 +87,9 @@ class CRHBaseController extends DEHBaseController
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         //$this->link_parms_array                 = $this->derive_entity_names_from_table(" ",$this->snippet_node_name);
         $this->node_name                        = $node_name ;
+        $this->link_parms_array                 = $this->derive_entity_names_from_table(" ",$this->node_name);
+
+
         $this->backup_node                      = $backup_node;
         $this->generated_files_folder           = $generated_files_folder;
         $this->key_field_name                   = $key_field_name;
@@ -192,7 +195,6 @@ class CRHBaseController extends DEHBaseController
     public function activateDeactivate( $id, $what_we_are_doing, $table){
         //echo($what_we_are_doing);
         $this->debug3(__FILE__,__LINE__,__FUNCTION__);echo('just routes');
-        $this->link_parms_array    = $this->derive_entity_names_from_table(" ",$table);
 
 
         $entities_array = array(
@@ -801,10 +803,27 @@ class CRHBaseController extends DEHBaseController
         }
     }
 
-    public function initialize_query($distinct,$field_name,$r_o,$v){
-        echo ($this->debug1(__FILE__,__LINE__,__FUNCTION__));
+    public function initialize_query($distinct_regular,$field_name,$r_o,$v) {
+    // *****************
+    // this initializes the query pointing to the correct model
+    // ****************
+        switch ($distinct_regular) { 
+            case "distinct":
+                $query = MiscThing::distinct()->select($field_name);
+                echo("MiscThing::distinct()->select(".$field_name.")");
+                break;
+            case "regular":
+                $query = MiscThing::where($field_name,$r_o,$v);
+                echo("MiscThing::where(".$field_name.",". $r_o. ",".$v.")");
+                //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
-    }
+                 break;
+       }   
+       return $query;
+
+    } 
+
+
     public function build_and_execute_query(
         $working_arrays,
         $bypassed_field,
@@ -2129,8 +2148,8 @@ class CRHBaseController extends DEHBaseController
     public function partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_string_array,$to_string_array,$displayYN) {
         //* *************
         //* 
-           echo($from_folder."  ".$to_folder);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-         if ($handle = opendir($from_folder)) {
+        //echo($from_folder."  ".$to_folder);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        if ($handle = opendir($from_folder)) {
              /* This is the correct way to loop over the directory. */
             while (false !== ($entry = readdir($handle))) {
                 $new_file_name =  $this->scan_replace_str_value_arrays($entry,$from_string_array,$to_string_array,$displayYN);
@@ -2198,7 +2217,7 @@ class CRHBaseController extends DEHBaseController
         $validation_array       = (array) json_decode($request->input('encoded_business_rules'));
         $modifiable_fields_array = (array) json_decode($request->input('modifiable_fields_array'));
         unset($modifiable_fields_array['id']);
-        var_dump($requestFieldsArray); $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($requestFieldsArray); $this->debug1(__FILE__,__LINE__,__FUNCTION__);
         
         $new_values = array(
             'model'         => $this->link_parms_array['model'],

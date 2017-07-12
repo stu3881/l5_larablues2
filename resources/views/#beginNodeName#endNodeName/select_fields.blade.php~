@@ -1,0 +1,120 @@
+@extends('layouts.main')
+
+@section('promo')
+
+<section id="promo">     
+	<div id="promo-details"> 
+		{{ HTML::image('img/sbbsnavlogo.gif', 'SBBS logo')}} 
+	</div> <!-- end promo-details -->
+</section><!-- promo -->
+@stop
+
+@section('content')
+
+	<?php 
+		//echo 'select_fields';print_r($_REQUEST);print_r($edit4_return_option);//exit("16  exit");
+		//	echo 'select_fields*';print_r($encoded_column_names_array);exit("16  exit");
+		//$from_array = $column_names_array;
+		$from_array 	= $from_array;
+		$to_array 	= $to_array;
+		//echo"from<br>";print_r($from_array);echo"to_array<br>";print_r($to_array);exit("exit 17");
+	?>
+
+		
+  <!doctype html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    <title>Move from one select box to another</title>
+    <style type="text/css">
+    select {
+        width: 200px;
+        float: left;
+    }
+    .controls {
+        width: 40px;
+        float: left;
+        margin: 10px;
+    }
+    .controls a {
+        background-color: #222222;
+        border-radius: 4px;
+        border: 2px solid #000;
+        color: #ffffff;
+        padding: 2px;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        margin: 5px;
+        width: 20px;
+    }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+    </script>
+    <script>
+    function moveAll(from, to) {
+        $('#'+from+' option').remove().appendTo('#'+to); 
+    }
+    
+    function moveSelected(from, to) {
+        $('#'+from+' option:selected').remove().appendTo('#'+to); 
+    }
+    </script>
+</head>
+    
+<body>
+<div id="admin" style="width:460px;">
+<?php $x = 'admin/'.$this->model_table.'/edit4';?>
+		{{ Form::open(array('url'=>$x, 'method'=>'GET')) }}
+		{{ Form::hidden('edit4_option',$edit4_return_option) }}
+		
+		<div id="abstract_div" style="height:120%;background-color: #FFA500;">
+				<div id="column_names_select_div">
+						{{-- Form::select('active_for_current_show',$from_array,array(),array('multiple','size'=>15,'id'=>'from')) --}}
+						{{ Form::select('active_for_current_show',$from_array,array(),array('multiple','size'=>15,'id'=>'from')) }}
+							<div class="controls"> 
+								<a href="javascript:moveAll('from', 'to')">&gt;&gt;</a> 
+								<a href="javascript:moveSelected('from', 'to')">&gt;</a> 
+								<a href="javascript:moveSelected('to', 'from')">&lt;</a> 
+								<a href="javascript:moveAll('to', 'from')" href="#">&lt;&lt;</a>
+							</div>
+							{{-- Form::select('to[]',$second_from_array,array(),array('multiple','size'=>15,'id'=>'to')) --}}
+							{{ Form::select('to[]',$to_array,$to_array,array('multiple','size'=>15,'id'=>'to')) }}							</div> <!-- end column_names_select_div --> 
+						<!-- ************************************ -->	
+						<!-- ************************************ -->	
+						<!-- <div id="div_inside_update_active_tasks"> -->	
+				<div style="position:relative;top:300px;left:-460px;">	
+					<table class="table_no_lines">
+							<tr class="table_no_lines">
+							<td>	
+								{{ Form::submit(Input::get('button_name'), array('class'=>'cart-btn')) }}
+								{{ Form::close() }}
+							</td>
+							
+							<td>	
+								{{ Form::open(array('url'=>'admin/'.$this->model_table, 'method'=>'GET')) }}
+								{{ Form::submit('Tasks menu') }}
+								{{ Form::close() }}
+							</td>
+							<td>	
+								{{ Form::open(array('url'=>'admin/'.$this->model_table.'/edit4', 'method'=>'GET')) }}
+								{{ Form::hidden('edit4_option','programmer_utilities_menu') }}
+								{{ Form::submit('programmer_utilities_menu') }}
+								{{ Form::close() }}
+							</td>
+							</tr>
+						</table>
+				</div> <!-- end div_inside_update_active_tasks --> 
+				<!-- ************************************ -->	
+				<!-- ************************************ -->	
+		</div> <!-- end abstract_div --> 
+	
+</div> <!-- end admin -->    
+</body>
+</html>
+
+
+
+@stop
+</body>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\#beginNodeName#endNodeName;
 
 
 use App\Models\MiscThing;
@@ -19,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class CategoriesController extends CRHBaseController
+class #beginNodeName#endNodeNameController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,10 +34,10 @@ class CategoriesController extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "CategoriesController", 
-        $model_table                    = "categories",         
-        $model                          = "Categorie", 
-        $node_name                      = "categories", 
+        $controller_name                = "#beginNodeName#endNodeNameController", 
+        $model_table                    = "#beginNodeName#endNodeName",         
+        $model                          = "#beginNodeName#endNodeName", 
+        $node_name                      = "#beginNodeName#endNodeName", 
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -178,12 +178,12 @@ class CategoriesController extends CRHBaseController
     // ****************
         switch ($distinct_regular) { 
             case "distinct":
-                $query = Categorie::distinct()->select($field_name);
-                echo("Categorie::distinct()->select(".$field_name.")");
+                $query = #beginNodeName#endNodeName::distinct()->select($field_name);
+                echo("#beginNodeName#endNodeName::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = Categorie::where($field_name,$r_o,$v);
-                echo("Categorie::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = #beginNodeName#endNodeName::where($field_name,$r_o,$v);
+                echo("#beginNodeName#endNodeName::where(".$field_name.",". $r_o. ",".$v.")");
                 //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
                  break;
@@ -279,7 +279,7 @@ class CategoriesController extends CRHBaseController
                 // *****
                 // return to view
                 // *****
-                        //var_dump($request->input);$this->debug_exit(__FILE__,__LINE__,1);
+                        var_dump($request->input);$this->debug_exit(__FILE__,__LINE__,1);
 
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
@@ -319,11 +319,11 @@ class CategoriesController extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = Categorie
+                        $updatex  = #beginNodeName#endNodeName
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = Categorie
+                        $updatex  = #beginNodeName#endNodeName
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
