@@ -85,6 +85,8 @@ class MiscThingsController extends CRHBaseController
         $this->snippet_node_name                = $snippet_node_name;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
+        $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+
         $this->backup_node                      = $backup_node;
         $this->generated_files_folder           = $generated_files_folder;
         $this->key_field_name                   = $key_field_name;
@@ -171,6 +173,39 @@ class MiscThingsController extends CRHBaseController
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
+    }
+    
+
+
+    public function initialize_query($distinct_regular,$field_name,$r_o,$v) {
+    // *****************
+    // this initializes the query pointing to the correct model
+    // ****************
+    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        switch ($distinct_regular) { 
+            // all queries start the same except distinct
+            case "distinct":
+                $query = MiscThing::distinct()->select($field_name);
+                echo("MiscThing::distinct()->select(".$field_name.")");
+                break;
+            case "regular":
+                $query = MiscThing::where($field_name,$r_o,$v);
+                echo("MiscThing::where(".$field_name.",". $r_o. ",".$v.")");
+                break;
+       }   
+       return $query;
+    }
+
+    public function destroy($id)
+    {
+         $this->debug_exit(__FILE__,__LINE__);
+
+        $this->authorize('destroy', MiscThing);
+
+        MiscThing::delete($id);
+
+        //return redirect('/tasks');
+        return;
     }
 
     

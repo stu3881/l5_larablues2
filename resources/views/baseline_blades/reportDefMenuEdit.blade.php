@@ -10,7 +10,7 @@
 	//var_dump($miscThing[0]);echo($what_we_are_doing." ** ".$coming_from);
 	//echo ('<br>'.$id);
 
-	//exit('exit in reportDefMenuUpdate.blade at 12');
+	exit('exit in reportDefMenuUpdate.blade at 12');
 	$lookups = "";
 	$encoded_field_name_array = array();
 	$lookups = "";

@@ -66,6 +66,14 @@ else{
 		
 		   	</li>
 		
+		<li>
+			{!! HTML::link('../'.$query->node_name.'/indexReports', 'Manage '.$query->model_table,$parameters = array(
+				'id'=>$query->id,
+		   		'reportDefinitionKey'=>$report_definition_key,
+		   		'class'=>"btn mycart-btn-row2"
+	   			)
+	   		)!!}	
+	   	</li>
 
 
 					
@@ -78,6 +86,14 @@ else{
 	   			)
 	   		) }}" class="btn mycart-btn-row2">programmer utilities NEW2</a>
 	
+	   	</li>
+
+		<li>
+			{!! HTML::link('http://test.com', 'testing',$parameters = array(
+				'id'=>$query->id,
+		   		'reportDefinitionKey'=>$report_definition_key
+	   			)
+	   		)!!}	
 	   	</li>
 
 	

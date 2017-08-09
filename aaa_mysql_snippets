@@ -420,3 +420,7 @@ update miscThings SET
  //* *************************
  //* *************************
  
+$updatex  = DB
+	::connection($this->db_snippet_connection)
+	->table($this->model_table)
+    ->insert($modifiable_fields_name_values);

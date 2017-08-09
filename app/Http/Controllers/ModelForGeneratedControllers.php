@@ -176,7 +176,9 @@ class @@controller_name@@ extends CRHBaseController
     // *****************
     // this initializes the query pointing to the correct model
     // ****************
+    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
         switch ($distinct_regular) { 
+            // all queries start the same except distinct
             case "distinct":
                 $query = @@model@@::distinct()->select($field_name);
                 echo("@@model@@::distinct()->select(".$field_name.")");
@@ -184,12 +186,9 @@ class @@controller_name@@ extends CRHBaseController
             case "regular":
                 $query = @@model@@::where($field_name,$r_o,$v);
                 echo("@@model@@::where(".$field_name.",". $r_o. ",".$v.")");
-                //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
-                 break;
+                break;
        }   
        return $query;
-
     }
 
 
@@ -343,5 +342,17 @@ class @@controller_name@@ extends CRHBaseController
         }   
     }
 
-    
+     public function destroy($id)
+    {
+         $this->debug_exit(__FILE__,__LINE__);
+
+        $this->authorize('destroy', @@model@@);
+
+        @@model@@->delete($id);
+
+        //return redirect('/tasks');
+        return;
+
+    }
+   
 }

@@ -14,10 +14,10 @@
 		Browse Select Defined Reports
 
 <?php
-	//var_dump($all_records);
+	//var_dump($parameters);exit("indexReports.blade 17 ");
 	//var_dump($report_definition_id);
 	//exit("indexReports.blade 17 ");
-
+	$request = "";
 	$what_we_are_doing = 'what_we_are_doing';
 	$coming_from = 'edit1';
 
@@ -129,7 +129,7 @@ $rowcount = -1;
 		@foreach($all_records as $record)
 			 
 				<?php 
-				//var_dump($record);exit("edit1.blade xx");
+				//echo $node_name;var_dump($record);//exit("edit1.blade xx");
 				?>
 				<tr >
 				<td class='border_left'>
@@ -143,14 +143,9 @@ $rowcount = -1;
 	the buttons at the end of the line 
 	-->
 
-  		        <td>
-  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> $coming_from)) }}" class="btn btn-warning">{{$record->id}} edita</a>
-					{{ Form::close() }}
-				</td>
-
 	
 				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'GET')) }}
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefMenuEdit', 'method'=>'GET')) }}
 					{{ Form::hidden('coming_from','edit1') }}
 					{{ Form::hidden('logical_button_name'	,'deleting a record') }}
 					{{ Form::hidden('what_we_are_doing'		,'deleting_record') }}			
@@ -162,24 +157,24 @@ $rowcount = -1;
 					{{ Form::submit('delete') }}
 					{{ Form::close() }}
 				</td>		
+	
+	
 				<td >
 	  		        <a href=
-	  		        "{{ URL::route($node_name.'.browseEdit', $parameters = 
+	  		        "{!! URL::route($node_name.'.browseEdit', $parameters = 
 	  		        array(
 	  		        'id'=>$record->id, 
 	  		        'what_we_are_doing'=>$what_we_are_doing,
 	  		        'coming_from'=> $coming_from
-	  		        )) }}" 
+	  		        )) !!}" 
 	  		        class="btn btn-warning"> 
 	  		        browseEdit</a>
 				</td>
-				<!--
-				<td >
-	  		        <a href="{{-- URL::route($node_name.'.browseEdit', $parameters = array('id'=>$record->id, 'what_we_are_doing'=>$what_we_are_doing,'coming_from'=> 'var_dump')) --}}" class="btn btn-warning"> 
-	  		        var_dump(xxx)</a>
-				</td>
-				-->
+
 			</tr>
+				<?php 
+				echo $node_name;var_dump($record);//exit("edit1.blade xx");
+				?>
 				
 		@endforeach
 		
@@ -195,8 +190,19 @@ if (document.getElementById("table_inside_update_active_tasks").style.width > do
 }
 
 </script>
-	
-	</div> <!-- end admin -->
+<script>
+function confirmDelete() {
+var result = confirm('Are you sure you want to delete?');
+
+if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}</script>	
+
+
+</div> <!-- end admin -->
 
 	
 @stop

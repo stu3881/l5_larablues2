@@ -56,12 +56,14 @@ class DEHBaseController extends Controller
     public function debug0($file,$line,$function) {
        // echo ('<BR>'.$file. ' at line: '.$line.' in method: ' .$function);
        //echo ('<BR>'. $line.' in method: ' .$function.' of file '.$file);
-       echo ('<BR>'. $line.' in method: ' .$function);
+       //echo ('<BR>'. $line.' in method: ' .$function);
+               $i0 = strripos($file,"/")+1;
+       echo ('<BR>'. $line.' in method: ' .$function." file: ".substr($file,$i0));
      }
 
     public function debug1($file,$line,$function) {
        //echo ('<BR>'. ' at line: '.$line.' in method: ' .$function.' of file '.$file);
-        $i0 = strripos($file,"/");
+        $i0 = strripos($file,"/")+1;
        echo ('<BR>stopping: '. $line.' in method: ' .$function." file: ".substr($file,$i0));
        exit();
      }
@@ -127,7 +129,7 @@ class DEHBaseController extends Controller
      
     public function blade_gen_simple_add($report_key,$field_name_array) {
         //echo ('<br>blade_gen_modifiable_fields_add<br><br>');
-        var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,10);
+        var_dump($field_name_array);$this->debug_exit(__FILE__,__LINE__,0);
 
 
         $crlf = "\r\n";

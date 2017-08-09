@@ -15,9 +15,20 @@
 		Activate/Deactivate table reporting
 
 <?php
-	//var_dump($arr1);
+	var_dump($arr1);
 	//var_dump($report_definition_key);
 	//exit("indexReports.blade 17 ");
+	var_dump($parameters);
+	exit("programmerUtilitiesMenu exit 24");
+	//echo("H**H");var_dump($parameters);
+	//	exit("dynamicMenu0 exit 24");
+if (isset($msg_array)){
+	var_dump($msg_array);
+	//exit("dynamicMenu0 exit 24");
+}
+else{
+	//exit("programmerUtilitiesMenu exit 26");
+}
 $browse_select_field_count=3;
 	$what_we_are_doing = 'what_we_are_doing';
 	$coming_from = 'edit1';
@@ -32,7 +43,7 @@ $rowcount = -1;
 	
 	<div id="admin" style="width:800px;height:99%">
 	
-	{{ Form::open(array('url'=>'admin/'.'ode_name'.'/add'	,'method'=>'GET')) }}
+	{{ Form::open(array('url'=>'admin/'.'node_name'.'/add'	,'method'=>'GET')) }}
 	
 	
 	<p>		
@@ -45,7 +56,7 @@ $rowcount = -1;
 			<table class="table_no_lines">
 				<tr class="table_no_lines">
 				<td>	
-			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
+			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parametersx = array(
 				   		'report_definition_key'=>'report_definition_key')
 				   		) }}" class="btn mycart-btn-row2">
 						Initialize_New_Report
@@ -53,7 +64,7 @@ $rowcount = -1;
 
 				</td>
 				<td class="table_no_lines">
-					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
+					<a href="{{ URL::route('Main.getIndex', $parametersx = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 				</td>
 			</table>
 		</td></tr>
@@ -67,53 +78,24 @@ $rowcount = -1;
 		?>    
 	
 		
-			<!-- 			
-			// *********
-			// read loop
-			// *********
-			 -->
-			
-				<?php 
-					$rowcount++;
-					//print_r($record);exit("exit 73");
-					//print_r($record->shift_id);exit("exit 73");
-					
-					?>
+		<!-- 			
+		// *********
+		// read loop
+		// *********
+		 -->
+		<?php $rowcount++;?>
 		@foreach($arr1 as $table=>$value)
+		<?php //echo ($table."**");var_dump($parameters);var_dump($value['class']);exit('at 88') ?>
 		<tr>
 			<td class='border_left'>
-				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
-				 	'id'=> $arr1[$table]['key_value'][0],
-	  		        'what_we_are_doing'=> $arr1[$table]['aord'][0],
-	  		        'table'=> $table)) }}" >
-	  		        {{$arr1[$table]['aord'][0]." ".$table}}
+				
+			<?php echo ("<td class=".$value['class'][0]."' >"); ?>
+				 	<a href="{{ URL::route($table.'.activateDeactivate', $parameters) }}" >
+	  		        {{$table}}
 			<?php echo($myStrings['tdEnd']);?>		
 			</td>
 
-
-
-						<td class='border_left'>
-				{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-			<?php echo ("<td class='".$arr1[$table]['class'][1]."' >"); ?>
-				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
-				 	'id'=> $arr1[$table]['key_value'][1],
-	  		        'what_we_are_doing'=> $arr1[$table]['aord'][1],
-	  		        'table'=> $table)) }}" >
-	  		        {{$arr1[$table]['aord'][1]." ".$table}}
-			<?php echo($myStrings['tdEnd']);?>		
-			</td>
-
-			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
-			<?php //echo($myStrings['tdBegin']);?>
-
-				@if($arr1[$table]['aord'][0] == "edit1")	
-					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
-				@endif						
- 
-		
-			<?php echo($myStrings['tdEnd']);?>		
+	
 
 		</tr>
 				
@@ -132,6 +114,21 @@ if (document.getElementById("table_inside_update_active_tasks").style.width > do
 
 </script>
 	
+
+<script>
+function confirmDelete() {
+var result = confirm('Are you sure you still want to lick my pussy?');
+
+if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}</script>	
+
+
+
+
 	</div> <!-- end admin -->
 
 	
