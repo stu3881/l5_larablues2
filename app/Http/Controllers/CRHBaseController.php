@@ -2260,7 +2260,7 @@ class CRHBaseController extends DEHBaseController
                 ->with('message'                            ,'')
                 ;
         }
-        var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
 
        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
         ->with('id'                                 ,$id)
@@ -2481,7 +2481,7 @@ class CRHBaseController extends DEHBaseController
      * @param  int  $idInput
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(REQUEST $request, $id)
     {
         //* *********************
         // the request has every field we need but many we dont

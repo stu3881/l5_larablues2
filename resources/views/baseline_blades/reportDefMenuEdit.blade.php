@@ -10,7 +10,7 @@
 	//var_dump($miscThing[0]);echo($what_we_are_doing." ** ".$coming_from);
 	//echo ('<br>'.$id);
 
-	exit('exit in reportDefMenuUpdate.blade at 12');
+	//exit('exit in reportDefMenuUpdate.blade at 12');
 	$lookups = "";
 	$encoded_field_name_array = array();
 	$lookups = "";
@@ -57,7 +57,7 @@
 		for table {{$node_name}}
 		 {{ csrf_field() }}
   
-		 {!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$id,$what_we_are_doing,$coming_from]]) !!}
+		 {!! Form::model('MiscThing',['method' => 'POST','route'=>[$node_name.'.update',$id]]) !!}
 		
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->

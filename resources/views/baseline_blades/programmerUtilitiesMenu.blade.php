@@ -12,10 +12,10 @@ var_dump($queryx[1]);exit("exit 4");
 
 print_r(Input::all());//exit("xit index")
 */
-var_dump($menu_array);
+//var_dump($menu_array);
 
 //var_dump($method_parameters_array);
-var_dump($method_parameters_array['configure_an_unconfigured_table']);
+//var_dump($method_parameters_array['configure_an_unconfigured_table']);
 //exit("19 this is an echo/exit in programmerUtilitiesMenu in baseline_blades");
 
 
@@ -40,7 +40,7 @@ else{
 <section id="promo">     
 	<div id="promo-details-identity"> 
 
-	programmersUtilitiesMenu x
+	programmersUtilitiesMenu
 
  	</div> 
  		<div id="promo-details"> 

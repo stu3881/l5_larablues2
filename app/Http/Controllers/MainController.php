@@ -241,14 +241,16 @@ class MainController extends CRHBaseController {
         //->get([$field]);
         ->get();
         $snippet_node_name = 'miscThings';
-
+        $parameters1 = array(
+        'id'=>"$"."query"."->"."id",
+        'reportDefinitionKey'=>"$"."report_definition_key");
         //$MiscThing = $this->snippet_node_name($MiscThing,$field);
 
         //var_dump($MiscThing);$this->debug_exit(__FILE__,__LINE__,0);
         return view('main.indexmain',compact('MiscThing'))
             ->with('report_definition_key'   ,$this->report_definition_id)   
 
-            //->with('$node_name'   ,$this->node_name)   
+            ->with('parameters1'   ,$parameters1)   
             ->with('$node_name'   ,'miscThings')   
             ->with('queryx'   ,$MiscThing);            
            

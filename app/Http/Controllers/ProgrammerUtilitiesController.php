@@ -55,7 +55,10 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $report_definition_id               = 0,
         $store_validation_id                = 0,
         $business_rules_array               = 0,
-        $link_parms_array                   = array()
+        $link_parms_array                   = array(),
+        $link_strings                       = array(),
+        $link_parameters                    = array(),
+        $myStrings                          = array()
 
         ) 
         {
@@ -70,7 +73,30 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->beforeFilter('csrf', array('on'=>'post'));
         //$this->beforeFilter('admin');
 
-       
+        $this->link_strings = array(
+            'tdBegin'   =>"<td class='text_align_left select_red' >",
+            
+            'link1of4' =>"<a href=\"{{ URL::route(",
+            'link2of4' =>"$".'node_name',
+            'link3of6' =>".",
+            'link4of6' =>"",
+            'tdEnd'     =>"</td>"
+             );
+
+        $this->link_parameters = array(
+            'what_we_are_doing' =>'activating_controller',
+            'coming_from'       =>'dynamicMenu0'
+            );
+         $this->myStrings = array(
+            'what_we_are_doing' =>"activating_controller",
+            'coming_from'       =>"dynamicMenu0",
+            'tdBegin'           =>"<td class='text_align_left select_pink' >",
+            'tdEnd'             =>"</td>",
+            'linkStrA'          =>"<a href= \"",
+            'linkStrC'          =>"\" class='btn mycart-btn-row2'>",
+            'linkEnd'           =>'</a>'
+            );
+      
 
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
@@ -214,26 +240,29 @@ class ProgrammerUtilitiesController extends CRHBaseController
      * @return \Illuminate\Http\Response
      */
     public function mainMenu(REQUEST $request,$id,$report_definition_id) {
-       $this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
-       //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
-       $record_type                    = "report_definition";
-       $linkx = "xx";
- 
- 
-        $main_menu_array = $this->define_menu_links();
+        //$this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
+        $main_menu_array = $this->define_main_menu_links();
         $method_parameters_array = $this->define_method_parameters($main_menu_array);
-        //var_dump($method_parameters_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
+        //var_dump($request);
         //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        return view($this->node_name.'/programmerUtilitiesMenu',$main_menu_array)
+        return view($this->node_name.'/programmerUtilitiesMenu')
             ->with('menu_array'               ,$main_menu_array)
             ->with('method_parameters_array'  ,$method_parameters_array)
             ;
-        }
+
+    }
  
+     public function define_main_menu_links() {
+        $main_menu_array = array(
+            'configure_an_unconfigured_table'       =>'redefined_table_methods',
+            'activate_deactivate_table_reporting'   =>'redefined_table_methods',
+            'show_me_reports_with_broken_links'     =>'redefined_table_methods',
+        );
+       return $main_menu_array;
+    }
 
     public function define_method_parameters($main_menu_array) {
-        var_dump($main_menu_array);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($main_menu_array);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
         $method_parameters_array = array();
         foreach ($main_menu_array as $option=>$method) {
 
@@ -259,7 +288,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
                   
                 case "node_name":
                     $method_parameters_array[$option]['pseudo_method']   = $method;
-                    $method_parameters_array[$option]['menu_name']     = $method;
+                    $method_parameters_array[$option]['menu_name']       = $method;
                     $method_parameters_array[$option]['real_method']     = $method;
                   break;
             }
@@ -270,19 +299,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }
 
 
-     public function define_menu_links() {
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $main_menu_array = array(
-            //'gen_tbl_routes_snippet'                =>'mainMenu_generate_routes_snippet',
-            'configure_an_unconfigured_table'       =>'mainMenu_active_inactive',
-            'activate_deactivate_table_reporting'   =>'mainMenu_active_inactive',
-            'show_me_reports_with_broken_links'     =>'mainMenu_active_inactive',
-            //'gen_tbl_model_snippet'                 =>'mainMenu_active_inactive',
-            //'gen_tbl_model'                         =>'mainMenu_generate_routes_snippet'
-
-        );
-       return $main_menu_array;
-    }
 
 
    public function build_link_array($aord,$table) {
@@ -385,13 +401,13 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
 
    public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$report_definition_id) {
-        $this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
 
        $record_type                    = "report_definition";
        $linkx = "xx";
 
-       $main_menu_array = $this->define_menu_links();
-       $method_parameters_array = $this->define_method_parameters($main_menu_array);
+       //$main_menu_array = $this->define_main_menu_links();
+       //$method_parameters_array = $this->define_method_parameters($main_menu_array);
 
         return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
             ->with('menu_array'               ,$main_menu_array)
@@ -400,8 +416,13 @@ class ProgrammerUtilitiesController extends CRHBaseController
             ;
         }
 
-    public function mainMenu_active_inactive(REQUEST $request,$id,$report_definition_id) {
-        //var_dump($request->what_are_we_doing);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+    public function redefined_table_methods(REQUEST $request,$id,$report_definition_id) {
+        // ********
+        // serveral functions require the same parameters 
+        // rather than define separate routes for all of them, we pass a parm that defines different functions
+        // this keeps us from having to add more and more routes
+        // ********
+        //var_dump($request);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
         $active_tables = array(); 
         $view_variables_array = array();
@@ -409,101 +430,61 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $db_result2 = MiscThing
            ::where('record_type','=','table_controller')
            ->where('table_reporting_active','=',1)
-           ->get();        
+           ->get();   
+        $main_menu_array = $this->define_main_menu_links();
+        $method_parameters_array = $this->define_method_parameters($main_menu_array);
+     
         foreach ($db_result2 as $db_result) {
             $active_tables[$db_result->node_name] = $db_result->node_name;
             $arr1[$db_result->node_name]['key_value'] = $db_result->id;
+            $method_parameters_array[$request->what_are_we_doing]['node'] = $db_result->node_name;
         }
-        $main_menu_array = $this->define_menu_links();
-        $method_parameters_array = $this->define_method_parameters($main_menu_array);
-
-        //var_dump($arr1);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
         $all_tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-        $getAll = 0;
-        switch ($request->what_are_we_doing) {
-            case "configure_an_unconfigured_table":
-                $only_active = 1;
-            case "activate_deactivate_table_reporting":
-                $only_active =0;
-                $getAll = 1;
-                break;
-            case "show_me_reports_with_broken_links":
-                $only_active = 1;
-                 break;
-        }
+
+        // ***************************
         foreach($all_tables as $table){
-            if (in_array($table,$active_tables)){
-                $view_variables_array[$table]['what_are_we_doing'] = $request->what_are_we_doing;
-                $view_variables_array[$table]['key_value']= $arr1['miscThings']['key_value'];
-                //var_dump($active_tables);echo($only_active);
-                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                switch ($request->what_are_we_doing) {
-                    case "configure_an_unconfigured_table":
+
+            switch ($request->what_are_we_doing) {
+                case "configure_an_unconfigured_table":
+                    if (!in_array($table,$active_tables)){
+                        $view_variables_array[$table]['what_are_we_doing'] = $request->what_are_we_doing;
+                        $view_variables_array[$table]['key_value']= $arr1['miscThings']['key_value'];
                         $view_variables_array[$table]['functions'][0] = 'configure';
                         $view_variables_array[$table]['class'][0] = "text_align_left";
-                        break;
-                    case "activate_deactivate_table_reporting":
+                    }
+                    break;
+                case "activate_deactivate_table_reporting":
+                    if (!in_array($table,$active_tables)){
                         $view_variables_array[$table]['functions'][0] = 'de activate';
                         $view_variables_array[$table]['class'][0] = "text_align_left";
-                        break;
-                    case "show_me_reports_with_broken_links":
+                        }
+                    else {
+                        $view_variables_array[$table]['functions'][0]= 'activate';
+                        $view_variables_array[$table]['class'][0]    = "text_align_left mycart-btn"; // dark blue            
+                        }
+                    $view_variables_array[$table]['functions'][1] = 'validate';
+                    $view_variables_array[$table]['class'][1] = "text_align_left";
+                    break;
+                case "show_me_reports_with_broken_links":
+                    if (in_array($table,$active_tables)){
                         $view_variables_array[$table]['functions'][0] = 'brokenLinks';
                         $view_variables_array[$table]['class'][0] = "text_align_left";
-                        break;
-                }
-            }
-            else {
-                if (!$only_active){
-                    $view_variables_array[$table]['functions'][0]= 'activate';
-                    $view_variables_array[$table]['class'][0]    = "text_align_left mycart-btn"; // dark blue            
-                }
-            }
-            if ($getAll){
-                $view_variables_array[$table]['functions'][1] = 'validate';
-                $view_variables_array[$table]['class'][1] = "text_align_left";
-                switch ($view_variables_array[$table]['functions'][0]) {
-                    // these don't do anything? 7/29
-                    case "deactivate":
-                        $this->build_link_array("deactivate",$table);
-                        break;
-                    case "activate":
-                        $this->build_link_array("activate",$table);
-                        break;
-                }      
-            }    
-        }  // all tables loop
-        //var_dump($view_variables_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $method_name = "miscThings";
-        $link_strings = array(
-            'tdBegin'   =>"<td class='text_align_left select_red' >",
+                        }
+                     break;
+                }   
             
-            'link1of4' =>"<a href=\"{{ URL::route(",
-            'link2of4' =>"$".'node_name',
-            'link3of6' =>".",
-            'link4of6' =>$method_name,
-            'tdEnd'     =>"</td>"
-             );
 
-        $link_parameters = array(
-            'what_we_are_doing' =>'activating_controller',
-            'coming_from'       =>'dynamicMenu0'
-            );
-         $myStrings = array(
-            'what_we_are_doing' =>"activating_controller",
-            'coming_from'       =>"dynamicMenu0",
-            'tdBegin'           =>"<td class='text_align_left select_pink' >",
-            'tdEnd'             =>"</td>",
-            'linkStrA'          =>"<a href= \"",
-            'linkStrC'          =>"\" class='btn mycart-btn-row2'>",
-            'linkEnd'           =>'</a>'
-            );
-       
+            } //  for all_tables
+
+         //var_dump($view_variables_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        //$method_name = "miscThings";
+        //$this->link_strings['link4of6'] = $method_name;
          return view($this->node_name.'.dynamicMenu0')
             ->with('arr1'           ,$view_variables_array)
             ->with('id'             ,$id)
             ->with('node_name'      ,$this->node_name)      
-            ->with('myStrings'      ,$myStrings)             
-            ->with('parameters',$method_parameters_array['show_me_reports_with_broken_links'])             
+            ->with('myStrings'      ,$this->myStrings)             
+            ->with('parameters',$method_parameters_array[$request->what_are_we_doing])             
             ;
     }
 

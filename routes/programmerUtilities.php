@@ -58,7 +58,7 @@
     $method_name            = "mainMenu";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
     //*
-    $method_name            = "mainMenu_active_inactive";
+    $method_name            = "redefined_table_methods";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $method_name            = "mainMenu_generate_routes_snippet";

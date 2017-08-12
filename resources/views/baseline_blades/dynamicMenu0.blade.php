@@ -19,9 +19,9 @@
 	//var_dump($report_definition_key);
 	//exit("indexReports.blade 17 ");
 	var_dump($parameters);
-	exit("programmerUtilitiesMenu exit 24");
-	//echo("H**H");var_dump($parameters);
-	//	exit("dynamicMenu0 exit 24");
+	//exit("dynamicMenu0 exit 24");
+	echo("OOOO".$node_name);//var_dump($parameters);
+		//exit("dynamicMenu0 exit 24");
 if (isset($msg_array)){
 	var_dump($msg_array);
 	//exit("dynamicMenu0 exit 24");
@@ -90,7 +90,7 @@ $rowcount = -1;
 			<td class='border_left'>
 				
 			<?php echo ("<td class=".$value['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route($table.'.activateDeactivate', $parameters) }}" >
+				 	<a href="{{ URL::route('programmerUtilities.activateDeactivate', $parameters) }}" >
 	  		        {{$table}}
 			<?php echo($myStrings['tdEnd']);?>		
 			</td>

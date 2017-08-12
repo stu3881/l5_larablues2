@@ -59,24 +59,16 @@ else{
 		
 	   	@foreach($queryx as $query)
 	   		<li>
-		   		<a href="{{ URL::route($query->node_name.'.indexReports', $parameters = array('id'=>$query->id,
+		   		<a href="{{ URL::route(
+		   		$query->node_name.'.indexReports',
+		   		$parameters = array(
+		   			'id'=>$query->id,
 		   			'reportDefinitionKey'=>$report_definition_key
 		   			)
-		   		) }}" class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
+		   		) 
+		   		}}"class="btn mycart-btn-row2">Manage {{$query->model_table}}</a>
 		
 		   	</li>
-		
-		<li>
-			{!! HTML::link('../'.$query->node_name.'/indexReports', 'Manage '.$query->model_table,$parameters = array(
-				'id'=>$query->id,
-		   		'reportDefinitionKey'=>$report_definition_key,
-		   		'class'=>"btn mycart-btn-row2"
-	   			)
-	   		)!!}	
-	   	</li>
-
-
-					
 
 	   	@endforeach
 

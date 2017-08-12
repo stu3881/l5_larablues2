@@ -132,6 +132,10 @@ $rowcount = -1;
 				//echo $node_name;var_dump($record);//exit("edit1.blade xx");
 				?>
 				<tr >
+
+
+
+
 				<td class='border_left'>
 					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefEdits', 'method'=>'GET')) }}
 					{{ Form::label('', $rowcount) }} 
@@ -143,9 +147,21 @@ $rowcount = -1;
 	the buttons at the end of the line 
 	-->
 
+  		        <td>
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', 
+	  		        $parameters = array(
+	  		        'id'=>$record->id,
+	  		        'what_we_are_doing'=>$what_we_are_doing,
+	  		        'coming_from'=> $coming_from
+	  		        )) }}" class="btn btn-warning">
+	  		        {{$record->id}} edita
+	  		        </a>
+					{{ Form::close() }}
+				</td>
+
 	
 				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/reportDefMenuEdit', 'method'=>'GET')) }}
+					{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'GET')) }}
 					{{ Form::hidden('coming_from','edit1') }}
 					{{ Form::hidden('logical_button_name'	,'deleting a record') }}
 					{{ Form::hidden('what_we_are_doing'		,'deleting_record') }}			
@@ -157,23 +173,22 @@ $rowcount = -1;
 					{{ Form::submit('delete') }}
 					{{ Form::close() }}
 				</td>		
-	
-	
 				<td >
 	  		        <a href=
-	  		        "{!! URL::route($node_name.'.browseEdit', $parameters = 
+	  		        "{{ URL::route($node_name.'.browseEdit', $parameters = 
 	  		        array(
 	  		        'id'=>$record->id, 
 	  		        'what_we_are_doing'=>$what_we_are_doing,
 	  		        'coming_from'=> $coming_from
-	  		        )) !!}" 
+	  		        )) }}" 
 	  		        class="btn btn-warning"> 
 	  		        browseEdit</a>
 				</td>
 
+
 			</tr>
 				<?php 
-				echo $node_name;var_dump($record);//exit("edit1.blade xx");
+				//echo $node_name;var_dump($record);//exit("edit1.blade xx");
 				?>
 				
 		@endforeach
