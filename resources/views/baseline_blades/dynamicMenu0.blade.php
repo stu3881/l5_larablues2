@@ -15,13 +15,13 @@
 		Activate/Deactivate table reporting
 
 <?php
-	var_dump($arr1);
+	//var_dump($arr1);
 	//var_dump($report_definition_key);
 	//exit("indexReports.blade 17 ");
-	var_dump($parameters);
+	//var_dump($parameters);
 	//exit("dynamicMenu0 exit 24");
-	echo("OOOO".$node_name);//var_dump($parameters);
-		//exit("dynamicMenu0 exit 24");
+	//echo("OOOO".$node_name);//var_dump($parameters);
+	//activateDeactivateexit("dynamicMenu0 exit 24");
 if (isset($msg_array)){
 	var_dump($msg_array);
 	//exit("dynamicMenu0 exit 24");
@@ -86,16 +86,42 @@ $rowcount = -1;
 		<?php $rowcount++;?>
 		@foreach($arr1 as $table=>$value)
 		<?php //echo ($table."**");var_dump($parameters);var_dump($value['class']);exit('at 88') ?>
+
 		<tr>
 			<td class='border_left'>
-				
-			<?php echo ("<td class=".$value['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route('programmerUtilities.activateDeactivate', $parameters) }}" >
-	  		        {{$table}}
+				{{ Form::open(array('url'=>$node_name.'/reportDefEdits', 'method'=>'GET')) }}
+			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
+				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
+				 	'id'=> $table,
+	  		        'what_we_are_doing'=> $arr1[$table]['functions'][0],
+	  		        'table'=> $table)) }}" >
+	  		        {{$arr1[$table]['functions'][0]." ".$table}}
 			<?php echo($myStrings['tdEnd']);?>		
 			</td>
 
-	
+			@if($arr1[$table]['functions'][1] == "validate")	
+			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
+				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
+				 	'id'=> $table,
+	  		        'what_we_are_doing'=> $arr1[$table]['functions'][0],
+	  		        'table'=> $table)) }}" >
+	  		        {{$arr1[$table]['functions'][0]." ".$table}}
+			<?php echo($myStrings['tdEnd']);?>		
+			</td>
+
+			@endif						
+
+
+
+			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
+			<?php //echo($myStrings['tdBegin']);?>
+
+				@if($arr1[$table]['functions'][0] == "edit1")	
+					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
+				@endif						
+ 
+		
+			<?php echo($myStrings['tdEnd']);?>		
 
 		</tr>
 				

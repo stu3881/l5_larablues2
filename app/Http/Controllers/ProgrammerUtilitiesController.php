@@ -455,11 +455,11 @@ class ProgrammerUtilitiesController extends CRHBaseController
                     break;
                 case "activate_deactivate_table_reporting":
                     if (!in_array($table,$active_tables)){
-                        $view_variables_array[$table]['functions'][0] = 'de activate';
+                        $view_variables_array[$table]['functions'][0] = 'activate';
                         $view_variables_array[$table]['class'][0] = "text_align_left";
                         }
                     else {
-                        $view_variables_array[$table]['functions'][0]= 'activate';
+                        $view_variables_array[$table]['functions'][0]= 'de activate';
                         $view_variables_array[$table]['class'][0]    = "text_align_left mycart-btn"; // dark blue            
                         }
                     $view_variables_array[$table]['functions'][1] = 'validate';
