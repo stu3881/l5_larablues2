@@ -53,6 +53,38 @@ class DEHBaseController extends Controller
 
 
 
+    public function debugx($parmstr,$file,$line,$function) {
+        $parma = str_split($parmstr);
+        //var_dump($parma);exit('xit58 deh');
+        foreach ($parma as $index=>$value) {
+            if ($index == 0) {
+                if ($value){
+                    echo ('<BR>stopping: ');    
+                }
+                else{
+                    echo ('<BR>');     
+                }
+            }
+            if ($index == 1) {
+                if ($value){
+                    echo (' at '.$line);    
+                }
+            }
+            if ($index == 2) {
+                if ($value){
+                    echo (' in method: ' .$function);    
+                }
+            }
+            if ($index == 3) {
+               if ($value){
+                   $i0 = strripos($file,"/")+1;
+                   echo (" in file: ".substr($file,$i0));    
+               }
+            }
+       } // end foreach
+       if ($parma[0]) exit();
+    }
+
     public function debug0($file,$line,$function) {
        // echo ('<BR>'.$file. ' at line: '.$line.' in method: ' .$function);
        //echo ('<BR>'. $line.' in method: ' .$function.' of file '.$file);

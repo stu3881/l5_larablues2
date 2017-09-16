@@ -61,8 +61,8 @@ echo("<br>13 echo in programmerUtilitiesMenu in baseline_blades");
 		   		// We're adding a little functionality without having to define a new route each time
 		   		// we just make one of the original fields an array and pass anything we need
 		   		//var_dump($a2_dimensional_array);
-		   		//var_dump($parm2_array);exit("exit programmerUtilitiesMenu 64"); 
-		   		//exit("exit programmerUtilitiesMenu 62"); 
+		   		//var_dump($menu_array);exit("exit programmerUtilitiesMenu 74"); 
+		   		//exit("programmerUtilitiesMenu 62"); 
 				//echo($name.'*'.$link);exit("programmerUtilitiesMenu 62"); 
 
 		   		?>

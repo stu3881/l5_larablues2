@@ -424,3 +424,7 @@ $updatex  = DB
 	::connection($this->db_snippet_connection)
 	->table($this->model_table)
     ->insert($modifiable_fields_name_values);
+
+update miscThings SET 
+ 	table_reporting_active = 0 
+	where id = 12562

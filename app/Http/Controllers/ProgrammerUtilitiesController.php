@@ -88,8 +88,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
             'coming_from'       =>'dynamicMenu0'
             );
          $this->myStrings = array(
-            'what_we_are_doing' =>"activating_controller",
-            'coming_from'       =>"dynamicMenu0",
             'tdBegin'           =>"<td class='text_align_left select_pink' >",
             'tdEnd'             =>"</td>",
             'linkStrA'          =>"<a href= \"",
@@ -232,7 +230,8 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
 
 
- 
+
+
 
      /**
      * Display a listing of the resource.
@@ -243,58 +242,91 @@ class ProgrammerUtilitiesController extends CRHBaseController
         //$this->debug_exit(__FILE__,__LINE__,0);echo('mainMenu');
         $main_menu_array = $this->define_main_menu_links();
         $method_parameters_array = $this->define_method_parameters($main_menu_array);
-        //var_dump($request);
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        return view($this->node_name.'/programmerUtilitiesMenu')
-            ->with('menu_array'               ,$main_menu_array)
-            ->with('method_parameters_array'  ,$method_parameters_array)
-            ;
+        
+        $encoded_method_parameters_array = array();
 
+        $parm1_array = array();
+        $parm2_array = array();
+        $parm2_array[0] = 'coming_from_programmer_utilities';
+        //$parm2_array[20] = 'coming_from_programmer_utilities';
+
+        foreach ($main_menu_array as $option=>$method) {
+           $encoded_method_parameters_array[$option][] = $method_parameters_array[$option]['dynamic_method'];
+           $encoded_method_parameters_array[$option][] = json_encode($method_parameters_array[$option]);
+           //$parm1_array[$option]['parm0'] = $method_parameters_array[$option]['dynamic_method'];
+           //$parm1_array[$option]['parm1'] = $method_parameters_array[$option]['dynamic_method'];
+           $parm1_array[$option] =  $option;
+           //$parm2_array[$option] =  $encoded_method_parameters_array[$option][1];
+
+        }
+        //var_dump($parm2_array);
+        //$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
+
+       //$encoded_method_parameters_array = json_encode($encoded_method_parameters_array);
+
+        return view($this->node_name.'/programmerUtilitiesMenu')
+            ->with('menu_array'                 ,$main_menu_array)
+            ->with('encoded_method_parameters_string'  , json_encode($encoded_method_parameters_array))
+            //->with('method_parameters_array'    ,$decoded_array);
+            ->with('node_name'                  ,$this->node_name)
+            ->with('method_parameters_array'    ,$method_parameters_array)
+            ->with('parm1_array'                ,$parm1_array)
+            ->with('parm2_array'                ,json_encode($parm2_array))
+            ->with('request'                    ,$request)
+
+            ;
     }
  
      public function define_main_menu_links() {
+        // these menu entries are defiend on an adhoc basis
         $main_menu_array = array(
-            'configure_an_unconfigured_table'       =>'redefined_table_methods',
-            'activate_deactivate_table_reporting'   =>'redefined_table_methods',
-            'show_me_reports_with_broken_links'     =>'redefined_table_methods',
+            'configure_an_unconfigured_table'       =>'generic_method_request_2parms',
+            'activate_deactivate_table_reporting'   =>'generic_method_request_2parms',
+            'reports_with_broken_links'             =>'generic_method_request_2parms',
         );
+
        return $main_menu_array;
     }
 
-    public function define_method_parameters($main_menu_array) {
-        //var_dump($main_menu_array);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        $method_parameters_array = array();
-        foreach ($main_menu_array as $option=>$method) {
+    public function define_method_parameters($main_menu_array) { 
+        // initially, these are all the same but as the routines are refined
+       //var_dump($main_menu_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
 
+        // i create an array for each menu option$
+        // the omly field which must be defined is 'what_are_we_doing'
+        // ********
+        // we need to create an array with 2 entries.one is the first level nagivation,
+        // the second is a json encoded string that we can use to pass data back to 
+        //*********
+        $method_parameters_array = array();
+        $decoded_array = array();
+        foreach ($main_menu_array as $option=>$method) {
+            $method_parameters_array[$option]['actual_method']     = 'generic_method_request_2parms';
+            //$method_parameters_array[$option]['actual_method']     = 'generic_method_request_1parm';
             switch ($option) {
                 case "configure_an_unconfigured_table":
-                    $method_parameters_array[$option]['id']                    = "query->id";
-                    $method_parameters_array[$option]['reportDefinitionKey']   = 'rshar';
-                    $method_parameters_array[$option]['what_are_we_doing']     = $option;
-                    $method_parameters_array[$option]['node']                  = 'node';
+                    $method_parameters_array[$option]['dynamic_method']         = $option;
+                    $method_parameters_array[$option]['what_are_we_doing']      = $option;
+                    $method_parameters_array[$option]['parm1']                  = 'parm1';
+                    $method_parameters_array[$option]['parm2']                  = 'parm2';
                     break;
                 case "activate_deactivate_table_reporting":
-                    $method_parameters_array[$option]['id']                    = "query->id";
-                    $method_parameters_array[$option]['reportDefinitionKey']   = 'rshar';
-                    $method_parameters_array[$option]['what_are_we_doing']     = $option;
-                    //$method_parameters_array[$option]['node']                  = 'node';
+                    $method_parameters_array[$option]['dynamic_method']         = $option;
+                    $method_parameters_array[$option]['what_are_we_doing']      = $option;
+                    $method_parameters_array[$option]['parm1']                  = 'parm1';
+                    $method_parameters_array[$option]['parm2']                  = 'parm2';
                    break;
-                case "show_me_reports_with_broken_links":
-                    $method_parameters_array[$option]['id']                    = "query->id";
-                    $method_parameters_array[$option]['reportDefinitionKey']   = 'report_definition_key';
-                    $method_parameters_array[$option]['what_are_we_doing']     = $option;
-                    $method_parameters_array[$option]['node']                  = 'node';
-                   break;
-                  
-                case "node_name":
-                    $method_parameters_array[$option]['pseudo_method']   = $method;
-                    $method_parameters_array[$option]['menu_name']       = $method;
-                    $method_parameters_array[$option]['real_method']     = $method;
-                  break;
+                case "reports_with_broken_links":
+                    $method_parameters_array[$option]['dynamic_method']         = $option;
+                    $method_parameters_array[$option]['what_are_we_doing']      = $option;
+                    $method_parameters_array[$option]['parm1']                  = 'parm1';
+                    $method_parameters_array[$option]['parm2']                  = 'parm2';
+                    break;
             }
-        }
-        //var_dump($method_parameters_array['show_me_reports_with_broken_links']);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        //var_dump($method_parameters_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        } //end foreach
+       
+       //var_dump($method_parameters_array);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+       //return $method_parameters_array;
        return $method_parameters_array;
     }
 
@@ -411,84 +443,12 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
         return view($this->node_name.'.programmerUtilitiesMenu',$main_menu_array)
             ->with('menu_array'               ,$main_menu_array)
-            ->with('method_parameters_array'       ,$method_parameters_array)
+            ->with('method_parameters_array'  ,$method_parameters_array)
 
             ;
         }
 
-    public function redefined_table_methods(REQUEST $request,$id,$report_definition_id) {
-        // ********
-        // serveral functions require the same parameters 
-        // rather than define separate routes for all of them, we pass a parm that defines different functions
-        // this keeps us from having to add more and more routes
-        // ********
-        //var_dump($request);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $active_tables = array(); 
-        $view_variables_array = array();
-        $arr1 = array();
-        $db_result2 = MiscThing
-           ::where('record_type','=','table_controller')
-           ->where('table_reporting_active','=',1)
-           ->get();   
-        $main_menu_array = $this->define_main_menu_links();
-        $method_parameters_array = $this->define_method_parameters($main_menu_array);
-     
-        foreach ($db_result2 as $db_result) {
-            $active_tables[$db_result->node_name] = $db_result->node_name;
-            $arr1[$db_result->node_name]['key_value'] = $db_result->id;
-            $method_parameters_array[$request->what_are_we_doing]['node'] = $db_result->node_name;
-        }
-        $all_tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
-
-        // ***************************
-        foreach($all_tables as $table){
-
-            switch ($request->what_are_we_doing) {
-                case "configure_an_unconfigured_table":
-                    if (!in_array($table,$active_tables)){
-                        $view_variables_array[$table]['what_are_we_doing'] = $request->what_are_we_doing;
-                        $view_variables_array[$table]['key_value']= $arr1['miscThings']['key_value'];
-                        $view_variables_array[$table]['functions'][0] = 'configure';
-                        $view_variables_array[$table]['class'][0] = "text_align_left";
-                    }
-                    break;
-                case "activate_deactivate_table_reporting":
-                    if (!in_array($table,$active_tables)){
-                        $view_variables_array[$table]['functions'][0] = 'activate';
-                        $view_variables_array[$table]['class'][0] = "text_align_left";
-                        }
-                    else {
-                        $view_variables_array[$table]['functions'][0]= 'de activate';
-                        $view_variables_array[$table]['class'][0]    = "text_align_left mycart-btn"; // dark blue            
-                        }
-                    $view_variables_array[$table]['functions'][1] = 'validate';
-                    $view_variables_array[$table]['class'][1] = "text_align_left";
-                    break;
-                case "show_me_reports_with_broken_links":
-                    if (in_array($table,$active_tables)){
-                        $view_variables_array[$table]['functions'][0] = 'brokenLinks';
-                        $view_variables_array[$table]['class'][0] = "text_align_left";
-                        }
-                     break;
-                }   
-            
-
-            } //  for all_tables
-
-         //var_dump($view_variables_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        //$method_name = "miscThings";
-        //$this->link_strings['link4of6'] = $method_name;
-         return view($this->node_name.'.dynamicMenu0')
-            ->with('arr1'           ,$view_variables_array)
-            ->with('id'             ,$id)
-            ->with('node_name'      ,$this->node_name)      
-            ->with('myStrings'      ,$this->myStrings)             
-            ->with('parameters',$method_parameters_array[$request->what_are_we_doing])             
-            ;
-    }
-
-    public function make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$field_values){
+     public function make_sure_table_controller_has_views_folder($extended_app_path,$field_names,$field_values){
         if (!File::isDirectory($extended_app_path."/views")) {
             File::makeDirectory($extended_app_path."/views");
         }

@@ -12,28 +12,28 @@
 
 
 @section('content')
-		Activate/Deactivate table reporting
+		{{$parm1}}
 
 <?php
-	//var_dump($arr1);
-	//var_dump($report_definition_key);
-	//exit("indexReports.blade 17 ");
-	//var_dump($parameters);
-	//exit("dynamicMenu0 exit 24");
-	//echo("OOOO".$node_name);//var_dump($parameters);
-	//activateDeactivateexit("dynamicMenu0 exit 24");
-if (isset($msg_array)){
-	var_dump($msg_array);
-	//exit("dynamicMenu0 exit 24");
-}
-else{
-	//exit("programmerUtilitiesMenu exit 26");
-}
-$browse_select_field_count=3;
-	$what_we_are_doing = 'what_we_are_doing';
-	$coming_from = 'edit1';
+	//var_dump($required_variables);exit("dynamicMenu0 exit 18");
+       //$required_variables = array(
+	
+    $array1           = $required_variables['array1'];
+    //$parm2            = $required_variables['parm2'];
+    //$json_array1       = $required_variables['json_array1'];
+    //'id'                = $required_variables[$parm1,
 
-$rowcount = -1;
+    $node_name         = $required_variables['node_name'];     
+    $myStrings         = $required_variables['myStrings'];
+    
+    //print_r($array1);print_r($array_of_encoded_variables);
+	//var_dump($array_of_encoded_variables);//exit("dynamicMenu0 exit 28");
+	var_dump($parm2_array);//exit("dynamicMenu0 exit 28");
+	//var_dump($parm2);exit("dynamicMenu0 exit 18");
+	//var_dump($report_definition_key);
+	//exit("dynamicMenu0.blade 17 ");
+	$browse_select_field_count=3;
+	$rowcount = -1;
 
 	$i =  1;
 	//var_dump($myStrings);var_dump($parameters);
@@ -66,6 +66,13 @@ $rowcount = -1;
 				<td class="table_no_lines">
 					<a href="{{ URL::route('Main.getIndex', $parametersx = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
 				</td>
+				<td class="table_no_lines">
+				
+			   		<a href="{{ URL::route('programmerUtilities'.'.mainMenu', $parameters = array('id'=>1,
+			   			'reportDefinitionKey'=>$report_definition_key
+			   			)
+			   		) }}" class="btn mycart-btn-row2">programmer utilities NEW2</a>
+				</td>
 			</table>
 		</td></tr>
 
@@ -76,7 +83,9 @@ $rowcount = -1;
 			$classradio = "class=\'bottom_buttons\'";	
 		*/		
 		?>    
-	
+
+		{{ Form::open(array('url'=>$node_name.'/reportDefEdits', 'method'=>'GET')) }}
+		{{-- Form::hidden('view_variables_array',$parm2) --}}
 		
 		<!-- 			
 		// *********
@@ -84,28 +93,51 @@ $rowcount = -1;
 		// *********
 		 -->
 		<?php $rowcount++;?>
-		@foreach($arr1 as $table=>$value)
-		<?php //echo ($table."**");var_dump($parameters);var_dump($value['class']);exit('at 88') ?>
 
-		<tr>
-			<td class='border_left'>
-				{{ Form::open(array('url'=>$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
-				 	'id'=> $table,
-	  		        'what_we_are_doing'=> $arr1[$table]['functions'][0],
-	  		        'table'=> $table)) }}" >
-	  		        {{$arr1[$table]['functions'][0]." ".$table}}
-			<?php echo($myStrings['tdEnd']);?>		
-			</td>
 
-			@if($arr1[$table]['functions'][1] == "validate")	
-			<?php echo ("<td class='".$arr1[$table]['class'][0]."' >"); ?>
-				 	<a href="{{ URL::route($node_name.'.activateDeactivate', $parameters = array(
-				 	'id'=> $table,
-	  		        'what_we_are_doing'=> $arr1[$table]['functions'][0],
-	  		        'table'=> $table)) }}" >
-	  		        {{$arr1[$table]['functions'][0]." ".$table}}
+		@foreach($array1 as $table=>$value)
+			<?php //echo ($table."**");var_dump($array1);exit('at 88') ?>
+			<tr>
+				<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
+					{{$table}}
+				</td>
+
+				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
+					<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
+				@else
+					<td class='border_left'>
+				@endif
+
+				 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
+				
+					 	'parm1' => 'parm1',
+		  		    
+		  		        'parm2' => $parm2_array)) }}" > 
+		  		        <!---'parm2' => $array_of_encoded_variables[$table])) }}" > -->
+		  		        <!---'parm2' => 'parm2')) }}" >  -->
+
+
+				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
+	  		        {{$array1[$table]['functions'][0]}}
+				@else
+					{{$table}}
+					
+				@endif
+				<td>
+				<?php echo($myStrings['tdEnd']);?>		
+
+			@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
+			@if($array1[$table]['functions'][1] == "validate")	
+				<?php echo ("<td class='".$array1[$table]['class'][1]."' >"); ?>
+			 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
+					 	'parm1' => 'parm1',
+		  		        'parm2' => 'parm2')) }}" >
+				
+	  		        {{$array1[$table]['functions'][1]}}
+				@else
+					{{$table}}
+					
+				@endif
 			<?php echo($myStrings['tdEnd']);?>		
 			</td>
 
@@ -116,7 +148,7 @@ $rowcount = -1;
 			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
 			<?php //echo($myStrings['tdBegin']);?>
 
-				@if($arr1[$table]['functions'][0] == "edit1")	
+				@if($array1[$table]['functions'][0] == "edit1")	
 					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
 				@endif						
  

@@ -8,10 +8,6 @@
     $coming_from            = "coming_from";         // needs to be defined here
     $reportDefinitionKey    = "reportDefinitionKey"; // needs to be defined here
     $encoded_business_rules = "encoded_business_rules"; // assigned elsewhere 
-    $singleParm             = "singleParm"; // assigned elsewhere 
-    $parm0                  = "parm0"; // assigned elsewhere 
-    $parm1                  = "parm1"; // assigned elsewhere 
-    $parm2                  = "parm2"; // assigned elsewhere 
     //*
     $method_name            = "store";
     Route::POST('admin/'.$node_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -22,7 +18,7 @@
         .'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
     //*
-    $method_name            = "xactivateDeactivate";
+    $method_name            = "activateDeactivate";
     Route::get('admin/'.$node_name
         .'/{'.$model.'}'
         .'/{'.$what_we_are_doing.'}'
@@ -61,27 +57,10 @@
       //*
     $method_name            = "mainMenu";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-    //*                       
-    $method_name            = "generic_method_request_2parms";
-    $parm1                  = "parm1"; // assigned elsewhere 
-    $parm2                  = "parm2"; // assigned elsewhere 
- 
-    Route::get('admin/'.$node_name
-        .'/{'.$parm1.'}'
-        .'/{'.$parm2.'}'
-        .'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
-    //*                       
-    $method_name            = "generic_method_request_3parms";
-    Route::get('admin/'.$node_name
-        .'/{'.$parm0.'}'
-        .'/{'.$parm1.'}'
-        .'/{'.$parm2.'}'
-        .'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-
     //*
+    $method_name            = "mainMenu_active_inactive";
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
     $method_name            = "mainMenu_generate_routes_snippet";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 

@@ -47,7 +47,7 @@ Route::group(['middleware' => ['web']], function () {
     //generated_inserts_begin_here
 	@include('/home/vagrant/Code/l5_larablues2/routes/miscThings.php');
 	//@include('/home/vagrant/Code/l5_larablues2/routes/generated/tasks_blues.php');
-	//@include('/home/vagrant/Code/l5_larablues2/routes/generated/categories.php');
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/categories.php');
 
 	//@include('/home/vagrant/Code/l5_larablues2/routes/generated/administrators.php');
 
