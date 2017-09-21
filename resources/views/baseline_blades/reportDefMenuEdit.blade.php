@@ -57,7 +57,7 @@
 		for table {{$node_name}}
 		 {{ csrf_field() }}
   
-		 {!! Form::model('MiscThing',['method' => 'POST','route'=>[$node_name.'.update',$id]]) !!}
+		 {!! Form::model('MiscThing',['method' => 'GET','route'=>[$node_name.'.update',$id]]) !!}
 		<input name="_method" type="hidden" value="PUT"> 
 		    {{ csrf_field() }}
 		<p>		
