@@ -58,7 +58,8 @@
 		 {{ csrf_field() }}
   
 		 {!! Form::model('MiscThing',['method' => 'POST','route'=>[$node_name.'.update',$id]]) !!}
-		
+		<input name="_method" type="hidden" value="PUT"> 
+		    {{ csrf_field() }}
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->
 		

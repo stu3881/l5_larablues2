@@ -351,13 +351,13 @@ class ProgrammerUtilitiesController extends CRHBaseController
 
     public function build_link($aord,$table) {       
         //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-             switch ($aord) {
-                case "deactivate":
-                   break;
-                case "activate":
-                    break;
-            }
+        switch ($aord) {
+            case "deactivate":
+              break;
+            case "activate":
+              break;
         }
+    }
   
 
    public function generate_entities($entity,$table) {   
@@ -1427,7 +1427,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
      * @return \Illuminate\Http\Response
      */
 
-    public function reportDefMenuEdit($id,$what_we_are_doing,$coming_from){
+    public function reportDefMenuEdit(REQUEST $request,$id,$what_we_are_doing,$coming_from){
         //* *******************
         //
         // use CRHBase

@@ -1,3 +1,4 @@
+<?php
     public function generic_method_request_3parms(REQUEST $request,$parm1,$parm2) {
         // ********
         // serveral functions require the same parameters 
@@ -218,3 +219,4 @@
             ->with('parm2_array'                ,json_encode($parm2_array))
             ->with('required_variables'         ,$required_variables_array);
     }
+    ?>

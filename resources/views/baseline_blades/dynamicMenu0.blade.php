@@ -28,7 +28,7 @@
     
     //print_r($array1);print_r($array_of_encoded_variables);
 	//var_dump($array_of_encoded_variables);//exit("dynamicMenu0 exit 28");
-	var_dump($parm2_array);//exit("dynamicMenu0 exit 28");
+	//var_dump($array_of_parm2_array);exit("dynamicMenu0 exit 28");
 	//var_dump($parm2);exit("dynamicMenu0 exit 18");
 	//var_dump($report_definition_key);
 	//exit("dynamicMenu0.blade 17 ");
@@ -96,7 +96,7 @@
 
 
 		@foreach($array1 as $table=>$value)
-			<?php //echo ($table."**");var_dump($array1);exit('at 88') ?>
+			<?php //echo ($what_we_are_doing."**");var_dump($array_of_parm2_array);exit('at 88') ?>
 			<tr>
 				<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
 					{{$table}}
@@ -108,19 +108,15 @@
 					<td class='border_left'>
 				@endif
 
-				 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-				
-					 	'parm1' => 'parm1',
-		  		    
-		  		        'parm2' => $parm2_array)) }}" > 
-		  		        <!---'parm2' => $array_of_encoded_variables[$table])) }}" > -->
-		  		        <!---'parm2' => 'parm2')) }}" >  -->
-
 
 				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
 	  		        {{$array1[$table]['functions'][0]}}
 				@else
-					{{$table}}
+				 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
+					 	'parm1' => 'parm1',	  		    
+		  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
+
+
 					
 				@endif
 				<td>
@@ -158,7 +154,26 @@
 		</tr>
 				
 		@endforeach
-	
+		 
+		@if ($what_we_are_doing == 'reports_with_broken_links')
+			@foreach($array1 as $table=>$value)
+				<?php //echo ($table."**");var_dump($array1);exit('at 88') ?>
+				<tr>
+					<td>
+						{{$table}}
+					</td>
+
+					<td>
+						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
+						 	'parm1' => 'parm1',	  		    
+			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
+	        					{{$table}}
+	        				</a>
+					</td>		
+				</tr>
+					
+			@endforeach
+		@endif		
 		
 	</table>
 	{{ Form::close() }}
