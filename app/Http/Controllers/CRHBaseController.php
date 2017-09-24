@@ -58,13 +58,14 @@ class CRHBaseController extends DEHBaseController
         $field_name_lists_array = "",
         $field_name_list_array_first_index  = "",
         $my_ctr                             = 0,
+        $no_of_fields                       = 0,
         $report_definition_id               = 0,
 
         $store_validation_id                = 0,
         $business_rules_array               = 0,
         $project_path                       = ""
 
-        ) 
+        )
         {
         
         parent::__construct();
@@ -161,6 +162,7 @@ class CRHBaseController extends DEHBaseController
         $this->field_name_list_array = "";
         $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         $this->business_rules_array         = $business_rules_array;
+        $this->no_of_fields = 0;
         echo (" : ".$this->project_path);$this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
     }
@@ -312,37 +314,45 @@ class CRHBaseController extends DEHBaseController
         //var_dump($active_tables);
         //var_dump($all_tables); var_dump($what_are_we_doing);
          //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+
        $view_variables_array = array();
        foreach($all_tables as $table){
             switch ($what_are_we_doing) {
                 case "configure_an_unconfigured_table":
-                    if (!in_array($table,$active_tables)){
+                   $this->no_of_fields = 2;
+                     if (!in_array($table,$active_tables)){
                         $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
-                        $view_variables_array[$table]['functions'][0]       = 'configure';
-                        $view_variables_array[$table]['class'][0]           = "text_align_left";
+                        $view_variables_array[$table]['field'][0]       = $table;
+                        $view_variables_array[$table]['class'][0]       = "text_align_left";
+                       $view_variables_array[$table]['field'][1]        = 'configure';
+                        $view_variables_array[$table]['class'][1]       = "text_align_left";
                     }
                     break;
                 case "activate_deactivate_table_reporting":
+                    $this->no_of_fields = 3;
                     $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
                     if (!in_array($table,$active_tables)){
-                       $view_variables_array[$table]['functions'][0]    = 'activate';
-                        $view_variables_array[$table]['class'][0]       = "text_align_left";
-                        }
-                    else {
-                        $view_variables_array[$table]['functions'][0]   = 'de_activate';
+                        $view_variables_array[$table]['field'][0]       = $table;
                         $view_variables_array[$table]['class'][0]       = "text_align_left mycart-btn"; // dark blue            
+                        $view_variables_array[$table]['field'][1]       = 'activate';
+                        $view_variables_array[$table]['class'][1]       = "text_align_left";
+                   }
+                    else {
+                        $view_variables_array[$table]['field'][1]       = 'de_activate';
+                        $view_variables_array[$table]['class'][1]       = "text_align_left mycart-btn"; // dark blue            
                         }
-                    $view_variables_array[$table]['functions'][1]       = 'validate';
-                    $view_variables_array[$table]['class'][1]           = "text_align_left";
+                    $view_variables_array[$table]['field'][2]           = 'validate';
+                    $view_variables_array[$table]['class'][2]           = "text_align_left mycart-btn"; // dark blue            
                     break;
                 case "reports_with_broken_links":
+                    $this->no_of_fields = 3;
                     if (in_array($table,$active_tables)){
                         // echo($table);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                         $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
-                        $view_variables_array[$table]['functions'][0]       = "reports_with_broken_links";
+                        $view_variables_array[$table]['field'][0]       = "list reports_with_broken_links";
                         $view_variables_array[$table]['class'][0]           = "text_align_left";
 
-                        $view_variables_array[$table]['functions'][1]       = "reports_with_broken_links";
+                        $view_variables_array[$table]['field'][1]       = "remove_broken_links";
                         $view_variables_array[$table]['class'][1]           = "text_align_left";
                     }
                     break;
@@ -374,7 +384,7 @@ class CRHBaseController extends DEHBaseController
                 $all_tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
                 break;
             }
-
+        //var_dump($parm1);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
         return $all_tables;
     }
 
@@ -401,61 +411,40 @@ class CRHBaseController extends DEHBaseController
         // rather than define separate routes for all of them, we pass a parm that defines different functions
         // this keeps us from having to add more and more routes
         // ********
-        //var_dump($request);
-        //var_dump($parm1);
-        //var_dump($parm2);
         $parm2_array = json_decode($parm2);
-        //var_dump($parm2_array);
+        //var_dump($request);//var_dump($parm1);//var_dump($parm2_array);
         //$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
-        $active_tables          = array(); 
-        $what_are_we_doing      = $parm1;
         // *******
-        // *********
-        // this method can call itself (via a view of course)
-        // if it has, the stuff we need has to be decoded
-        // ****************
+        //var_dump($parm1);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $what_are_we_doing = $parm1;
+        switch ($parm1) {
+            case "configure_an_unconfigured_table":
+                break;
+            case "activate_deactivate_table_reporting":
+                break;
+            case "reports_with_broken_links":
+                break;
+            }
 
-        //var_dump($parm2);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         if (in_array('we_have_done_first_read',$parm2_array)){
             if (in_array('node_name_follows',$parm2_array)){
                 $flip = array_flip($parm2_array);
                 $i = $flip['node_name_follows']+1;
- 
                 $table_name = $parm2_array[$i];
                 $node_name = $parm2_array[$i];
-
-                //var_dump($node_name);$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
-
-                $view_files_prefix = $what_are_we_doing;
-                //$this->clean_orphan_files($table_name,$node_name,$view_files_prefix);  //2parms
                 $this->clean_orphan_files($table_name,$node_name,$node_name);  //2parms
-           }
-            $all_tables = array();
-             }
-        else{
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            }
         }
-        if (in_array('coming_from_programmer_utilities',$parm2_array)){
-            //* *******
-            //* *******
+        else{
             $parm2_array[] = 'we_have_done_first_read';
             $all_tables = $this->generic_method_get_all_tables($parm1);
-            $active_controllers = $this->generic_method_get_active_tables($parm1);
+            $active_controllers = $this->generic_method_get_active_tables();
             $array_of_parm2_array = $this->generic_method_build_array_of_parm2_array($parm1,$parm2_array,$all_tables,$active_controllers);
-            //var_dump($array_of_parm2_array);$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-            //$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
+         $view_variables_array = $this->generic_method_build_view_variables_array($all_tables,$active_controllers,$parm1);
+       }
 
-            }
-        else{
-            $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        }
-        //var_dump($parm1);var_dump($parm2);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-
-        //echo('<br>'.'json_array1: ');var_dump($request->json_array1);
-        //echo('<br>'.'what_are_we_doing: ');
         //var_dump($what_are_we_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
-        $view_variables_array = $this->generic_method_build_view_variables_array($all_tables,$active_controllers,$parm1);
 
         $required_variables_array = array(
             'array1'            => $view_variables_array,
@@ -463,10 +452,13 @@ class CRHBaseController extends DEHBaseController
             'node_name'         => $this->node_name,     
             'myStrings'         => $this->myStrings
             );
+
+
         //var_dump($view_variables_array);//var_dump(json_encode($decoded_variables_array));
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         return view($this->node_name.'.dynamicMenu0')
             // VARIABLES WE'RE PASSING TO A VIEW
+            ->with('no_of_fields'           ,$this->no_of_fields)
             ->with('array_of_parm2_array'    ,$array_of_parm2_array)
             ->with('report_definition_key'    ,$this->report_definition_id)
             ->with('parm1'                    ,$parm1)
@@ -1436,23 +1428,17 @@ class CRHBaseController extends DEHBaseController
     public function clean_orphan_files($table_name,$node_name,$view_files_prefix) {
         //$field_name_array = (array) json_decode(Input::get('encoded_field_name_array'));
         //echo "xxxx".$view_files_prefix."xxxx".$node_name;exit('xit2001');
-        $miscThings = MiscThing    
-            ::where('record_type',  '=', "report_definition")
-            ->where('node_name',  '=', $node_name)
-            ->orderBy('id')
-            ->get();
-        foreach ($miscThings as $miscThing){
-        //var_dump($miscThing);
-        //echo('<br/>'.$miscThing->id);
-        }
-         //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
-
+        $active_report_ids = $this->get_active_reports_for_table($node_name); 
         $path_to_files = $this->views_files_path .'/'.$view_files_prefix."/".$this->generated_files_folder;
+
+          //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+
         if ($handle = opendir($path_to_files)) {
             //echo "Directory handle: $handle\n";
             //echo "Entries:\n";
             $stra = "xxx";
-            $active_report_ids = $this->get_active_reports_for_table();
+
+            //var_dump($active_report_ids);$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
             /* This is the correct way to loop over the directory. */
             while (false !== ($entry = readdir($handle))) {
                 $i = strpos($entry,'_');
@@ -1460,11 +1446,11 @@ class CRHBaseController extends DEHBaseController
                     $stra = substr($entry,0,$i);
                     if (is_numeric($stra)){
                         if (in_array($stra,$active_report_ids)){
-                            echo ('<br/>'. 'good '.$entry ." will not be deleted"."<br>");
+                            //echo ('<br/>'. 'good '.$entry ." will not be deleted"."<br>");
                         }
                         else {
                             //echo $path_to_files."/".$entry . " will be deleted"."<br>";
-                           echo $entry . " will be deleted"."<br>";
+                           echo ('<br/>'." will be deleted ".$entry );
                              //unlink($path_to_files."/".$entry);
                         }
                     }
@@ -2038,11 +2024,12 @@ class CRHBaseController extends DEHBaseController
     }
  
 
-    public function get_active_reports_for_table() {
+    public function get_active_reports_for_table($node_name) {
     $array = array();
     $response = MiscThing
     ::where('record_type','=','report_definition')
-    ->where('table_name','=',$this->model_table)
+    //->where('table_name','=',$this->model_table)
+    ->where('node_name','=',$node_name)
     ->get(array($this->snippet_table_key_field_name));
     if ($response){
         foreach ($response as $record) {

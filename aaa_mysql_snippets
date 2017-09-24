@@ -428,3 +428,5 @@ $updatex  = DB
 update miscThings SET 
  	table_reporting_active = 0 
 	where id = 12562
+
+git difftool -t meld v0.0.7.4..v0.0.7.7

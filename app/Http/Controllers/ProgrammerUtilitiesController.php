@@ -57,8 +57,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $business_rules_array               = 0,
         $link_parms_array                   = array(),
         $link_strings                       = array(),
-        $link_parameters                    = array(),
-        $myStrings                          = array()
+        $link_parameters                    = array()
 
         ) 
         {

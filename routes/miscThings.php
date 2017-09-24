@@ -65,7 +65,7 @@
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
     $method_name            = "update";
-    Route::POST('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+    Route::PUT('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
      //*
     $method_name            = "ppvEdit";

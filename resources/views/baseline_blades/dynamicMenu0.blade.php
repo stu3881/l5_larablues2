@@ -25,9 +25,8 @@
 
     $node_name         = $required_variables['node_name'];     
     $myStrings         = $required_variables['myStrings'];
-    
-    //print_r($array1);print_r($array_of_encoded_variables);
-	//var_dump($array_of_encoded_variables);//exit("dynamicMenu0 exit 28");
+    //echo("<br/><br/><br/>");    print_r($array1);exit("dynamicMenu0 exit 28");print_r($array_of_encoded_variables);
+	//var_dump($array1);exit("dynamicMenu0 exit 28");
 	//var_dump($array_of_parm2_array);exit("dynamicMenu0 exit 28");
 	//var_dump($parm2);exit("dynamicMenu0 exit 18");
 	//var_dump($report_definition_key);
@@ -96,9 +95,9 @@
 
 
 		@foreach($array1 as $table=>$value)
-			<?php //echo ($what_we_are_doing."**");var_dump($array_of_parm2_array);exit('at 88') ?>
 			<tr>
-				<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
+				<?php //echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
+				<td class={{$array1[$table]['class'][0]}} >
 					{{$table}}
 				</td>
 
@@ -110,31 +109,31 @@
 
 
 				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
-	  		        {{$array1[$table]['functions'][0]}}
+	  		        {{$array1[$table]['field'][0]}}
 				@else
 				 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-					 	'parm1' => 'parm1',	  		    
+					 	'parm1' => $parm1,	  		    
 		  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
 
 
 					
 				@endif
-				<td>
-				<?php echo($myStrings['tdEnd']);?>		
+
+				</td>	
 
 			@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
-			@if($array1[$table]['functions'][1] == "validate")	
-				<?php echo ("<td class='".$array1[$table]['class'][1]."' >"); ?>
+			@if($array1[$table]['field'][1] == "validate")	
+				<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
 			 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-					 	'parm1' => 'parm1',
+					 	'parm1' => $parm1,	  		    
 		  		        'parm2' => 'parm2')) }}" >
 				
-	  		        {{$array1[$table]['functions'][1]}}
+	  		        {{$array1[$table]['field'][1]}}
 				@else
 					{{$table}}
 					
 				@endif
-			<?php echo($myStrings['tdEnd']);?>		
+			
 			</td>
 
 			@endif						
@@ -144,7 +143,7 @@
 			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
 			<?php //echo($myStrings['tdBegin']);?>
 
-				@if($array1[$table]['functions'][0] == "edit1")	
+				@if($array1[$table]['field'][0] == "edit1")	
 					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
 				@endif						
  
@@ -165,7 +164,7 @@
 
 					<td>
 						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-						 	'parm1' => 'parm1',	  		    
+						 	'parm1' => $parm1,	  		    
 			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
 	        					{{$table}}
 	        				</a>
