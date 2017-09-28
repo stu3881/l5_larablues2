@@ -94,65 +94,6 @@
 		<?php $rowcount++;?>
 
 
-		@foreach($array1 as $table=>$value)
-			<tr>
-				<?php //echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
-				<td class={{$array1[$table]['class'][0]}} >
-					{{$table}}
-				</td>
-
-				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
-					<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
-				@else
-					<td class='border_left'>
-				@endif
-
-
-				@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
-	  		        {{$array1[$table]['field'][0]}}
-				@else
-				 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-					 	'parm1' => $parm1,	  		    
-		  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
-
-
-					
-				@endif
-
-				</td>	
-
-			@if ($what_we_are_doing == 'activate_deactivate_table_reporting')
-			@if($array1[$table]['field'][1] == "validate")	
-				<?php echo ("<td class='".$array1[$table]['class'][0]."' >"); ?>
-			 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
-					 	'parm1' => $parm1,	  		    
-		  		        'parm2' => 'parm2')) }}" >
-				
-	  		        {{$array1[$table]['field'][1]}}
-				@else
-					{{$table}}
-					
-				@endif
-			
-			</td>
-
-			@endif						
-
-
-
-			<?php /*'tdBegin'           =>"<td class='text_align_left select_pink' >",  */ ?>
-			<?php //echo($myStrings['tdBegin']);?>
-
-				@if($array1[$table]['field'][0] == "edit1")	
-					@include($node_name.'/'.'hardcoded_report_getEdit_snippet')
-				@endif						
- 
-		
-			<?php echo($myStrings['tdEnd']);?>		
-
-		</tr>
-				
-		@endforeach
 		 
 		@if ($what_we_are_doing == 'reports_with_broken_links')
 			@foreach($array1 as $table=>$value)
@@ -166,7 +107,7 @@
 						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
 						 	'parm1' => $parm1,	  		    
 			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
-	        					{{$table}}
+	        					{{$table}} aa
 	        				</a>
 					</td>		
 				</tr>
