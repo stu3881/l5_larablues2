@@ -298,10 +298,11 @@ class CRHBaseController extends DEHBaseController
 
     public function generic_method_build_array_of_parm2_array($what_are_we_doing,$parm2_array,$all_tables,$active_controllers,$view_variables_array,$no_of_fields){
            // ***************************
-        //var_dump($active_tables);
-        //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+       // var_dump($parm2_array);
        $array_of_parm2_array = array();
        foreach($all_tables as $table){
+           // echo($table);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+
             switch ($what_are_we_doing) {
                 case "configure_an_unconfigured_table":
                     break;
@@ -309,10 +310,16 @@ class CRHBaseController extends DEHBaseController
                     break;
                 case "reports_with_broken_links":
                     if (in_array($table,$active_controllers)){
-                        //echo($table);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                        //echo("<br/>".$table);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+
                         if ($no_of_fields > 1){
                             for ($i = 1; $i < $no_of_fields; $i++) {
                                 $array_of_parm2_array[$table]['parm2_array'][$i]  = $parm2_array;
+                                if (!in_array('node_name_follows',$array_of_parm2_array[$table]['parm2_array'][$i])){
+                                    $array_of_parm2_array[$table]['parm2_array'][$i][]  = 'node_name_follows';
+                                    $array_of_parm2_array[$table]['parm2_array'][$i][]  = $table;
+                                    }
+
                                 $array_of_parm2_array[$table]['parm2_array'][$i][]= $view_variables_array[$table]['field'][$i];
                             }
 
@@ -330,7 +337,7 @@ class CRHBaseController extends DEHBaseController
     }
 
     public function generic_method_add_link_field_names($parm2_array,$view_variables_array,$table,$no_of_fields) {
-var_dump($active_tables);
+        var_dump($active_tables);
         for ($i = 1; $i < $no_of_fields; $i++) {
             $parm2_array[$I][]= $view_variables_array[$table]['field'][$i];
          }
@@ -341,7 +348,7 @@ var_dump($active_tables);
            // ***************************
         //var_dump($active_tables);
         //var_dump($all_tables); var_dump($what_are_we_doing);
-      //$view_variables_array[$table]['field'][] = 'ccremove_broken_links';
+
          //$this->debugx(' 1110',__FILE__,__LINE__,__FUNCTION__);
         // this builds the row that will be displayed
        $view_variables_array = array();
@@ -360,9 +367,9 @@ var_dump($active_tables);
                             $view_variables_array[$table]['class'][]       = "text_align_left";
                         }
                     }
-         //var_dump($this->parm2_array); $this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
-                   //$this->parm2_array = $this->generic_method_add_link_field_names($this->parm2_array,$view_variables_array,$table,$no_of_fields);
-         //ar_dump($this->parm2_array); $this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+
+
+
                    break;
                case "configure_an_unconfigured_table":
                    
@@ -450,13 +457,14 @@ var_dump($active_tables);
 
         //var_dump($parm2_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $what_are_we_doing = $parm1;
-        if (!in_array('we_have_done_first_read',$parm2_array))//||(in_array('coming_from_programmer_utilities',$parm2_array)))
+        if (!in_array('we_have_done_first_read',$this->parm2_array))//||(in_array('coming_from_programmer_utilities',$parm2_array)))
         {
 
             $parm2_array[] = 'we_have_done_first_read';
             $this->all_tables = $this->generic_method_get_all_tables($parm1);
             $this->active_controllers = $this->generic_method_get_active_tables();
             $this->no_of_fields = 3;
+
 
            //$this->view_variables_array = $this->generic_method_build_view_variables_array($this->all_tables,$this->active_controllers,$parm1,$this->no_of_fields);
             }
@@ -473,8 +481,6 @@ var_dump($active_tables);
                 $this->view_variables_array = $this->generic_method_build_view_variables_array($this->all_tables,$this->active_controllers,$parm1,$this->no_of_fields);
  
                if (in_array('cclist_broken_links',$parm2_array)){
-                    var_dump($parm2_array);
-                    $this->debugx('0101',__FILE__,__LINE__,__FUNCTION__);
                     $this->no_of_fields = 1;
 
                     $flip = array_flip($parm2_array);
@@ -487,7 +493,7 @@ var_dump($active_tables);
                     $this->view_variables_array = $this->clean_orphan_files($table_name,$node_name,$node_name,$update_option);  //2parms
                 }
                 if (in_array('ccremove_broken_links',$parm2_array)){
-                    $this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
+                    //$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
                    $flip = array_flip($parm2_array);
                     $i = $flip['node_name_follows']+1;
                     $table_name = $parm2_array[$i];
@@ -515,8 +521,10 @@ var_dump($active_tables);
             );
 
 
-        var_dump($this->view_variables_array);//var_dump(json_encode($decoded_variables_array));
-        $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($this->view_variables_array);
+        //var_dump($this->array_of_parm2_array);
+        //var_dump($this->parm2_array);
+        //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         //*
         //* loop thru the view_variables_array
         return view($this->node_name.'.dynamicMenu0')
@@ -527,7 +535,7 @@ var_dump($active_tables);
             ->with('parm1'                    ,$parm1)
             ->with('what_we_are_doing'          ,$parm1)
             ->with('view_variables_array'     , $this->view_variables_array)
-            ->with('parm2_array'                ,json_encode($parm2_array))
+            ->with('parm2_array'                ,json_encode($this->parm2_array))
             ->with('required_variables'         ,$required_variables_array);
     }
  
@@ -1511,9 +1519,17 @@ var_dump($active_tables);
                         }
                         else {
                             //echo $path_to_files."/".$entry . " will be deleted"."<br>";
-                            $broken_link_files[$entry] = $entry;
-                           echo ('<br/>'." will be deleted ".$entry );
-                             //unlink($path_to_files."/".$entry);
+                            if ($update_option == "remove_broken_links"){
+                                $broken_link_files[ $path_to_files.'/'.$entry] = $entry;
+                                unlink($path_to_files."/".$entry);
+                            }
+                            else{
+                                $broken_link_files[ $entry] = $path_to_files.'/'.$entry;
+                               
+                            }
+
+                           //echo ('<br/>'." will be deleted ".$entry );
+                             
                         }
                     }
                 }
