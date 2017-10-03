@@ -18,15 +18,15 @@
 	//var_dump($required_variables);exit("dynamicMenu0 exit 18");
        //$required_variables = array(
 	
-    $array1           = $required_variables['array1'];
+    
     //$parm2            = $required_variables['parm2'];
-    //$json_array1       = $required_variables['json_array1'];
     //'id'                = $required_variables[$parm1,
-
+    $no_of_fields_start = 1;
+    $no_of_fields_stop = $no_of_fields -1;
     $node_name         = $required_variables['node_name'];     
     $myStrings         = $required_variables['myStrings'];
-    //echo("<br/><br/><br/>");    print_r($array1);exit("dynamicMenu0 exit 28");print_r($array_of_encoded_variables);
-	//var_dump($array1);exit("dynamicMenu0 exit 28");
+    //echo("<br/><br/><br/>");    print_r($view_variables_array);exit("dynamicMenu0 exit 28");print_r($array_of_encoded_variables);
+	//var_dump($view_variables_array);exit("dynamicMenu0 exit 28");
 	//var_dump($array_of_parm2_array);exit("dynamicMenu0 exit 28");
 	//var_dump($parm2);exit("dynamicMenu0 exit 18");
 	//var_dump($report_definition_key);
@@ -70,7 +70,7 @@
 			   		<a href="{{ URL::route('programmerUtilities'.'.mainMenu', $parameters = array('id'=>1,
 			   			'reportDefinitionKey'=>$report_definition_key
 			   			)
-			   		) }}" class="btn mycart-btn-row2">programmer utilities NEW2</a>
+			   		) }}" class="btn mycart-btn-row2">programmer utilities </a>
 				</td>
 			</table>
 		</td></tr>
@@ -84,7 +84,6 @@
 		?>    
 
 		{{ Form::open(array('url'=>$node_name.'/reportDefEdits', 'method'=>'GET')) }}
-		{{-- Form::hidden('view_variables_array',$parm2) --}}
 		
 		<!-- 			
 		// *********
@@ -96,22 +95,24 @@
 
 		 
 		@if ($what_we_are_doing == 'reports_with_broken_links')
-			@foreach($array1 as $table=>$value)
-				<?php //echo ($table."**");var_dump($array1);exit('at 88') ?>
+			@foreach($view_variables_array as $table=>$value)
+				<?php //echo ($table."**");var_dump($view_variables_array);exit('at 88') ?>
+				<?php //echo ('value'."**");var_dump($value);exit('at 88') ?>
 				<tr>
 					<td>
 						{{$table}}
 					</td>
 
-					<td>
+					@for ($i = $no_of_fields_start; $i <= $no_of_fields_stop; $i++)
+						<td>
 						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
 						 	'parm1' => $parm1,	  		    
-			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'])) }}" > 
-	        					{{$table}} aa
-	        				</a>
-					</td>		
+			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'][$i])) }}" > 
+		    					{{$value['field'][$i]}} 
+		    				</a>
+						</td>	
+					@endfor
 				</tr>
-					
 			@endforeach
 		@endif		
 		

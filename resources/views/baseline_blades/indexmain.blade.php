@@ -76,7 +76,7 @@ else{
 	   		<a href="{{ URL::route('programmerUtilities'.'.mainMenu', $parameters = array('id'=>$query->id,
 	   			'reportDefinitionKey'=>$report_definition_key
 	   			)
-	   		) }}" class="btn mycart-btn-row2">programmer utilities NEW2</a>
+	   		) }}" class="btn mycart-btn-row2">programmer utilities </a>
 	
 	   	</li>
 
