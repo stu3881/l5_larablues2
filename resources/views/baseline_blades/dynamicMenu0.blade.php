@@ -94,9 +94,9 @@
 
 
 		 
-		@if ($what_we_are_doing == 'reports_with_broken_links')
 			@foreach($view_variables_array as $table=>$value)
-				<?php //echo ($table."**");var_dump($view_variables_array);exit('at 88') ?>
+				<?php //echo ($table."**");//var_dump($view_variables_array);//exit('at 88') ?>
+				<?php //echo ('value'."**");var_dump($value);exit('at 88') ?>
 				<?php //echo ('value'."**");var_dump($value);exit('at 88') ?>
 				<tr>
 					<td>
@@ -104,6 +104,7 @@
 					</td>
 
 					@for ($i = $no_of_fields_start; $i <= $no_of_fields_stop; $i++)
+				<?php //echo ('parm2'."**");var_dump($array_of_parm2_array[$table]['parm2_array'][$i]);exit('at 108') ?>
 						<td>
 						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
 						 	'parm1' => $parm1,	  		    
@@ -114,7 +115,7 @@
 					@endfor
 				</tr>
 			@endforeach
-		@endif		
+
 		
 	</table>
 	{{ Form::close() }}

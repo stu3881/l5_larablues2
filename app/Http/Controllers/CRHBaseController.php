@@ -298,7 +298,7 @@ class CRHBaseController extends DEHBaseController
 
     public function generic_method_build_array_of_parm2_array($what_are_we_doing,$parm2_array,$all_tables,$active_controllers,$view_variables_array,$no_of_fields){
            // ***************************
-       // var_dump($parm2_array);
+       var_dump($parm2_array);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
        $array_of_parm2_array = array();
        foreach($all_tables as $table){
            // echo($table);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
@@ -307,6 +307,21 @@ class CRHBaseController extends DEHBaseController
                 case "configure_an_unconfigured_table":
                     break;
                 case "activate_deactivate_table_reporting":
+                    if ($no_of_fields > 1){
+                        for ($i = 1; $i < $no_of_fields; $i++) {
+                            $array_of_parm2_array[$table]['parm2_array'][$i]  = $parm2_array;
+                            if (!in_array('node_name_follows',$array_of_parm2_array[$table]['parm2_array'][$i])){
+                                $array_of_parm2_array[$table]['parm2_array'][$i][]  = 'node_name_follows';
+                                $array_of_parm2_array[$table]['parm2_array'][$i][]  = $table;
+                                }
+
+                            $array_of_parm2_array[$table]['parm2_array'][$i][]= $view_variables_array[$table]['field'][$i];
+                        }
+
+                       for ($i = 1; $i < $no_of_fields; $i++) {
+                            $array_of_parm2_array[$table]['parm2_array'][$i]    = json_encode($array_of_parm2_array[$table]['parm2_array'][$i]);
+                        }
+                    }
                     break;
                 case "reports_with_broken_links":
                     if (in_array($table,$active_controllers)){
@@ -354,24 +369,7 @@ class CRHBaseController extends DEHBaseController
        $view_variables_array = array();
        foreach($all_tables as $table){
             switch ($what_are_we_doing) {
-                case "reports_with_broken_links":
-                   
-                    if (in_array($table,$active_tables)){
-                        //* only an active table can have broken links
-                        $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
-                        
-                        $view_variables_array[$table]['field'][] = $table;
-                        $view_variables_array[$table]['field'][] = 'cclist_broken_links';
-                        $view_variables_array[$table]['field'][] = 'ccremove_broken_links';
-                        for ($i = 0; $i < $no_of_fields; $i++) {
-                            $view_variables_array[$table]['class'][]       = "text_align_left";
-                        }
-                    }
-
-
-
-                   break;
-               case "configure_an_unconfigured_table":
+                case "configure_an_unconfigured_table":
                    
                      if (!in_array($table,$active_tables)){
                         $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
@@ -385,21 +383,41 @@ class CRHBaseController extends DEHBaseController
                    
                     $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
                     if (!in_array($table,$active_tables)){
-                        $view_variables_array[$table]['field'][0]       = $table;
-                        $view_variables_array[$table]['class'][0]       = "text_align_left mycart-btn"; // dark blue            
-                        $view_variables_array[$table]['field'][1]       = 'activate';
-                        $view_variables_array[$table]['class'][1]       = "text_align_left";
+                        $view_variables_array[$table]['field'][]        = $table;
+                        $view_variables_array[$table]['field'][]        = 'activate';
+                        $view_variables_array[$table]['field'][]        = 'validate';
+
+                        $view_variables_array[$table]['class'][]        = "text_align_left"; 
+                        $view_variables_array[$table]['class'][]        = "text_align_left";
+                        $view_variables_array[$table]['class'][]        = "text_align_left"; 
+ 
+ 
                    }
                     else {
-                        $view_variables_array[$table]['field'][0]       = $table;
-                        $view_variables_array[$table]['class'][0]       = "text_align_left"; 
-                       $view_variables_array[$table]['field'][1]        = 'de_activate';
-                        $view_variables_array[$table]['class'][1]       = "text_align_left mycart-btn"; // dark blue            
+                       $view_variables_array[$table]['field'][]        = $table;
+                       $view_variables_array[$table]['field'][]        = 'de_activate';
+                       $view_variables_array[$table]['field'][]        = 'validate';
+
+                        $view_variables_array[$table]['class'][]      = "text_align_left mycart-btn"; // dark blue            
+                        $view_variables_array[$table]['class'][]      = "text_align_left mycart-btn"; // dark blue            
+                        $view_variables_array[$table]['class'][]      = "text_align_left mycart-btn"; // dark blue            
                         }
-                    $view_variables_array[$table]['field'][2]           = 'validate';
-                    $view_variables_array[$table]['class'][2]           = $view_variables_array[$table]['class'][1];
                     break;
-             } // end switch
+                case "reports_with_broken_links":
+                   
+                    if (in_array($table,$active_tables)){
+                        //* only an active table can have broken links
+                        $view_variables_array[$table]['what_are_we_doing']  = $what_are_we_doing;
+                        
+                        $view_variables_array[$table]['field'][] = $table;
+                        $view_variables_array[$table]['field'][] = 'cclist_broken_links';
+                        $view_variables_array[$table]['field'][] = 'ccremove_broken_links';
+                        for ($i = 0; $i < $no_of_fields; $i++) {
+                            $view_variables_array[$table]['class'][]       = "text_align_left";
+                        }
+                    }
+                   break;
+            } // end switch
             
 
          } // for each table
@@ -454,10 +472,9 @@ class CRHBaseController extends DEHBaseController
         //$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
         // *******
         $parm2_array = json_decode($parm2);
-
         //var_dump($parm2_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $what_are_we_doing = $parm1;
-        if (!in_array('we_have_done_first_read',$this->parm2_array))//||(in_array('coming_from_programmer_utilities',$parm2_array)))
+        if (!in_array('we_have_done_first_read',$parm2_array))//||(in_array('coming_from_programmer_utilities',$parm2_array)))
         {
 
             $parm2_array[] = 'we_have_done_first_read';
@@ -466,7 +483,6 @@ class CRHBaseController extends DEHBaseController
             $this->no_of_fields = 3;
 
 
-           //$this->view_variables_array = $this->generic_method_build_view_variables_array($this->all_tables,$this->active_controllers,$parm1,$this->no_of_fields);
             }
         else { 
             //var_dump($parm2_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -475,6 +491,11 @@ class CRHBaseController extends DEHBaseController
             case "configure_an_unconfigured_table":
                 break;
             case "activate_deactivate_table_reporting":
+                $this->no_of_fields = 3;
+                $this->view_variables_array = $this->generic_method_build_view_variables_array($this->all_tables,$this->active_controllers,$parm1,$this->no_of_fields);
+               $this->array_of_parm2_array = $this->generic_method_build_array_of_parm2_array($parm1,$parm2_array,$this->all_tables,$this->active_controllers,$this->view_variables_array,$this->no_of_fields);
+             //var_dump($this->array_of_parm2_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
                 break;
             case "reports_with_broken_links":
                 $this->no_of_fields = 3;
@@ -502,7 +523,6 @@ class CRHBaseController extends DEHBaseController
                     $broken_link_files = $this->clean_orphan_files($table_name,$node_name,$node_name,$update_option);  //2parms
                 }
 
-                //* everybody else
                $this->array_of_parm2_array = $this->generic_method_build_array_of_parm2_array($parm1,$parm2_array,$this->all_tables,$this->active_controllers,$this->view_variables_array,$this->no_of_fields);
 
                 break;
@@ -529,12 +549,13 @@ class CRHBaseController extends DEHBaseController
         //* loop thru the view_variables_array
         return view($this->node_name.'.dynamicMenu0')
             // VARIABLES WE'RE PASSING TO A VIEW
+            ->with('view_variables_array'     , $this->view_variables_array)
             ->with('no_of_fields'           ,$this->no_of_fields)
             ->with('array_of_parm2_array'    ,$this->array_of_parm2_array)
             ->with('report_definition_key'    ,$this->report_definition_id)
             ->with('parm1'                    ,$parm1)
             ->with('what_we_are_doing'          ,$parm1)
-            ->with('view_variables_array'     , $this->view_variables_array)
+            
             ->with('parm2_array'                ,json_encode($this->parm2_array))
             ->with('required_variables'         ,$required_variables_array);
     }
