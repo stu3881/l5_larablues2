@@ -16,13 +16,9 @@
 </td>
 
 <td class='text_align_left select_pink' >
+{{ Form::label('', $record->table_reporting_active) }}
+</td>
+
+<td class='text_align_left select_pink' >
 {{ Form::label('', $record->no_of_blank_entries) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record->snippet_table) }}
-</td>
-
-<td class='text_align_left select_pink' >
-{{ Form::label('', $record->snippet_table_key_field_name) }}
 </td>

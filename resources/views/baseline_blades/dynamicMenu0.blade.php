@@ -105,7 +105,8 @@
 
 					@for ($i = $no_of_fields_start; $i <= $no_of_fields_stop; $i++)
 				<?php //echo ('parm2'."**");var_dump($array_of_parm2_array[$table]['parm2_array'][$i]);exit('at 108') ?>
-						<td>
+						<td class={{$value['class'][$i]}} > 
+
 						 	<a href="{{ URL::route($node_name.'.generic_method_request_2parms', $parameters = array(
 						 	'parm1' => $parm1,	  		    
 			  		        'parm2' => $array_of_parm2_array[$table]['parm2_array'][$i])) }}" > 
