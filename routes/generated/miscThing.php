@@ -19,9 +19,9 @@
     //$model                  = 'miscThing';
     //$controller_name        = 'MiscThingsController';
 
-    $controller_name        = "MaillistController"; 
-    $model                  = "Maillist";
-    $node_name              = "maillist";
+    $controller_name        = "@@controller_name@@"; 
+    $model                  = "@@model@@";
+    $node_name              = "@@node_name@@";
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here
@@ -74,5 +74,9 @@
     $method_name            = "create_w_report_id";
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
+     //*
+    $method_name            = "update";
+    Route::POST('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
-
+    

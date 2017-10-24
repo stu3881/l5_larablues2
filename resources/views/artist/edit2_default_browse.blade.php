@@ -1,1 +1,0 @@
-@include('../'.'baseline_blades/edit2_default_browse')

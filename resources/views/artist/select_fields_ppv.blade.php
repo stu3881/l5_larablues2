@@ -1,1 +1,0 @@
-@include('../'.'baseline_blades/select_fields_ppv')

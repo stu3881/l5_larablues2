@@ -35,7 +35,7 @@ echo("<br>13 echo in programmerUtilitiesMenu in baseline_blades");
 
  	</div> 
  		<div id="promo-details"> 
-		{{-- HTML::image('img/Alfa120pct.JPG', '69 myalfa',array('height'=>'272px'))--}} 
+		{{-- HTML::image('img/Alfa120pct.JPG', '69 myalfa',array('height'=>'272px')) --}} 
   		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'192px'))}} 
  	</div> 
 
