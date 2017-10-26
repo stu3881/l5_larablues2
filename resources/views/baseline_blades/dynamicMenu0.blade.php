@@ -99,9 +99,7 @@
 
 		 
 			@foreach($view_variables_array as $table=>$value)
-				<?php //echo ($table."**");//var_dump($view_variables_array);//exit('at 88') ?>
-				<?php //echo ('value'."**");var_dump($value);exit('at 103') ?>
-				<?php //echo ('value'."**");var_dump($value);exit('at 88') ?>
+
 				<tr>
 					<td style="text-align:left","background-color:#cbe6ce">
 						
