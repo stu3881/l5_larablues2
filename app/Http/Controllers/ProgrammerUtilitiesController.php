@@ -359,6 +359,77 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }
   
 
+   public function generic_method_generate_entities($entity,$table) {   
+       $link_parms_array = array(
+        'controller_name'   => ucfirst($table).'Controller',
+        'model_table'       => ucfirst($table),
+        'model'             => ucfirst($table),
+        'node_name'         => lcfirst($table),
+        'field_name_string' => "" 
+
+        );
+
+        foreach ($link_parms_array as $entity=>$name) {
+            switch ($entity) {
+                case "controller_name":
+                   break;
+                case "model_table":
+                   break;
+                case "model":
+                   break;
+                case "node_name":
+                   break;
+            }
+        }
+                 $file_as_string = $this->anchor_boundaries_insert_replace(
+                    $file_as_string,
+                    $link_parms_array['model'],
+                    "// Automatically adjuested strings begin here",
+                    "#beginModel",
+                    "#endModel"
+                );
+
+                $file_as_string = $this->anchor_boundaries_insert_replace(
+                    $file_as_string,
+                    $link_parms_array['model_table'],
+                    "// Automatically adjuested strings begin here",
+                    "#beginModelTable",
+                    "#endModelTable"
+                );
+               $file_as_string = $this->anchor_boundaries_insert_replace(
+                    $file_as_string,
+                    $link_parms_array['node_name'],
+                    "// Automatically adjuested strings begin here",
+                    "#beginNodeName",
+                    "#endNodeName"
+                );
+
+
+
+                $this->generic_method_generate_entities('table_controller',$table);
+                $this->generic_method_generate_entities('model',$table);
+                $this->generic_method_generate_entities('routes',$table);
+                $this->generic_method_generate_entities('views',$table);
+           
+        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+         switch ($entity) {
+            case "table_controller":
+               $this->insure_node_integrity('controller',$table);
+               break;
+            case "model":
+                $this->insure_node_integrity('model',$table);
+                break;
+            case "routes":
+                $this->insure_node_integrity('routes',$table);
+               break;
+            case "views":
+               
+                $this->insure_node_integrity('views',$table);
+               break;
+        }
+
+    }
+
 
    public function mainMenu_generate_routes_snippet(REQUEST $request,$id,$report_definition_id) {
         $this->debug1(__FILE__,__LINE__,__FUNCTION__);
@@ -1962,7 +2033,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         }        
     }
 
-    public function working_arrays_pad_specific_group($working_arrays,$array_group_to_be_padded,$pad_ctr) {
+    public function x($working_arrays,$array_group_to_be_padded,$pad_ctr) {
         echo($array_group_to_be_padded);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10); 
         //var_dump($working_arrays[$array_group_to_be_padded]);$this->debug_exit(__FILE__,__LINE__,10); 

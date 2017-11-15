@@ -1,8 +1,8 @@
 <?php
-
+/*
 namespace App\Http\Controllers;
 
-use App\Models\@@model@@;
+use App\Models\Book;
 
 
 use App\Models\MiscThing;
@@ -18,8 +18,8 @@ use App\Http\Requests\StoreMiscThings;
 
 use DB;
 //use App\Http\Controllers\Schema;
-
-class @@controller_name@@ extends CRHBaseController
+*/
+class BooksController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,10 +34,10 @@ class @@controller_name@@ extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "@@controller_name@@", 
-        $model_table                    = "@@model_table@@",         
-        $model                          = "@@model@@", 
-        $node_name                      = "@@node_name@@", 
+        $controller_name                = "BooksController", 
+        $model_table                    = "books",         
+        $model                          = "Book", 
+        $node_name                      = "books", 
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -180,12 +180,12 @@ class @@controller_name@@ extends CRHBaseController
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
-                $query = @@model@@::distinct()->select($field_name);
-                echo("@@model@@::distinct()->select(".$field_name.")");
+                $query = Book::distinct()->select($field_name);
+                echo("Book::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = @@model@@::where($field_name,$r_o,$v);
-                echo("@@model@@::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = Book::where($field_name,$r_o,$v);
+                echo("Book::where(".$field_name.",". $r_o. ",".$v.")");
                 break;
        }   
        return $query;
@@ -318,11 +318,11 @@ class @@controller_name@@ extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = @@model@@
+                        $updatex  = Book
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = @@model@@
+                        $updatex  = Book
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -346,9 +346,9 @@ class @@controller_name@@ extends CRHBaseController
     {
          $this->debug_exit(__FILE__,__LINE__);
 
-        $this->authorize('destroy', @@model@@);
+        $this->authorize('destroy', Book);
 
-        @@model@@::delete($id);
+        Book::delete($id);
 
         //return redirect('/tasks');
         return;

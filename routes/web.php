@@ -45,20 +45,52 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     // DONT MOVE OR CHANGE THE FILLOWING LINE
     //generated_inserts_begin_here
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/books.php');
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/migrations.php');
 	@include('/home/vagrant/Code/l5_larablues2/routes/miscThings.php');
-	//@include('/home/vagrant/Code/l5_larablues2/routes/generated/tasks_blues.php');
 	@include('/home/vagrant/Code/l5_larablues2/routes/generated/categories.php');
 
-	//@include('/home/vagrant/Code/l5_larablues2/routes/generated/administrators.php');
+
 
     
     //generated_inserts_stop
     //***********************
       
-    //@include('/home/vagrant/Code/l5_larablues2/routes/generated/artist.php');
+    //
     //@include('/home/vagrant/Code/l5_larablues2/routes/generated/new_show.php');
     //@include('/home/vagrant/Code/l5_larablues2/routes/generated/volunteers.php');
 

@@ -16,9 +16,9 @@
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->table_name) }}
+{{ Form::label('', $record->record_type) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->record_type) }}
+{{ Form::label('', $record->table_name) }}
 </td>

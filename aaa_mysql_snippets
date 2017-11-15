@@ -363,7 +363,7 @@ sudo dd bs=4M if=~/Downloads/ubuntu-16.04.2-desktop-amd64.iso of=/dev/sdc1
 homestead_with_defs_20170520A.sql
 mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170520A.sql;
 
-select node_name, table_name, model, model_table from miscThings where record_type = 'table_controller'
+select node_name, table_name, table_reporting_active, model, model_table from miscThings where record_type = 'table_controller';
 
 {{$myStrings['tdBegin']}}
 
@@ -427,7 +427,7 @@ $updatex  = DB
 
 update miscThings SET 
  	table_reporting_active = 0 
-	where id = 12562
+	where id = 11311
 
 git difftool -t meld v0.0.7.4..v0.0.7.7
 
@@ -439,3 +439,34 @@ INTO OUTFILE '/tmp/maillist20170930.csv'
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
+
+2017-10-27
+select id, node_name, table_name, table_reporting_active, model, model_table from miscThings where record_type = 'table_controller';
+
+ delete from miscThings where id = 12655;
+
+ update miscThings SET 
+ 	table_reporting_active = 0 
+	where id = 12657
+
+
+	select id, node_name, table_name, table_reporting_active, model, model_table from miscThings where record_type = 'report_definition';
+        if($miscThings = MiscThing::where('record_type','=',$record_type)
+            ->where('table_name',  '='    ,$this->model_table)
+            ->where('node_name',    '='    ,$this->node_name)
+
+select id, node_name, table_name, table_reporting_active report_name from miscThings where record_type = 'report_definition';
+
+
+
+/home/sbblues/php/dbParmsSBBS.php
+
+	select id, created_at, node_name, record_type, table_reporting_active,  from miscThings where record_type = 'report_definition';
+created_at
+
+select id, created_at, node_name, record_type, report_name, table_reporting_active  from miscThings 
+where record_type =  = 'report_definition' and where report_name like %definition_model%;
+
+select id, created_at, node_name, record_type, report_name, table_reporting_active  from miscThings where report_name like '%definition_model%';
+
+

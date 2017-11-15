@@ -19,9 +19,9 @@
     //$model                  = 'miscThing';
     //$controller_name        = 'MiscThingsController';
 
-    $controller_name        = "@@controller_name@@"; 
-    $model                  = "@@model@@";
-    $node_name              = "@@node_name@@";
+    $controller_name        = "BooksController"; 
+    $model                  = "Book";
+    $node_name              = "books";
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here

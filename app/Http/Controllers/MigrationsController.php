@@ -348,7 +348,7 @@ class @@controller_name@@ extends CRHBaseController
 
         $this->authorize('destroy', @@model@@);
 
-        @@model@@::delete($id);
+        @@model@@->delete($id);
 
         //return redirect('/tasks');
         return;

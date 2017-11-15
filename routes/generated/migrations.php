@@ -35,15 +35,6 @@
         //.'/{'.$modifiable_fields_array.'}'
         .'/'.$method_name,
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-   //*
-    $method_name            = "activateDeactivate";
-    Route::get('admin/'.$node_name
-        .'/{'.$model.'}'
-        .'/{'.$what_we_are_doing.'}'
-        .'/{'.$coming_from.'}'
-        .'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-     //*
     //*
     $method_name            = "browseEdit";
     Route::get('admin/'.$node_name
@@ -67,10 +58,6 @@
       //*
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-
-    $method_name            = "update";
-    Route::PUT('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
-
      //*
     $method_name            = "ppvEdit";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -79,7 +66,7 @@
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
     $method_name            = "reportDefMenuEdit";
-    Route::GET('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
      //*
     $method_name            = "create";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -87,7 +74,38 @@
     $method_name            = "create_w_report_id";
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
+     //*
+    $method_name            = "update";
+    Route::POST('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 
-    $method_name            = "delete";
-    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
+// *****
+// miscThingController NOT miscThings
+// *****
+// *****
+// these are common to all the routes that follow for this controller
+// *****
+
+$node_name              = 'MiscThing';
+$model                  = 'miscThing';
+$controller_name        = 'MiscThingController';
+$what_we_are_doing      = "what_we_are_doing"; // assigned elsewhere but needs to be defined here
+$coming_from            = "coming_from"; // assigned elsewhere but needs to be defined here
+$reportDefinitionKey    = "reportDefinitionKey"; // assigned elsewhere but needs to be defined here
+
+//*
+$method_name            = "store";
+Route::POST($node_name
+    .'/'.$method_name, 
+    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+
+
+     //*
+    $method_name            = "create_w_report_id";
+    Route::POST($node_name
+    .'/{'.$reportDefinitionKey.'}'
+    .'/'.$method_name, 
+    array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+
 
