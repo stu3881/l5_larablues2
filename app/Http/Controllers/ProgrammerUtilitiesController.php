@@ -779,21 +779,6 @@ class ProgrammerUtilitiesController extends CRHBaseController
     }
 
 
-     /**
-     * write_file_from_string
-     *
-     */
-
-    public function write_file_from_string($file_name,$file_as_string) {
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-        if (is_file($file_name)){
-            unlink($file_name); // delete it
-        }
-        $handle = fopen($file_name, "w");
-        fwrite($handle, $file_as_string);
-    }
-
-
     
         public function array_node_to_array($array) {
         // *****************

@@ -1,29 +1,5 @@
 <tr>
 <td style="text-align:left">
-{{ Form::label("table_controller_exists","table_controller_exists") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('table_controller_exists',$record['table_controller_exists']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("table_reporting_active","table_reporting_active") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('table_reporting_active',$record['table_reporting_active']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-{{ Form::label("table_route_exists","table_route_exists") }}
-</td>
-<td style="text-align:left">
-{{ Form::text('table_route_exists',$record['table_route_exists']) }}
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
 {{ Form::label("record_type","record_type") }}
 </td>
 <td style="text-align:left">
