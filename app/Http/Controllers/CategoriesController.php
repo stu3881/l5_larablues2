@@ -205,7 +205,7 @@ class CategoriesController extends CRHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
+        echo("<br> cateditUpdate... ".
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.

@@ -192,6 +192,27 @@ class @@controller_name@@ extends CRHBaseController
     }
 
 
+    public function kloneRecord($function,$id)    {
+        switch ($function) {
+             case "insert":
+                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                $data_record = @@model@@::where('id','=',$id)->get();
+                //$arr1 = (array) $data_record[0]['attributes'];
+                var_dump($data_record[0]);//var_dump($arr1);
+                $arr1 = (array) $data_record[0];
+                unset($arr1['id']);
+                unset($arr1['created_at']);
+                unset($arr1['updated_at']);
+                if (@@model@@::create($arr1)){
+                    echo('klone succeeded');
+                }
+                else{
+                    echo('klone failed');
+                    $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                }
+                break;
+            }
+    }
 
 
 
@@ -205,7 +226,7 @@ class @@controller_name@@ extends CRHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
+        echo("<br> mgeditUpdate... ".
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.
@@ -218,6 +239,11 @@ class @@controller_name@@ extends CRHBaseController
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
             switch ($what_we_are_doing) { 
+
+                case "klone_record":
+                    //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    $this->kloneRecord(insert,$id);
+                    break;
                 case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
@@ -278,7 +304,7 @@ class @@controller_name@@ extends CRHBaseController
                 // *****
                 // return to view
                 // *****
-                        var_dump($request->input);$this->debug_exit(__FILE__,__LINE__,1);
+                        var_dump($request->input);//$this->debug_exit(__FILE__,__LINE__,1);
 
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
@@ -341,6 +367,21 @@ class @@controller_name@@ extends CRHBaseController
                 }
         }   
     }
+    public function updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request['report_definition_key']){
+            $@@model@@ = @@model@@::where($this->key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+            $@@model@@ = @@model@@::where($this->key_field_name,  '=', $id)
+            ->get();
+            //$@@model@@1 = compact($@@model@@);
+            //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ 
+            return redirect()->route('@@model@@.browseEdit', 
+                ['id' => $request['report_definition_key'],
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'editUpdate'
+                ]);
+            }
+
 
      public function destroy($id)
     {

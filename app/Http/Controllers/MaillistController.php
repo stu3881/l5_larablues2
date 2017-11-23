@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\@@model@@;
+use App\Models\Maillist;
 
 
 use App\Models\MiscThing;
@@ -19,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class @@controller_name@@ extends CRHBaseController
+class MaillistController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,10 +34,10 @@ class @@controller_name@@ extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "@@controller_name@@", 
-        $model_table                    = "@@model_table@@",         
-        $model                          = "@@model@@", 
-        $node_name                      = "@@node_name@@", 
+        $controller_name                = "MaillistController", 
+        $model_table                    = "maillist",         
+        $model                          = "Maillist", 
+        $node_name                      = "maillist", 
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -180,18 +180,39 @@ class @@controller_name@@ extends CRHBaseController
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
-                $query = @@model@@::distinct()->select($field_name);
-                echo("@@model@@::distinct()->select(".$field_name.")");
+                $query = Maillist::distinct()->select($field_name);
+                echo("Maillist::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = @@model@@::where($field_name,$r_o,$v);
-                echo("@@model@@::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = Maillist::where($field_name,$r_o,$v);
+                echo("Maillist::where(".$field_name.",". $r_o. ",".$v.")");
                 break;
        }   
        return $query;
     }
 
 
+    public function kloneRecord($function,$id)    {
+        switch ($function) {
+             case "insert":
+                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                $data_record = Maillist::where('id','=',$id)->get();
+                //$arr1 = (array) $data_record[0]['attributes'];
+                var_dump($data_record[0]);//var_dump($arr1);
+                $arr1 = (array) $data_record[0];
+                unset($arr1['id']);
+                unset($arr1['created_at']);
+                unset($arr1['updated_at']);
+                if (Maillist::create($arr1)){
+                    echo('klone succeeded');
+                }
+                else{
+                    echo('klone failed');
+                    $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                }
+                break;
+            }
+    }
 
 
 
@@ -205,7 +226,7 @@ class @@controller_name@@ extends CRHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
+        echo("<br> mgeditUpdate... ".
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.
@@ -218,6 +239,11 @@ class @@controller_name@@ extends CRHBaseController
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
             switch ($what_we_are_doing) { 
+
+                case "klone_record":
+                    //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    $this->kloneRecord('insert',$id);
+                    break;
                 case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
@@ -278,12 +304,12 @@ class @@controller_name@@ extends CRHBaseController
                 // *****
                 // return to view
                 // *****
-                        var_dump($request->input);$this->debug_exit(__FILE__,__LINE__,1);
+                var_dump($passed_to_view_array);//$this->debug_exit(__FILE__,__LINE__,1);
 
-                        return view($this->node_name.'.editUpdate',compact('miscThings'))
-                        ->with('node_name'   ,$this->node_name)            
-                        ->with('passed_to_view_array'   ,$passed_to_view_array);            
-                        break;          
+                return view($this->node_name.'.editUpdate',compact('miscThings'))
+                ->with('node_name'   ,$this->node_name)            
+                ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                break;          
             case "edit2_default_update":
             //case "updating_data_record": // defined in editUpdate
                 //echo("<BR>".$what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
@@ -318,11 +344,11 @@ class @@controller_name@@ extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = @@model@@
+                        $updatex  = Miscthing
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = @@model@@
+                        $updatex  = Miscthing
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -346,13 +372,28 @@ class @@controller_name@@ extends CRHBaseController
     {
          $this->debug_exit(__FILE__,__LINE__);
 
-        $this->authorize('destroy', @@model@@);
+        $this->authorize('destroy', Maillist);
 
-        @@model@@->delete($id);
+        Maillist::delete($id);
 
         //return redirect('/tasks');
         return;
 
     }
-   
+       public function updateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
+            $maillist = Maillist::where($key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+            $Maillist = Maillist::where($key_field_name,  '=', $id)
+            ->get();
+            //$Maillist1 = compact($Maillist);
+            //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ 
+            return redirect()->route('maillist.browseEdit', 
+                ['id' => $request['report_definition_key'],
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'editUpdate'
+                ]);
+            }
+
+
 }

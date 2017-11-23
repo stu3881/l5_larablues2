@@ -1,0 +1,3 @@
+<td class='text_align_left select_pink' >
+{{ Form::label('$field_name', $record->report_name) }}
+</td>

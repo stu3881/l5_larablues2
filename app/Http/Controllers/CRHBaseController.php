@@ -1813,8 +1813,7 @@ class CRHBaseController extends DEHBaseController
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        //$this->debug2(__FILE__,__LINE__,__FUNCTION__);echo(" ".$what_we_are_doing.$id.$coming_from);
-    
+        //var_dump($request);  //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $report_definition          = $this->execute_query_by_report_no($id) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
 
@@ -2039,141 +2038,7 @@ class CRHBaseController extends DEHBaseController
         //echo(' ->get()');
         return $query->get();
     }   // end of b uild_and_execute_query        
-    public function build_and_execute_queryOLD(
-        $working_arrays,
-        $bypassed_field,
-        $query_relational_operators_array) {
-        //echo("<br>build_and_execute_query");
-        $this->debug4(__FILE__,__LINE__,__FUNCTION__);
-        //var_dump($working_arrays['ppv_define_query']);
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //
-        // *******
-        // this guy does a lot
-        // *****
-        //$fieldName_r_o_value_array);
 
-        $field_name_array_name = $working_arrays['ppv_define_query']['field_name_array']['field_name'];
-        $field_name_array      = $working_arrays['ppv_define_query'][$field_name_array_name];
-        $r_o_array_name        = $working_arrays['ppv_define_query']['field_name_array']['r_o'];
-        $r_o_array             = $working_arrays['ppv_define_query'][$r_o_array_name];
-  
-       $value_array_name      = $working_arrays['ppv_define_query']['field_name_array']['value'];
-       $value_array           = $working_arrays['ppv_define_query'][$value_array_name];
-
-        $dash_gt = " ->";
-        //$dash_gt = " query->where";
-        //$query = MiscThing::
-        // *************
-        $first_time = 1;
-        //echo $this->model;$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-        $executing_distinct = 0;
-        $model = $this->node_name;
-        foreach ($field_name_array as $index=>$field_name) {
-            $value = $field_name;
-           if ($field_name <> $bypassed_field){
-                $r_o = $r_o_array [$index];
-                $v = $value_array[$index];
-                $v = $this->convert_string_variables_to_variables($v);
-                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-                switch ($r_o) {
-                    case "distinct":
-                        if ($first_time){
-                            $first_time = 0;
-                            //$query = MiscThing::where($field_name,$r_o,$v);
-                            //$query = MiscThing::distinct()->select($field_name)->groupBy('user_id')->get();
-                            $model = $this->model_name;
-                            $query = $model::distinct()->select($field_name);
-
-                             echo("MiscThing::distinct()->select(".$field_name.")");
-                        }
-                        else {
-                            $query->where($field_name,$r_o,$v);
-                             echo("->where(".$field_name." $r_o ".$v.")");
-                        }
-                        break;
-                    case "=":
-                    case "<>":
-                    case ">":
-                    case "<":
-                    case "<=":
-                    case ">=":
-                        if ($first_time){
-                            $first_time = 0;
-                            $query = MiscThing::where($field_name,$r_o,$v);
-                            echo($model ."::where(".$field_name.",". $r_o. ",".$v.")");
-                            //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-                        }
-                        else {
-                            $query->where($field_name,$r_o,$v);
-                            echo("->where(".$field_name." $r_o ".$v.")");
-                            //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-
-                        }
-                        break;
-                    }
-  //echo $this->model;$this->debug0(__FILE__,__LINE__,__FUNCTION__);    
-                switch ($r_o) {
-                    //case  "join":
-                    case "join":
-                        //DB::table('name')->join('table', 'name.id', '=', 'table.id')
-                        //->select('name.id', 'table.email');       
-                        //case  "where":
-                    case "whereBetween":
-                        $query->whereBetween($field_name,$value);
-                         echo(' ->whereBetween('.$field_name.','.$aord.')');
-                        break;
-                    case "whereNull":
-                        $query->whereNull($field_name);
-                         echo(' ->whereNull('.$field_name.')');
-                        break;
-                    case "whereNotNull":
-                        $query->whereNotNull($field_name);
-                         echo(' ->whereNotNull('.$field_name.')');
-                        break;
-                    case  "groupBy":
-                            $query->groupBy($field_name);
-                             echo(' ->groupBy('.$field_name.')');
-                            break;
-
-                    case "orderBy":
-                          $aord = "ASC";
-                            $query->orderBy($value);
-                            echo(' ->orderBy('.$value.','.$aord.')');
-                       
-                        break;
-                    case "orderByDesc":
-                        $aord = "DESC";     
-                            $query->orderBy($value,$aord);
-                            echo(' ->orderBy('.$value.','.$aord.')');
-                        
-                        break;
-                    case "distinct":
-                        $executing_distinct = 1;
-                        //$distinct_value = $value;
-                        //$query->distinct();
-                        //echo(" ->distinct()");
-                       
-                        break;
-                    case "xgetArray":
-                        //$query->get();
-                        break;
-                } // end switch      
-
- 
-        } // end of not bypassed
-
-        
-    }  // end foreach
-                //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
-            echo(' ->get()');
-            return $query->get();
-
-    //$this->debug1(__FILE__,__LINE__,__FUNCTION__);
- 
-
-    //return  (array) $query;
-    }   // end of b uild_and_execute_query
 
     public function clean_orphan_files($node_name,$update_option) {
         //$field_name_array = (array) json_decode(Input::get('encoded_field_name_array'));
@@ -2299,26 +2164,47 @@ class CRHBaseController extends DEHBaseController
             }
             return null;
         }   
-    //public function putEdit2new() {
+
+
+    public function kloneRecord($insert,$data_record)    {
+        echo('should always be defined in controller it extends');
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
+    }
+
+
     public function editUpdate(
         Request $request, 
         $id, 
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> editUpdate... ".
+        $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
+        echo("<br> crheditUpdate... ".
             ' what_we_are_doing: '. $what_we_are_doing.
             ", id: ".$id.
             ', coming_from: '.$coming_from.
             ', report_definition_key: '.$report_definition_key);
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($request);
-        //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
-            //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
+            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
+
             $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
             switch ($what_we_are_doing) { 
+                case "klone_record":
+                    //var_dump($request);
+                         //* *****
+                    $data_record  = DB::connection($this->db_data_connection)->table($this->model_table)->where('id','=',$id)->get();
+                        //$arr1 = (array) $data_record[0]['attributes'];
+                        var_dump($data_record[0]);//var_dump($arr1);
+                        $arr1 = (array) $data_record[0];
+                        unset($arr1['id']);
+                        unset($arr1['created_at']);
+                        unset($arr1['updated_at']);
+                    $this->kloneRecord('insert',$id);                     
+
+                    break;
+
                 case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
@@ -2334,7 +2220,8 @@ class CRHBaseController extends DEHBaseController
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
                     $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
-                    //var_dump($report_definition_key); $this->debug_exit(__FILE__,__LINE__,1);
+                    var_dump($id); 
+                    //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
                     $MiscThing  = MiscThing::where('id','=',$id)->get();
                     if($MiscThing){
@@ -2342,7 +2229,8 @@ class CRHBaseController extends DEHBaseController
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
                        //echo('id' .$id);
                        //var_dump($MiscThing[0]);
-                       //var_dump($modifiable_fields_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                       //var_dump($modifiable_fields_array);
+                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
@@ -2387,51 +2275,51 @@ class CRHBaseController extends DEHBaseController
                         ->with('node_name'   ,$this->node_name)            
                        ->with('passed_to_view_array'   ,$passed_to_view_array);            
                         break;          
-            case "edit2_default_update":
-            //case "updating_data_record": // defined in editUpdate
-                //echo("<BR>".$what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
-                //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
-                $requestFieldsArray=$request->all(); // important!!
+                case "edit2_default_update":
+                //case "updating_data_record": // defined in editUpdate
+                    //echo("<BR>".$what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
+                    //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
+                    $requestFieldsArray=$request->all(); // important!!
 
-                //var_dump($working_arrays['ppv_define_business_rules']['business_rules_r_o_array']);
-                //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
-                var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
+                    //var_dump($working_arrays['ppv_define_business_rules']['business_rules_r_o_array']);
+                    //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
+                    var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
 
-                //$validator = Validator::make(Input::all(), $business_rules_array); //update
-                if ( $validator->fails() ) {
-                    $errors = $validator->messages();
-                    $this->debug_exit(__FILE__,__LINE__,1);
-                    //return redirect()->back(); 
-                    //return redirect('public/admin/'.$this->node_name.'/editUpdate')
-                    return View::make($this->node_name.'/editUpdate')
-                        //->with('passed_to_view_array' ,$passed_to_view_array);            
+                    //$validator = Validator::make(Input::all(), $business_rules_array); //update
+                    if ( $validator->fails() ) {
+                        $errors = $validator->messages();
+                        $this->debug_exit(__FILE__,__LINE__,1);
+                        //return redirect()->back(); 
+                        //return redirect('public/admin/'.$this->node_name.'/editUpdate')
+                        return View::make($this->node_name.'/editUpdate')
+                            //->with('passed_to_view_array' ,$passed_to_view_array);            
 
-                    //->withErrors($errors)
-                    ->withInput();
-                      //return $validator->errors()->all();
-                    //return back()->withErrors($errors)->withInput();
-                }
-                
-                //$this->debug_exit(__FILE__,__LINE__,1);
-                $a = 'encoded_modifiable_fields_array';
-                $Inputo = json_decode(json_encode(Input::all()),0);
-                $modifiable_fields_array = $this->decode_object_field_to_array($Inputo,$a);
-                //var_dump($b);
-                //$this->debug_exit(__FILE__,__LINE__,1);
-                switch ($request->input('coming_from')) {
+                        //->withErrors($errors)
+                        ->withInput();
+                          //return $validator->errors()->all();
+                        //return back()->withErrors($errors)->withInput();
+                    }
                     
-                    case "edit2_browse_add_button":
-                     echo($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                        $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
-                            ->insert($modifiable_fields_name_values);
-                        break;
-                    case "edit2_edit_button":
-                     echo($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                       $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
-                            ->where($this->key_field_name,  '=', $request->input('data_key'))
-                            ->update($modifiable_fields_name_values);
-                        break;
-                }
+                    //$this->debug_exit(__FILE__,__LINE__,1);
+                    $a = 'encoded_modifiable_fields_array';
+                    $Inputo = json_decode(json_encode(Input::all()),0);
+                    $modifiable_fields_array = $this->decode_object_field_to_array($Inputo,$a);
+                    var_dump($modifiable_fields_array);var_dump($request);
+                    $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    switch ($request->input('coming_from')) {
+                        
+                        case "edit2_browse_add_button":
+                         echo($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                            $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                                ->insert($modifiable_fields_name_values);
+                            break;
+                        case "edit2_edit_button":
+                         echo($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                           $updatex  = DB::connection($this->db_data_connection)->table($this->model_table)
+                                ->where($this->key_field_name,  '=', $request->input('data_key'))
+                                ->update($modifiable_fields_name_values);
+                            break;
+                    }
 
 
                 return redirect('admin/'.$this->node_name.'/edit1')
@@ -2445,9 +2333,9 @@ class CRHBaseController extends DEHBaseController
                         $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
                         break;
-                }
-        }   
-    }
+                } // end switch what we are doing
+        } // what we are doing is not empty   
+    } // end of edit update
  
 
 
@@ -3409,8 +3297,20 @@ class CRHBaseController extends DEHBaseController
         return redirect('admin/miscThings');
     }
 
-
-
+    public function updateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
+            $miscThing = MiscThing::where($this->key_field_name,  '=', $id)
+            ->update($requestFieldsArray);
+            $miscThing = MiscThing::where($this->key_field_name,  '=', $id)
+            ->get();
+            //$miscThing1 = compact($miscThing);
+            //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ 
+            return redirect()->route('miscThings.browseEdit', 
+                ['id' => $request['report_definition_key'],
+                'what_we_are_doing' => 'what_we_are_doing',
+                'coming_from' => 'editUpdate'
+                ]);
+            }
 
 
     /*
@@ -3546,27 +3446,16 @@ class CRHBaseController extends DEHBaseController
             }
             //var_dump($requestFieldsArray);
 
-        
-            $updatex = MiscThing::where($this->key_field_name,  '=', $id)
-            ->update($requestFieldsArray);
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-           /* return redirect()->route('miscThings.reportDefMenuEdit', 
-                ['id' => $id,
+            $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
+            //$miscThing1 = compact($miscThing);
+            //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ 
+            return redirect()->route('miscThings.browseEdit', 
+                ['id' => $request['report_definition_key'],
                 'what_we_are_doing' => 'what_we_are_doing',
-                'coming_from' => 'edit1'
-                ]);*/
-                $coming_from = 1111;
-        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
-        ->with('id'                                 ,$id)
-        ->with('report_definition_id'               ,$this->report_definition_id)
-
-        ->with('model'                              ,$this->model)
-        ->with('node_name'                          ,$this->node_name)
-        ->with('what_we_are_doing'                  ,'updating_report_name')
-        ->with('coming_from'                        ,'editUpdate')
-       ;
-        return back()->withInput();
-        }
+                'coming_from' => 'editUpdate'
+                ]);
+            }
         if (!$update) {
 
             var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);

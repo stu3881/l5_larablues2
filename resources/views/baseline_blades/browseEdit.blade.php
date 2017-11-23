@@ -169,12 +169,12 @@ $rowcount = -1;
 		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
 		  		        array(
 		  		        'id'=>$record->id,
-		  		        'what_we_are_doing'=>'klone',
+		  		        'what_we_are_doing'=>'klone_record',
 		  		        'coming_from'=> 'browseEdit',
 		  		        'report_definition_key'=>$report_key)
 		  		        ) }}" class="btn mycart-btn-row2">
 		  		        
-		  		        klone
+		  		        klone record
 
 		  		        </a>
 						</td>

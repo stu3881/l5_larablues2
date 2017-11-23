@@ -67,7 +67,7 @@
 {{ $message }}
 <div id="admin" style="width:460px;background-color: #aabbcc;">aa
 	
-		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) !!}
+		{{ Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) }}
 		{{ Form::hidden('coming_from',$coming_from) }}
 		
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
