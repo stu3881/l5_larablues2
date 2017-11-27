@@ -1,1 +1,0 @@
-@include('../'.'baseline_blades/browse_edit_field_names_row')

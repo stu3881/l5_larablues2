@@ -367,13 +367,13 @@ class @@controller_name@@ extends CRHBaseController
                 }
         }   
     }
-    public function updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request['report_definition_key']){
-            $@@model@@ = @@model@@::where($this->key_field_name,  '=', $id)
+    public function updateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
+            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
             ->update($requestFieldsArray);
-            $@@model@@ = @@model@@::where($this->key_field_name,  '=', $id)
+            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
             ->get();
             //$@@model@@1 = compact($@@model@@);
-            //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
  
             return redirect()->route('@@model@@.browseEdit', 
                 ['id' => $request['report_definition_key'],

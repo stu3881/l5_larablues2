@@ -35,6 +35,7 @@
 	//var_dump($passed_to_view_array);exit("in editUpdate exit 36"); 	
 	$node_name 							= $passed_to_view_array['report_definition']->node_name;
 	$report_name 						= $passed_to_view_array['report_definition']->report_name;
+	$report_definition_key 				= $passed_to_view_array['report_definition_key'];
 	$snippet_name 						= $passed_to_view_array['snippet_name'];
 	$encoded_input 						= $passed_to_view_array['encoded_input'];
 	//$encoded_business_rules 			= $passed_to_view_array['encoded_business_rules'];
@@ -92,11 +93,11 @@
 						{{ Form::submit('Update ') }}
 						{{ Form::close() }}
 					</td>
-
 					<td class="table_no_lines">
-						{{ Form::open(array('url'=>'admin/'.$node_name, 'method'=>'GET')) }}
-						{{ Form::submit('Reports menu') }}
-						{{ Form::close() }}
+				   		<a href="{{ URL::route($node_name.'.indexReports', $parameters = array('id'=>$report_definition_key,
+			   			'reportDefinitionKey'=>$report_definition_key
+			   			)) }}" class="btn mycart-btn-row2">Reports menu
+			   			</a>
 					</td>
 	
 				<td class="table_no_lines">
