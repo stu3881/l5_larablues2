@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\@@model@@;
+use App\Models\Maillist;
 
 
 use App\Models\MiscThing;
@@ -19,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class @@controller_name@@ extends CRHBaseController
+class MaillistController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,10 +34,10 @@ class @@controller_name@@ extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "@@controller_name@@", 
-        $model_table                    = "@@model_table@@",         
-        $model                          = "@@model@@", 
-        $node_name                      = "@@node_name@@", 
+        $controller_name                = "MaillistController", 
+        $model_table                    = "maillist",         
+        $model                          = "Maillist", 
+        $node_name                      = "maillist", 
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -180,12 +180,12 @@ class @@controller_name@@ extends CRHBaseController
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
-                $query = @@model@@::distinct()->select($field_name);
-                echo("@@model@@::distinct()->select(".$field_name.")");
+                $query = Maillist::distinct()->select($field_name);
+                echo("Maillist::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = @@model@@::where($field_name,$r_o,$v);
-                echo("@@model@@::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = Maillist::where($field_name,$r_o,$v);
+                echo("Maillist::where(".$field_name.",". $r_o. ",".$v.")");
                 break;
        }   
        return $query;
@@ -196,14 +196,14 @@ class @@controller_name@@ extends CRHBaseController
         switch ($function) {
              case "insert":
                 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                $data_record = @@model@@::where('id','=',$id)->get();
+                $data_record = Maillist::where('id','=',$id)->get();
                 //$arr1 = (array) $data_record[0]['attributes'];
                 var_dump($data_record[0]);//var_dump($arr1);
                 $arr1 = (array) $data_record[0];
                 unset($arr1['id']);
                 unset($arr1['created_at']);
                 unset($arr1['updated_at']);
-                if (@@model@@::create($arr1)){
+                if (Maillist::create($arr1)){
                     echo('klone succeeded');
                 }
                 else{
@@ -344,11 +344,11 @@ class @@controller_name@@ extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = @@model@@
+                        $updatex  = Maillist
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = @@model@@
+                        $updatex  = Maillist
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -368,14 +368,14 @@ class @@controller_name@@ extends CRHBaseController
         }   
     }
     public function xupdateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
-            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
+            $Maillist = Maillist::where($key_field_name,  '=', $id)
             ->update($requestFieldsArray);
-            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
+            $Maillist = Maillist::where($key_field_name,  '=', $id)
             ->get();
-            //$@@model@@1 = compact($@@model@@);
+            //$Maillist1 = compact($Maillist);
             var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
  
-            return redirect()->route('@@model@@.browseEdit', 
+            return redirect()->route('Maillist.browseEdit', 
                 ['id' => $request['report_definition_key'],
                 'what_we_are_doing' => 'what_we_are_doing',
                 'coming_from' => 'editUpdate'
@@ -387,9 +387,9 @@ class @@controller_name@@ extends CRHBaseController
     {
          $this->debug_exit(__FILE__,__LINE__);
 
-        $this->authorize('destroy', @@model@@);
+        $this->authorize('destroy', Maillist);
 
-        @@model@@::delete($id);
+        Maillist::delete($id);
 
         //return redirect('/tasks');
         return;

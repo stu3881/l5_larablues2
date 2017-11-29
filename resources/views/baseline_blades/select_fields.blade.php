@@ -107,14 +107,6 @@
 								</td>
 								
   		        <td>
-	  		        <a href="{{ URL::route($node_name.'.update', 
-	  		        $parameters = array(
-	  		        'id'=>$miscThing[0]->id
-	  		        )) }}" class="btn btn-warning">
-	  		        update (link)
-	  		        </a>
-				</td>
-  		        <td>
 	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', 
 	  		        $parameters = array(
 	  		        'id'=>$miscThing[0]->id,

@@ -229,7 +229,7 @@ class CRHBaseController extends DEHBaseController
                         ::where('id','=',$this->report_definition_id )
                         ->get();
                         $arr1 = (array) $report_definition[0]['attributes'];
-                        var_dump($arr1);
+                        //var_dump($arr1);
                         unset($arr1['id']);
                         $query_field_name_array_str = "'[".$second_field .',"not_used","not_used","not_used","not_used"]';
                         //echo($second_field);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -350,7 +350,7 @@ class CRHBaseController extends DEHBaseController
                     $file_as_string = file_get_contents($controller_model_file);
                     $tmp_array = $search_str_array;
                     unset($tmp_array['field_name_string']);
-                    echo ("<br><br><br>search_str_array");var_dump($tmp_array);var_dump($link_parms_array);
+                    //echo ("<br><br><br>search_str_array");var_dump($tmp_array);var_dump($link_parms_array);
                     $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$tmp_array,$link_parms_array,'y');
                     File::put($controller_file, $file_as_string);
                     $msg_array[$i0]['fileName'] = $controller_file;
@@ -418,7 +418,7 @@ class CRHBaseController extends DEHBaseController
                     
                     $file_as_string = file_get_contents($routes_model_file);
                     $link_parms_array['field_name_string']   = "";
-                    $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);echo (" creating routes file for ".$link_parms_array['node_name']);var_dump($link_parms_array);var_dump($values_array);
+                    //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);echo (" creating routes file for ".$link_parms_array['node_name']);var_dump($link_parms_array);var_dump($values_array);
                     $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$values_array,$link_parms_array,'n');
                     File::put($generated_file_name, $file_as_string);
                     $msg_array[$i0]['fileName'] = $generated_file_name;
@@ -545,7 +545,7 @@ class CRHBaseController extends DEHBaseController
            // ***************************
         //var_dump($parm2_array);
        
-        $this->debugx('0010',__FILE__,__LINE__,__FUNCTION__);
+        //$this->debugx('0010',__FILE__,__LINE__,__FUNCTION__);
        $array_of_parm2_array = array();
         
        foreach($table_names as $table){
@@ -745,9 +745,12 @@ class CRHBaseController extends DEHBaseController
             case "table_controller_file":
                 break;
             case "table_controller":
-                 $updatex = MiscThing::where('record_type',  '=', "table_controller")
+                 //$updatex = MiscThing::where('record_type',  '=', "table_controller")
+                //->where('node_name',  '=', $link_parms_array['node_name'])
+                //->update(array('table_reporting_active'=>0));  
+                $updatex = MiscThing::where('record_type',  '=', "table_controller")
                 ->where('node_name',  '=', $link_parms_array['node_name'])
-                ->update(array('table_reporting_active'=>0));  
+                ->delete();  
                 $msg_array[$i0]['line']   = __LINE__; 
                 $msg_array[$i0]['entity']   = $entity;
                 $msg_array[$i0]['fileName'] = $link_parms_array['node_name'];
@@ -989,12 +992,13 @@ class CRHBaseController extends DEHBaseController
                 ->where('node_name',  '=', $link_parms_array['node_name'])
                 ->where('table_reporting_active',  '=', 1)
                 ->get()){
+                    //var_dump($link_parms_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     $updatex = MiscThing::where('record_type',  '=', "table_controller")
                     ->where('node_name',  '=', $link_parms_array['node_name'])
-                    ->update(array('table_reporting_active'=>0));   
+                    ->delete();   
 
                     $msg_array[$i0]['fileName'] = $link_parms_array['node_name'];
-                    $msg_array[$i0]['str1']     = " has been set to inactive ";
+                    $msg_array[$i0]['str1']     = " has been deleted ";
           //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);echo(" ".$entity);
                }
                else {
@@ -1419,7 +1423,7 @@ class CRHBaseController extends DEHBaseController
             );
         //var_dump($view_variables_array);
         //var_dump($parm2_array);
-        $this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);echo(" right before menu0 ");
+        //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);echo(" right before menu0 ");
         
         return view($this->node_name.'.dynamicMenu0')
         //* loop thru the view_variables_array
@@ -1939,7 +1943,7 @@ class CRHBaseController extends DEHBaseController
         //echo $this->model;$this->debug1(__FILE__,__LINE__,__FUNCTION__);
         $executing_distinct = 0;
         $model = $this->node_name;
-        var_dump($field_name_array);
+        //var_dump($field_name_array);
 
         foreach ($field_name_array as $index=>$field_name) {
             //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -2978,28 +2982,26 @@ class CRHBaseController extends DEHBaseController
 
     public function reportDefMenuEdit(REQUEST $request,$id,$what_we_are_doing,$coming_from){
         //$requestFieldsArray=$request->all();
-        //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
 
-        //echo('<br>this is reportDefMenuEdit node: '.$this->node_name);
-        //echo("<br>we moved it to indexReports and then reportDefMenuEdit(here)");
-        //echo("<br>".'* '.$id.' * '.$what_we_are_doing.' * '.$coming_from." ** ");$this->debug_exit(__FILE__,__LINE__,0);
-        //$this->debug3(__FILE__,__LINE__,__FUNCTION__);echo($id.' * '.$what_we_are_doing.' * '.$coming_from); 
+        //echo($id.' * '.$what_we_are_doing.' * '.$coming_from); 
         $miscThing = MiscThing::where('id','=',$id)->get();
         //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
         $working_arrays     = $this->working_arrays_construct($miscThing[0]);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);        
         //$this->debug_exit(__FILE__,__LINE__,10);
+        var_dump($what_we_are_doing);var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
         case "maintain_browse_fields":  
+ 
             switch ($coming_from) {
                 case 'select_fields':
                     var_dump($coming_from);
                     //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     break;
                 case 'reportDefMenuEdit':
-                    var_dump($coming_from);
-                    $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    //var_dump($coming_from);
+                    //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
              //       break;
              //   default:
              //       var_dump($coming_from);
@@ -3013,7 +3015,7 @@ class CRHBaseController extends DEHBaseController
             $to_array = (array) $working_arrays[$what_we_are_doing][$array_name];
             $from_array = array_diff($column_names_array,$to_array);
             //$this->debug_exit(__FILE__,__LINE__,0);var_dump($to_array);
-            var_dump($request->input('encoded_column_names'));
+            //var_dump($request->input('encoded_column_names'));
             //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             return view($this->model_table.'.select_fields'    ,compact('miscThing'))
                 ->with('request'                            ,$request->input('encoded_record'))
@@ -3034,12 +3036,8 @@ class CRHBaseController extends DEHBaseController
                 break;  
         case "ppv_define_query":
         case "ppv_define_business_rules":
-            //var_dump($request[0]);//var_dump($working_arrays);
-            $just_the_ones_we_want = $working_arrays['ppv_define_business_rules']['field_name_array'];
-
-            //unset($modifiable_fields_name_values[$this->snippet_table_key_field_name]);
-            //$requestFieldsArray=$request->all(); // important!!
-            //$this->validate($request, $business_rules);
+            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+ 
 
            //var_dump($just_the_ones_we_want);
            //var_dump($working_arrays['ppv_define_business_rules']['field_name_array']);
@@ -3053,12 +3051,13 @@ class CRHBaseController extends DEHBaseController
                      $just_the_names_array = json_encode($working_arrays['ppv_define_business_rules']['field_name_array']);
                     break;
              }
-
+var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $column_names_array = (array) $this->build_column_names_array($this->model_table);
-            //echo('<br>1042: '.$what_we_are_doing);var_dump($miscThing );   $this->debug_exit(__FILE__,__LINE__,0);   
+            //echo('<br>1042: '.$what_we_are_doing);//var_dump($miscThing );   $this->debug_exit(__FILE__,__LINE__,0);   
             $working_arrays = 
             $this->working_arrays_fixer($working_arrays,$what_we_are_doing);
-            //var_dump($working_arrays [$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,0);
+            //var_dump($working_arrays [$what_we_are_doing]);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
             //echo("rows ".$field_name_array_name);
             $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
@@ -3092,6 +3091,7 @@ class CRHBaseController extends DEHBaseController
             $r_o_array_name         = ($working_arrays[$what_we_are_doing]['field_name_array']['r_o']);
             $r_o_array              = ($working_arrays[$what_we_are_doing][$r_o_array_name]);
             //var_dump($working_arrays[$what_we_are_doing][$r_o_array_name]);var_dump($r_o_array);
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $working_arrays[$what_we_are_doing]['lookups'][1] = 
             array_combine(
                 $working_arrays[$what_we_are_doing]['lookups'][1],
@@ -3100,7 +3100,8 @@ class CRHBaseController extends DEHBaseController
            $value_array_name       = ($working_arrays[$what_we_are_doing]['field_name_array']['value']);
             $value_array            = ($working_arrays[$what_we_are_doing][$value_array_name]);
         
-            //echo ($what_we_are_doing);$this->debug_exit(__FILE__,__LINE__,10);
+            echo ($what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+
             return view($this->model_table.".ppv_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
                ->with('just_the_names_array'                ,$just_the_names_array)
@@ -3120,7 +3121,7 @@ class CRHBaseController extends DEHBaseController
                 ->with('message'                            ,'')
                 ;
         }
-        //var_dump($miscThing);$this->debug_exit(__FILE__,__LINE__,10);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
         ->with('id'                                 ,$id)
@@ -3347,7 +3348,14 @@ class CRHBaseController extends DEHBaseController
            $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
          }
         $what_we_are_doing = $requestFieldsArray['what_we_are_doing'] ;
-        $coming_from = $requestFieldsArray['coming_from'] ;
+
+        if (array_key_exists('coming_from',$requestFieldsArray)) {
+           $coming_from = $requestFieldsArray['coming_from'] ;
+         }
+         else{
+            $coming_from = 'coming_from';//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+         }
+        
         $update = 0;  
         //var_dump ($requestFieldsArray) ;
         //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
@@ -3462,13 +3470,13 @@ class CRHBaseController extends DEHBaseController
                 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                 break; 
             }
+            
             //var_dump($requestFieldsArray);
-
 
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
             //$miscThing1 = compact($miscThing);
             $requestFieldsArray=$request->all(); // important!!
-            //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
@@ -3477,6 +3485,23 @@ class CRHBaseController extends DEHBaseController
                             //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
                             //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                           ;
+                            break;
+                        }
+                case "ppv_define_query":
+                case "ppv_define_business_rules":
+                    switch ($what_we_are_doing) {
+                        case 'ppv_define_query':
+                            echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                            return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
                             ->with('report_definition_id'  ,$this->report_definition_id)
@@ -3594,9 +3619,7 @@ class CRHBaseController extends DEHBaseController
         // originally we did it just for who you were but not, it seems easiest to size them after we get // the existing arrays. 
         // ******
         $working_arrays['groups_to_be_resized']     = array(
-            //'maintain_modifiable_fields'    => 'maintain_modifiable_fields',
-            //'maintain_browse_fields'        => 'maintain_browse_fields',
-           'ppv_define_query'              => 'ppv_define_query',
+            'ppv_define_query'              => 'ppv_define_query',
             'ppv_define_business_rules'     => 'ppv_define_business_rules'
             );
         $working_arrays['advanced_edit_functions']     = array(
@@ -3657,7 +3680,7 @@ class CRHBaseController extends DEHBaseController
        //$working_arrays = $this->working_arrays_fixer($working_arrays,$what_we_are_doing);
         if(!isset($working_arrays['ppv_define_query']['query_field_name_array'])){
             //echo("count xxx".count($working_arrays['ppv_define_query']['query_field_name_array']));
-            $working_arrays = $this->working_arrays_fixer($working_arrays,'fix_ppv_query');
+            $working_arrays = $this->working_arrays_fixer($working_arrays,'ppv_define_query');
             //$this->debug_exit(__FILE__,__LINE__,10);
         }
         else{
@@ -3709,10 +3732,13 @@ class CRHBaseController extends DEHBaseController
     public function working_arrays_fixer($working_arrays,$fix_this) {
         
         //foreach ($ppv_array_names as $what_we_are_doing){
-        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,0);
         switch ($fix_this) {
-           case "fix_ppv_query":
+           case "ppv_define_query":
             $no_of_entries = 5;
+           //var_dump($working_arrays ['ppv_define_query']);//$this->debug_exit(__FILE__,__LINE__,0);
+            //$working_arrays['ppv_define_query']['query_field_name_array'] = array();       
+            //$working_arrays['ppv_define_query']['query_r_o_array'] = array();
+            //$working_arrays['ppv_define_query']['query_value_array'] = array();
             for ($i=0;$i<$no_of_entries;$i++) {
                 $working_arrays['ppv_define_query']['query_field_name_array'][] = 
                 $working_arrays['ppv_define_query']['default_values_array']['field_name'];
@@ -3721,7 +3747,8 @@ class CRHBaseController extends DEHBaseController
                 $working_arrays['ppv_define_query']['query_value_array'][] = 
                 $working_arrays['ppv_define_query']['default_values_array']['value'];
             }
-
+            //var_dump($working_arrays );//$this->debug_exit(__FILE__,__LINE__,0);
+                break;
             case "maintain_browse_fields":           
                 $column_names_array = (array) $this->build_column_names_array($this->model_table);
                 //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,10);

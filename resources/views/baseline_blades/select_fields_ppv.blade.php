@@ -13,10 +13,10 @@
 
 	<?php 
 		//echo"inside select_fields_blade<br>";exit("exit15");
-		$coming_from = "reportDefMenuEdit";
-
+		$coming_from = "select_fields_ppv";
+		//var_dump($miscThing);
 		 
-
+		//exit("at 19");
 	?>
 
 		
@@ -67,8 +67,9 @@
 <div id="admin" style="width:460px;background-color: #aabbcc;">aa
 	
 		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$miscThing->id,$what_we_are_doing,$coming_from]]) !!}
+		 
 		{{ Form::hidden('coming_from',$coming_from) }}
-		
+
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
 		{{ Form::hidden('edit4_option'						,'update_field_list') }}
 		{{ Form::hidden('report_key'						, $miscThing->id) }}
