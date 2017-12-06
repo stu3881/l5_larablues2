@@ -176,7 +176,7 @@ class @@controller_name@@ extends CRHBaseController
     // *****************
     // this initializes the query pointing to the correct model
     // ****************
-    //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
@@ -306,8 +306,9 @@ class @@controller_name@@ extends CRHBaseController
                 // *****
                         var_dump($request->input);//$this->debug_exit(__FILE__,__LINE__,1);
 
-                        return view($this->node_name.'.editUpdate',compact('miscThings'))
-                        ->with('node_name'   ,$this->node_name)            
+                        return view('@@node_name@@'.'.editUpdate',compact('miscThings'))
+                        ->with('node_name'              ,$this->node_name)            
+                        ->with('model'                  ,$this->model)            
                         ->with('passed_to_view_array'   ,$passed_to_view_array);            
                         break;          
             case "edit2_default_update":
@@ -367,10 +368,285 @@ class @@controller_name@@ extends CRHBaseController
                 }
         }   
     }
-    public function xupdateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
+ 
+
+
+    public function model_get_id($model,$id){
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $model = @@model@@::where('id','=',$id)  
+        ->get();
+        return($model);
+        //var_dump($coming_from);
+    }
+
+
+    /*
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $idInput
+     * @return \Illuminate\Http\Response
+     */
+    public function update(REQUEST $request, $id)
+    {
+        //* *********************
+        // the request has every field we need but many we dont
+        // running array_intersect_key against an array of the fields we want
+        // will return an array of ONLY the data we want from the request
+        // **********************
+        
+        
+        $requestFieldsArray=$request->all();
+        //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        if (!array_key_exists('what_we_are_doing',$requestFieldsArray)) {
+           $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
+         }
+        $what_we_are_doing = $requestFieldsArray['what_we_are_doing'] ;
+
+        if (array_key_exists('coming_from',$requestFieldsArray)) {
+           $coming_from = $requestFieldsArray['coming_from'] ;
+         }
+         else{
+            $coming_from = 'coming_from';//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+         }
+        
+        $update = 0;  
+        //var_dump ($requestFieldsArray) ;
+        //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+        //var_dump($requestFieldsArray['encoded_modifiable_fields_array']);$this->debug_exit(__FILE__,__LINE__,10);
+        switch ($what_we_are_doing) {
+          
+           case "editUpdate":
+                $update = 1;
+                // this is the guy that needs validation
+                $just_the_ones_we_want = array_flip((array) json_decode($requestFieldsArray['encoded_modifiable_fields_array']));
+                
+                //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
+                 break; 
+             case "updating_report_definition":
+                break; 
+            case "updating_report_name":
+               $update = 1; 
+               $requestFieldsArray['just_the_names_array'] = array('report_name');
+         
+                $just_the_ones_we_want = $requestFieldsArray['just_the_names_array'] ;
+                $just_the_ones_we_want = array_flip($just_the_ones_we_want);
+                break;  
+
+           case "maintain_modifiable_fields":
+                $update = 1; 
+                //var_dump($requestFieldsArray['field_name_array']);$this->debug_exit(__FILE__,__LINE__,10);
+                //var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+                $requestFieldsArray['modifiable_fields_array'] = 
+                json_encode(array_combine($request->to,$request->to));
+                //* ******************
+                $objectOrArray = "array";
+                $this->blade_gen_browse_select($id,$objectOrArray);
+                $just_the_ones_we_want = array(
+                    'modifiable_fields_array'=> 'modifiable_fields_array'
+                    );
+                break;  
+
+            case "maintain_browse_fields":           
+                $update = 1; 
+                $requestFieldsArray['browse_select_array'] = 
+                json_encode(array_combine($request->to,$request->to));
+                $objectOrArray = "array";
+                $this->blade_gen_browse_select($id,$objectOrArray);
+                $just_the_ones_we_want = array('browse_select_array'=> 'browse_select_array');
+                break;  
+            case "ppv_define_query":
+                $update = 1; 
+                $new_r_o_array = $request->r_o_array;
+                if(is_numeric($request->r_o_array[0])){
+                    $new_r_o_array = array();
+                    $query_relational_operators_array = $this->build_query_relational_operators_array();
+                    foreach ($request->r_o_array as $index=>$value){
+                        $new_r_o_array[] =
+                        $query_relational_operators_array[$value];
+                    }
+                }
+                $requestFieldsArray = array(
+                    'query_field_name_array'    => json_encode($request->field_name_array),
+                    'query_r_o_array'           => json_encode($new_r_o_array),
+                    'query_value_array'         => json_encode($request->value_array)
+                    );
+                $just_the_ones_we_want = $requestFieldsArray;
+
+                break;  
+            case "ppv_define_business_rules":
+                echo(__FILE__.__LINE__.'<br>');//exit();
+                $update = 1; 
+                //var_dump($request);//var_dump($working_arrays);
+ 
+
+                $requestFieldsArray['business_rules']             = 
+                $this->build_validation_array(
+                    $this->build_business_rules_relational_operators(),
+                    $request->field_name_array,
+                    $request->r_o_array,
+                    $request->value_array);
+                $business_rules = $requestFieldsArray['business_rules'];
+                $request->business_rules = json_encode($requestFieldsArray['business_rules']);
+                $requestFieldsArray['business_rules'] = 
+                    json_encode($requestFieldsArray['business_rules']);
+                $requestFieldsArray['business_rules_field_name_array']    = 
+                    json_encode($request->field_name_array);
+                $requestFieldsArray['business_rules_r_o_array'] = 
+                    json_encode($request->r_o_array);
+                $requestFieldsArray['business_rules_value_array'] = 
+                    json_encode($request->value_array);
+
+
+                $just_the_ones_we_want = (array) json_decode($requestFieldsArray['just_the_names_array']);
+                $just_the_ones_we_want = array_flip($just_the_ones_we_want);
+                 //echo(' array_intersect_key($requestFieldsArray,$arr2 ' );var_dump($arr2);            $this->debug_exit(__FILE__,__LINE__,10);
+                break;  
+        } 
+        //$requestFieldsArray=$request->all(); // create an array of all fields on the form
+        //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
+        // ******
+       // update
+       // ******
+        if ($update){  
+            $requestFieldsArray = array_intersect_key($requestFieldsArray,
+            $just_the_ones_we_want);
+            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+            //$validation_array = json_decode($encoded_business_rules);
+            switch ($request->what_we_are_doing) {
+             case "editUpdate":
+                // this is the guy that needs validation
+                $rules_array =  (array) json_decode($request->encoded_business_rules);
+                //var_dump($rules_array);
+                //$this->debug_exit(__FILE__,__LINE__,10);
+                $this->validate($request,$rules_array);
+                //var_dump($just_the_ones_we_want);//var_dump($request);
+                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                break; 
+            }
+            
+            //var_dump($requestFieldsArray);
+            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
+
+            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            switch ($what_we_are_doing) {
+                case 'maintain_modifiable_fields':
+                case 'maintain_browse_fields':
+                    switch ($coming_from) {
+                        case 'select_fields':
+                            //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                           return view('@@node_name@@'.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                           ;
+                            break;
+                        }
+                case "ppv_define_query":
+                case "ppv_define_business_rules":
+                    switch ($what_we_are_doing) {
+                        case 'ppv_define_query':
+                            echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                           ;
+                            break;
+                        }
+
+                    var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                   return redirect()->route('@@node_name@@.browseEdit', 
+                        ['id' => $request['report_definition_key'],
+                        'what_we_are_doing' => 'what_we_are_doing',
+                        'coming_from' => 'editUpdate'
+                        ]);
+                    break;
+ 
+                default:
+                    var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                 
+                    return redirect()->route('@@node_name@@.browseEdit', 
+                        ['id' => $request['report_definition_key'],
+                        'what_we_are_doing' => 'what_we_are_doing',
+                        'coming_from' => 'editUpdate'
+                        ]);
+                    break;
+                }
+ 
+            }
+        if (!$update) {
+
+            var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,10);
+            if ((isset($request->what_we_are_doing)&&$request->what_we_are_doing == 'updating_data_record') ){
+                $business_rules = json_decode($requestFieldsArray['wxyz'],1 );
+                var_dump($business_rules);$this->debug_exit(__FILE__,__LINE__,0);
+                $modifiable_fields_array = json_decode($request->encoded_modifiable_fields_array,1);
+                $modifiable_fields_name_values = array_intersect_key($requestFieldsArray, $modifiable_fields_array);
+                unset($modifiable_fields_name_values[$this->snippet_table_key_field_name]);
+                $requestFieldsArray=$request->all(); // important!!
+                $this->validate($request, $business_rules);
+                 // valid past here
+                $update = 0; 
+                    $miscThingsings=MiscThing::find($id);
+                    $miscThingsings->update($modifiable_fields_name_values);
+                    return redirect('admin/miscThings')
+                       ->with('message'      , 'ok ');
+            }
+        }
+
+                return redirect('admin/miscThings')
+                ->with('message'      , 'record updated ');
+    }
+
+    public function updateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
+        $AllrequestFieldsArray=$request->all(); // important!!
+        //var_dump($requestFieldsArray);
+        //var_dump($AllrequestFieldsArray);
+        
+        //var_dump($request->request->parameters);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$coming_from = "";
+        if($AllrequestFieldsArray['coming_from'] == 'select_fields'){
+        $query_result = MiscThing::where($key_field_name,  '=', $id)
+        ->update($requestFieldsArray);
+
+        }
+        else {
+        $query_result = @@model@@::where($key_field_name,  '=', $id)
+        ->update($requestFieldsArray);
+        //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
+        //->get();
+        //$Maillist1 = compact($Maillist);
+        var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route(@@node_name@@.'.browseEdit', 
+            ['id' => $AllrequestFieldsArray['report_definition_key'],
+            'what_we_are_doing' => 'what_we_are_doing',
+            'coming_from' => 'editUpdate'
+            ]);
+         var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //return $Maillist;
+        }
+    }
+
+
+    public function xxupdateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
             $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
             ->update($requestFieldsArray);
             $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
+
             ->get();
             //$@@model@@1 = compact($@@model@@);
             var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);

@@ -174,3 +174,58 @@
 {{ Form::text('value_array[]', $value_array[15]) }}
 </td>
 </tr>
+<tr>
+<td style='text-align:left'>
+{{ Form::select('field_name_array[]', $first_lookup_array,$field_name_array[16]) }}
+</td>
+<td style="text-align:left">
+{{ Form::select('r_o_array[]', $second_lookup_array,$r_o_array[16]) }}
+</td>
+<td style="text-align:left">
+{{ Form::text('value_array[]', $value_array[16]) }}
+</td>
+</tr>
+<tr>
+<td style='text-align:left'>
+{{ Form::select('field_name_array[]', $first_lookup_array,$field_name_array[17]) }}
+</td>
+<td style="text-align:left">
+{{ Form::select('r_o_array[]', $second_lookup_array,$r_o_array[17]) }}
+</td>
+<td style="text-align:left">
+{{ Form::text('value_array[]', $value_array[17]) }}
+</td>
+</tr>
+<tr>
+<td style='text-align:left'>
+{{ Form::select('field_name_array[]', $first_lookup_array,$field_name_array[18]) }}
+</td>
+<td style="text-align:left">
+{{ Form::select('r_o_array[]', $second_lookup_array,$r_o_array[18]) }}
+</td>
+<td style="text-align:left">
+{{ Form::text('value_array[]', $value_array[18]) }}
+</td>
+</tr>
+<tr>
+<td style='text-align:left'>
+{{ Form::select('field_name_array[]', $first_lookup_array,$field_name_array[19]) }}
+</td>
+<td style="text-align:left">
+{{ Form::select('r_o_array[]', $second_lookup_array,$r_o_array[19]) }}
+</td>
+<td style="text-align:left">
+{{ Form::text('value_array[]', $value_array[19]) }}
+</td>
+</tr>
+<tr>
+<td style='text-align:left'>
+{{ Form::select('field_name_array[]', $first_lookup_array,$field_name_array[20]) }}
+</td>
+<td style="text-align:left">
+{{ Form::select('r_o_array[]', $second_lookup_array,$r_o_array[20]) }}
+</td>
+<td style="text-align:left">
+{{ Form::text('value_array[]', $value_array[20]) }}
+</td>
+</tr>

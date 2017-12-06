@@ -1817,14 +1817,11 @@ class CRHBaseController extends DEHBaseController
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        //var_dump($request);  //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($request);  //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         $report_definition          = $this->execute_query_by_report_no($id) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
-
-        //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
-
         $working_arrays             = $this->working_arrays_construct($report_definition[0]);
-        //var_dump($working_arrays);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($this->model);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
         $query_relational_operators_array = $this->build_query_relational_operators_array();
         
@@ -1894,7 +1891,7 @@ class CRHBaseController extends DEHBaseController
     // *****************
     // this initializes the query pointing to the correct model
     // ****************
-        $this->debug1(__FILE__,__LINE__,__FUNCTION__);
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         switch ($distinct_regular) { 
             case "distinct":
                 $query = MiscThing::distinct()->select($field_name);
@@ -2111,7 +2108,7 @@ class CRHBaseController extends DEHBaseController
         $array = array();
        
         $array ['browse_select_display_snippet']            = "";
-        $array ['browse_select_array']                                  = json_encode($nv_array);
+        $array ['browse_select_array']                  = json_encode($nv_array);
         $array ['merge_browse_select_and_modify_arrays']= json_encode(array_merge ((array) $_REQUEST["to"],$this->generated_snippets_array['modifiable_fields_array']));
         $array ['lookup_name_value_array_gen_by_table'] = json_encode($this->lookup_name_value_array_gen_by_table($this->model_table));
         //print_r($array);exit("exit 184");
@@ -2191,8 +2188,7 @@ class CRHBaseController extends DEHBaseController
             ', report_definition_key: '.$report_definition_key);
         if (!empty($what_we_are_doing)) {
             //$this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
-
-            $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
+            $report_definition  = $this->model_get_id($this->snippet_model,$report_definition_key);
             $working_arrays     = $this->working_arrays_construct($report_definition[0]);
             switch ($what_we_are_doing) { 
                 case "klone_record":
@@ -2203,6 +2199,7 @@ class CRHBaseController extends DEHBaseController
                 case "edit2new":
                 case "edit2_default_edit":
                 case "editing_a_data_record":
+                    $this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
                     //$request->input('data_key');
                     //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,0);
                     //$report_definition  = $this->execute_query_by_report_no($id);
@@ -2214,14 +2211,13 @@ class CRHBaseController extends DEHBaseController
                     $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
                     //$lookups_array = $this->bld_name_value_lookup_array('shows');
                     $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
-                    var_dump($id); 
+                    //var_dump($id); 
                     //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-
-                    $MiscThing  = MiscThing::where('id','=',$id)->get();
+                    $MiscThing  = $this->model_get_id($this->model,$id);
+                    //$MiscThing  = MiscThing::where('id','=',$id)->get();
                     if($MiscThing){
                         $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                       //echo('id' .$id);
+                      //echo('id' .$id);
                        //var_dump($MiscThing[0]);
                        //var_dump($modifiable_fields_array);
                         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -2263,11 +2259,13 @@ class CRHBaseController extends DEHBaseController
                 // *****
                 // return to view
                 // *****
-                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                        //var_dump($this->model);
 
+                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                         return view($this->node_name.'.editUpdate',compact('miscThings'))
-                        ->with('node_name'   ,$this->node_name)            
-                       ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                        ->with('model'              ,$this->model)            
+                        ->with('node_name'          ,$this->node_name)            
+                       ->with('passed_to_view_array',$passed_to_view_array);            
                         break;          
                 case "edit2_default_update":
                 //case "updating_data_record": // defined in editUpdate
@@ -2883,7 +2881,21 @@ class CRHBaseController extends DEHBaseController
      *
      */
        
-  
+    public function model_get_id($model,$id){
+        //echo ("modelx ".$model);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        switch ($model) {
+            case 'MiscThing':
+                $model_get_id = MiscThing::where('id','=',$id)  
+                ->get();
+                break;
+            case model:
+                $model_get_id = $model::where('id','=',$id)  
+                ->get();
+                break;
+         }
+        return $model_get_id;
+    }
+
 
     public function ppv_edit_snippet_gen($no_of_rows){
         //echo(" ppv_edit_snippet_gen ".$no_of_rows."<br>");$this->debug_exit(__FILE__,__LINE__,0);
@@ -2921,13 +2933,33 @@ class CRHBaseController extends DEHBaseController
         }  // end for
         return $strx;       
     }
+    public function recreate_snippet_file(
+        $modifiable_fields_array,
+        $lookups_array,
+        $array1,
+        $report_definition_key
+        ){                 
+
+
+        $snippet_string = $this->snippet_gen_modifiable_fields(
+            $modifiable_fields_array,
+            $lookups_array,
+            $array1);                   
+        //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_definition_key.'_snippet_string.blade.php';
+       //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
+        $this->write_file_from_string($fnam,$snippet_string);
+        return $snippet_string;
+        //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
+
+     }
 
     public function return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array) {
         //var_dump($what_we_are_doing);//$this->debug_exit(__FILE__,__LINE__,1);
         //var_dump($modifiable_fields_array);$this->debug_exit(__FILE__,__LINE__,1);
 
         $array1 = array();
-        if (is_null($modifiable_fields_array)){ echo "858";
+        if (is_null($modifiable_fields_array)){ echo "null modifiable_fields_array";
             return $array1;
         }
          switch ($what_we_are_doing) { 
@@ -2943,18 +2975,14 @@ class CRHBaseController extends DEHBaseController
                 case "editing_a_data_record":
                 case "edit2_default_edit":
                 case "edit2new":
-                    $db_result  = MiscThing::where('id','=',$id)->get();
+
+                    //echo($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    //$db_result  = MiscThing::where('id','=',$id)->get();
+                    $db_result  = $this->model_get_id($this->model,$id);
                     $working_arrays = $this->working_arrays_construct($db_result[0]);
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
 
-                   //var_dump($working_arrays);echo(__FILE__.__LINE__);exit();
-                    /*
-                   foreach ($db_result as $name=> $value) {
-                        $array1[$value] = $db_result->$value;
-                    }
-                    */
-                   //var_dump($db_result->items[0]);
-                   //$this->debug_exit(__FILE__,__LINE__,1);
+
                    $array1 = array();
                    if (is_null($modifiable_fields_array)){
                         return $array1;
@@ -2989,14 +3017,14 @@ class CRHBaseController extends DEHBaseController
         $working_arrays     = $this->working_arrays_construct($miscThing[0]);
         //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,10);        
         //$this->debug_exit(__FILE__,__LINE__,10);
-        var_dump($what_we_are_doing);var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($what_we_are_doing);var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
     switch ($what_we_are_doing) {
         case "maintain_modifiable_fields":
         case "maintain_browse_fields":  
  
             switch ($coming_from) {
                 case 'select_fields':
-                    var_dump($coming_from);
+                    //var_dump($coming_from);
                     //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     break;
                 case 'reportDefMenuEdit':
@@ -3016,7 +3044,7 @@ class CRHBaseController extends DEHBaseController
             $from_array = array_diff($column_names_array,$to_array);
             //$this->debug_exit(__FILE__,__LINE__,0);var_dump($to_array);
             //var_dump($request->input('encoded_column_names'));
-            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+            var_dump($array_name);//$this->debug_exit(__FILE__,__LINE__,1);
             return view($this->model_table.'.select_fields'    ,compact('miscThing'))
                 ->with('request'                            ,$request->input('encoded_record'))
                 ->with('what_we_are_doing'                  ,$what_we_are_doing)
@@ -3024,6 +3052,7 @@ class CRHBaseController extends DEHBaseController
                 ->with('from_array'                         ,$from_array)
                 ->with('to_array'                           ,$to_array)
                 ->with('node_name'                          ,$this->node_name)
+                ->with('model'                              ,$this->model)
                 ->with('model_table'                        ,$this->model_table)
                 ->with('encoded_record'                     ,$request->input('encoded_record'))
                 ->with('encoded_column_names'               ,$request->input('encoded_column_names'))
@@ -3306,23 +3335,15 @@ var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTI
     }
 
     public function updateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
-          //var_dump($request);
+          
+        //$requestFieldsArray=$request->all(); // important!!
+        var_dump($requestFieldsArray);
             //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $miscThing = MiscThing::where($key_field_name,  '=', $id)
             ->update($requestFieldsArray);
             $miscThing = MiscThing::where($key_field_name,  '=', $id)
             ->get();
-            //$miscThing1 = compact($miscThing);
-            /*
-            var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
- 
-
-            return redirect()->route('miscThings.browseEdit', 
-                ['id' => $request['report_definition_key'],
-                'what_we_are_doing' => 'what_we_are_doing',
-                'coming_from' => 'editUpdate'
-                ]);
-                */
+            return($miscThing);
             }
 
 
@@ -3472,11 +3493,10 @@ var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTI
             }
             
             //var_dump($requestFieldsArray);
-
+            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
-            //$miscThing1 = compact($miscThing);
-            $requestFieldsArray=$request->all(); // important!!
-            var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+
+            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
@@ -3490,6 +3510,7 @@ var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTI
                             ->with('report_definition_id'  ,$this->report_definition_id)
                             ->with('model'                 ,$this->model)
                             ->with('node_name'             ,$this->node_name)
+
                             ->with('what_we_are_doing'     ,'updating_report_name')
                             ->with('coming_from'           ,$coming_from)
                            ;
@@ -3522,7 +3543,8 @@ var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTI
                     break;
  
                 default:
-                    
+                    //var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                 
                     return redirect()->route('miscThings.browseEdit', 
                         ['id' => $request['report_definition_key'],
                         'what_we_are_doing' => 'what_we_are_doing',

@@ -32,8 +32,12 @@
 <?php 
 /* */
 
-	//var_dump($passed_to_view_array);exit("in editUpdate exit 36"); 	
-	$node_name 							= $passed_to_view_array['report_definition']->node_name;
+	//var_dump($passed_to_view_array['edit_snippet_file_name']);
+
+	//var_dump($passed_to_view_array);
+//var_dump($model);
+//exit("in editUpdate exit 36"); 	
+	//$node_name 							= $passed_to_view_array['report_definition']->node_name;
 	$report_name 						= $passed_to_view_array['report_definition']->report_name;
 	$report_definition_key 				= $passed_to_view_array['report_definition_key'];
 	$snippet_name 						= $passed_to_view_array['snippet_name'];
@@ -51,8 +55,8 @@
 	//$coming_from 				= Input::get('coming_from');
 	//$generated_files_folder 	= 'generated_files';
  
-
-
+//echo('node_name '.$node_name);
+//exit(" in editUpdate exit 57"); 	
 
  
 ?>
@@ -66,18 +70,13 @@
 		{{ $passed_to_view_array['report_definition']->model_table }}
 
 	
-		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$passed_to_view_array['id']]]) !!}
-		{{-- Form::hidden('encoded_business_rules',$encoded_business_rules) --}}
-
-		{{ Form::hidden('id'							,$passed_to_view_array['id']) }}
-		{{-- Form::hidden('encoded_business_rules'		,$passed_to_view_array['encoded_business_rules']) --}}
+		{!! Form::model($model,['method' => 'PUT','route'=>[$node_name.'.update',$passed_to_view_array['id']]]) !!}
+		{{ Form::hidden('coming_from'				,'editUpdate_data_record') }}
+		{{ Form::hidden('what_we_are_doing'			,'editUpdate') }}
+		{{ Form::hidden('id'						,$passed_to_view_array['id']) }}
+		{{ Form::hidden('report_definition_key'					
+										,$passed_to_view_array['report_definition_key']) }}	
 		{{ Form::hidden('encoded_modifiable_fields_array'							,$passed_to_view_array['encoded_modifiable_fields_array']) }}
-
-		{{ Form::hidden('coming_from'						,$passed_to_view_array['coming_from']) }}
-		{{ Form::hidden('report_definition_key'				,$passed_to_view_array['report_definition_key']) }}
-		
-		
-		{{ Form::hidden('what_we_are_doing'					,'editUpdate') }}
 
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->

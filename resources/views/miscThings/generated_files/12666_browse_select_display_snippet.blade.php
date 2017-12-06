@@ -4,9 +4,9 @@
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->id) }}
+{{ Form::label('', $record->report_name) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->report_name) }}
+{{ Form::label('', $record->id) }}
 </td>

@@ -14,3 +14,11 @@
 {{ Form::text('Email',$record['Email']) }}
 </td>
 </tr>
+<tr>
+<td style="text-align:left">
+{{ Form::label("Address","Address") }}
+</td>
+<td style="text-align:left">
+{{ Form::text('Address',$record['Address']) }}
+</td>
+</tr>

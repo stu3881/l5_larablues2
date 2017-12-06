@@ -15,9 +15,13 @@
     // *****
     // these are common to all the routes that follow for this controller
     // *****
-    $node_name              = "tasks_blues";
+    //$node_name              = 'miscThings';
+    //$model                  = 'miscThing';
+    //$controller_name        = 'MiscThingsController';
+
+    $controller_name        = "Tasks_bluesController"; 
     $model                  = "Tasks_blue";
-    $controller_name        = "Tasks_bluesController";
+    $node_name              = "tasks_blues";
 
     $what_we_are_doing      = "what_we_are_doing"; // needs to be defined here
     $coming_from            = "coming_from";  // needs to be defined here
@@ -31,6 +35,15 @@
         //.'/{'.$modifiable_fields_array.'}'
         .'/'.$method_name,
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+   //*
+    $method_name            = "activateDeactivate";
+    Route::get('admin/'.$node_name
+        .'/{'.$model.'}'
+        .'/{'.$what_we_are_doing.'}'
+        .'/{'.$coming_from.'}'
+        .'/'.$method_name, 
+        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+     //*
     //*
     $method_name            = "browseEdit";
     Route::get('admin/'.$node_name
@@ -54,6 +67,10 @@
       //*
     $method_name            = "indexReports";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.'{'.$reportDefinitionKey.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
+    $method_name            = "update";
+    Route::PUT('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+
      //*
     $method_name            = "ppvEdit";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -62,7 +79,7 @@
     Route::get('admin/'.$node_name.'/{'.$model.'}/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
      //*
     $method_name            = "reportDefMenuEdit";
-    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+    Route::GET('admin/'.$node_name.'/{'.$model.'}'.'/{'.$what_we_are_doing.'}'.'/{'.$coming_from.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
      //*
     $method_name            = "create";
     Route::get('admin/'.$node_name.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
@@ -71,15 +88,6 @@
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
-     //*
-    $method_name            = "show";
-    Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-     //*
-    $method_name            = "update";
-    Route::PUT('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
-     //*
-    $method_name            = "destroy";
-    Route::DELETE('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
-        array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
+    $method_name            = "delete";
+    Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
+

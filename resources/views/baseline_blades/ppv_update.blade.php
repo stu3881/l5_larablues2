@@ -49,6 +49,9 @@
 		{!! Form::model('MiscThing',[
 		'method' => 'PUT',
 		'route'=>[$node_name.'.update',$miscThing[0]->id,$what_we_are_doing,$coming_from]]) !!}
+
+		{{ Form::hidden('coming_from'				,'ppv_update') }}
+
 		@if($what_we_are_doing == "ppv_define_query")	
 			{{ Form::hidden('what_we_are_doing'	, "ppv_define_query") }}
 			{{ Form::hidden('query_field_name_array', "") }}
