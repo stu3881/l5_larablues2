@@ -45,6 +45,8 @@
 	//$encoded_business_rules 			= $passed_to_view_array['encoded_business_rules'];
 	$encoded_report_definition 			= $passed_to_view_array['encoded_report_definition'];
 	$encoded_modifiable_fields_array 	= $passed_to_view_array['encoded_modifiable_fields_array'];
+	$encoded_business_rules 			= $passed_to_view_array['encoded_business_rules'];
+
 	$snippet_string 					= $passed_to_view_array['snippet_string'];
 	$data_array_name 					= $passed_to_view_array['record'];
 	$lookups		 					= $passed_to_view_array['lookups_array'];
@@ -72,6 +74,7 @@
 	
 		{!! Form::model($model,['method' => 'PUT','route'=>[$node_name.'.update',$passed_to_view_array['id']]]) !!}
 		{{ Form::hidden('coming_from'				,'editUpdate_data_record') }}
+		{{ Form::hidden('encoded_business_rules'	,$encoded_business_rules) }}
 		{{ Form::hidden('what_we_are_doing'			,'editUpdate') }}
 		{{ Form::hidden('id'						,$passed_to_view_array['id']) }}
 		{{ Form::hidden('report_definition_key'					

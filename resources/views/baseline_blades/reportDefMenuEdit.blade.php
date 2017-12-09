@@ -57,7 +57,8 @@
 		for table {{$node_name}}
 		 {{ csrf_field() }}
   
-		 {!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$id,$what_we_are_doing,$coming_from]]) !!}
+		{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$id,$what_we_are_doing,$coming_from]]) !!}
+		{{ Form::hidden('coming_from'				,'reportDefMenuEdit') }}
 		
 		<p>		
 		<div id="div_inside_update_active_tasks" >	<!--div_inside_update_active_tasks -->

@@ -38,6 +38,7 @@ class @@controller_name@@ extends CRHBaseController
         $model_table                    = "@@model_table@@",         
         $model                          = "@@model@@", 
         $node_name                      = "@@node_name@@", 
+        $snippet_model                  = "MiscThing",
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -76,6 +77,7 @@ class @@controller_name@@ extends CRHBaseController
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
+        $this->snippet_model                    = $snippet_model;
 
         $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
         //$link_parms_array = array(
@@ -226,18 +228,41 @@ class @@controller_name@@ extends CRHBaseController
         $what_we_are_doing, 
         $coming_from,
         $report_definition_key){
-        echo("<br> mgeditUpdate... ".
-            ' what_we_are_doing: '. $what_we_are_doing.
-            ", id: ".$id.
-            ', coming_from: '.$coming_from.
-            ', report_definition_key: '.$report_definition_key);
-        //$this->debug_exit(__FILE__,__LINE__,10);
-        //var_dump($request);
-        //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
+        // ************
+        // this guy has to get the report definition so he can find which fields can be 
+        // updated.
+        // then, she has to get record she selected so we can start with their current values
+        // ************
+        echo("<br> generated editUpdate... ".
+            '<br> what_we_are_doing: '. $what_we_are_doing.
+            "<br>, id: ".$id.
+            '<br>, coming_from: '.$coming_from.
+            '<br>, report_definition_key: '.$report_definition_key);
+        $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         if (!empty($what_we_are_doing)) {
-            //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
-            $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
-            $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+            switch ($coming_from) {
+                case "browseEdit":
+                    // ******************
+                    // GET SNIPPET RECORD
+                    // ******************
+                    $report_definition  = $this->model_get_id($this->snippet_model,$report_definition_key);
+                    $working_arrays = $this->working_arrays_construct($report_definition[0]);
+
+                    $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
+                    $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
+                    $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
+                    $lookups_array = $this->bld_name_value_lookup_array('shows');
+                    $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
+
+                    //var_dump($working_arrays);
+                    //echo($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    break;
+                default :
+                    //$report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
+                    $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    $working_arrays     = $this->working_arrays_construct($report_definition[0]);
+                    break;
+                }
             switch ($what_we_are_doing) { 
 
                 case "klone_record":
@@ -247,41 +272,33 @@ class @@controller_name@@ extends CRHBaseController
                 case "edit2_default_add":
                 case "edit2new":
                 case "edit2_default_edit":
-                case "editing_a_data_record":
-                    //$request->input('data_key');
-                    //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,0);
-                    //$report_definition  = $this->execute_query_by_report_no($id);
-                    $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
-
-                    $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
-                    //var_dump($modifiable_fields_array); $this->debug_exit(__FILE__,__LINE__,10);
-
-                    $fieldname_name_value_array = $this->bld_name_value_lookup_array($this->model_table);
-                    //$lookups_array = $this->bld_name_value_lookup_array('shows');
-                    $lookups_array = array_merge($lookups_array,$fieldname_name_value_array);
-                    //var_dump($report_definition_key); $this->debug_exit(__FILE__,__LINE__,1);
-
-                    $MiscThing  = MiscThing::where('id','=',$id)->get();
+  
+                case "editUpdate_data_record":
+                    // ***************
+                    // GET DATA RECORD
+                    // ***************
+                    $MiscThing  = $this->model_get_id($this->model,$id);
                     if($MiscThing){
-                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        $array1  = $this->return_modifiable_fields_array($what_we_are_doing,$id,$modifiable_fields_array); 
-                       //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
-                        $snippet_string = $this->snippet_gen_modifiable_fields(
+                        echo($coming_from."**" . $what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                        $requestFieldsArray = $MiscThing->all(); 
+                        $array1 = array_intersect_key($requestFieldsArray[0]['attributes'],
+                        (array) $modifiable_fields_array);
+                        //var_dump($array1);
+                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);echo(' id: ' .$id);
+                         $snippet_string = $this->recreate_snippet_file(
                             $modifiable_fields_array,
                             $lookups_array,
-                            $array1);                   }   
+                            $array1,
+                            $report_definition_key
+                        );                   
 
 
-                        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
-                       //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
-                        $this->write_file_from_string($fnam,$snippet_string);
-    
-
-                        $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$MiscThing[0]->id.'_snippet_string';
+                        $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_snippet_string';
                         //$edit_snippet_file_name = $fnam;
                         //debug_exit(__FILE__,__LINE__,1);   
                         $passed_to_view_array                                   = array();
+                        $passed_to_view_array['record']                         = $array1;
+
                         $passed_to_view_array['edit_snippet_file_name']         = $edit_snippet_file_name;
                         $passed_to_view_array['id']                             = $id;
                         $passed_to_view_array['report_definition_key']          = $report_definition_key;
@@ -295,8 +312,7 @@ class @@controller_name@@ extends CRHBaseController
                         $passed_to_view_array['encoded_business_rules']                           = 
                             ($report_definition[0]['business_rules']);
                         $passed_to_view_array['report_definition']              = $report_definition[0];
-                        $passed_to_view_array['record']                         = $MiscThing[0];
-                        $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
+                         $passed_to_view_array['encoded_report_definition']      = json_encode($report_definition[0]);       
                         $passed_to_view_array['snippet_string']                 = $snippet_string;      
                         $passed_to_view_array['lookups_array']                  = $lookups_array;       
                         //echo("*".$request->input('coming_from')."*");$this->debug_exit(__FILE__,__LINE__,0);
@@ -304,12 +320,13 @@ class @@controller_name@@ extends CRHBaseController
                 // *****
                 // return to view
                 // *****
-                        var_dump($request->input);//$this->debug_exit(__FILE__,__LINE__,1);
+                        //var_dump($passed_to_view_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
                         return view('@@node_name@@'.'.editUpdate',compact('miscThings'))
-                        ->with('node_name'              ,$this->node_name)            
-                        ->with('model'                  ,$this->model)            
-                        ->with('passed_to_view_array'   ,$passed_to_view_array);            
+                        ->with('node_name'   ,$this->node_name)            
+                        ->with('model'   ,$this->model)            
+                        ->with('passed_to_view_array'   ,$passed_to_view_array);  
+                        }          
                         break;          
             case "edit2_default_update":
             //case "updating_data_record": // defined in editUpdate
@@ -353,7 +370,7 @@ class @@controller_name@@ extends CRHBaseController
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
-                }
+                    }
 
 
                 return redirect('admin/'.$this->node_name.'/edit1')
@@ -365,19 +382,32 @@ class @@controller_name@@ extends CRHBaseController
                         echo("<br>"."what we are doing is improperly assigned");
                         $this->debug_exit(__FILE__,__LINE__,1);
                         break;
-                }
+                
         }   
     }
+}
  
 
-
     public function model_get_id($model,$id){
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        $model = @@model@@::where('id','=',$id)  
-        ->get();
-        return($model);
-        //var_dump($coming_from);
+        echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        switch ($model) {
+            case $this->snippet_model:
+                //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                $model_get_id = MiscThing::where('id','=',$id)  
+                ->get();
+                break;
+            case $this->model:
+        
+                //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                $model_get_id = @@model@@::where('id','=',$id)  
+                ->get();
+                break;
+         }
+        //var_dump($model_get_id[0]);//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //echo ("<br/>"." xit model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+       return $model_get_id;
     }
+
 
 
     /*
@@ -511,22 +541,19 @@ class @@controller_name@@ extends CRHBaseController
         if ($update){  
             $requestFieldsArray = array_intersect_key($requestFieldsArray,
             $just_the_ones_we_want);
-            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+            //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
             //$validation_array = json_decode($encoded_business_rules);
             switch ($request->what_we_are_doing) {
              case "editUpdate":
-                // this is the guy that needs validation
                 $rules_array =  (array) json_decode($request->encoded_business_rules);
-                //var_dump($rules_array);
-                //$this->debug_exit(__FILE__,__LINE__,10);
-                $this->validate($request,$rules_array);
-                //var_dump($just_the_ones_we_want);//var_dump($request);
                 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                $this->validate($request,$rules_array);
+                // you'll redirect if validation fails
                 break; 
             }
             
             //var_dump($requestFieldsArray);
-            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
             //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -552,6 +579,7 @@ class @@controller_name@@ extends CRHBaseController
                 case "ppv_define_query":
                 case "ppv_define_business_rules":
                     switch ($what_we_are_doing) {
+                        case "ppv_define_business_rules":
                         case 'ppv_define_query':
                             echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
@@ -619,7 +647,8 @@ class @@controller_name@@ extends CRHBaseController
         //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$coming_from = "";
-        if($AllrequestFieldsArray['coming_from'] == 'select_fields'){
+        if($AllrequestFieldsArray['coming_from'] == 'select_fields'||
+        $AllrequestFieldsArray['coming_from'] == 'ppv_update'){
         $query_result = MiscThing::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
 
@@ -631,7 +660,7 @@ class @@controller_name@@ extends CRHBaseController
         //->get();
         //$Maillist1 = compact($Maillist);
         var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-        return redirect()->route(@@node_name@@.'.browseEdit', 
+        return redirect()->route('@@node_name@@'.'.browseEdit', 
             ['id' => $AllrequestFieldsArray['report_definition_key'],
             'what_we_are_doing' => 'what_we_are_doing',
             'coming_from' => 'editUpdate'
@@ -640,24 +669,6 @@ class @@controller_name@@ extends CRHBaseController
         //return $Maillist;
         }
     }
-
-
-    public function xxupdateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
-            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
-            ->update($requestFieldsArray);
-            $@@model@@ = @@model@@::where($key_field_name,  '=', $id)
-
-            ->get();
-            //$@@model@@1 = compact($@@model@@);
-            var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
- 
-            return redirect()->route('@@model@@.browseEdit', 
-                ['id' => $request['report_definition_key'],
-                'what_we_are_doing' => 'what_we_are_doing',
-                'coming_from' => 'editUpdate'
-                ]);
-            }
-
 
      public function destroy($id)
     {

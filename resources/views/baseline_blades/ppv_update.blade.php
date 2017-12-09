@@ -86,7 +86,7 @@
 				   		<a href="{{ URL::route($miscThing[0]->node_name.'.indexReports', 
 					   		$parameters = array(
 					   		'id'=>$miscThing[0]->id,
-			   				'reportDefinitionKey'=>$report_definition_id
+			   				'reportDefinitionKey'=>$miscThing[0]->id
 			   				)
 		   				) }}" class="btn mycart-btn-row2">Reports menu</a>
 					</td>

@@ -73,7 +73,8 @@
 		{{ Form::hidden('coming_from'						,'select_fields') }}
 		{{ Form::hidden('what_we_are_doing'					,$what_we_are_doing) }}
 		{{ Form::hidden('edit4_option'						,'update_field_list') }}
-		{{ Form::hidden('report_key'						, $miscThing[0]->id) }}
+		{{-- Form::hidden('report_key'						, $miscThing[0]->id) --}}
+		{{ Form::hidden('report_key'						, $report_definition_id) }}
 		@if($what_we_are_doing == "maintain_browse_fields")	
 			{{ Form::hidden('browse_select_array'		, "") }}
 		@endif						

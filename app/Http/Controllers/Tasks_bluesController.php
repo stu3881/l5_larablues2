@@ -72,13 +72,12 @@ class Tasks_bluesController extends CRHBaseController
         $this->db_snippet_connection           = $db_snippet_connection;
         //$this->db_snippet_connection           = "";
        
-        $this->snippet_model                    = $snippet_model;
         $this->model                            = $model;
         $this->model_table                      = $model_table;
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
-
+        $this->snippet_model                    = $snippet_model;
         $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
         //$link_parms_array = array(
         //'controller_name',   
@@ -239,12 +238,12 @@ class Tasks_bluesController extends CRHBaseController
             '<br>, coming_from: '.$coming_from.
             '<br>, report_definition_key: '.$report_definition_key);
         $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-        //var_dump($request);
-        //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,10);
         if (!empty($what_we_are_doing)) {
-            //echo("editUpdate");$this->debug_exit(__FILE__,__LINE__,0);
             switch ($coming_from) {
                 case "browseEdit":
+                    // ******************
+                    // GET SNIPPET RECORD
+                    // ******************
                     $report_definition  = $this->model_get_id($this->snippet_model,$report_definition_key);
                     $working_arrays = $this->working_arrays_construct($report_definition[0]);
 
@@ -258,7 +257,7 @@ class Tasks_bluesController extends CRHBaseController
                     //echo($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     break;
                 default :
-                    $report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
+                    //$report_definition  = MiscThing::where('id','=',$report_definition_key)->get();
                     $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     $working_arrays     = $this->working_arrays_construct($report_definition[0]);
                     break;
@@ -280,24 +279,11 @@ class Tasks_bluesController extends CRHBaseController
                     $MiscThing  = $this->model_get_id($this->model,$id);
                     if($MiscThing){
                         echo($coming_from."**" . $what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                        //$request->input('data_key');
-                        //var_dump(Input::all()); $this->debug_exit(__FILE__,__LINE__,0);
-                        //$report_definition  = $this->execute_query_by_report_no($id);
-                        $requestFieldsArray=$MiscThing->all(); // important!!
-                        //var_dump($requestFieldsArray[0]['attributes']);
-                        //var_dump($modifiable_fields_array);
+                        $requestFieldsArray = $MiscThing->all(); 
                         $array1 = array_intersect_key($requestFieldsArray[0]['attributes'],
                         (array) $modifiable_fields_array);
-                        var_dump($array1);
-                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);echo(' id: ' .$id." after model_get_id ");
-                        //$MiscThing  = $this->snippet_model::where('id','=',$id)->get();
-                        //$MiscThing  = MiscThing::where('id','=',$id)->get();
-                         //$array1  = $this->return_modifiable_fields_array($what_we_are_doing,$report_definition_key,$modifiable_fields_array); 
-                        //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
-                        //echo('id' .$id);//var_dump($MiscThing[0]);var_dump($modifiable_fields_array);
-                        //var_dump($array1);$this->debug_exit(__FILE__,__LINE__,0);
-
-
+                        //var_dump($array1);
+                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);echo(' id: ' .$id);
                          $snippet_string = $this->recreate_snippet_file(
                             $modifiable_fields_array,
                             $lookups_array,
@@ -306,7 +292,7 @@ class Tasks_bluesController extends CRHBaseController
                         );                   
 
 
-                        $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$MiscThing[0]->id.'_snippet_string';
+                        $edit_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition_key.'_snippet_string';
                         //$edit_snippet_file_name = $fnam;
                         //debug_exit(__FILE__,__LINE__,1);   
                         $passed_to_view_array                                   = array();
@@ -333,10 +319,7 @@ class Tasks_bluesController extends CRHBaseController
                 // *****
                 // return to view
                 // *****
-                        //var_dump($passed_to_view_array);
-                        //var_dump($MiscThing[0]);$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
-//
-                        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                        //var_dump($passed_to_view_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
                         return view('tasks_blues'.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
@@ -405,7 +388,7 @@ class Tasks_bluesController extends CRHBaseController
  
 
     public function model_get_id($model,$id){
-        echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         switch ($model) {
             case $this->snippet_model:
                 //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
@@ -549,67 +532,85 @@ class Tasks_bluesController extends CRHBaseController
                  //echo(' array_intersect_key($requestFieldsArray,$arr2 ' );var_dump($arr2);            $this->debug_exit(__FILE__,__LINE__,10);
                 break;  
         } 
-        //$requestFieldsArray=$request->all(); // create an array of all fields on the form
-        //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
-        // ******
+ 
+       // ******
        // update
        // ******
         if ($update){  
             $requestFieldsArray = array_intersect_key($requestFieldsArray,
             $just_the_ones_we_want);
-            //var_dump($request);$this->debug_exit(__FILE__,__LINE__,10);
+            //var_dump($request);//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             //$validation_array = json_decode($encoded_business_rules);
             switch ($request->what_we_are_doing) {
              case "editUpdate":
-                // this is the guy that needs validation
                 $rules_array =  (array) json_decode($request->encoded_business_rules);
-                //var_dump($rules_array);
-                //$this->debug_exit(__FILE__,__LINE__,10);
-                $this->validate($request,$rules_array);
-                //var_dump($just_the_ones_we_want);//var_dump($request);
                 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                $this->validate($request,$rules_array);
+                // you'll redirect if validation fails
                 break; 
             }
             
             //var_dump($requestFieldsArray);
-            $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
-            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($what_we_are_doing);var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
+                case 'updating_report_name':
+                
                     switch ($coming_from) {
-                        case 'select_fields':
-                            //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
-                            //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                           return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
-                            ->with('id'                    ,$id)
-                            ->with('report_definition_id'  ,$this->report_definition_id)
-                            ->with('model'                 ,$this->model)
-                            ->with('node_name'             ,$this->node_name)
-
-                            ->with('what_we_are_doing'     ,'updating_report_name')
-                            ->with('coming_from'           ,$coming_from)
-                           ;
+                        case 'reportDefMenuEdit':
+                            echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            return redirect()->route('tasks_blues.browseEdit', 
+                                ['id' => $id,
+                                'what_we_are_doing' => 'what_we_are_doing',
+                                'coming_from' => 'editUpdate'
+                                ]);
                             break;
+                    case 'select_fields':
+                        //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                        $miscThing  = $this->model_get_id($this->snippet_model,$id);
+                        $xmiscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                        //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                        return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
+                        ->with('id'                    ,$id)
+                        ->with('report_definition_id'  ,$this->report_definition_id)
+                        ->with('model'                 ,$this->model)
+                        ->with('node_name'             ,$this->node_name)
+
+                        ->with('what_we_are_doing'     ,'updating_report_name')
+                        ->with('coming_from'           ,$coming_from)
+                        ;
+
                         }
+                        break;
                 case "ppv_define_query":
                 case "ppv_define_business_rules":
                     switch ($what_we_are_doing) {
+                        case "ppv_define_business_rules":
                         case 'ppv_define_query':
-                            echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            echo($coming_from.$id.$this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing = $this->execute_query_by_report_no($id) ;
                             var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+                           return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
-                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('report_definition_id'  ,$id)
                             ->with('model'                 ,$this->model)
                             ->with('node_name'             ,$this->node_name)
                             ->with('what_we_are_doing'     ,'updating_report_name')
                             ->with('coming_from'           ,$coming_from)
                            ;
+                        return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
+                        ->with('id'                    ,$id)
+                        ->with('report_definition_id'  ,$this->report_definition_id)
+                        ->with('model'                 ,$this->model)
+                        ->with('node_name'             ,$this->node_name)
+
+                        ->with('what_we_are_doing'     ,'updating_report_name')
+                        ->with('coming_from'           ,$coming_from)
+                        ;
                             break;
                         }
 
@@ -661,12 +662,11 @@ class Tasks_bluesController extends CRHBaseController
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
-        
-        //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$coming_from = "";
         if($AllrequestFieldsArray['coming_from'] == 'select_fields'||
-        $AllrequestFieldsArray['coming_from'] == 'ppv_update'){
+        $AllrequestFieldsArray['coming_from'] == 'ppv_update'||
+        $AllrequestFieldsArray['coming_from'] == 'reportDefMenuEdit'){
         $query_result = MiscThing::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
 
@@ -687,23 +687,6 @@ class Tasks_bluesController extends CRHBaseController
         //return $Maillist;
         }
     }
-
-
-    public function xxupdateGetRedirect($key_field_name,$id,$requestFieldsArray,$request){
-            $Tasks_blue = Tasks_blue::where($key_field_name,  '=', $id)
-            ->update($requestFieldsArray);
-            $Tasks_blue = Tasks_blue::where($key_field_name,  '=', $id)
-
-            ->get();
-            //$Tasks_blue1 = compact($Tasks_blue);
-            var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
- 
-            return redirect()->route('Tasks_blue.browseEdit', 
-                ['id' => $request['report_definition_key'],
-                'what_we_are_doing' => 'what_we_are_doing',
-                'coming_from' => 'editUpdate'
-                ]);
-            }
 
 
      public function destroy($id)
