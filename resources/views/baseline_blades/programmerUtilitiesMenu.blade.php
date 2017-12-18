@@ -9,7 +9,7 @@
 //var_dump($parm2_array);
 
 //var_dump($encoded_method_parameters);
-echo("<br>13 echo in programmerUtilitiesMenu in baseline_blades");
+//echo("<br>13 echo in programmerUtilitiesMenu in baseline_blades");
 //echo("<br/>parm1_array ");var_dump($parm1_array);
 //echo("<br/><br/>parm2_array ");var_dump($parm2_array);
 //echo("19 echo in programmerUtilitiesMenu in baseline_blades");
@@ -27,7 +27,7 @@ echo("<br>13 echo in programmerUtilitiesMenu in baseline_blades");
 {{ Form::hidden('encoded_method_parameters_string', $encoded_method_parameters_string) }}
 
 
-@section('promo') }}
+@section('promo') 
 <section id="promo">     
 	<div id="promo-details-identity"> 
 

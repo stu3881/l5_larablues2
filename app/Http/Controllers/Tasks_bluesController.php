@@ -39,12 +39,14 @@ class Tasks_bluesController extends CRHBaseController
         $model                          = "Tasks_blue", 
         $node_name                      = "tasks_blues", 
         $snippet_model                  = "MiscThing",
+
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
 
         $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
+        $snippet_node_name              = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
         $generated_files_folder         = "generated_files", 
@@ -171,8 +173,72 @@ class Tasks_bluesController extends CRHBaseController
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
+        $this->link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+        // *******************
+        // you can only get here after a table has been activated so all that needs to be 
+        // done is to insert a report definition and the snippet files
+        // *******************
+        $columns = (array) Schema::getColumnListing('miscThings');
+        if ($miscThing = MiscThing    
+            ::where('record_type',  '=', "report_definition")
+            ->where('node_name',  '=', $this->link_parms_array['node_name'])
+            ->orderBy('created_at','DESC')
+            //->orderBy('created_at')
+            ->get())
+        {
+
+            //$columns = array_flip($columns); //var_dump($columns);
+            $arr1 = (array) $miscThing[0]['attributes']; //var_dump($arr1);
+            $from_id = $arr1['id'];
+            unset($arr1['id']);
+            //$arr1 = array_intersect_key($arr1,$columns);
+            //var_dump($arr1);
+            MiscThing::create($arr1);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);echo(' id: ' .$id);
+
+            $new_id = $this->get_newest_record_type('report_definition');
+            $from_array = array(
+                'report_id'=>$from_id,
+                'node_name'=>$arr1['node_name']
+            );
+            $to_array   = array(
+                'report_id'=>strval($new_id),
+                'node_name'=>$this->link_parms_array['node_name']
+            );
+            $generated_dir = "generated_files";
+            $to_folder = $this->views_files_path ."/".$generated_dir;
+            $from_folder = $to_folder;
+            //echo("<BR>".$to_folder."*".$from_folder);
+            //echo("** from_array  **"); var_dump($from_array);
+            //echo("** to_array  **"); 
+            //var_dump($to_folder);
+            //var_dump($from_array);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
+            $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_array,$to_array,'y');
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+$report_definition_key = $new_id;
+$id = $new_id;
+       return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+        ->with('id'                                 ,$id)
+        ->with('report_definition_id'               ,$report_definition_key)
+        ->with('model'                              ,$this->model)
+        ->with('node_name'                          ,$this->node_name)
+        ->with('what_we_are_doing'                  ,'updating_report_name')
+        ->with('coming_from'                        ,'indexReports')
+       ;
+
+    }
+    }
+ 
     public function initialize_query($distinct_regular,$field_name,$r_o,$v) {
     // *****************
     // this initializes the query pointing to the correct model
@@ -196,16 +262,17 @@ class Tasks_bluesController extends CRHBaseController
     public function kloneRecord($function,$id)    {
         switch ($function) {
              case "insert":
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                //echo($id);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                 $data_record = Tasks_blue::where('id','=',$id)->get();
                 //$arr1 = (array) $data_record[0]['attributes'];
-                var_dump($data_record[0]);//var_dump($arr1);
-                $arr1 = (array) $data_record[0];
+                $arr1 = (array) $data_record[0]['attributes']; //var_dump($arr1);
                 unset($arr1['id']);
                 unset($arr1['created_at']);
                 unset($arr1['updated_at']);
                 if (Tasks_blue::create($arr1)){
-                    echo('klone succeeded');
+                    //echo('klone succeeded');
+            //return back()->withInput();
+                    return;
                 }
                 else{
                     echo('klone failed');
@@ -213,7 +280,8 @@ class Tasks_bluesController extends CRHBaseController
                 }
                 break;
             }
-    }
+        return;
+            }
 
 
 
@@ -266,7 +334,15 @@ class Tasks_bluesController extends CRHBaseController
 
                 case "klone_record":
                     //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                    $this->kloneRecord(insert,$id);
+                echo($report_definition_key);
+                    $this->kloneRecord('insert',$id);
+                     $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    return redirect()->route('Tasks_blue.browseEdit', 
+                        ['id' => $report_definition_key,
+                        'what_we_are_doing' => 'what_we_are_doing',
+                        'coming_from' => 'kloneRecord'
+                        ]);
+ $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     break;
                 case "edit2_default_add":
                 case "edit2new":
@@ -452,7 +528,11 @@ class Tasks_bluesController extends CRHBaseController
                 
                 //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
                  break; 
-             case "updating_report_definition":
+
+            case "initializeNewReport":
+            $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                break; 
+            case "updating_report_definition":
                 break; 
             case "updating_report_name":
                $update = 1; 
@@ -562,27 +642,19 @@ class Tasks_bluesController extends CRHBaseController
                 
                     switch ($coming_from) {
                         case 'reportDefMenuEdit':
-                            echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            return redirect()->route('tasks_blues.browseEdit', 
-                                ['id' => $id,
-                                'what_we_are_doing' => 'what_we_are_doing',
-                                'coming_from' => 'editUpdate'
-                                ]);
-                            break;
-                    case 'select_fields':
-                        //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                        $miscThing  = $this->model_get_id($this->snippet_model,$id);
-                        $xmiscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
-                        //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                        return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
-                        ->with('id'                    ,$id)
-                        ->with('report_definition_id'  ,$this->report_definition_id)
-                        ->with('model'                 ,$this->model)
-                        ->with('node_name'             ,$this->node_name)
-
-                        ->with('what_we_are_doing'     ,'updating_report_name')
-                        ->with('coming_from'           ,$coming_from)
-                        ;
+                        case 'select_fields':
+                            //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing  = $this->model_get_id($this->snippet_model,$id);
+                            $xmiscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                            ;
 
                         }
                         break;
@@ -594,7 +666,7 @@ class Tasks_bluesController extends CRHBaseController
                             echo($coming_from.$id.$this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($id) ;
                             var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                           return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
+                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
                             ->with('report_definition_id'  ,$id)
                             ->with('model'                 ,$this->model)
@@ -689,16 +761,18 @@ class Tasks_bluesController extends CRHBaseController
     }
 
 
-     public function destroy($id)
-    {
-         $this->debug_exit(__FILE__,__LINE__);
+    public function destroy(REQUEST $request, $id) {
+        echo('deleted');
+        //echo($id);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $file = Tasks_blue::where('id', $id)->first(); // File::find($id)
+        if($file) {
+            $file->delete();
+            return back()->withInput();
 
-        $this->authorize('destroy', Tasks_blue);
-
-        Tasks_blue::delete($id);
-
-        //return redirect('/tasks');
-        return;
+           
+            echo('deleted');
+            return;
+        }
 
     }
    

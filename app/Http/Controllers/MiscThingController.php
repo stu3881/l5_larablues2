@@ -117,8 +117,7 @@ class MiscThingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy(REQUEST $request, $id) {
        MiscThing::find($id)->delete();
        return redirect('miscThings');
     }

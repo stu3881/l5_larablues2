@@ -110,7 +110,7 @@ class CRHBaseController extends DEHBaseController
         $this->routes_path              = app_path()."/Http";
         $this->storage_path             = $this->project_path."/storage";
         $this->views_files_path         = $this->project_path."/resources/views/";
-
+        $this->views_files_path_only    = $this->views_files_path;
 
         $this->key_field_array          = array($this->snippet_table_key_field_name=>$this->snippet_table_key_field_name);
         $this->make_sure_table_snippet_exists($this->model_table);
@@ -170,7 +170,7 @@ class CRHBaseController extends DEHBaseController
         //var_dump($node_name);        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $project_path     = substr(app_path(),0,strlen(app_path())-4);
         $crlf = "\r\n";
-        $crlftab = "\r\n\t";
+        $crlftab = "\r\n\t";        
         $quote = "'";
        $search_str_array = array(
             'controller_name'   => "@@controller_name@@",
@@ -222,7 +222,7 @@ class CRHBaseController extends DEHBaseController
                         //$arr0 =  $this->db_data_connection->getSchemaBuilder()->getColumnListing($link_parms_array['node_name']);
                         //$columns = DB::getSchemaBuilder()->getColumnListing($link_parms_array['node_name']);
                         $columns = Schema::getColumnListing($link_parms_array['node_name']);
-
+var_dump($link_parms_array);
                         $second_field = $columns[1];
                         //* *****
                         $report_definition  =  MiscThing
@@ -1421,22 +1421,26 @@ class CRHBaseController extends DEHBaseController
         //var_dump($view_variables_array);
         //var_dump($parm2_array);
         //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);echo(" right before menu0 ");
-        
-        return view($this->node_name.'.dynamicMenu0')
-        //* loop thru the view_variables_array
-            // VARIABLES WE'RE PASSING TO A VIEW
-            ->with('process_fields_as'          ,$process_fields_as)
-            ->with('view_variables_array'       ,$view_variables_array)
-            ->with('no_of_fields'               ,$this->no_of_fields)
-            ->with('array_of_parm2_array'       ,$array_of_parm2_array)
-            ->with('report_definition_key'      ,$this->report_definition_id)
-            ->with('parm1'                      ,$parm1)
-            ->with('what_we_are_doing'          ,$parm1)
-            
-            ->with('parm2_array'                ,json_encode($parm2_array))
-            ->with('required_variables'         ,$required_variables_array);
-    }
+        if (!isset($array_of_parm2_array)){
+            $array_of_parm2_array = array();
+        }
 
+
+            return view($this->node_name.'.dynamicMenu0')
+            //* loop thru the view_variables_array
+                // VARIABLES WE'RE PASSING TO A VIEW
+                ->with('process_fields_as'          ,$process_fields_as)
+                ->with('view_variables_array'       ,$view_variables_array)
+                ->with('no_of_fields'               ,$this->no_of_fields)
+                ->with('array_of_parm2_array'       ,$array_of_parm2_array)
+                ->with('report_definition_key'      ,$this->report_definition_id)
+                ->with('parm1'                      ,$parm1)
+                ->with('what_we_are_doing'          ,$parm1)
+                
+                ->with('parm2_array'                ,json_encode($parm2_array))
+                ->with('required_variables'         ,$required_variables_array);
+            }
+        
 
 
 
@@ -1836,7 +1840,7 @@ class CRHBaseController extends DEHBaseController
 
         $browse_snippet_file_name ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.$report_definition[0]->id.'_browse_select_display_snippet';
 
-
+$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
        
         if($coming_from == 'var_dump'){
             var_dump($miscThings[0]);
@@ -1848,7 +1852,7 @@ class CRHBaseController extends DEHBaseController
         if ($miscThings){         
             //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
             //$miscThings = (array) $miscThings;
-            //var_dump($miscThings[0]); debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($miscThings[0]); $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
              return view($this->node_name.'.browseEdit',compact('miscThings'))
             ->with('browse_select_field_count'  ,count($miscThings))
@@ -2041,9 +2045,9 @@ class CRHBaseController extends DEHBaseController
     public function clean_orphan_files($node_name,$update_option) {
         //$field_name_array = (array) json_decode(Input::get('encoded_field_name_array'));
         $active_report_ids = $this->get_active_reports_for_table($node_name); 
-        $path_to_files = $this->views_files_path .$node_name."/"."generated_files";
-        echo (" ptf ".$path_to_files);
-        //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+        $path_to_files = $this->views_files_path_only .$node_name."/"."generated_files";
+        //echo (" ptf ".$path_to_files.'%'.$node_name.'%'.$this->views_files_path.'%%'.$this->views_files_path_only);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
         if ($handle = opendir($path_to_files)) {
             //echo "Directory handle: $handle\n";
@@ -2528,28 +2532,52 @@ class CRHBaseController extends DEHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-     public function create_w_report_id($report_definition_key) {
+     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+        $requestFieldsArray=$request->all();
         //$report_definition_key = $this->report_definition_key;
-        //echo $report_definition_key;
+        echo $this->model;
         //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
 
         //$required_entities = $this->generic_method_define_required_entities();
         $msgs_array = array();
-        $search_str_array = array();
+        $search_str_array = array(
+            'controller_name'   => "@@controller_name@@",
+            'model_table'       => "@@model_table@@",
+            'model'             => "@@model@@",
+            'node_name'         => "@@node_name@@",
+            'field_name_string' => "@@field_name_string@@"
+            );
+        //echo("<br/>".$this->node_name);
+        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        //var_dump($link_parms_array);
+
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $parm2_array = array();
-        
+        $parm2_array[1]  = $report_definition_key;
         $required_entities = array(
             'model_report_definition'       => 'model_report_definition'
             );
+  echo($this->node_name. $this->get_report_definition_id(
+        'report_definition',
+        $this->node_name,
+        'xxx'));
+ $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         foreach ($required_entities as $entity=>$entity_name) {
             //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$this->link_parms_array,$parm2_array,$this->node_name);
+            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
- 
 
 
-
+ $id = $report_definition_id;
+       return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+        ->with('id'                                 ,$id)
+        ->with('report_definition_id'               ,$report_definition_key)
+        ->with('model'                              ,$this->model)
+        ->with('node_name'                          ,$this->node_name)
+        ->with('what_we_are_doing'                  ,'updating_report_name')
+        ->with('coming_from'                        ,$coming_from)
+       ;
 
         $report_definition = 
         $this->execute_query_by_report_no($report_definition_key) ;
@@ -2663,7 +2691,7 @@ class CRHBaseController extends DEHBaseController
         $response = MiscThing
             ::where('record_type','=',$record_type)
             ->where('node_name','='     ,$this->snippet_node_name)
-            ->where('report_name','like','%'.$like_report_name.'%')
+            //->where('report_name','like','%'.$like_report_name.'%')
             ->get();
 
         if ($response){
@@ -2758,6 +2786,9 @@ class CRHBaseController extends DEHBaseController
             ->with('node_name'                  ,$this->node_name)
             ->with('snippet_table_key_field_name',$this->snippet_table_key_field_name)
             ->with('snippet_table'                ,$this->snippet_table)
+            //->with('snippet_model'                 ,$this->snippet_model)
+
+            ->with('snippet_node_name'            ,$this->snippet_node_name)         
             ->with('model_table'                  ,$this->model_table)         
             ;
             
@@ -2794,7 +2825,7 @@ class CRHBaseController extends DEHBaseController
      * @return \Illuminate\Http\Response
      */
     public function indexReports(REQUEST $request,$id,$report_definition_id) {
-       //$this->debug_exit(__FILE__,__LINE__,0);echo(' indexReports');
+       //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);echo(' indexReports');
        // var_dump($id);
        $record_type                    = "report_definition";
    
@@ -2816,7 +2847,7 @@ class CRHBaseController extends DEHBaseController
                 //var_dump($this->report_definition_id);
                 // var_dump($miscThings);
                 $parameters = array('id'=>$id,'what_we_are_doing'=>$what_we_are_doing,'coming_from'=>'indexReports');
-                $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                 //$this->debug_exit(__FILE__,__LINE__,10);
                 return view($this->node_name.'.indexReports',compact('miscThings'))
                     ->with('encoded_report_description'     ,json_encode($miscThings))
@@ -2828,6 +2859,9 @@ class CRHBaseController extends DEHBaseController
                     ->with('encoded_working_arrays'         ,json_encode($working_arrays))
                     ->with('record'                         ,$record)
                     ->with('all_records'                    ,$miscThings)
+                    ->with('snippet_model'                 ,$this->snippet_model)
+                    ->with('snippet_node_name'            ,$this->snippet_node_name)         
+
                     ->with('report_key'                     ,$this->report_definition_id)
                     //->with('report_key'                     ,$request->input('report_key'))
                     ->with('node_name'                      ,$this->node_name)
@@ -3205,17 +3239,12 @@ class CRHBaseController extends DEHBaseController
                     //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     //var_dump($to_string_array);//var_dump($from_string_array);
                     $new_file_name = $to_folder.'/'.$to_string_array['report_id'].substr($file_name,$i2);
-                    echo('xyyxx'.$file_name.'xxyyx'.$new_file_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    //echo('xyyxx'.$file_name.'xxyyx'.$new_file_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     File::put($new_file_name, $file_as_string);
 
-                    echo("<br>".$new_file_name." was created ");
+                    //echo("<br>".$new_file_name." was created ");
                 }
-                else{
-                    //echo ("<br>zzzzzzzzzzzzzzzz".$file_name." entry ".$from_string_array['report_id']);
-                    //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
- 
-                }
-            }
+             }
         }
     }
 
@@ -3530,7 +3559,6 @@ class CRHBaseController extends DEHBaseController
                             ->with('report_definition_id'  ,$this->report_definition_id)
                             ->with('model'                 ,$this->model)
                             ->with('node_name'             ,$this->node_name)
-
                             ->with('what_we_are_doing'     ,'updating_report_name')
                             ->with('coming_from'           ,$coming_from)
                            ;
@@ -3563,7 +3591,15 @@ class CRHBaseController extends DEHBaseController
                     break;
  
                 default:
-                    //var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                          return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                           ;
                  
                     return redirect()->route('miscThings.browseEdit', 
                         ['id' => $request['report_definition_key'],
@@ -3610,7 +3646,7 @@ class CRHBaseController extends DEHBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(REQUEST $request, $id)
     {
          $this->debug_exit(__FILE__,__LINE__);
 

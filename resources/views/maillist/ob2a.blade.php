@@ -1,1 +1,0 @@
-@include('../'.'baseline_blades/ob2a')

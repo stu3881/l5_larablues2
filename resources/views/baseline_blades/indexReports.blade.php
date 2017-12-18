@@ -14,6 +14,7 @@
 		Browse Select Defined Reports
 
 <?php
+	//var_dump($all_records[0]);exit("indexReports.blade 17 ");
 	//var_dump($parameters);exit("indexReports.blade 17 ");
 	//var_dump($report_definition_id);
 	//exit("indexReports.blade 17 ");
@@ -79,8 +80,10 @@ $rowcount = -1;
 	
 	<div id="admin" style="width:800px;height:99%">
 	
-	{{ Form::open(array('url'=>'admin/'.$node_name.'/add'	,'method'=>'GET')) }}
-	
+	{!! Form::model('MiscThing',['method' => 'PUT','route'=>[$node_name.'.update',$id,$what_we_are_doing,$coming_from]]) !!}
+		{{ Form::hidden('id'						,15) }}
+		{{ Form::hidden('coming_from'				,'indexReports') }}
+		{{ Form::hidden('what_we_are_doing'			,'initializeNewReport') }}
 	
 	<p>		
 	<div id="div_inside_update_active_tasks" style="width:$width" >		
@@ -91,8 +94,9 @@ $rowcount = -1;
 		<td colspan={{$browse_select_field_count}} >	
 			<table class="table_no_lines">
 				<tr class="table_no_lines">
+
 				<td>	
-			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
+			   		<a href="{{ URL::route($node_name.'.create_w_report_id', $parameters = array(
 				   		'report_definition_key'=>$report_definition_id)
 				   		) }}" class="btn mycart-btn-row2">
 						Initialize_New_Report
@@ -129,7 +133,7 @@ $rowcount = -1;
 		@foreach($all_records as $record)
 			 
 				<?php 
-				//echo $node_name;var_dump($record);//exit("edit1.blade xx");
+				//echo $node_name;var_dump($record->attributes);//exit("edit1.blade xx");
 				?>
 				<tr >
 
@@ -158,21 +162,18 @@ $rowcount = -1;
 	  		        </a>
 					{{ Form::close() }}
 				</td>
+<td>
+    <form class="delete" action="{{ route($snippet_node_name.'.destroy',$record->id) }}" method="GET">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="what_we_are_doing" value="delete_report" />
+        <input type="hidden" name="coming_from" value="indexReports" />
+        <input type="hidden" name="coming_from_node" value={{$node_name}} />
+        <input type="hidden" name="report_definition_id" value={{$report_definition_id}} />
+        <input type="submit" value="delete Report">
+    </form>
+</td>
 
-	
-				<td >
-					{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'GET')) }}
-					{{ Form::hidden('coming_from','edit1') }}
-					{{ Form::hidden('logical_button_name'	,'deleting a record') }}
-					{{ Form::hidden('what_we_are_doing'		,'deleting_record') }}			
-
-					{{-- Form::hidden('model_table',$record->model_table) --}}
-					{{ Form::hidden('node_name',$node_name) }}
-					{{-- Form::hidden('snippet_table',$snippet_table) --}}
-					{{-- Form::hidden('key_field_name',$record->key_field_name) --}}
-					{{ Form::submit('delete') }}
-					{{ Form::close() }}
-				</td>		
 				<td >
 	  		        <a href=
 	  		        "{{ URL::route($node_name.'.browseEdit', $parameters = 
@@ -196,15 +197,13 @@ $rowcount = -1;
 		
 			</table>
 
-	<script>
-//write document.getElementById("div_inside_update_active_tasks").width = "2000px";
-if (document.getElementById("table_inside_update_active_tasks").style.width > document.getElementById("div_inside_update_active_tasks").style.width) {
-	
-	document.getElementById("table_inside_update_active_tasks ").style.background_color = "#FF8C00";
-	document.getElementById("table_inside_update_active_tasks ").style.width = "3000px";
-}
 
+<script>
+    $(".delete").on("submit", function(){
+        return confirm("Do you want to delete this item?");
+    });
 </script>
+
 <script>
 function confirmDelete() {
 var result = confirm('Are you sure you want to delete?');
@@ -215,6 +214,16 @@ if (result) {
         return false;
     }
 }</script>	
+
+<script>
+//write document.getElementById("div_inside_update_active_tasks").width = "2000px";
+if (document.getElementById("table_inside_update_active_tasks").style.width > document.getElementById("div_inside_update_active_tasks").style.width) {
+	
+	document.getElementById("table_inside_update_active_tasks ").style.background_color = "#FF8C00";
+	document.getElementById("table_inside_update_active_tasks ").style.width = "3000px";
+}
+
+</script>
 
 
 </div> <!-- end admin -->

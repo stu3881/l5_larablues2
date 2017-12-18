@@ -13,7 +13,7 @@ var_dump($queryx[1]);exit("exit 4");
 print_r(Input::all());//exit("xit index")
 */
 //var_dump($queryx[0]);
-echo("this is an echo/exit in indexmain.php in baseline_blades");
+//echo("this is an echo/exit in indexmain.php in baseline_blades");
 
 
 if (isset($queryx)){
@@ -33,11 +33,12 @@ else{
 @section('promo')
 <section id="promo">     
 	<div id="promo-details-identity"> 
-	indexmain
+	indexmain 
+	<?php // echo(__FILE__);?>
  	</div> 
  		<div id="promo-details"> 
 		{{-- HTML::image('img/Alfa120pct.JPG', '69 myalfa',array('height'=>'272px'))--}} 
-  		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'192px'))}} 
+  		{{ HTML::image('img/AlfaHiRes373x177.jpg', '69 myalfa',array('height'=>'92px'))}} 
  	</div> 
 
 </section>

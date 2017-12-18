@@ -88,6 +88,6 @@
     Route::get('admin/'.$node_name.'/{'.$reportDefinitionKey.'}'.'/'.$method_name, 
         array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name); 
 
-    $method_name            = "delete";
+    $method_name            = "destroy";
     Route::get('admin/'.$node_name.'/{'.$model.'}'.'/'.$method_name, array('uses'=>$controller_name.'@'.$method_name))->name($node_name .'.'.$method_name);   
 

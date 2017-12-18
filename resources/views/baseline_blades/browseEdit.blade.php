@@ -84,15 +84,6 @@ $rowcount = -1;
 			   			)) }}" class="btn mycart-btn-row2">reports list
 			   			</a>
 					</td>
-				<td class="table_no_lines">
-			   		<a href="{{ URL::route('miscThings'.'.create_w_report_id', $parameters = array(
-				   		'report_definition_key'=>$report_key)
-				   		) }}" class="btn mycart-btn-row2">
-						Initialize_New_Report
-				 	</a>
-
-				</td>
-
 
 				<td class="table_no_lines">
 					<a href="{{ URL::route('Main.getIndex', $parameters = array('method'=>'GET')) }}" class="btn mycart-btn-row2">Main menu</a>
@@ -165,7 +156,8 @@ $rowcount = -1;
 					</td>
 
 
-					<td >
+
+						<td >
 		  		        <a href="{{ URL::route($node_name.'.editUpdate', $parameters = 
 		  		        array(
 		  		        'id'=>$record->id,
@@ -179,14 +171,15 @@ $rowcount = -1;
 		  		        </a>
 						</td>
 					<td >
-						{{ Form::open(array('url'=>'admin/'.$node_name.'/destroy', 'method'=>'POST')) }}
-						{{ Form::hidden('key_field_name',$key_field_name) }}
-						{{ Form::hidden('report_key',$report_key) }}
-						{{ Form::submit('delete') }}
-						{{ Form::hidden('node_name'					,$node_name) }}
-						
-						{{ Form::close() }}
-					</td>
+		  		        <a href="{{ URL::route($node_name.'.destroy', $parameters = 
+		  		        array(
+		  		        'id'=>$record->id
+		  		        )
+		  		        ) }}" class="btn mycart-btn-row2">
+		  		        
+		  		        delete
+		  		        </a>
+						</td>
 				</tr>
 			@endforeach
 

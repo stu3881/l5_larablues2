@@ -174,6 +174,94 @@ class @@controller_name@@ extends CRHBaseController
         $this->store_validation_id          = $this->report_definition_id;
     }
 
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+        // *******************
+        // you can only get here after a table has been activated so all that needs to be 
+        // done is to insert a report definition and the snippet files
+        // *******************
+        if ($miscThing = MiscThing    
+ 
+            ::where('record_type',  '=', "report_definition")
+            ->where('node_name',  '=', $this->link_parms_array['node_name'])
+            //->orderBy('created_at','DESC')
+            //->orderBy('created_at')
+           ->get())
+      {
+
+        //$requestFieldsArray=$miscThing->all();
+        var_dump($this->link_parms_array);
+        var_dump($miscThing[0]);
+        //$report_definition_key = $this->report_definition_key;
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
+        echo $this->model;
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+
+
+        //$required_entities = $this->generic_method_define_required_entities();
+        $msgs_array = array();
+        $search_str_array = array(
+            'controller_name'   => "@@controller_name@@",
+            'model_table'       => "@@model_table@@",
+            'model'             => "@@model@@",
+            'node_name'         => "@@node_name@@",
+            'field_name_string' => "@@field_name_string@@"
+            );
+        //echo("<br/>".$this->node_name);
+        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        //var_dump($link_parms_array);
+
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $parm2_array = array();
+        $parm2_array[1]  = $report_definition_key;
+        $required_entities = array(
+            'model_report_definition'       => 'model_report_definition'
+            );
+        echo($this->node_name. $this->get_report_definition_id(
+        'report_definition',
+        $this->node_name,
+        'xxx'));
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        foreach ($required_entities as $entity=>$entity_name) {
+            //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
+            }
+
+
+        $id = $report_definition_id;
+        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+            ->with('id'                                 ,$id)
+            ->with('report_definition_id'               ,$report_definition_key)
+            ->with('model'                              ,$this->model)
+            ->with('node_name'                          ,$this->node_name)
+            ->with('what_we_are_doing'                  ,'updating_report_name')
+            ->with('coming_from'                        ,$coming_from)
+           ;
+
+        $report_definition = 
+        $this->execute_query_by_report_no($report_definition_key) ;
+        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
+        $report_definition_key.'_modifiable_fields_add';  
+        echo($report_definition_key.$this->node_name);
+        return view($this->node_name.'.create')
+            ->with('encoded_business_rules' , $report_definition[0]->business_rules)
+            ->with('modifiable_fields_array' , 
+                $report_definition[0]->modifiable_fields_array)
+            ->with('report_definition_key'  , $report_definition_key)
+            ->with('snippet_file'           , $snippet_file)
+            ->with('node_name'              , $this->node_name
+            );
+    }
+    }
+ 
     public function initialize_query($distinct_regular,$field_name,$r_o,$v) {
     // *****************
     // this initializes the query pointing to the correct model
