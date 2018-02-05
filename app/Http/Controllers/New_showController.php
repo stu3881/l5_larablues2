@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tasks_blue;
+use App\Models\New_show;
 
 
 use App\Models\MiscThing;
@@ -19,7 +19,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class Tasks_bluesController extends CRHBaseController
+class New_showController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,19 +34,17 @@ class Tasks_bluesController extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "Tasks_bluesController", 
-        $model_table                    = "tasks_blues",         
-        $model                          = "Tasks_blue", 
-        $node_name                      = "tasks_blues", 
+        $controller_name                = "New_showController", 
+        $model_table                    = "new_show",         
+        $model                          = "New_show", 
+        $node_name                      = "new_show", 
         $snippet_model                  = "MiscThing",
-
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
 
         $no_of_blank_entries            = "5", 
         $snippet_table                  = "miscThings", 
-        $snippet_node_name              = "miscThings", 
         $snippet_table_key_field_name   = "id", 
         $backup_node                    = "backup_before_redirect_to_baseline", 
         $generated_files_folder         = "generated_files", 
@@ -80,6 +78,7 @@ class Tasks_bluesController extends CRHBaseController
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
         $this->snippet_model                    = $snippet_model;
+
         $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
         //$link_parms_array = array(
         //'controller_name',   
@@ -173,8 +172,8 @@ class Tasks_bluesController extends CRHBaseController
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
-        $this->link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -186,56 +185,80 @@ class Tasks_bluesController extends CRHBaseController
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
         // *******************
-        $columns = (array) Schema::getColumnListing('miscThings');
         if ($miscThing = MiscThing    
+ 
             ::where('record_type',  '=', "report_definition")
             ->where('node_name',  '=', $this->link_parms_array['node_name'])
-            ->orderBy('created_at','DESC')
+            //->orderBy('created_at','DESC')
             //->orderBy('created_at')
-            ->get())
-        {
+           ->get())
+      {
 
-            //$columns = array_flip($columns); //var_dump($columns);
-            $arr1 = (array) $miscThing[0]['attributes']; //var_dump($arr1);
-            $from_id = $arr1['id'];
-            unset($arr1['id']);
-            //$arr1 = array_intersect_key($arr1,$columns);
-            //var_dump($arr1);
-            MiscThing::create($arr1);
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);echo(' id: ' .$id);
+        //$requestFieldsArray=$miscThing->all();
+        var_dump($this->link_parms_array);
+        var_dump($miscThing[0]);
+        //$report_definition_key = $this->report_definition_key;
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
+        echo $this->model;
+        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
 
-            $new_id = $this->get_newest_record_type('report_definition');
-            $from_array = array(
-                'report_id'=>$from_id,
-                'node_name'=>$arr1['node_name']
+
+        //$required_entities = $this->generic_method_define_required_entities();
+        $msgs_array = array();
+        $search_str_array = array(
+            'controller_name'   => "New_showController",
+            'model_table'       => "new_show",
+            'model'             => "New_show",
+            'node_name'         => "new_show",
+            'field_name_string' => "@@field_name_string@@"
             );
-            $to_array   = array(
-                'report_id'=>strval($new_id),
-                'node_name'=>$this->link_parms_array['node_name']
+        //echo("<br/>".$this->node_name);
+        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        //var_dump($link_parms_array);
+
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $parm2_array = array();
+        $parm2_array[1]  = $report_definition_key;
+        $required_entities = array(
+            'model_report_definition'       => 'model_report_definition'
             );
-            $generated_dir = "generated_files";
-            $to_folder = $this->views_files_path ."/".$generated_dir;
-            $from_folder = $to_folder;
-            //echo("<BR>".$to_folder."*".$from_folder);
-            //echo("** from_array  **"); var_dump($from_array);
-            //echo("** to_array  **"); 
-            //var_dump($to_folder);
-            //var_dump($from_array);
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        echo($this->node_name. $this->get_report_definition_id(
+        'report_definition',
+        $this->node_name,
+        'xxx'));
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        foreach ($required_entities as $entity=>$entity_name) {
+            //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
+            }
 
-            $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_array,$to_array,'y');
-            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-$report_definition_key = $new_id;
-$id = $new_id;
-       return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
-        ->with('id'                                 ,$id)
-        ->with('report_definition_id'               ,$report_definition_key)
-        ->with('model'                              ,$this->model)
-        ->with('node_name'                          ,$this->node_name)
-        ->with('what_we_are_doing'                  ,'updating_report_name')
-        ->with('coming_from'                        ,'indexReports')
-       ;
 
+        $id = $report_definition_id;
+        return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
+            ->with('id'                                 ,$id)
+            ->with('report_definition_id'               ,$report_definition_key)
+            ->with('model'                              ,$this->model)
+            ->with('node_name'                          ,$this->node_name)
+            ->with('what_we_are_doing'                  ,'updating_report_name')
+            ->with('coming_from'                        ,$coming_from)
+           ;
+
+        $report_definition = 
+        $this->execute_query_by_report_no($report_definition_key) ;
+        //var_dump($report_definition);$this->debug_exit(__FILE__,__LINE__,1);
+        $encoded_business_rules     = $report_definition[0]->business_rules;
+        
+        $snippet_file ="../".$this->node_name.'/'.$this->generated_files_folder.'/'.
+        $report_definition_key.'_modifiable_fields_add';  
+        echo($report_definition_key.$this->node_name);
+        return view($this->node_name.'.create')
+            ->with('encoded_business_rules' , $report_definition[0]->business_rules)
+            ->with('modifiable_fields_array' , 
+                $report_definition[0]->modifiable_fields_array)
+            ->with('report_definition_key'  , $report_definition_key)
+            ->with('snippet_file'           , $snippet_file)
+            ->with('node_name'              , $this->node_name
+            );
     }
     }
  
@@ -247,12 +270,12 @@ $id = $new_id;
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
-                $query = Tasks_blue::distinct()->select($field_name);
-                echo("Tasks_blue::distinct()->select(".$field_name.")");
+                $query = New_show::distinct()->select($field_name);
+                echo("New_show::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = Tasks_blue::where($field_name,$r_o,$v);
-                echo("Tasks_blue::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = New_show::where($field_name,$r_o,$v);
+                echo("New_show::where(".$field_name.",". $r_o. ",".$v.")");
                 break;
        }   
        return $query;
@@ -262,18 +285,16 @@ $id = $new_id;
     public function kloneRecord($function,$id)    {
         switch ($function) {
              case "insert":
-                //echo($id);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                $data_record = Tasks_blue::where('id','=',$id)->get();
+                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                $data_record = New_show::where('id','=',$id)->get();
                 //$arr1 = (array) $data_record[0]['attributes'];
-                $arr1 = (array) $data_record[0]['attributes']; //var_dump($arr1);
+                var_dump($data_record[0]);//var_dump($arr1);
+                $arr1 = (array) $data_record[0];
                 unset($arr1['id']);
                 unset($arr1['created_at']);
                 unset($arr1['updated_at']);
-                if (Tasks_blue::create($arr1)){
-                    //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                    //echo('klone succeeded');
-            //return back()->withInput();
-                    return;
+                if (New_show::create($arr1)){
+                    echo('klone succeeded');
                 }
                 else{
                     echo('klone failed');
@@ -281,8 +302,7 @@ $id = $new_id;
                 }
                 break;
             }
-        return;
-            }
+    }
 
 
 
@@ -335,20 +355,7 @@ $id = $new_id;
 
                 case "klone_record":
                     //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                echo($report_definition_key);
-                    $this->kloneRecord('insert',$id);
-                     $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                    return redirect()->route('Main.getIndex', $parameters = 
-                        array('method'=>'GET'));
-
-                    $miscThing  = $this->model_get_id($this->snippet_model,$report_definition_key);
- 
-                    return redirect()->route('Tasks_blue.browseEdit', 
-                        ['id' => $report_definition_key,
-                        'what_we_are_doing' => 'what_we_are_doing',
-                        'coming_from' => 'kloneRecord'
-                        ]);
- $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    $this->kloneRecord(insert,$id);
                     break;
                 case "edit2_default_add":
                 case "edit2new":
@@ -403,7 +410,7 @@ $id = $new_id;
                 // *****
                         //var_dump($passed_to_view_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
-                        return view('tasks_blues'.'.editUpdate',compact('miscThings'))
+                        return view('new_show'.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
                         ->with('model'   ,$this->model)            
                         ->with('passed_to_view_array'   ,$passed_to_view_array);  
@@ -443,11 +450,11 @@ $id = $new_id;
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = Tasks_blue
+                        $updatex  = New_show
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = Tasks_blue
+                        $updatex  = New_show
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -470,7 +477,7 @@ $id = $new_id;
  
 
     public function model_get_id($model,$id){
-        //echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         switch ($model) {
             case $this->snippet_model:
                 //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
@@ -480,7 +487,7 @@ $id = $new_id;
             case $this->model:
         
                 //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                $model_get_id = Tasks_blue::where('id','=',$id)  
+                $model_get_id = New_show::where('id','=',$id)  
                 ->get();
                 break;
          }
@@ -534,11 +541,7 @@ $id = $new_id;
                 
                 //var_dump($just_the_ones_we_want);$this->debug_exit(__FILE__,__LINE__,10);
                  break; 
-
-            case "initializeNewReport":
-            $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                break; 
-            case "updating_report_definition":
+             case "updating_report_definition":
                 break; 
             case "updating_report_name":
                $update = 1; 
@@ -618,14 +621,15 @@ $id = $new_id;
                  //echo(' array_intersect_key($requestFieldsArray,$arr2 ' );var_dump($arr2);            $this->debug_exit(__FILE__,__LINE__,10);
                 break;  
         } 
- 
-       // ******
+        //$requestFieldsArray=$request->all(); // create an array of all fields on the form
+        //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
+        // ******
        // update
        // ******
         if ($update){  
             $requestFieldsArray = array_intersect_key($requestFieldsArray,
             $just_the_ones_we_want);
-            //var_dump($request);//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
             //$validation_array = json_decode($encoded_business_rules);
             switch ($request->what_we_are_doing) {
              case "editUpdate":
@@ -640,60 +644,47 @@ $id = $new_id;
             //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
-            //var_dump($what_we_are_doing);var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
-                case 'updating_report_name':
-                
                     switch ($coming_from) {
-                        case 'reportDefMenuEdit':
                         case 'select_fields':
                             //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            $miscThing  = $this->model_get_id($this->snippet_model,$id);
-                            $xmiscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
                             //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
+                           return view('new_show'.'.reportDefMenuEdit',compact('miscThing'))
+                            ->with('id'                    ,$id)
+                            ->with('report_definition_id'  ,$this->report_definition_id)
+                            ->with('model'                 ,$this->model)
+                            ->with('node_name'             ,$this->node_name)
+
+                            ->with('what_we_are_doing'     ,'updating_report_name')
+                            ->with('coming_from'           ,$coming_from)
+                           ;
+                            break;
+                        }
+                case "ppv_define_query":
+                case "ppv_define_business_rules":
+                    switch ($what_we_are_doing) {
+                        case "ppv_define_business_rules":
+                        case 'ppv_define_query':
+                            echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
                             ->with('report_definition_id'  ,$this->report_definition_id)
                             ->with('model'                 ,$this->model)
                             ->with('node_name'             ,$this->node_name)
                             ->with('what_we_are_doing'     ,'updating_report_name')
                             ->with('coming_from'           ,$coming_from)
-                            ;
-
-                        }
-                        break;
-                case "ppv_define_query":
-                case "ppv_define_business_rules":
-                    switch ($what_we_are_doing) {
-                        case "ppv_define_business_rules":
-                        case 'ppv_define_query':
-                            echo($coming_from.$id.$this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            $miscThing = $this->execute_query_by_report_no($id) ;
-                            var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                           return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
-                            ->with('id'                    ,$id)
-                            ->with('report_definition_id'  ,$id)
-                            ->with('model'                 ,$this->model)
-                            ->with('node_name'             ,$this->node_name)
-                            ->with('what_we_are_doing'     ,'updating_report_name')
-                            ->with('coming_from'           ,$coming_from)
                            ;
-                        return view('tasks_blues'.'.reportDefMenuEdit',compact('miscThing'))
-                        ->with('id'                    ,$id)
-                        ->with('report_definition_id'  ,$this->report_definition_id)
-                        ->with('model'                 ,$this->model)
-                        ->with('node_name'             ,$this->node_name)
-
-                        ->with('what_we_are_doing'     ,'updating_report_name')
-                        ->with('coming_from'           ,$coming_from)
-                        ;
                             break;
                         }
 
                     var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                   return redirect()->route('tasks_blues.browseEdit', 
+                   return redirect()->route('new_show.browseEdit', 
                         ['id' => $request['report_definition_key'],
                         'what_we_are_doing' => 'what_we_are_doing',
                         'coming_from' => 'editUpdate'
@@ -703,7 +694,7 @@ $id = $new_id;
                 default:
                     var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                  
-                    return redirect()->route('tasks_blues.browseEdit', 
+                    return redirect()->route('new_show.browseEdit', 
                         ['id' => $request['report_definition_key'],
                         'what_we_are_doing' => 'what_we_are_doing',
                         'coming_from' => 'editUpdate'
@@ -740,23 +731,24 @@ $id = $new_id;
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
+        
+        //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$coming_from = "";
         if($AllrequestFieldsArray['coming_from'] == 'select_fields'||
-        $AllrequestFieldsArray['coming_from'] == 'ppv_update'||
-        $AllrequestFieldsArray['coming_from'] == 'reportDefMenuEdit'){
+        $AllrequestFieldsArray['coming_from'] == 'ppv_update'){
         $query_result = MiscThing::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
 
         }
         else {
-        $query_result = Tasks_blue::where($key_field_name,  '=', $id)
+        $query_result = New_show::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();
         //$Maillist1 = compact($Maillist);
         var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-        return redirect()->route('tasks_blues'.'.browseEdit', 
+        return redirect()->route('new_show'.'.browseEdit', 
             ['id' => $AllrequestFieldsArray['report_definition_key'],
             'what_we_are_doing' => 'what_we_are_doing',
             'coming_from' => 'editUpdate'
@@ -766,19 +758,16 @@ $id = $new_id;
         }
     }
 
+     public function destroy($id)
+    {
+         $this->debug_exit(__FILE__,__LINE__);
 
-    public function destroy(REQUEST $request, $id) {
-        echo('deleted');
-        //echo($id);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        $file = Tasks_blue::where('id', $id)->first(); // File::find($id)
-        if($file) {
-            $file->delete();
-            return back()->withInput();
+        $this->authorize('destroy', New_show);
 
-           
-            echo('deleted');
-            return;
-        }
+        New_show::delete($id);
+
+        //return redirect('/tasks');
+        return;
 
     }
    

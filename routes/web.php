@@ -45,6 +45,7 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     // DONT MOVE OR CHANGE THE FILLOWING LINE
     //generated_inserts_begin_here
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/new_show.php');
 	
 	
 	

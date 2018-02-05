@@ -1818,7 +1818,7 @@ var_dump($link_parms_array);
      */
 
     public function browseEdit(Request $request, $id, $what_we_are_doing, $coming_from){
-        //var_dump($request);  //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        var_dump($id);  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         $report_definition          = $this->execute_query_by_report_no($id) ;
         $encoded_business_rules     = $report_definition[0]->business_rules;
         $working_arrays             = $this->working_arrays_construct($report_definition[0]);
@@ -1848,7 +1848,8 @@ $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
 
           $this->debug_exit(__FILE__,__LINE__,0);  
         }
-        //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
+ $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+       //var_dump($browse_snippet_file_name);  $this->debug_exit(__FILE__,__LINE__,0);
         if ($miscThings){         
             //var_dump($miscThings[0]); $this->debug_exit(__FILE__,__LINE__,10);  
             //$miscThings = (array) $miscThings;
@@ -2562,7 +2563,7 @@ $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         'report_definition',
         $this->node_name,
         'xxx'));
- $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         foreach ($required_entities as $entity=>$entity_name) {
             //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);

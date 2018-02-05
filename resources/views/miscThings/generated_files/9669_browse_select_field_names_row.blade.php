@@ -5,4 +5,9 @@
 <td>db_host</td>
 <td>db_prefix</td>
 <td>db_username</td>
+<td>db_charset</td>
+<td>db_collation</td>
+<td>db_default</td>
+<td>db_driver</td>
+<td>db_schema</td>
 </tr>
