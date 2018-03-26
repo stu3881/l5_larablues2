@@ -53,7 +53,7 @@ Route::group(['middleware' => ['web']], function () {
 	
 	
 	
-	@include('/home/vagrant/Code/l5_larablues2/routes/generated/tasks_blues.php');
+	
 	
 	
 	
