@@ -470,3 +470,13 @@ where record_type =  = 'report_definition' and where report_name like %definitio
 select id, created_at, node_name, record_type, report_name, table_reporting_active  from miscThings where report_name like '%definition_model%';
 
 
+$keywords = [
+    ['name', 'LIKE', $searchQuery],
+    ['category_id', '=', $selectedSubcategory],
+];
+
+$products = Product::where(function ($query) use ($keywords) {
+    foreach ($keywords as $keyword) {
+        $query->where($keyword);
+    }
+})->paginate(15);

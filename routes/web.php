@@ -45,6 +45,39 @@ Route::group(['middleware' => ['web']], function () {
     //***********************
     // DONT MOVE OR CHANGE THE FILLOWING LINE
     //generated_inserts_begin_here
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/maillist.php');
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/users.php');
+	@include('/home/vagrant/Code/l5_larablues2/routes/generated/users_blues.php');
+	
+	
 	@include('/home/vagrant/Code/l5_larablues2/routes/generated/new_show.php');
 	
 	
@@ -78,8 +111,21 @@ Route::group(['middleware' => ['web']], function () {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@include('/home/vagrant/Code/l5_larablues2/routes/miscThings.php');
-	@include('/home/vagrant/Code/l5_larablues2/routes/generated/categories.php');
+	
 
 
 

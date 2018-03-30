@@ -541,12 +541,13 @@ class MiscThingsController extends CRHBaseController
         //$requestFieldsArray=$request->all(); // create an array of all fields on the form
         //$this->debug_exit(__FILE__,__LINE__,1);echo('update id: '.$id);
         // ******
-       // update
+       // update 
        // ******
         if ($update){  
             $requestFieldsArray = array_intersect_key($requestFieldsArray,
             $just_the_ones_we_want);
-            //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            var_dump($requestFieldsArray);//$this->debug_exit(__FILE__,__LINE__,10);
             //$validation_array = json_decode($encoded_business_rules);
             switch ($request->what_we_are_doing) {
              case "editUpdate":
@@ -570,7 +571,7 @@ class MiscThingsController extends CRHBaseController
                     switch ($coming_from) {
                         case 'reportDefMenuEdit':
                         case 'select_fields':
-                            //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                            echo($id);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing  = $this->model_get_id($this->snippet_model,$id);
                             $xmiscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
                             //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
@@ -681,7 +682,7 @@ class MiscThingsController extends CRHBaseController
         }
     }
 
-    public function xdestroy($id)
+    public function xdestroy(REQUEST $request,$id)
     {
          $this->debug_exit(__FILE__,__LINE__);
 

@@ -1,7 +1,7 @@
 <tr>
 <td>#</td>
-<td>table_name</td>
-<td>field_name</td>
-<td>value</td>
-<td>name</td>
+<td>artist</td>
+<td>date</td>
+<td>record_type</td>
+<td>title</td>
 </tr>

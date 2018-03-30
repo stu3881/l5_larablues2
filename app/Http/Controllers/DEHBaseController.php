@@ -364,7 +364,8 @@ class DEHBaseController extends Controller
 		$query_relational_operators_array[] =  ">";
 		$query_relational_operators_array[] =  ">=";
 		$query_relational_operators_array[] =  "join";
-		$query_relational_operators_array[] =  "where";
+        $query_relational_operators_array[] =  "like";		
+        $query_relational_operators_array[] =  "where";
 		$query_relational_operators_array[] =  "whereBetween";
 		$query_relational_operators_array[] =  "whereIn";
 		$query_relational_operators_array[] =  "whereNotIn";
@@ -372,7 +373,8 @@ class DEHBaseController extends Controller
 		$query_relational_operators_array[] =  "whereNotNull";
 		$query_relational_operators_array[] =  "groupBy";
 		$query_relational_operators_array[] =  "orderBy";
-		$query_relational_operators_array[] =  "orderByDesc";
+        $query_relational_operators_array[] =  "orderByDesc";
+        
 		//$query_relational_operators_array[] =  "getArray";
 		$query_relational_operators_array[] =  "distinct";
 		return $query_relational_operators_array;

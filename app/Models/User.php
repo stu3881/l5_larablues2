@@ -1,35 +1,21 @@
-<?php
+<?php namespace App\Models;
 
-namespace App;
+use Illuminate\Database\Eloquent\Model;
 
-use App\Task;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+class User extends Model {
 
-class User extends Authenticatable
-{
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * Generated
      */
+
+    protected $table = 'users';
     protected $fillable = [
-        'name', 'email', 'password',
-    ];
+	'name',
+	'email',
+	'password',
+	'remember_token',
+	'created_at',
+	'updated_at',
+	];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * Get all of the tasks for the user.
-     */
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
 }

@@ -146,8 +146,8 @@ class New_showController extends CRHBaseController
         $snippetController = $this->snippet_model_parms['controller_name'];
         $snippetModel = $this->snippet_model_parms['model'];
         //echo($snippetModel);exit("exit at 146");
-        //$MiscThing = new $snippetModel;
-        //$MiscThing->setConnection("homestead");
+        
+        
         $miscThings = MiscThing
             ::where('record_type'       ,'='    ,'table_controller')
             ->where('controller_name'   ,'='    ,"MiscThingsController")
@@ -168,7 +168,7 @@ class New_showController extends CRHBaseController
         // **************
         $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        $this->report_definition_id         = $this->report_definition_id;
+        //$this->report_definition_id         = $this->report_definition_id;
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
@@ -195,6 +195,7 @@ class New_showController extends CRHBaseController
       {
 
         //$requestFieldsArray=$miscThing->all();
+         echo ("* ".$report_definition_key);
         var_dump($this->link_parms_array);
         var_dump($miscThing[0]);
         //$report_definition_key = $this->report_definition_key;
@@ -477,11 +478,11 @@ class New_showController extends CRHBaseController
  
 
     public function model_get_id($model,$id){
-        echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //echo ("<br/>"." model_get_id "." model: ".$model." id: ".$id);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         switch ($model) {
             case $this->snippet_model:
                 //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                $model_get_id = MiscThing::where('id','=',$id)  
+                $model_get_id = miscThing::where('id','=',$id)  
                 ->get();
                 break;
             case $this->model:
@@ -640,18 +641,23 @@ class New_showController extends CRHBaseController
                 break; 
             }
             
-            //var_dump($requestFieldsArray);
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($this->key_field_name);var_dump($id);var_dump($requestFieldsArray);
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            // ******
+            // this does the update
+            // ******
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
             //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
+                case 'updating_report_name':
                     switch ($coming_from) {
+                        case 'reportDefMenuEdit':
                         case 'select_fields':
                             //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                            $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
+                            $miscThing = $this->execute_query_by_report_no($id) ;
                             //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                            return view('new_show'.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
@@ -742,14 +748,14 @@ class New_showController extends CRHBaseController
 
         }
         else {
-        $query_result = New_show::where($key_field_name,  '=', $id)
+        $query_result = MiscThing::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();
         //$Maillist1 = compact($Maillist);
-        var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         return redirect()->route('new_show'.'.browseEdit', 
-            ['id' => $AllrequestFieldsArray['report_definition_key'],
+            ['id' => $id,
             'what_we_are_doing' => 'what_we_are_doing',
             'coming_from' => 'editUpdate'
             ]);
@@ -758,7 +764,7 @@ class New_showController extends CRHBaseController
         }
     }
 
-     public function destroy($id)
+     public function destroyx($id)
     {
          $this->debug_exit(__FILE__,__LINE__);
 
@@ -770,5 +776,40 @@ class New_showController extends CRHBaseController
         return;
 
     }
-   
+     public function destroy(REQUEST $request, $id) {
+       //echo($id.$this->snippet_node_name);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $requestFieldsArray=$request->all();
+        var_dump($requestFieldsArray) ;
+        $what_we_are_doing = $requestFieldsArray['what_we_are_doing'];
+        $coming_from = $requestFieldsArray['coming_from'];
+        $coming_from_node = $requestFieldsArray['coming_from_node'];
+
+        switch ($what_we_are_doing) {
+        case 'delete_report':
+            switch ($coming_from) {
+            case 'indexReports':
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                $update_option = "remove_broken_links";
+                $view_variables_array = $this->clean_orphan_files($coming_from_node,$update_option);  //2parms
+                //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            break;
+            }
+        break;
+        }
+        $file = MiscThing::where('id', $id)->first(); // File::find($id)
+        if($file) {
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            $file->delete();
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            return redirect()->route($coming_from_node.'.indexReports',[
+            'id' => $requestFieldsArray['report_definition_id'],
+            'reportDefinitionKey'=>$requestFieldsArray['report_definition_id']
+            ]);
+            $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        }
+
+    }
+
 }
