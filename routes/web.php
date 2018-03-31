@@ -74,6 +74,29 @@ Route::group(['middleware' => ['web']], function () {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@include('/home/vagrant/Code/l5_larablues2/routes/generated/users.php');
 	@include('/home/vagrant/Code/l5_larablues2/routes/generated/users_blues.php');
 	

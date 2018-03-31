@@ -1,9 +1,0 @@
-<tr>
-<td>#</td>
-<td>id</td>
-<td>table_name</td>
-<td>report_name</td>
-<td>node_name</td>
-<td>record_type</td>
-<td>updated_at</td>
-</tr>

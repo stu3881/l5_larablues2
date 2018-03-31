@@ -106,7 +106,7 @@ class ProgrammerUtilitiesController extends CRHBaseController
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
         $this->snippet_node_name                = $snippet_node_name;
-        //$this->link_parms_array                 = $this->derive_entity_names_from_table(" ",$this->snippet_node_name);
+        $this->link_parms_array                 = $this->derive_entity_names_from_table($this->snippet_node_name);
 
         $this->report_definition_model_name     = $report_definition_model_name;
         //* $this->report_definition_id is the same for all tables

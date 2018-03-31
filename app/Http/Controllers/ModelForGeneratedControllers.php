@@ -39,6 +39,8 @@ class @@controller_name@@ extends CRHBaseController
         $model                          = "@@model@@", 
         $node_name                      = "@@node_name@@", 
         $snippet_model                  = "MiscThing",
+        $link_parms_array               = "",
+
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -79,7 +81,7 @@ class @@controller_name@@ extends CRHBaseController
         $this->node_name                        = $node_name ;
         $this->snippet_model                    = $snippet_model;
 
-        $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+        $this->link_parms_array                 = $this->derive_entity_names_from_table($this->node_name);
         //$link_parms_array = array(
         //'controller_name',   
         //'model_table',   
@@ -142,7 +144,7 @@ class @@controller_name@@ extends CRHBaseController
 
         // THIS IS HOW WE CHANGE CONNECTIONS (they're currently hardcoded to homestead)
         $dataModel = $this->link_parms_array['controller_name'];
-        $this->snippet_model_parms = $this->derive_entity_names_from_table(" ",$this->snippet_table);
+        $this->snippet_model_parms = $this->link_parms_array;
         $snippetController = $this->snippet_model_parms['controller_name'];
         $snippetModel = $this->snippet_model_parms['model'];
         //echo($snippetModel);exit("exit at 146");
@@ -185,23 +187,17 @@ class @@controller_name@@ extends CRHBaseController
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
         // *******************
+        $link_parms_array = $this->link_parms_array;
+        
+        //echo $this->node_name;//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);    
         if ($miscThing = MiscThing    
  
             ::where('record_type',  '=', "report_definition")
-            ->where('node_name',  '=', $this->link_parms_array['node_name'])
+            ->where('node_name',  '=', $link_parms_array['node_name'])
+            ->get())
             //->orderBy('created_at','DESC')
             //->orderBy('created_at')
-           ->get())
-      {
-
-        //$requestFieldsArray=$miscThing->all();
-        var_dump($this->link_parms_array);
-        var_dump($miscThing[0]);
-        //$report_definition_key = $this->report_definition_key;
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
-        echo $this->model;
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
+     {
 
         //$required_entities = $this->generic_method_define_required_entities();
         $msgs_array = array();
@@ -212,18 +208,15 @@ class @@controller_name@@ extends CRHBaseController
             'node_name'         => "@@node_name@@",
             'field_name_string' => "@@field_name_string@@"
             );
-        //echo("<br/>".$this->node_name);
-        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        echo("<br/>nn ".$this->node_name);
+        $link_parms_array = $this->link_parms_array;
         //var_dump($link_parms_array);
 
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $parm2_array = array();
         $parm2_array[1]  = $report_definition_key;
-         echo(" * ".$this->node_name." * ". $this->get_report_definition_id(
-        'report_definition',
-        $this->node_name,
-        'xxx'));
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+         //echo(" * ".$this->node_name." * ". $this->get_report_definition_id('report_definition',$this->node_name, 'xxx'));
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $required_entities = array(
             'model_report_definition'       => 'model_report_definition'
             );

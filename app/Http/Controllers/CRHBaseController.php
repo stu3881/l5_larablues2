@@ -94,7 +94,8 @@ class CRHBaseController extends DEHBaseController
         $this->snippet_table                    = $snippet_table;
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
-        //$link_parms_array                 = $this->derive_entity_names_from_table($this->node_name);
+       
+        //$this->link_parms_array                 = $link_parms_array;
 
 
         $this->backup_node                      = $backup_node;
@@ -168,8 +169,6 @@ class CRHBaseController extends DEHBaseController
 
     public function generic_method_activate_entity($entity,$values_array,$msg_array,$link_parms_array,$parm2_array,$node_name) {
 
-        //$this->clone_from_node_to_node($from_info,$dir_name,$link_parms_array);
-
         //echo("generic_method_activate_entity");var_dump($entity);var_dump($values_array);var_dump($msg_array);var_dump($link_parms_array);
         //var_dump($node_name);        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $project_path     = substr(app_path(),0,strlen(app_path())-4);
@@ -203,7 +202,7 @@ class CRHBaseController extends DEHBaseController
 
          switch ($entity) { 
             case "model_report_definition":
-                $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                 if ($miscThing = MiscThing    
                     ::where('record_type',  '=', "report_definition")
                     ->where('report_name','like','%'.'report_definition_model'.'%')
@@ -226,7 +225,7 @@ class CRHBaseController extends DEHBaseController
                         //$arr0 =  $this->db_data_connection->getSchemaBuilder()->getColumnListing($link_parms_array['node_name']);
                         //$columns = DB::getSchemaBuilder()->getColumnListing($link_parms_array['node_name']);
                         $columns = Schema::getColumnListing($link_parms_array['node_name']);
-                        var_dump($link_parms_array);
+
                         $second_field = $columns[1];
                         //* *****
                         $report_definition  =  MiscThing
@@ -235,7 +234,11 @@ class CRHBaseController extends DEHBaseController
                         $arr1 = (array) $report_definition[0]['attributes'];
                         //var_dump($arr1);
                         unset($arr1['id']);
-
+                        $query_field_name_array_str = "'[".$second_field .',"not_used","not_used","not_used","not_used"]';
+                        //echo($second_field);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                      
+                        //$arr1['modifiable_fields_array'] = '{$second_field :$second_field }';
+                        //$arr1['browse_select_array']     = '{$second_field :$second_field }';
                         $query_field_name_array_str = array(
                         $second_field, 'not_used', 'not_used', 'not_used', 'not_used', 'not_used');
                         $query_field_name_array_str   = json_encode($query_field_name_array_str);
@@ -261,7 +264,6 @@ class CRHBaseController extends DEHBaseController
                        $arr1['modifiable_fields_array'] = json_encode($arr1['modifiable_fields_array']);
 
 
-                        $arr1['report_name'] = 'new report cloned from default';
 
                         $arr1['node_name'] = $link_parms_array['node_name'];
                         $arr1['table_name'] = $link_parms_array['node_name'];
@@ -280,21 +282,13 @@ class CRHBaseController extends DEHBaseController
 
                         //$this->business_rules_array = (array) json_decode($report_definition[0]['business_rules']);
 
-                        $working_arrays = 
-                        $this->working_arrays_construct($report_definition[0]);
+                        $working_arrays             = $this->working_arrays_construct($report_definition[0]);
                         //var_dump($working_arrays);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                        $use_generate_node = 0;
+                        $use_generate_node = 1;
                         $from_info = $this->get_report_definition_id_info($use_generate_node,$link_parms_array);
                         $link_parms_array['report_id'] = $new_id;
-                        $to_folder = $this->views_files_path_only . $link_parms_array['node_name'];
-        
-                        var_dump($link_parms_array);var_dump($from_info);var_dump($to_folder);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                        //$this->clone_from_node_to_node($from_info,$to_folder,$link_parms_array);
-                        $use_generate_node = 1;
-                        //$this->clone_ids_to_node_name($from_info ,$use_generate_node,$link_parms_array);
-                        $to_folder .= '/'.$this->generated_files_folder;
-                        $from_folder = $from_info['from_folder'].'/'.$this->generated_files_folder;
-                        $x = $this->partial_folder_clone_w_scanrepl($from_folder,$to_folder,$from_array,$to_array,'y');
+                        //this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                        $this->clone_ids_to_node_name($from_info ,$use_generate_node,$link_parms_array);
                         //* *****
 
                          $msg_array[$i0]['str1'] = $entity." created  for ";
@@ -396,7 +390,7 @@ class CRHBaseController extends DEHBaseController
                     $link_parms_array['field_name_string']   = $field_name_str;
                     
                     //echo ("<br><br><br>file_as_string ".$file_as_string);
-                    echo ("<br><br><br>search_str_array");var_dump($search_str_array);var_dump($link_parms_array);
+                    //echo ("<br><br><br>search_str_array");var_dump($search_str_array);var_dump($link_parms_array);
                     // field_name_string
                     $file_as_string = $this->scan_replace_str_value_arrays($file_as_string,$search_str_array,$link_parms_array,'y');
                     File::put($models_directory.$link_parms_array['model'].".php", $file_as_string);  
@@ -483,6 +477,7 @@ class CRHBaseController extends DEHBaseController
                 break;
 
             case "views_node_directory":
+                $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                 $dir_name = $project_path."/resources/views/". $link_parms_array['node_name'];
                //* ***********************
                 if (is_dir($dir_name)){
@@ -491,15 +486,19 @@ class CRHBaseController extends DEHBaseController
                     $msg_array[$i0]['str1']     = " already exists ";
                 }
                 else{
-                    //echo($dir_name)  ;  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    //echo($dir_name)  ;  
+                    
                     if (mkdir($dir_name)){
                         //echo($dir_name)  ;  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                         //* *****
-                        $use_generate_node = 1;
+                        $use_generate_node = 0;
                         $from_info = $this->get_report_definition_id_info($use_generate_node,$link_parms_array);
-                        //var_dump($from_info);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                        //echo($this->views_files_path_only."*");
+                        $from_node = $from_info['from_folder'];
+                        $to_node = $this->views_files_path_only. $link_parms_array['node_name'];
+                        //var_dump($link_parms_array);var_dump($from_info);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                         
-                       $this->clone_from_node_to_node($from_info,$dir_name,$link_parms_array);
+                       $this->clone_from_node_to_node($from_node,$to_node);
                         //* *****
                         $msg_array[$i0]['fileName'] = $dir_name;
                         $msg_array[$i0]['str1']     = " has been created ";
@@ -527,13 +526,10 @@ class CRHBaseController extends DEHBaseController
                     if (mkdir($dir_name)){
                        $msg_array[$i0]['str1']     = " directory has been created ";
                         $msg_array[$i0]['fileName'] = $dir_name;
-                    //echo($dir_name)  ;  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    //echo($dir_name)  ;  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     //* *****
                     $use_generate_node = 1;
                     $from_info = $this->get_report_definition_id_info($use_generate_node,$link_parms_array);
-                     //var_dump($from_info);
-                    //$this->clone_ids_to_node_name($from_info ,$use_generate_node,$link_parms_array);
-                    //* *****
 
                    }
                     else{
@@ -903,10 +899,10 @@ class CRHBaseController extends DEHBaseController
             'routes_include'                => 'routes_include',     
             'table_controller'              => 'table_controller',     
             'table_controller_file'         => 'table_controller_file',     
-             'views_node_directory'          => 'views_node_directory',     
+            'views_node_directory'          => 'views_node_directory',     
             'views_node_gen_directory'      => 'views_node_gen_directory',     
             'model_report_definition'       => 'model_report_definition',     
-           'model'                         => 'model',     
+            'model'                         => 'model',     
             );
 
         return $required_entities;
@@ -950,6 +946,7 @@ class CRHBaseController extends DEHBaseController
 
         $i0 = count($msg_array);
         $msg_array[$i0] = $empty_msg_array;
+        echo('entity: '.$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         switch ($entity) {
  
            case "model_report_definition":
@@ -1093,7 +1090,7 @@ class CRHBaseController extends DEHBaseController
                 break;
 
             case "views_node_gen_directory":
-
+                $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                 $dir_name = $project_path."/resources/views/". $link_parms_array['node_name'].'/generated_files'; 
                 if (is_dir($dir_name)){
                     //$this->debug3(__FILE__,__LINE__,__FUNCTION__);
@@ -1202,7 +1199,6 @@ class CRHBaseController extends DEHBaseController
                             //$table_names = array('0'=>$node_name);
                             $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
 
-                            $link_parms_array = $this->derive_entity_names_from_table($node_name);   
                             // link_pams_array is the counterpart of search_str_arrays 
                             //var_dump($node_name);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);  
 
@@ -1212,7 +1208,7 @@ class CRHBaseController extends DEHBaseController
                             $msgs_array = array();
                             foreach ($required_entities as $entity=>$entity_name) {
                                 //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                                $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$node_name);
+                                $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$this->link_parms_array,$parm2_array,$node_name);
                               }
                             $fields = array("entity","str1","fileName","str2");
 
@@ -1234,8 +1230,6 @@ class CRHBaseController extends DEHBaseController
                             $this->no_of_fields = 4;
 
                             $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
-                            $link_parms_array = $this->derive_entity_names_from_table($node_name);   
-   
 
                             $table_names = array('0'=>$node_name);
                             $table_names = array($node_name=>$node_name);
@@ -1272,7 +1266,7 @@ class CRHBaseController extends DEHBaseController
                             $table_names = array('0'=>$node_name);
                             $table_names = array($node_name=>$node_name);
                             $active_controllers = $table_names;
-                            $link_parms_array = $this->derive_entity_names_from_table($node_name);    
+                            $link_parms_array = $this->$link_parms_array;
                             //var_dump($node_name);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);  
 
                             if ($miscThing = MiscThing    
@@ -1304,7 +1298,7 @@ class CRHBaseController extends DEHBaseController
                             $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);  
                             $table_names = array('0'=>$node_name);
-                            $link_parms_array = $this->derive_entity_names_from_table($node_name);    
+                            $link_parms_array = $this->$link_parms_array;
                             //var_dump($link_parms_array);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);  
 
                             $active_controllers = $table_names;
@@ -1336,7 +1330,7 @@ class CRHBaseController extends DEHBaseController
                             $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
 
                             $table_names = array('0'=>$node_name);
-                            $link_parms_array = $this->derive_entity_names_from_table($node_name);    
+                            $link_parms_array = $this->link_parms_array;  
                             //var_dump($link_parms_array);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);  
 
                             $active_controllers = $table_names;
@@ -1748,7 +1742,7 @@ class CRHBaseController extends DEHBaseController
 
 
    public function derive_entity_names_from_table($table) {       
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
+        //echo ('table: '.$table);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $link_parms_array = array(
             'controller_name'   => ucfirst($table).'Controller',
             'model_table'       => $table,
@@ -2384,7 +2378,7 @@ class CRHBaseController extends DEHBaseController
                 'report_id'=>$from_id,
                 'node_name'=>$arr1['node_name']
             );
-echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $from_folder = $views_files_path_only .  $from_array['node_name']."/".$generated_dir;
 
            unset($arr1['id']);
@@ -2422,7 +2416,7 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
     public function get_report_definition_id_info($use_generate_node,$link_parms_array) {
         //var_dump($link_parms_array); var_dump($this->report_definition_id);
 
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
         $reports_to_clone_array = array(
              $this->report_definition_model_name =>$this->report_definition_id  
               );
@@ -2433,7 +2427,6 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
         //***** if there aren't any, load the defaults
         $arr1 = (array) $report_definition[0]['attributes'];
         //var_dump($arr1);
-        $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
 
         if ($report_definition->count('items') > 0){
             //***** for each default_report 
@@ -2457,26 +2450,22 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
         }
     }
 
-    public function clone_from_node_to_node($from_info,$to_folder,$link_parms_array) {
+    public function clone_from_node_to_node($from_folder,$to_folder) {
         // except directories
-        //var_dump($from_info);// var_dump($this->report_definition_id);
+        //var_dump($from_folder); var_dump($to_folder);
 
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        if ($handle = opendir($from_info['from_folder'])) {
+        if ($handle = opendir($from_folder)) {
              /* This is the correct way to loop over the directory. */
             while (false !== ($file_name = readdir($handle))) {
                      //echo ("<br>".$to_string_array['report_id']);
-                if(!(is_dir($from_info['from_folder']."/".$file_name))) {
+                if(!(is_dir($from_folder."/".$file_name))) {
                    //echo("<br>".$to_folder."/".$file_name." was created ");
-                    echo("<br>".$to_folder."/".$file_name);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                    copy($from_info['from_folder']."/".$file_name,$to_folder."/".$file_name);
+                    //echo("<br>".$to_folder."/".$file_name);//$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    copy($from_folder."/".$file_name,$to_folder."/".$file_name);
                     //$this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo($to_folder."/".$file_name." was created ");
                 }
-                else{
-                    //echo ("<br>zzzzzzzzzzzzzzzz".$file_name." entry ".$from_string_array['report_id']);
-                    //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
- 
-                }
+
             }
         }
         return redirect('admin/miscThings');
@@ -2485,7 +2474,8 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
 
 
     public function clone_ids_to_node_name($from_info,$use_generate_node,$link_parms_array) {
-       //var_dump($from_info);// var_dump($this->report_definition_id);
+        // part of the model_report_definition
+        //var_dump($from_info);// var_dump($this->report_definition_id);
 
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $reports_to_clone_array = array(
@@ -2494,18 +2484,18 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
         $from_id = $from_info['report_id'];
         $from_folder = $from_info['from_folder'];
 
-            $generated_dir = "generated_files";
-            $displayYN = "n";
-            $link_parms_array['to_folder'] = $this->views_files_path. $link_parms_array['node_name']."/"."generated_files";
-            foreach ($reports_to_clone_array as $index => $from_id) {
-                // jusst once to seed report files and directories
-                //$this->clone_id_to_node($from_id,$new_values_array,$new_values_array['node_name'],$from_folder,$to_folder); 
-                //$this->partial_folder_clone_w_scanrepl($from_id,$new_values_array,$this->views_files_path,$generated_dir ); 
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                $this->partial_folder_clone_w_scanrepl($from_folder,$link_parms_array['to_folder'],$from_info,$link_parms_array,$displayYN);
- 
-            }
-                return redirect('admin/miscThings');
+        $generated_dir = "generated_files";
+        $displayYN = "n";
+        $link_parms_array['to_folder'] = $this->views_files_path_only. $link_parms_array['node_name']."/"."generated_files";
+        foreach ($reports_to_clone_array as $index => $from_id) {
+            // jusst once to seed report files and directories
+            //$this->clone_id_to_node($from_id,$new_values_array,$new_values_array['node_name'],$from_folder,$to_folder); 
+            
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            $this->partial_folder_clone_w_scanrepl($from_folder,$link_parms_array['to_folder'],$from_info,$link_parms_array,$displayYN);
+
+        }
+            return redirect('admin/miscThings');
     }
 
 
@@ -2570,7 +2560,7 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
             'field_name_string' => "@@field_name_string@@"
             );
         //echo("<br/>".$this->node_name);
-        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        $link_parms_array = $this->link_parms_array; 
         //var_dump($link_parms_array);
 
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -2587,7 +2577,7 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
         // we're only doing one ... 'model_report_definition'
         foreach ($required_entities as $entity=>$entity_name) {
             //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
+            $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$this->link_parms_array,$parm2_array,$this->node_name);
             }
 
 
@@ -3247,7 +3237,7 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
         //  
         //var_dump($from_string_array);
         //var_dump($to_string_array);
-        echo(" **** "." from_folder ".$from_folder." **** "." to_folder ".$to_folder." **** ");$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        //echo(" **** "." from_folder ".$from_folder." **** "." to_folder ".$to_folder." **** ");$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         if ($handle = opendir($from_folder)) {
              /* This is the correct way to loop over the directory. */
             while (false !== ($file_name = readdir($handle))) {
@@ -3261,7 +3251,7 @@ echo($from_array['node_name']." *** ".$generated_dir." *** ");$this->debugx('111
                     //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     //var_dump($to_string_array);//var_dump($from_string_array);
                     $new_file_name = $to_folder.'/'.$to_string_array['report_id'].substr($file_name,$i2);
-                    echo('file_name '.$file_name.'new_file_name '.$new_file_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                    //echo('file_name '.$file_name.'new_file_name '.$new_file_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                     File::put($new_file_name, $file_as_string);
 
                     //echo("<br>".$new_file_name." was created ");
