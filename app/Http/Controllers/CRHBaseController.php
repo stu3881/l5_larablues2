@@ -148,20 +148,23 @@ class CRHBaseController extends DEHBaseController
         //echo $this->view_files_prefix ;exit ("exit in constructor");
 
         // THIS IS HOW WE CHANGE CONNECTIONS
- 
+        /*
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $project_path     = substr(app_path(),0,strlen(app_path())-4);
         $MiscThing = new MiscThing;
         $MiscThing->setConnection("homestead");
-        $MiscThing->setConnection("blues_main");
+        //$MiscThing->setConnection("blues_main");
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $miscThings = $MiscThing
             ::where('record_type','=','table_controller')
             ->where('controller_name','='    ,"MiscThingsController")
             ->get();
         $this->db_snippet_connection            = $miscThings[0]->db_snippet_connection;
         $this->db_data_connection               = $miscThings[0]->db_data_connection;
-       
+ exit("exit!");       
         //$this->db_snippet_connection            = "homestead";
         //$this->db_data_connection               = "homestead";
- 
+ */
  
         // field_name_list_array d//return $an_array;
     }

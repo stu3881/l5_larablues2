@@ -71,7 +71,7 @@ class MainController extends CRHBaseController {
         //$snippet_table = "miscThings";
         //$defaultConnection = "localhost_stu3881_main";
         //$queryx = $this->get_db_connection_data($snippet_table,$defaultConnection);
-
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$this->beforeFilter('csrf', array('on'=>'post'));
         //$this->beforeFilter('admin');
         $this->db_connection_name              = $db_connection_name;
