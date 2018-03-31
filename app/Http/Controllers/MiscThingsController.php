@@ -81,7 +81,7 @@ class MiscThingsController extends CRHBaseController
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
         //$this->db_snippet_connection           = "";
- exit("Exiting!");      
+ //exit("Exiting!");      
         $this->snippet_model                    = $snippet_model;
         $this->model                            = $model;
         $this->model_table                      = $model_table;
