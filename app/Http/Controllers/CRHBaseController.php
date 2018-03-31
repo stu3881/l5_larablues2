@@ -95,7 +95,7 @@ class CRHBaseController extends DEHBaseController
         $this->snippet_table_key_field_name     = $snippet_table_key_field_name;
         $this->node_name                        = $node_name ;
        
-        //$this->link_parms_array                 = $link_parms_array;
+        $this->link_parms_array                 = $link_parms_array;
 
 
         $this->backup_node                      = $backup_node;
@@ -497,7 +497,7 @@ class CRHBaseController extends DEHBaseController
                         $use_generate_node = 0;
                         $from_info = $this->get_report_definition_id_info($use_generate_node,$link_parms_array);
                         //echo($this->views_files_path_only."*");
-                        $from_node = $from_info['from_folder'];
+                        $from_node = $this->views_files_path_only.'generated_views_directory_model';
                         $to_node = $this->views_files_path_only. $link_parms_array['node_name'];
                         //var_dump($link_parms_array);var_dump($from_info);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                         
@@ -1301,7 +1301,7 @@ class CRHBaseController extends DEHBaseController
                             $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);  
                             $table_names = array('0'=>$node_name);
-                            $link_parms_array = $this->$link_parms_array;
+                            $link_parms_array = $this->link_parms_array;
                             //var_dump($link_parms_array);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);  
 
                             $active_controllers = $table_names;
