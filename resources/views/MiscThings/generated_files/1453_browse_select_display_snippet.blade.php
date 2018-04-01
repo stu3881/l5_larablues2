@@ -1,16 +1,16 @@
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->table_name) }}
+{{ Form::label('', $record['table_name']) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->field_name) }}
+{{ Form::label('', $record['field_name']) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->value) }}
+{{ Form::label('', $record['value']) }}
 </td>
 
 <td class='text_align_left select_pink' >
-{{ Form::label('', $record->name) }}
+{{ Form::label('', $record['name']) }}
 </td>

@@ -1,0 +1,12 @@
+<tr>
+<td>#</td>
+<td>node_name</td>
+<td>report_name</td>
+<td>table_name</td>
+<td>record_type</td>
+<td>business_rules</td>
+<td>business_rules_field_name_array</td>
+<td>business_rules_r_o_array</td>
+<td>business_rules_value_array</td>
+<td>bypassed_field_name</td>
+</tr>
