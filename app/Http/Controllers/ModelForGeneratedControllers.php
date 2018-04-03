@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\@@model@@;
-
-
 use App\Models\MiscThing;
+
 use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
@@ -182,7 +181,7 @@ class @@controller_name@@ extends CRHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+     public function xcreate_w_report_id(REQUEST $request, $report_definition_key) {
         // *******************
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
@@ -226,8 +225,8 @@ class @@controller_name@@ extends CRHBaseController
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
 
-
-        $id = $report_definition_id;
+        $coming_from = "create_w_report_id";
+        $id = $report_definition_key;
         return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
             ->with('id'                                 ,$id)
             ->with('report_definition_id'               ,$report_definition_key)

@@ -8,7 +8,9 @@
 	$table_name = 'to_be_resolved';
 	$update_table = "";
 	//var_dump($miscThing[0]);echo($what_we_are_doing." ** ".$coming_from);
-	//echo ('<br>'.$id);
+	//$report_name = $miscThing[0]['report_name'];
+	//echo ('<br>'.$report_name);
+	//$report_name = $report_name;
 
 	//exit('exit in reportDefMenuUpdate.blade at 12');
 	$lookups = "";
@@ -77,9 +79,9 @@
 					</td>
 
 					<td class="table_no_lines">
-				   		<a href="{{ URL::route($miscThing[0]->node_name.'.indexReports', 
+				   		<a href="{{ URL::route($node_name.'.indexReports', 
 					   		$parameters = array(
-					   		'id'=>$miscThing[0]->id,
+					   		'id'=>$id,
 			   				'reportDefinitionKey'=>$report_definition_id
 			   				)
 		   				) }}" class="btn mycart-btn-row2">Reports menu</a>

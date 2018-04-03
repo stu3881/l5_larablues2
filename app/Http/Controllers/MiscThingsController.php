@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\New_show;
-
-
 use App\Models\MiscThing;
+
 use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
@@ -19,7 +17,7 @@ use App\Http\Requests\StoreMiscThings;
 use DB;
 //use App\Http\Controllers\Schema;
 
-class New_showController extends CRHBaseController
+class MiscThingsController extends CRHBaseController
 {
         public function __construct(
      
@@ -34,11 +32,13 @@ class New_showController extends CRHBaseController
         //$db_snippet_connection          = "",
         // set unique values for table controller
         //flagEn0 dont chage or remove this line or line above
-        $controller_name                = "New_showController", 
-        $model_table                    = "new_show",         
-        $model                          = "New_show", 
-        $node_name                      = "new_show", 
+        $controller_name                = "MiscThingsController", 
+        $model_table                    = "miscThings",         
+        $model                          = "MiscThing", 
+        $node_name                      = "miscThings", 
         $snippet_model                  = "MiscThing",
+        $link_parms_array               = "",
+
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -79,7 +79,7 @@ class New_showController extends CRHBaseController
         $this->node_name                        = $node_name ;
         $this->snippet_model                    = $snippet_model;
 
-        $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+        $this->link_parms_array                 = $this->derive_entity_names_from_table($this->node_name);
         //$link_parms_array = array(
         //'controller_name',   
         //'model_table',   
@@ -142,7 +142,7 @@ class New_showController extends CRHBaseController
 
         // THIS IS HOW WE CHANGE CONNECTIONS (they're currently hardcoded to homestead)
         $dataModel = $this->link_parms_array['controller_name'];
-        $this->snippet_model_parms = $this->derive_entity_names_from_table(" ",$this->snippet_table);
+        $this->snippet_model_parms = $this->link_parms_array;
         $snippetController = $this->snippet_model_parms['controller_name'];
         $snippetModel = $this->snippet_model_parms['model'];
         //echo($snippetModel);exit("exit at 146");
@@ -168,7 +168,7 @@ class New_showController extends CRHBaseController
         // **************
         $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        //$this->report_definition_id         = $this->report_definition_id;
+        $this->report_definition_id         = $this->report_definition_id;
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
@@ -185,53 +185,40 @@ class New_showController extends CRHBaseController
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
         // *******************
-        var_dump($this->link_parms_array);
-        var_dump($miscThing[0]);
-        //$report_definition_key = $this->report_definition_key;
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
+        $link_parms_array = $this->link_parms_array;
+        
+        //echo $this->node_name;//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);    
         if ($miscThing = MiscThing    
  
             ::where('record_type',  '=', "report_definition")
-            ->where('node_name',  '=', $this->link_parms_array['node_name'])
+            ->where('node_name',  '=', $link_parms_array['node_name'])
+            ->get())
             //->orderBy('created_at','DESC')
             //->orderBy('created_at')
-           ->get())
-      {
-
-        //$requestFieldsArray=$miscThing->all();
-         echo ("* ".$report_definition_key);
-        var_dump($this->link_parms_array);
-        var_dump($miscThing[0]);
-        //$report_definition_key = $this->report_definition_key;
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
-        echo $this->model;
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
+     {
 
         //$required_entities = $this->generic_method_define_required_entities();
         $msgs_array = array();
         $search_str_array = array(
-            'controller_name'   => "New_showController",
-            'model_table'       => "new_show",
-            'model'             => "New_show",
-            'node_name'         => "new_show",
+            'controller_name'   => "MiscThingsController",
+            'model_table'       => "miscThings",
+            'model'             => "MiscThing",
+            'node_name'         => "miscThings",
             'field_name_string' => "@@field_name_string@@"
             );
-        //echo("<br/>".$this->node_name);
-        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        echo("<br/>nn ".$this->node_name);
+        $link_parms_array = $this->link_parms_array;
         //var_dump($link_parms_array);
 
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $parm2_array = array();
         $parm2_array[1]  = $report_definition_key;
+         //echo(" * ".$this->node_name." * ". $this->get_report_definition_id('report_definition',$this->node_name, 'xxx'));
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $required_entities = array(
             'model_report_definition'       => 'model_report_definition'
             );
-        echo($this->node_name. $this->get_report_definition_id(
-        'report_definition',
-        $this->node_name,
-        'xxx'));
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        // just this one 
         foreach ($required_entities as $entity=>$entity_name) {
             //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
@@ -275,12 +262,12 @@ class New_showController extends CRHBaseController
         switch ($distinct_regular) { 
             // all queries start the same except distinct
             case "distinct":
-                $query = New_show::distinct()->select($field_name);
-                echo("New_show::distinct()->select(".$field_name.")");
+                $query = MiscThing::distinct()->select($field_name);
+                echo("MiscThing::distinct()->select(".$field_name.")");
                 break;
             case "regular":
-                $query = New_show::where($field_name,$r_o,$v);
-                echo("New_show::where(".$field_name.",". $r_o. ",".$v.")");
+                $query = MiscThing::where($field_name,$r_o,$v);
+                echo("MiscThing::where(".$field_name.",". $r_o. ",".$v.")");
                 break;
        }   
        return $query;
@@ -291,14 +278,14 @@ class New_showController extends CRHBaseController
         switch ($function) {
              case "insert":
                 //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                $data_record = New_show::where('id','=',$id)->get();
+                $data_record = MiscThing::where('id','=',$id)->get();
                 //$arr1 = (array) $data_record[0]['attributes'];
                 var_dump($data_record[0]);//var_dump($arr1);
                 $arr1 = (array) $data_record[0];
                 unset($arr1['id']);
                 unset($arr1['created_at']);
                 unset($arr1['updated_at']);
-                if (New_show::create($arr1)){
+                if (MiscThing::create($arr1)){
                     echo('klone succeeded');
                 }
                 else{
@@ -415,7 +402,7 @@ class New_showController extends CRHBaseController
                 // *****
                         //var_dump($passed_to_view_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
-                        return view('new_show'.'.editUpdate',compact('miscThings'))
+                        return view('miscThings'.'.editUpdate',compact('miscThings'))
                         ->with('node_name'   ,$this->node_name)            
                         ->with('model'   ,$this->model)            
                         ->with('passed_to_view_array'   ,$passed_to_view_array);  
@@ -455,11 +442,11 @@ class New_showController extends CRHBaseController
                 switch ($request->input('coming_from')) {
                     
                     case "edit2_browse_add_button":
-                        $updatex  = New_show
+                        $updatex  = MiscThing
                             ::insert($modifiable_fields_name_values);
                         break;
                     case "edit2_edit_button":
-                        $updatex  = New_show
+                        $updatex  = MiscThing
                             ::where($this->key_field_name,  '=', $request->input('data_key'))
                             ->update($modifiable_fields_name_values);
                         break;
@@ -492,7 +479,7 @@ class New_showController extends CRHBaseController
             case $this->model:
         
                 //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                $model_get_id = New_show::where('id','=',$id)  
+                $model_get_id = MiscThing::where('id','=',$id)  
                 ->get();
                 break;
          }
@@ -663,7 +650,7 @@ class New_showController extends CRHBaseController
                             //echo($id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($id) ;
                             //var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                           return view('new_show'.'.reportDefMenuEdit',compact('miscThing'))
+                           return view('miscThings'.'.reportDefMenuEdit',compact('miscThing'))
                             ->with('id'                    ,$id)
                             ->with('report_definition_id'  ,$this->report_definition_id)
                             ->with('model'                 ,$this->model)
@@ -694,7 +681,7 @@ class New_showController extends CRHBaseController
                         }
 
                     var_dump($coming_from);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-                   return redirect()->route('new_show.browseEdit', 
+                   return redirect()->route('miscThings.browseEdit', 
                         ['id' => $request['report_definition_key'],
                         'what_we_are_doing' => 'what_we_are_doing',
                         'coming_from' => 'editUpdate'
@@ -704,7 +691,7 @@ class New_showController extends CRHBaseController
                 default:
                     var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                  
-                    return redirect()->route('new_show.browseEdit', 
+                    return redirect()->route('miscThings.browseEdit', 
                         ['id' => $request['report_definition_key'],
                         'what_we_are_doing' => 'what_we_are_doing',
                         'coming_from' => 'editUpdate'
@@ -758,7 +745,7 @@ class New_showController extends CRHBaseController
         //->get();
         //$Maillist1 = compact($Maillist);
         //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-        return redirect()->route('new_show'.'.browseEdit', 
+        return redirect()->route('miscThings'.'.browseEdit', 
             ['id' => $id,
             'what_we_are_doing' => 'what_we_are_doing',
             'coming_from' => 'editUpdate'
@@ -772,9 +759,9 @@ class New_showController extends CRHBaseController
     {
          $this->debug_exit(__FILE__,__LINE__);
 
-        $this->authorize('destroy', New_show);
+        $this->authorize('destroy', MiscThing);
 
-        New_show::delete($id);
+        MiscThing::delete($id);
 
         //return redirect('/tasks');
         return;

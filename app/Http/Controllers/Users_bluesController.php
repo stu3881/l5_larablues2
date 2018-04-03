@@ -80,6 +80,8 @@ class Users_bluesController extends CRHBaseController
         $this->snippet_model                    = $snippet_model;
 
         $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+        //var_dump($request);
+        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$link_parms_array = array(
         //'controller_name',   
         //'model_table',   
