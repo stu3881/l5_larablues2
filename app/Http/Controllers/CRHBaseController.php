@@ -2492,12 +2492,13 @@ class CRHBaseController extends DEHBaseController
 
     public function clone_ids_to_node_name($from_info,$use_generate_node,$link_parms_array) {
         // part of the model_report_definition
-        //var_dump($from_info);// var_dump($this->report_definition_id);
-
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        
         $reports_to_clone_array = array(
              $this->report_definition_model_name =>$this->report_definition_id  
               );
+        //var_dump($reports_to_clone_array);// var_dump($this->report_definition_id);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
         $from_id = $from_info['report_id'];
         $from_folder = $from_info['from_folder'];
 
@@ -2562,7 +2563,8 @@ class CRHBaseController extends DEHBaseController
         $requestFieldsArray=$request->all();
         //var_dump($report_definition_key);
         
-        $link_parms_array = $this->link_parms_array;var_dump($request);echo($report_definition_key);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);   
+        $link_parms_array = $this->link_parms_array;
+        //var_dump($request);echo($report_definition_key);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);   
         
         //echo $this->node_name;//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);    
         $miscThing = MiscThing    

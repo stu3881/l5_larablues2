@@ -224,8 +224,8 @@ class MiscThingsController extends CRHBaseController
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
 
-
-        $id = $report_definition_id;
+        $coming_from = "coming_from";
+        $id = $report_definition_key;
         return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
             ->with('id'                                 ,$id)
             ->with('report_definition_id'               ,$report_definition_key)
