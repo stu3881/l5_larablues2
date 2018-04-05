@@ -1140,7 +1140,7 @@ class CRHBaseController extends DEHBaseController
         $parm2_array = json_decode($parm2);
         //var_dump($parm1);var_dump($parm2_array);$this->debugx('1101',__FILE__,__LINE__,__FUNCTION__);
         $node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
-        $this->link_parms_array = $this->derive_entity_names_from_table($this->node_name);
+        $this->link_parms_array = $this->derive_entity_names_from_table($node_name);
         var_dump($this->link_parms_array);var_dump($node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         $what_are_we_doing = $parm1;  
 
@@ -1206,7 +1206,10 @@ class CRHBaseController extends DEHBaseController
                     if (in_array('remove',$parm2_array)){$choice2       = 'remove';}
                     if (in_array('validate',$parm2_array)){$choice2     = 'validate';}
                     //
-                    //echo($choice2);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+                    //$node_name = $this->generic_method_node_name_from_parm2_array($parm2_array);
+//$this->link_parms_array = $this->derive_entity_names_from_table($node_name);
+
+                    //var_dump($this->link_parms_array);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                     switch ($choice2) { 
                         case "activate":
                             $array_of_parm2_array = array();
@@ -1258,8 +1261,8 @@ class CRHBaseController extends DEHBaseController
                             $required_entities = $this->generic_method_define_required_entities();
                             $msgs_array = array();
                             foreach ($required_entities as $entity=>$entity_name) {
-                                //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-                                $msgs_array = $this->generic_method_deactivate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$node_name);
+                                echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+                                $msgs_array = $this->generic_method_deactivate_entity($entity,$search_str_array,$msgs_array,$this->link_parms_array,$parm2_array,$node_name);
                               }
                             var_dump($msgs_array);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);  
                        

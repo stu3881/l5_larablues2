@@ -3,6 +3,6 @@
 	{{ Form::label('report_name','report_name') }}
 </td>
 <td style="text-align:left">
-	{!! Form::text('report_name','fixthis report_name',['class'=>'form-control']) !!}
+	{!! Form::text('report_name',$report_name,['class'=>'form-control']) !!}
 </td>
 </tr>

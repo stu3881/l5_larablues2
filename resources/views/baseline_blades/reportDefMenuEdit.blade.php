@@ -8,7 +8,7 @@
 	$table_name = 'to_be_resolved';
 	$update_table = "";
 	//var_dump($miscThing[0]);echo($what_we_are_doing." ** ".$coming_from);
-	//$report_name = $miscThing[0]['report_name'];
+	$report_name = $miscThing[0]['report_name'];
 	//echo ('<br>'.$report_name);
 	//$report_name = $report_name;
 
