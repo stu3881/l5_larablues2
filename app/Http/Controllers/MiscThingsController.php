@@ -510,7 +510,7 @@ class MiscThingsController extends CRHBaseController
         //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         if (!array_key_exists('what_we_are_doing',$requestFieldsArray)) {
            $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
-         }
+        }
         $what_we_are_doing = $requestFieldsArray['what_we_are_doing'] ;
 
         if (array_key_exists('coming_from',$requestFieldsArray)) {
@@ -637,9 +637,17 @@ class MiscThingsController extends CRHBaseController
             // ******
             // this does the update
             // ******
+           
+            //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);//var_dump($what_we_are_doing);
+            //$requestFieldsArray['query_field_name_array'] = json_encode($requestFieldsArray['query_field_name_array']);
+            //$requestFieldsArray['query_r_o_array'] = json_encode($requestFieldsArray['query_r_o_array']);
+            //$requestFieldsArray['query_field_name_array'] = json_encode($requestFieldsArray['query_value_array']);
+
+           //var_dump($requestFieldsArray);//var_dump($what_we_are_doing);
+
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
-            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
@@ -666,6 +674,8 @@ class MiscThingsController extends CRHBaseController
                     switch ($what_we_are_doing) {
                         case "ppv_define_business_rules":
                         case 'ppv_define_query':
+
+
                             echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
                             var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);

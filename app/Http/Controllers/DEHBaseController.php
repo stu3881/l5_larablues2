@@ -34,6 +34,7 @@ class DEHBaseController extends Controller
 		*/
 			$crlf = "\r\n";
 	        $bypassed_field_name = "not_used";
+            $snippet_table = "";
 
 	}
 
@@ -156,6 +157,21 @@ class DEHBaseController extends Controller
         $objOrArray = "object";
         File::put($fnam,$this->blade_gen_browse_select_data_rows($this->model,$_REQUEST["to"],'version1',$objOrArray));
         //echo ('<br>blade_gen_browse_select<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+   }
+  
+            
+
+    public function blade_gen_radio_button_list($report_key,$objOrArray) {
+        //echo ('<br>blade_gen_radio_button_list<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+//blade_gen_simple_add
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_field_names_row.blade.php';
+        File::put($fnam, $this->blade_gen_radio_button_list_field_names_row($this->model,$_REQUEST["to"]));
+       //echo ('<br>blade_gen_radio_button_list<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
+
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_key.'_browse_select_display_snippet.blade.php';
+        $objOrArray = "object";
+        File::put($fnam,$this->blade_gen_radio_button_list_data_rows($this->model,$_REQUEST["to"],'version1',$objOrArray));
+        //echo ('<br>blade_gen_radio_button_list<br><br>'.$report_key);$this->debug_exit(__FILE__,__LINE__,10);
    }
   
      
@@ -380,6 +396,16 @@ class DEHBaseController extends Controller
 		return $query_relational_operators_array;
 	}
 	
+    /*
+    // Basic Join Statement DB::table('users')
+          ->join('contacts', 'users.id', '=', 'contacts.user_id')
+          ->join('orders', 'users.id', '=', 'orders.user_id')
+          ->select('users.id', 'contacts.phone', 'orders.price')
+          ->get();
+    */
+
+
+
 	public function build_business_rules_relational_operators() {
 		$business_rules_relational_operators	= 		array();
 		$business_rules_relational_operators[] =		"required";
@@ -555,8 +581,8 @@ class DEHBaseController extends Controller
 		//echo 'get_generated_snippets 838';//exit("exit");
 		//2014-10-13 modified query to only get 
 
-//var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
-//var_dump($ConnectionsQuery)
+        //var_dump($ConnectionsQuery);$this->debug_exit(__FILE__,__LINE__,1);
+        //var_dump($ConnectionsQuery)
 
 		$array = array();
 		$arrx  = DB::connection($this->db_snippet_connection)->table($this->snippet_table)

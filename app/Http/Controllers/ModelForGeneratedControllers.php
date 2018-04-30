@@ -729,6 +729,37 @@ class @@controller_name@@ extends CRHBaseController
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
+        //var_dump($request->request->parameters);$this->snippet_model
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $coming_from = $AllrequestFieldsArray['coming_from'];
+        switch ($coming_from) {
+            case 'select_fields':
+            case 'reportDefMenuEdit':
+            case 'ppv_update':
+                $query_result = MiscThing::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+               break;
+            default :
+                $query_result = Maillist::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+                break;
+            }
+        //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route('miscThings'.'.browseEdit', 
+            ['id' => $id,
+            'what_we_are_doing' => 'what_we_are_doing',
+            'coming_from' => 'editUpdate'
+            ]);
+         //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //return $Maillist;
+        }
+    
+
+
+    public function updateGetRedirectold($key_field_name,$id,$requestFieldsArray,$request){
+        $AllrequestFieldsArray=$request->all(); // important!!
+        //var_dump($requestFieldsArray);
+        //var_dump($AllrequestFieldsArray);
         
         //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -740,7 +771,7 @@ class @@controller_name@@ extends CRHBaseController
 
         }
         else {
-        $query_result = MiscThing::where($key_field_name,  '=', $id)
+        $query_result = '@@model@@'::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();

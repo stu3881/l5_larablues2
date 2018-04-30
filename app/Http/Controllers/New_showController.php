@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\New_show;
-
-
 use App\Models\MiscThing;
+
 use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
@@ -39,6 +38,8 @@ class New_showController extends CRHBaseController
         $model                          = "New_show", 
         $node_name                      = "new_show", 
         $snippet_model                  = "MiscThing",
+        $link_parms_array               = "",
+
         //flagStart1 dont chage or remove this line
 
         $report_definition_model_name   = "Report_Definition_Model",
@@ -79,7 +80,7 @@ class New_showController extends CRHBaseController
         $this->node_name                        = $node_name ;
         $this->snippet_model                    = $snippet_model;
 
-        $this->link_parms_array               = $this->derive_entity_names_from_table(" ",$this->node_name);
+        $this->link_parms_array                 = $this->derive_entity_names_from_table($this->node_name);
         //$link_parms_array = array(
         //'controller_name',   
         //'model_table',   
@@ -142,7 +143,7 @@ class New_showController extends CRHBaseController
 
         // THIS IS HOW WE CHANGE CONNECTIONS (they're currently hardcoded to homestead)
         $dataModel = $this->link_parms_array['controller_name'];
-        $this->snippet_model_parms = $this->derive_entity_names_from_table(" ",$this->snippet_table);
+        $this->snippet_model_parms = $this->link_parms_array;
         $snippetController = $this->snippet_model_parms['controller_name'];
         $snippetModel = $this->snippet_model_parms['model'];
         //echo($snippetModel);exit("exit at 146");
@@ -168,7 +169,7 @@ class New_showController extends CRHBaseController
         // **************
         $this->field_name_list_array_first_index = $field_name_list_array_first_index;
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" leaving constructor");
-        //$this->report_definition_id         = $this->report_definition_id;
+        $this->report_definition_id         = $this->report_definition_id;
 
         $this->business_rules_array         = $business_rules_array;
         $this->store_validation_id          = $this->report_definition_id;
@@ -180,33 +181,22 @@ class New_showController extends CRHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+     public function xcreate_w_report_id(REQUEST $request, $report_definition_key) {
         // *******************
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
         // *******************
-        var_dump($this->link_parms_array);
-        var_dump($miscThing[0]);
-        //$report_definition_key = $this->report_definition_key;
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
+        $link_parms_array = $this->link_parms_array;
+        
+        //echo $this->node_name;//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);    
         if ($miscThing = MiscThing    
  
             ::where('record_type',  '=', "report_definition")
-            ->where('node_name',  '=', $this->link_parms_array['node_name'])
+            ->where('node_name',  '=', $link_parms_array['node_name'])
+            ->get())
             //->orderBy('created_at','DESC')
             //->orderBy('created_at')
-           ->get())
-      {
-
-        //$requestFieldsArray=$miscThing->all();
-         echo ("* ".$report_definition_key);
-        var_dump($this->link_parms_array);
-        var_dump($miscThing[0]);
-        //$report_definition_key = $this->report_definition_key;
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
-        echo $this->model;
-        //$this->debug0(__FILE__,__LINE__,__FUNCTION__);
-
+     {
 
         //$required_entities = $this->generic_method_define_required_entities();
         $msgs_array = array();
@@ -217,28 +207,26 @@ class New_showController extends CRHBaseController
             'node_name'         => "new_show",
             'field_name_string' => "@@field_name_string@@"
             );
-        //echo("<br/>".$this->node_name);
-        $link_parms_array = $this->derive_entity_names_from_table($this->node_name); 
+        echo("<br/>nn ".$this->node_name);
+        $link_parms_array = $this->link_parms_array;
         //var_dump($link_parms_array);
 
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $parm2_array = array();
         $parm2_array[1]  = $report_definition_key;
+         //echo(" * ".$this->node_name." * ". $this->get_report_definition_id('report_definition',$this->node_name, 'xxx'));
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $required_entities = array(
             'model_report_definition'       => 'model_report_definition'
             );
-        echo($this->node_name. $this->get_report_definition_id(
-        'report_definition',
-        $this->node_name,
-        'xxx'));
-        $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        // just this one 
         foreach ($required_entities as $entity=>$entity_name) {
             //echo("<br/>".$entity);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
 
-
-        $id = $report_definition_id;
+        $coming_from = "create_w_report_id";
+        $id = $report_definition_key;
         return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
             ->with('id'                                 ,$id)
             ->with('report_definition_id'               ,$report_definition_key)
@@ -741,6 +729,37 @@ class New_showController extends CRHBaseController
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
+        //var_dump($request->request->parameters);$this->snippet_model
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $coming_from = $AllrequestFieldsArray['coming_from'];
+        switch ($coming_from) {
+            case 'select_fields':
+            case 'reportDefMenuEdit':
+            case 'ppv_update':
+                $query_result = MiscThing::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+               break;
+            default :
+                $query_result = Maillist::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+                break;
+            }
+        //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route('miscThings'.'.browseEdit', 
+            ['id' => $id,
+            'what_we_are_doing' => 'what_we_are_doing',
+            'coming_from' => 'editUpdate'
+            ]);
+         //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //return $Maillist;
+        }
+    
+
+
+    public function updateGetRedirectold($key_field_name,$id,$requestFieldsArray,$request){
+        $AllrequestFieldsArray=$request->all(); // important!!
+        //var_dump($requestFieldsArray);
+        //var_dump($AllrequestFieldsArray);
         
         //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -752,7 +771,7 @@ class New_showController extends CRHBaseController
 
         }
         else {
-        $query_result = MiscThing::where($key_field_name,  '=', $id)
+        $query_result = 'New_show'::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();

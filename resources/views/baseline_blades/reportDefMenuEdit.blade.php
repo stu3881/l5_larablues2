@@ -101,10 +101,16 @@
 			<?php $coming_from = "edit1"; ?>
 			@if($coming_from == "edit1")	
 				<tr class='table_no_lines'>
-<!-- <td> {{--"just a test"--}}</td>-->
+
+				<td>
+					<!-- add_additional_tables_to_query -->
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'add_additional_tables_to_query','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">add_additional_tables_to_query</a>
+	  		    </td>    
+					
 				<td>
 					<!-- modifiable fields -->
 	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'maintain_modifiable_fields','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_modifiable_fields</a>
+	  		    </td>    
 				<td>
 				
 				<!-- browse_select_array fields -->

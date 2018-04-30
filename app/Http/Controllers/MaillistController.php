@@ -186,7 +186,7 @@ class MaillistController extends CRHBaseController
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
         // *******************
-        $link_parms_array = $this->link_parms_array;var_dump($request);echo($report_definition_key);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);   
+        $link_parms_array = $this->link_parms_array;
         
         //echo $this->node_name;//$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);    
         if ($miscThing = MiscThing    
@@ -225,15 +225,13 @@ class MaillistController extends CRHBaseController
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
 
-            //echo("**".$id);
-        $id = $report_definition_id;
+        $coming_from = "create_w_report_id";
+        $id = $report_definition_key;
         return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
             ->with('id'                                 ,$id)
             ->with('report_definition_id'               ,$report_definition_key)
             ->with('model'                              ,$this->model)
             ->with('node_name'                          ,$this->node_name)
-            ->with('report_name'                        ,$miscThing[0]['report_name'])
-    //echo ('<br>'.$id);
             ->with('what_we_are_doing'                  ,'updating_report_name')
             ->with('coming_from'                        ,$coming_from)
            ;
@@ -417,7 +415,8 @@ class MaillistController extends CRHBaseController
                 //var_dump($request);$this->debug_exit(__FILE__,__LINE__,1);
                 $requestFieldsArray=$request->all(); // important!!
 
-                //                //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
+                //var_dump($working_arrays['ppv_define_business_rules']['business_rules_r_o_array']);
+                //var_dump($this->build_business_rules_relational_operators());$this->debug_exit(__FILE__,__LINE__,1);
                 var_dump($requestFieldsArray);$this->debug_exit(__FILE__,__LINE__,1);
 
                 //$validator = Validator::make(Input::all(), $business_rules_array); //update
@@ -587,11 +586,10 @@ class MaillistController extends CRHBaseController
 
                 break;  
             case "ppv_define_business_rules":
-                echo($what_we_are_doing." ".__FILE__.__LINE__.'<br>');//exit();
+                echo(__FILE__.__LINE__.'<br>');//exit();
                 $update = 1; 
-                //what_we_are_doing' => string 'ppv_define_business_rules'
                 //var_dump($request);//var_dump($working_arrays);
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+ 
 
                 $requestFieldsArray['business_rules']             = 
                 $this->build_validation_array(
@@ -599,20 +597,20 @@ class MaillistController extends CRHBaseController
                     $request->field_name_array,
                     $request->r_o_array,
                     $request->value_array);
-                //var_dump($requestFieldsArray);
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                 $business_rules = $requestFieldsArray['business_rules'];
                 $request->business_rules = json_encode($requestFieldsArray['business_rules']);
-                $requestFieldsArray['business_rules'] =                     json_encode($requestFieldsArray['business_rules']);
-                $requestFieldsArray['business_rules_field_name_array']    =                     json_encode($request['field_name_array']);
-                $requestFieldsArray['business_rules_r_o_array'] =                     json_encode($request['r_o_array']);
-                $requestFieldsArray['business_rules_value_array'] =                     json_encode($request['value_array']);
+                $requestFieldsArray['business_rules'] = 
+                    json_encode($requestFieldsArray['business_rules']);
+                $requestFieldsArray['business_rules_field_name_array']    = 
+                    json_encode($request->field_name_array);
+                $requestFieldsArray['business_rules_r_o_array'] = 
+                    json_encode($request->r_o_array);
+                $requestFieldsArray['business_rules_value_array'] = 
+                    json_encode($request->value_array);
 
 
                 $just_the_ones_we_want = (array) json_decode($requestFieldsArray['just_the_names_array']);
                 $just_the_ones_we_want = array_flip($just_the_ones_we_want);
-                //var_dump($just_the_ones_we_want);  
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
                  //echo(' array_intersect_key($requestFieldsArray,$arr2 ' );var_dump($arr2);            $this->debug_exit(__FILE__,__LINE__,10);
                 break;  
         } 
@@ -622,14 +620,8 @@ class MaillistController extends CRHBaseController
        // update
        // ******
         if ($update){  
-               //var_dump($requestFieldsArray); var_dump($just_the_ones_we_want);
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $requestFieldsArray = array_intersect_key($requestFieldsArray,
             $just_the_ones_we_want);
-            //var_dump($request->what_we_are_doing); 
-            //var_dump($requestFieldsArray);
-            //var_dump($just_the_ones_we_want);
-                //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             //var_dump($request);//$this->debug_exit(__FILE__,__LINE__,10);
             //$validation_array = json_decode($encoded_business_rules);
             switch ($request->what_we_are_doing) {
@@ -642,14 +634,11 @@ class MaillistController extends CRHBaseController
             }
             
             //var_dump($this->key_field_name);var_dump($id);var_dump($requestFieldsArray);
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             // ******
             // this does the update
             // ******
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
-           // ******
-            // this does the update
-            // ******
 
             //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
@@ -740,20 +729,50 @@ class MaillistController extends CRHBaseController
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
+        //var_dump($request->request->parameters);$this->snippet_model
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $coming_from = $AllrequestFieldsArray['coming_from'];
+        switch ($coming_from) {
+            case 'select_fields':
+            case 'reportDefMenuEdit':
+            case 'ppv_update':
+                $query_result = MiscThing::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+               break;
+            default :
+                $query_result = Maillist::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+                break;
+            }
+        //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route('miscThings'.'.browseEdit', 
+            ['id' => $id,
+            'what_we_are_doing' => 'what_we_are_doing',
+            'coming_from' => 'editUpdate'
+            ]);
+         //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //return $Maillist;
+        }
+    
+
+
+    public function updateGetRedirectold($key_field_name,$id,$requestFieldsArray,$request){
+        $AllrequestFieldsArray=$request->all(); // important!!
+        //var_dump($requestFieldsArray);
+        //var_dump($AllrequestFieldsArray);
         
         //var_dump($request->request->parameters);
-        
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         //$coming_from = "";
-        if( $AllrequestFieldsArray['coming_from'] == 'select_fields'||
-            $AllrequestFieldsArray['coming_from'] == 'reportDefMenuEdit'||  
-            $AllrequestFieldsArray['coming_from'] == 'ppv_update'){
-
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);        
-            $query_result = MiscThing::where($key_field_name,  '=', $id)->update($requestFieldsArray);
+        if($AllrequestFieldsArray['coming_from'] == 'select_fields'||
+        $AllrequestFieldsArray['coming_from'] == 'ppv_update'){
+        $query_result = MiscThing::where($key_field_name,  '=', $id)
+        ->update($requestFieldsArray);
 
         }
         else {
-        //??$query_result = MiscThing::where($key_field_name,  '=', $id)->update($requestFieldsArray);
+        $query_result = 'Maillist'::where($key_field_name,  '=', $id)
+        ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();
         //$Maillist1 = compact($Maillist);
