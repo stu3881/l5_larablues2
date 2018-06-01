@@ -60,7 +60,8 @@ class @@controller_name@@ extends CRHBaseController
         $my_ctr                             = 0,
         $report_definition_id               = 0,
         $store_validation_id                = 0,
-        $business_rules_array               = 0
+        $business_rules_array               = 0,
+        $MyWorkingArray                     = array()
 
         ) 
         {
@@ -68,6 +69,7 @@ class @@controller_name@@ extends CRHBaseController
          parent::__construct();
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" entering constructor");
 
+        $this->MyWorkingArray                  = new  WorkingArray;
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
@@ -327,7 +329,9 @@ class @@controller_name@@ extends CRHBaseController
                     // GET SNIPPET RECORD
                     // ******************
                     $report_definition  = $this->model_get_id($this->snippet_model,$report_definition_key);
-                    $working_arrays = $this->working_arrays_construct($report_definition[0]);
+                    //$working_arrays = $this->working_arrays_construct($report_definition[0]);
+                    $working_arrays = 
+                    $this->MyWorkingArray->working_arrays_initialize($report_definition[0],'editing_a_data_record',$this->bypassed_field_name,$this->model_table );
 
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);

@@ -103,8 +103,8 @@
 				<tr class='table_no_lines'>
 
 				<td>
-					<!-- add_additional_tables_to_query -->
-	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'add_additional_tables_to_query','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">add_additional_tables_to_query</a>
+					<!-- maintain_query_joins -->
+	  		        <a href="{{ URL::route($node_name.'.reportDefMenuEdit', $parameters = array('id'=>$id, 'what_we_are_doing'=>'maintain_query_joins','coming_from'=> 'reportDefMenuEdit')) }}" class="btn mycart-btn-row2">maintain_query_joins</a>
 	  		    </td>    
 					
 				<td>

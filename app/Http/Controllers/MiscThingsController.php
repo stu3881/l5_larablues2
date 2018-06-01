@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MiscThing;
 
+
 use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
@@ -59,7 +60,8 @@ class MiscThingsController extends CRHBaseController
         $my_ctr                             = 0,
         $report_definition_id               = 0,
         $store_validation_id                = 0,
-        $business_rules_array               = 0
+        $business_rules_array               = 0,
+        $MyWorkingArray                     = array()
 
         ) 
         {
@@ -67,6 +69,7 @@ class MiscThingsController extends CRHBaseController
          parent::__construct();
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" entering constructor");
 
+        $this->MyWorkingArray                  = new  WorkingArray;
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
@@ -180,7 +183,7 @@ class MiscThingsController extends CRHBaseController
      *
      * @return \Illuminate\Http\Response
      */
-     public function create_w_report_id(REQUEST $request, $report_definition_key) {
+     public function xcreate_w_report_id(REQUEST $request, $report_definition_key) {
         // *******************
         // you can only get here after a table has been activated so all that needs to be 
         // done is to insert a report definition and the snippet files
@@ -224,7 +227,7 @@ class MiscThingsController extends CRHBaseController
             $msgs_array = $this->generic_method_activate_entity($entity,$search_str_array,$msgs_array,$link_parms_array,$parm2_array,$this->node_name);
             }
 
-        $coming_from = "coming_from";
+        $coming_from = "create_w_report_id";
         $id = $report_definition_key;
         return view($this->node_name.'.reportDefMenuEdit',compact('miscThing'))
             ->with('id'                                 ,$id)
@@ -326,7 +329,9 @@ class MiscThingsController extends CRHBaseController
                     // GET SNIPPET RECORD
                     // ******************
                     $report_definition  = $this->model_get_id($this->snippet_model,$report_definition_key);
-                    $working_arrays = $this->working_arrays_construct($report_definition[0]);
+                    //$working_arrays = $this->working_arrays_construct($report_definition[0]);
+                    $working_arrays = 
+                    $this->MyWorkingArray->working_arrays_initialize($report_definition[0],'editing_a_data_record',$this->bypassed_field_name,$this->model_table );
 
                     $modifiable_fields_array = $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'];
                     $lookups_array['field_name'] = $this->build_column_names_array($this->model_table);
@@ -510,7 +515,7 @@ class MiscThingsController extends CRHBaseController
         //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         if (!array_key_exists('what_we_are_doing',$requestFieldsArray)) {
            $requestFieldsArray['what_we_are_doing'] = 'updating_report_name';
-        }
+         }
         $what_we_are_doing = $requestFieldsArray['what_we_are_doing'] ;
 
         if (array_key_exists('coming_from',$requestFieldsArray)) {
@@ -637,17 +642,9 @@ class MiscThingsController extends CRHBaseController
             // ******
             // this does the update
             // ******
-           
-            //var_dump($requestFieldsArray);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);//var_dump($what_we_are_doing);
-            //$requestFieldsArray['query_field_name_array'] = json_encode($requestFieldsArray['query_field_name_array']);
-            //$requestFieldsArray['query_r_o_array'] = json_encode($requestFieldsArray['query_r_o_array']);
-            //$requestFieldsArray['query_field_name_array'] = json_encode($requestFieldsArray['query_value_array']);
-
-           //var_dump($requestFieldsArray);//var_dump($what_we_are_doing);
-
-            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $this->updateGetRedirect($this->key_field_name,$id,$requestFieldsArray,$request);
 
+            //var_dump($coming_from);var_dump($what_we_are_doing);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             switch ($what_we_are_doing) {
                 case 'maintain_modifiable_fields':
                 case 'maintain_browse_fields':
@@ -674,8 +671,6 @@ class MiscThingsController extends CRHBaseController
                     switch ($what_we_are_doing) {
                         case "ppv_define_business_rules":
                         case 'ppv_define_query':
-
-
                             echo($coming_from.$id);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
                             $miscThing = $this->execute_query_by_report_no($this->report_definition_id) ;
                             var_dump($coming_from);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
@@ -738,6 +733,37 @@ class MiscThingsController extends CRHBaseController
         $AllrequestFieldsArray=$request->all(); // important!!
         //var_dump($requestFieldsArray);
         //var_dump($AllrequestFieldsArray);
+        //var_dump($request->request->parameters);$this->snippet_model
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        $coming_from = $AllrequestFieldsArray['coming_from'];
+        switch ($coming_from) {
+            case 'select_fields':
+            case 'reportDefMenuEdit':
+            case 'ppv_update':
+                $query_result = MiscThing::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+               break;
+            default :
+                $query_result = Maillist::where($key_field_name,  '=', $id)
+                ->update($requestFieldsArray);
+                break;
+            }
+        //var_dump($this->node_name);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        return redirect()->route('miscThings'.'.browseEdit', 
+            ['id' => $id,
+            'what_we_are_doing' => 'what_we_are_doing',
+            'coming_from' => 'editUpdate'
+            ]);
+         //var_dump($request);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //return $Maillist;
+        }
+    
+
+
+    public function updateGetRedirectold($key_field_name,$id,$requestFieldsArray,$request){
+        $AllrequestFieldsArray=$request->all(); // important!!
+        //var_dump($requestFieldsArray);
+        //var_dump($AllrequestFieldsArray);
         
         //var_dump($request->request->parameters);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -749,7 +775,7 @@ class MiscThingsController extends CRHBaseController
 
         }
         else {
-        $query_result = MiscThing::where($key_field_name,  '=', $id)
+        $query_result = 'MiscThing'::where($key_field_name,  '=', $id)
         ->update($requestFieldsArray);
         //$MiscThing = MiscThing::where($key_field_name,  '=', $AllrequestFieldsArray['report_definition_key'])
         //->get();

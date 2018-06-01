@@ -480,3 +480,54 @@ $products = Product::where(function ($query) use ($keywords) {
         $query->where($keyword);
     }
 })->paginate(15);
+
+
+select
+ business_rules_field_name_array,      business_rules_r_o_array,      business_rules_value_array,          business_rules  
+from miscThings  where id > 13000;              
+|
+
+update sbblues6_main.new_show.flags = 'cOs') WHERE id = '2634')'
+
+UPDATE sbblues6_main.maillist  
+SET (sbblues6_main.maillist.flags =  'cOs') WHERE id = 2634;
+		" WHERE id = :id)";
+
+2018-05-01
+
+mysqldump -u homestead -psecret homestead > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20180501.sql;
+
+mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20180501.sql;
+
+
+homestead_with_defs_20170520A.sql
+
+
+mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170520A.sql;
+
+mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20180501.sql
+
+mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20180501_homestead.sql
+
+//*
+mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_with_defs_20170520A.sql;
+
+alter table miscThings drop column joins_joinee_table_names_array;
+
+mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20180501.sql
+
+mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_data_20180505.sql;
+
+ //* *************************
+ //* *************************
+
+	mysqldump -u homestead -psecret homestead  > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_all_20180506.sql;
+
+    mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_data_20180506.sql;
+
+    mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20180501.sql
+
+
+
+ //* *************************
+ //* *************************

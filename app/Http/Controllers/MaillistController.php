@@ -23,6 +23,7 @@ class MaillistController extends CRHBaseController
         public function __construct(
      
         /**/
+
         $buttons_in_front               = "",
         $print_orientation              = "",
         $record_type                    = "table_controller", 
@@ -60,7 +61,9 @@ class MaillistController extends CRHBaseController
         $my_ctr                             = 0,
         $report_definition_id               = 0,
         $store_validation_id                = 0,
-        $business_rules_array               = 0
+        $business_rules_array               = 0,
+        $MyWorkingArray                     = array()
+        
 
         ) 
         {
@@ -68,6 +71,7 @@ class MaillistController extends CRHBaseController
          parent::__construct();
         //$this->debug_exit(__FILE__,__LINE__,0); echo(" entering constructor");
 
+        $this->MyWorkingArray                  = new  WorkingArray;
         $this->db_connection_name              = $db_connection_name;
         $this->db_data_connection              = $db_data_connection;
         $this->db_snippet_connection           = $db_snippet_connection;
