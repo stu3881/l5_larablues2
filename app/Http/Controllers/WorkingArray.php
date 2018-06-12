@@ -101,12 +101,11 @@ class WorkingArray extends CRHBaseController
     }
 
       
-    public function working_arrays_assign_from_data($record,$bypassed_field_name) {
+    public function working_arrays_assign_from_data($working_arrays,$record,$bypassed_field_name) {
         //echo("working_arrays_assign_from_data");
          //$bypassed_field_name = $bypassed_field_name;
         //var_dump($record);
         //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        $working_arrays = array();
         //$requestFieldsArray=$record->all(); // important!!
 
         //$working_arrays['maintain_modifiable_fields']['field_name']   = 'modifiable_fields_array';
@@ -125,8 +124,9 @@ class WorkingArray extends CRHBaseController
         // originally we did it just for who you were but not, it seems easiest to size them after we get // the existing arrays. 
         // ****** 
         $working_arrays['groups_that_get_padded']     = array(
-            'ppv_define_query'              => 'ppv_define_query',
+            //'ppv_define_query'              => 'ppv_define_query',
             'maintain_query_joins'          => 'maintain_query_joins',
+            'ppv_define_query'              => 'ppv_define_query',
             'ppv_define_business_rules'     => 'ppv_define_business_rules'
             );
         $working_arrays['advanced_edit_functions']     = array(
@@ -189,34 +189,59 @@ class WorkingArray extends CRHBaseController
 
 // maintain_query_joins
 
-        $working_arrays['maintain_query_joins']['field_name_array'] = array(
-            'join_type'             => 'joins_join_type_array',
-            'joinee_table_names'    => 'joins_joinee_table_names_array',
-            'field_name'            => 'joins_field_name_array',
-            'r_o'                   => 'joins_r_o_array',
-            'value'                 => 'joins_value_array'
-            );
-        //$working_arrays['maintain_query_joins']['field_name_array'] ['join_type'] =       array('not_used','normal','left','right');
-
-        //$working_arrays['maintain_query_joins']['field_name_array'] ['joins_r_o_array'] = array(            '=','<>','<','>','<=','>=');
-        
-        $working_arrays['maintain_query_joins']['default_values_array'] = array(
-            'join_type'             => 'not_used',
-            'joinee_table_names'    => '',
-            'field_name'            => '',
-            'r_o'                   => '',
-            'value'                 => ''
-            );
-        $working_arrays['maintain_query_joins']['joins_join_type_array'] = 
+        $working_arrays['maintain_query_joins']['data']['joins_join_type_array'] = 
         json_decode($record->joins_join_type_array);
-        $working_arrays['maintain_query_joins']['joins_joinee_table_names_array'] = 
+        $working_arrays['maintain_query_joins']['data']['joins_joinee_table_names_array'] = 
         json_decode($record->joins_joinee_table_names_array);
-        $working_arrays['maintain_query_joins']['joins_field_name_array'] = 
+        $working_arrays['maintain_query_joins']['data']['joins_field_name_array'] = 
         json_decode($record->joins_field_name_array);
-        $working_arrays['maintain_query_joins']['joins_r_o_array'] = 
+        $working_arrays['maintain_query_joins']['data']['joins_r_o_array'] = 
         json_decode($record->joins_r_o_array);
-        $working_arrays['maintain_query_joins']['joins_value_array'] = 
+        $working_arrays['maintain_query_joins']['data']['joins_value_array'] = 
         json_decode($record->joins_value_array);
+
+        $working_arrays['maintain_query_joins']['field_name_array'] = array(
+            'join_types'            => 'joins_join_type_array',
+            'joinor_field_names'    => 'joins_joinee_field_name_array',
+            'joinee_table_names'    => 'joins_joinor_field_name_array',
+            'joinee_field_names'    => 'joins_r_o_array',
+            'joins_r_o_array'       => 'joins_value_array',
+            );
+
+/*
+        $working_arrays['maintain_query_joins']['field_name_array'] = array(
+            'join_types'            => 'join_types',
+            'joinor_field_names'    => 'joinor_field_names',
+            'joinee_table_names'    => 'joinee_table_names',
+            'joinee_field_names'    => 'joinee_field_names',
+            'joins_r_o_array'       => 'joins_r_o_array',
+            );
+*/
+        $working_arrays['maintain_query_joins']['field_type_array'] = array(
+            'join_types'            => 'select',
+            'joinor_field_names'    => 'select',
+            'joinee_table_names'    => 'select',
+            'joinee_field_names'    => 'select',
+            'joins_r_o_array'       => 'select',
+            );
+
+        $working_arrays['maintain_query_joins']['lookups'] = array(
+            'join_types'            => 'join_types',
+            'joinor_field_names'    => 'joinor_field_names',
+            'joinee_table_names'    => 'joinee_table_names',
+            'joinee_field_names'    => 'joinee_field_names',
+            'joins_r_o_array'       => 'joins_r_o_array',
+            );
+        // joinee_field_name
+        //$working_arrays['maintain_query_joins']['field_name_array'] ['join_type'] =       array('not_used','normal','left','right');
+   
+        $working_arrays['maintain_query_joins']['default_values_array'] = array(
+            'join_types'             => 'not_used',
+            'joinor_field_names'    => 'not_used',
+            'joinee_table_names'    => 'not_used',
+            'joinee_field_names'    => 'not_used',
+            'joins_r_o_array'       => '=',
+            );
 
         // ppv_define_query
 
@@ -309,24 +334,29 @@ class WorkingArray extends CRHBaseController
         //echo("working_arrays_initialize");
         // $working_arrays contains some handy grouping of data and arrays we need for various things
         //var_dump($working_arrays);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-       
-        $working_arrays     = $this->working_arrays_assign_from_data($record,$bypassed_field_name);
+        $working_arrays = array();
+        $working_arrays     = $this->working_arrays_assign_from_data($working_arrays,$record,$bypassed_field_name);
+        //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
         $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
         $column_names       = $this->build_column_names_array($model_table);
-        $working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names,$bypassed_field_name);
-
-          //var_dump($working_arrays);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //var_dump($working_arrays);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names,$bypassed_field_name);
+        //var_dump($working_arrays);  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+        $working_arrays     = $this->working_arrays_populate_lookups_new($what_we_are_doing,$working_arrays,$model_table);
+        //var_dump($working_arrays);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $working_arrays = 
             $this->working_arrays_pad_for_growth($working_arrays,$this->pad_ctr,$bypassed_field_name);
-
          return $working_arrays;
     }
 
 
     public function working_arrays_pad_for_growth($working_arrays,$pad_ctr,$bypassed_field_name) {
+        //var_dump($working_arrays);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         foreach ($working_arrays['groups_that_get_padded']as $group_to_be_padded){
-            echo($group_to_be_padded);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            echo("</br>   * ".$group_to_be_padded."</br>");$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             //var_dump($working_arrays [$group_to_be_padded]['field_name_array']);
+            var_dump($working_arrays [$group_to_be_padded]);
             $pad_ctr = $this->working_arrays_set_pad_ctr($pad_ctr,$working_arrays,$group_to_be_padded );
             $working_arrays = $this->working_arrays_pad_group($working_arrays,$group_to_be_padded,$pad_ctr,$bypassed_field_name);
          }
@@ -335,15 +365,20 @@ class WorkingArray extends CRHBaseController
     }
 
     public function working_arrays_set_pad_ctr($pad_ctr,$working_arrays,$group_to_be_padded ) {
+        //print_r( $working_arrays[$group_to_be_padded]['field_name_array']);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
         foreach($working_arrays[$group_to_be_padded]['field_name_array'] as 
             $generic_array_name=>$specific_array_name) {
-            //echo($generic_array_name."**".$specific_array_name);var_dump($working_arrays[$group_to_be_padded][$specific_array_name]);
+            echo(' '.$generic_array_name."**".$specific_array_name);var_dump($working_arrays[$group_to_be_padded]['field_name_array'][$generic_array_name]);
             //echo( $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name]);
             $bypassed_field_name = $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name];
-            //echo($bypassed_field_name." bypassed_field_name");$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //echo($bypassed_field_name." bypassed_field_name");
+            //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
 
-            if(is_null($working_arrays[$group_to_be_padded][$specific_array_name])){
-              //echo('null stop');$this->debug_exit(__FILE__,__LINE__,10); 
+            //if(is_null($working_arrays[$group_to_be_padded][$generic_array_name])){
+           if(is_null($working_arrays[$group_to_be_padded]['data'][$specific_array_name])){
+        //$working_arrays['maintain_query_joins']['data']['joins_join_type_array'] = 
+
+              //echo('$pad_ctr'.$pad_ctr);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
               return $pad_ctr;
             }
             else{
@@ -365,31 +400,90 @@ class WorkingArray extends CRHBaseController
     }
 
     public function working_arrays_pad_group($working_arrays,$group_to_be_padded,$pad_ctr,$bypassed_field_name) {
-        //var_dump($working_arrays[$group_to_be_padded]);$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+        //['da']
+        var_dump($working_arrays[$group_to_be_padded]['default_values_array']);
+         var_dump($working_arrays[$group_to_be_padded]['data']);//$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
         foreach($working_arrays[$group_to_be_padded]['field_name_array'] as 
             $generic_array_name=>$specific_array_name) {
-            var_dump($working_arrays[$group_to_be_padded][$specific_array_name]);
-                var_dump($working_arrays[$group_to_be_padded]['default_values_array'][$specific_array_name]);
-
-            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
-            echo (" **".$specific_array_name);
-            echo ($pad_ctr."*-* ".$generic_array_name."** ".$specific_array_name."** ");
-/*            
-foreach($working_arrays[$group_to_be_padded]['field_name_array'] as              $generic_array_name=>$specific_array_name) {
-}  //* end of field_name_array name
-*/                
-            //$working_arrays[$group_to_be_padded][$specific_array_name][] =             $working_arrays[$group_to_be_padded]['default_values_array'];
-
-
-            //var_dump($working_arrays[$group_to_be_padded]['default_values_array']);
-            
-
-        }  //* end of field_name_array name
-        $this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);echo('specific_array_name* '.$specific_array_name.' *');print_r($working_arrays[$group_to_be_padded]);
-        //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
-              return $working_arrays;
+            echo($generic_array_name.$specific_array_name);
+            //var_dump($working_arrays[$group_to_be_padded]['data'][$generic_array_name]);
+            $working_arrays[$group_to_be_padded]['data'][$generic_array_name] = array();
+            $working_arrays[$group_to_be_padded]['data'][$specific_array_name][] =
+                $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name];
+        }  
+        return $working_arrays;
     } 
           
+    public function working_arrays_populate_lookups_new($what_we_are_doing,$working_arrays,$model_table) {
+        //$schema = DB::getDoctrineSchemaManager();
+        //$columns = Schema::getColumnListing($link_parms_array['node_name']);
+        //$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+
+        switch ($what_we_are_doing) { 
+
+        case "maintain_modifiable_fields":
+        case "maintain_browse_fields":  
+            break;
+
+        case "ppv_define_query":
+        case "ppv_define_business_rules":
+            break;
+        case "maintain_query_joins":
+
+/*        $working_arrays['maintain_query_joins']['lookups'] = array(
+            'join_types'             => 'join_types',
+            'joinor_field_names'    => 'joinor_field_names',
+            'joinee_table_names'    => 'joinee_table_names',
+            'joinee_field_names'    => 'joinee_field_names',
+            'joins_r_o_array'       => 'joins_r_o_array',
+            );
+ */
+            $schema = DB::getDoctrineSchemaManager();
+            //var_dump($working_arrays[$what_we_are_doing]['field_name_array'] );
+            //var_dump($working_arrays[$what_we_are_doing]['lookups'] );
+            //echo('<br/>');$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+            foreach ($working_arrays[$what_we_are_doing]['lookups'] as $key => $value) {
+            //foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
+                
+                switch ($key) { 
+                    case "join_types":
+                        $array = array('not_used','normal','left','right');
+                        $array = array_combine(array_values($array),array_values($array));
+                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $array;
+                        break;
+                    case "joinor_field_names":
+                        $columns = Schema::getColumnListing($model_table);
+                        $columns = 
+                        array_combine(array_values($columns),array_values($columns));
+
+                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $columns;
+                         break;
+                   case "joinee_table_names":
+                        $table_names = $this->generic_method_get_table_names();
+                        $table_names = array_combine(array_values($table_names),array_values($table_names));
+                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $table_names;
+                        break;
+                    case "joinee_field_names":
+                        $columns = Schema::getColumnListing($model_table);
+                        $columns = array_combine(array_values($columns),array_values($columns));
+                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $columns;
+                        break;
+                     case "joins_r_o_array":
+                        $join_ro_arrays = array('=','<>','<','>','<=','>=');
+                        $table_names = array_combine(array_values($join_ro_arrays),array_values($join_ro_arrays));
+                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $table_names;
+                        //$columns = Schema::getColumnListing($this->model_table);
+                        //$columns = array_combine(array_values($columns),array_values($columns));
+                       break;
+                    }
+            }
+            break;
+        }
+        //var_dump($working_arrays[$what_we_are_doing]['lookups'] );
+
+        return $working_arrays;
+    }
+
 
 
         public function working_arrays_populate_lookups($working_arrays,$columns,$bypassed_field_name) {

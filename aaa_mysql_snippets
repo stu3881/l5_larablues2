@@ -525,9 +525,15 @@ mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Co
 
     mysqldump -u homestead -psecret homestead --no-create-db --no-create-info > ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_data_20180506.sql;
 
-    mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_just_data_20180501.sql
+    mysql -uhomestead -psecret <  ~/Code/l5_larablues2/storage/deh_mysql_backups/homestead_data_20180506.sql
 
 
 
  //* *************************
  //* *************************
+
+joins_join_type_array
+joins_joinee_field_name_array
+joins_joinor_field_name_array
+joins_r_o_array
+joins_joinee_table_names_array

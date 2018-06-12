@@ -3010,60 +3010,6 @@ class CRHBaseController extends DEHBaseController
         return $model_get_id;
     }
 
-    public function new_populate_lookups($what_we_are_doing,$working_arrays,$model_table) {
-        //$schema = DB::getDoctrineSchemaManager();
-        //$columns = Schema::getColumnListing($link_parms_array['node_name']);
-
-        $working_arrays['lookups'] = array();
-        switch ($what_we_are_doing) { 
-
-        case "maintain_modifiable_fields":
-        case "maintain_browse_fields":  
-            break;
-
-        case "ppv_define_query":
-        case "ppv_define_business_rules":
-            break;
-        case "maintain_query_joins":
-            $schema = DB::getDoctrineSchemaManager();
-            foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
-                switch ($key) { 
-                    case "join_type":
-                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $working_arrays['maintain_query_joins']['field_name_array'] ['join_type'];
-                        break;
-                    case "joinee_table_names":
-                        $table_names = $this->generic_method_get_table_names();
-                        $table_names = array_combine(array_values($table_names),array_values($table_names));
-                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $table_names;
-                        break;
-                    case "joinor_field_name":
-                        $columns = Schema::getColumnListing($model_table);
-
-                        $columns = 
-                        array_combine(array_values($columns),array_values($columns));
-
-                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $columns;
-                        break;
-                    case "r_o":
-                        $columns =
-                        $working_arrays['lookups'] [$key] = $working_arrays['maintain_query_joins']['field_name_array'] ['r_o']; 
-                        //$columns = Schema::getColumnListing($this->model_table);
-                        $columns = 
-                        array_combine(array_values($columns),array_values($columns));
-                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $columns;
-                       break;
-                    case "joinee_field_name":
-                        $columns = Schema::getColumnListing($this->model_table);
-                        $columns = array_combine(array_values($columns),array_values($columns));
-                        $working_arrays[$what_we_are_doing]['lookups'] [$key] = $columns;
-                        break;
-                     }
-            }
-            break;
-        }
-        return $working_arrays;
-    }
-
 
     public function generic_snippet_gen_update_form($id,$working_arrays,$what_we_are_doing){
         // clonedd from ppv_edit_snippet_gen
@@ -3094,7 +3040,7 @@ class CRHBaseController extends DEHBaseController
             );
 */
         $schema = DB::getDoctrineSchemaManager();
-            $working_arrays = $this->new_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
+        //$working_arrays = $this->working_arrays_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
         switch ($what_we_are_doing) { 
 
         case "maintain_modifiable_fields":
@@ -3112,15 +3058,15 @@ class CRHBaseController extends DEHBaseController
             $crlf = "\r\n";
             $strx = "";
             $j = -1;
-            for ($i=0; $i<(count($working_arrays['lookups'])); $i++){
+            for ($i=0; $i<(count($working_arrays[$what_we_are_doing]['lookups'])); $i++){
                 $j++;
                 $strx .= "<tr>".$crlf; // start a new row
                 foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
                     $strx .= // first field is always  relational operator
                         "<td style=\"text-align:left\">".$crlf.
                         "{{ Form::select('".$key."[]',".
-                        "$"."working_arrays['".$what_we_are_doing."']['lookups']['$key'],".
-                        "$"."working_arrays['".$what_we_are_doing."']['field_name_array'][".$j."]) }}".
+                        "$"."working_arrays['".$what_we_are_doing."']['lookups']['".$key."'],".
+                        "$"."working_arrays['".$what_we_are_doing."']['field_name_array']['".$key."']) }}".
                         $crlf.
                         "</td>".$crlf;
                 }
@@ -3234,7 +3180,7 @@ class CRHBaseController extends DEHBaseController
             $lookups_array,
             $array1);                   
         //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
-        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_definition_key.'_snippet_string.blade.php';
+        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$report_definition_key.'_rsnippet_string.blade.php';
        //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
         $this->write_file_from_string($fnam,$snippet_string);
         return $snippet_string;
@@ -3316,8 +3262,8 @@ class CRHBaseController extends DEHBaseController
                     {{Form::select('name', array('key' => 'value','cunt' => 'blade'), 'key', array('class' => 'name'))}}
                </td></tr>";
               
-            $working_arrays = $this->new_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
-           var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //$working_arrays = $this->working_arrays_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
+           //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             // ***************
             return view($this->model_table.".query_joins_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'              ,$what_we_are_doing)

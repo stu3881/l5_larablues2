@@ -576,6 +576,62 @@ class DEHBaseController extends Controller
     } // end array has entries
         return $strx;
     } 
+
+
+    public function snippet_gen_modifiable_fields_new($field_name_array,$lookups,$data_array){
+        //echo 'snippet_gen_modifiable_fields';
+        // this generates the code to create the table 
+        // for the modifiable fields view
+
+        // IT'S ALL JUST STRINGS!
+        // ***
+        // This is what your input view will look like the next time you load it
+        //$field_name_array = array_values($field_name_array);
+        $crlf = "\r\n";
+        $strx = "";
+
+        $field_ctr = -1;
+        //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,10);
+        if (count($field_name_array)> 0){
+        foreach($field_name_array as $index=>$fieldx) {
+            $field_ctr ++;
+            //echo"<br>name: ";print_r($fieldx);
+            $strx .=
+            "<tr>".$crlf;
+            //$crlf;
+           if ($fieldx != $this->snippet_table_key_field_name){ // never update key
+    
+                $strx .=
+                "<td style=\"text-align:left\">".$crlf.
+                "{{ Form::label(\"$fieldx\",\"$fieldx\") }}".$crlf.
+                "</td>".$crlf;
+                //echo("<br><br>".$fieldx);$this->debug_exit(__FILE__,__LINE__,0);
+                //var_dump($field_name_array);var_dump($lookups);$this->debug_exit(__FILE__,__LINE__,0);
+                //var_dump($lookups);var_dump($field_name_array);var_dump(Input::all());$this->debug_exit(__FILE__,__LINE__,10);
+                if (array_key_exists($fieldx,$lookups)) {
+                    $strx .=
+                    "<td style='text-align:left'>".$crlf.
+                    "{{ Form::select('".$fieldx. "',$"."lookups['".$fieldx."'] , $". "data_array_name" . "['".$fieldx."']) }}".$crlf.
+                    //"{{ Form::select('" .$fieldx. "',". $lookups[$fieldx].",  $"."record['".$fieldx."']) }}".$crlf.
+                        
+                    "</td>".$crlf;
+                }
+                else {
+                    //echo 'NOT in lookup array (OK)';$this->debug_exit(__FILE__,__LINE__,0);
+                    // actually, this is most likely
+                    $strx .=
+                    "<td style=\"text-align:left\">".$crlf.
+                    "{{ Form::text('".$fieldx."',$". "record['".$fieldx."']) }}".$crlf.
+                    //"{{ Form::text('".$fieldx."','xxx') }}".$crlf.
+                    "</td>".$crlf;
+                }
+            }
+            $strx .= "</tr>".$crlf;
+            //$strx .= $crlf;
+        } // end foreach
+    } // end array has entries
+        return $strx;
+    } 
 	
 	public function get_generated_snippets() {
 		//echo 'get_generated_snippets 838';//exit("exit");
