@@ -1743,14 +1743,14 @@ class CRHBaseController extends DEHBaseController
 
             $array['ppv_define_query']['lookups']['field_names']                = '';
             $array['ppv_define_query']['lookups']['relational_operators']  = '';
-            $array['ppv_define_query']['lookups'][0]                        = '';
-            $array['ppv_define_query']['lookups'][1]                        = '';
+            $array['ppv_define_query']['lookups']['columns_w_bypass']                        = '';
+            $array['ppv_define_query']['lookups']['query_relational_operators_array']                        = '';
             
 
             $array['ppv_define_query']['lookups']['field_names']            = '';
             $array['ppv_define_query']['lookups']['relational_operators']  = '';
-            $array['ppv_define_query']['lookups'][0]                        = '';
-            $array['ppv_define_query']['lookups'][1]                        = '';
+            $array['ppv_define_query']['lookups']['columns_w_bypass']       = '';
+            $array['ppv_define_query']['lookups']['query_relational_operators_array']                        = '';
             
 
         foreach ($array as $field) {
@@ -2767,60 +2767,6 @@ class CRHBaseController extends DEHBaseController
 
 
 
-
-
-
-
-    public function getEdit8_array_node_to_array($array) {
-        // *****************
-        // this converts encoded_strings to arrays
-        // ****************
-
-            $array['ppv_define_query']['lookups']['field_names']                = '';
-            $array['ppv_define_query']['lookups']['relational_operators']  = '';
-            $array['ppv_define_query']['lookups'][0]                        = '';
-            $array['ppv_define_query']['lookups'][1]                        = '';
-            
-
-            $array['ppv_define_query']['lookups']['field_names']            = '';
-            $array['ppv_define_query']['lookups']['relational_operators']  = '';
-            $array['ppv_define_query']['lookups'][0]                        = '';
-            $array['ppv_define_query']['lookups'][1]                        = '';
-            
-
-        foreach ($array as $field) {
-            if (is_null($field))    {
-                $array[$field] =  array();
-            }
-            /*
-            else{
-                $array[$field] =  json_decode($field);
-            }
-            */
-        }
-        return $array;
-
-        var_dump($arr);exit("xit 4420");
-    }
-
-    public function getEdit8_decode_array_to_array($record,$encoded_string) {
-        // *****************
-        // this converts encoded_strings to arrays
-        // ****************
-
-        //var_dump($encoded_string);
-        if (is_null($record->$encoded_string))   {
-            $arr = array();
-        }else{
-            $arr =  (array) json_decode($record->$encoded_string,1);
-        }
-        return $arr;
-
-        var_dump($arr);exit("xit 4420");
-    }
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -3341,12 +3287,12 @@ class CRHBaseController extends DEHBaseController
                      json_encode($working_arrays['ppv_define_business_rules']['field_name_array']);
                     break;
              }
-            //var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            var_dump($just_the_names_array );$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $column_names_array = 
                 (array) $this->build_column_names_array($this->model_table);
             $field_name_array_name = ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
             //echo("rows ".$field_name_array_name);
-            $no_of_rows = count($working_arrays [$what_we_are_doing][$field_name_array_name]);
+            $no_of_rows = count($working_arrays [$what_we_are_doing]['data'][$field_name_array_name]);
             
             $blade_routine                          = "ppv_edit_snippet_gen";
             $blade_name                             = "_ppv_edit_snippet";
@@ -3357,7 +3303,7 @@ class CRHBaseController extends DEHBaseController
             //*
      
  
-            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
+            var_dump($working_arrays[$what_we_are_doing]);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
             $column_names_array = array_combine(array_values($column_names_array),$column_names_array);
 
@@ -3368,7 +3314,9 @@ class CRHBaseController extends DEHBaseController
                 ($working_arrays[$what_we_are_doing][$field_name_array_name]);
             $r_o_array_name         = 
                 ($working_arrays[$what_we_are_doing]['field_name_array']['r_o']);
+                 var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $r_o_array              = 
+
                 ($working_arrays[$what_we_are_doing][$r_o_array_name]);
             //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             $working_arrays[$what_we_are_doing]['lookups'][1] = 
