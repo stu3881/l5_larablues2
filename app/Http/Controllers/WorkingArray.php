@@ -100,29 +100,9 @@ class WorkingArray extends CRHBaseController
 
     }
 
-      
-    public function working_arrays_assign_from_data($working_arrays,$record,$bypassed_field_name) {
-        //echo("working_arrays_assign_from_data");
-         //$bypassed_field_name = $bypassed_field_name;
-        //var_dump($record);
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        //$requestFieldsArray=$record->all(); // important!!
 
-        //$working_arrays['maintain_modifiable_fields']['field_name']   = 'modifiable_fields_array';
-        //$working_arrays['maintain_modifiable_fields'][]               = 'modifiable_fields_array';
-        //* ******
-        // "groups_that_get_padded" lists arrays that need room for growth.
-        // queries and business rules can grow and differ widely from one query (or rule) to 
-        //another they need to be loaded first and padded with some room for growth
-        //
-        // no more or no less than $this->no_of_blank_entries 
-        // default values padded onto the end
-        //
-        // even though we have relational operators and values arrays to worry about,
-        // this drives off the number of field_names = to $bypassed_field_name on the end of the array
-        
-        // originally we did it just for who you were but not, it seems easiest to size them after we get // the existing arrays. 
-        // ****** 
+
+    public function working_arrays_custom_stuff($working_arrays,$bypassed_field_name) {
         $working_arrays['groups_that_get_padded']     = array(
             //'ppv_define_query'              => 'ppv_define_query',
             'maintain_query_joins'          => 'maintain_query_joins',
@@ -147,13 +127,53 @@ class WorkingArray extends CRHBaseController
         $working_arrays['maintain_modifiable_fields']['default_values_array'] = array(
             'field_name'        => $bypassed_field_name,
             );
-        //var_dump($record);exit();
+        //var_dump($record);exit();  
+        $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
+            'field_name' => 'business_rules_field_name_array',
+            'r_o'        => 'business_rules_r_o_array',
+            'value'      => 'business_rules_value_array'
+            );
 
 
+        return $working_arrays;
+
+    }    
+
+
+      
+    public function working_arrays_assign_from_data($working_arrays,$record,$bypassed_field_name) {
+        //echo("working_arrays_assign_from_data");
+         //$bypassed_field_name = $bypassed_field_name;
+        //var_dump($record);
+        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+        //$requestFieldsArray=$record->all(); // important!!
+
+        //$working_arrays['maintain_modifiable_fields']['field_name']   = 'modifiable_fields_array';
+        //$working_arrays['maintain_modifiable_fields'][]               = 'modifiable_fields_array';
+        //* ******
+        // "groups_that_get_padded" lists arrays that need room for growth.
+        // queries and business rules can grow and differ widely from one query (or rule) to 
+        //another they need to be loaded first and padded with some room for growth
+        //
+        // no more or no less than $this->no_of_blank_entries 
+        // default values padded onto the end
+        //
+        // even though we have relational operators and values arrays to worry about,
+        // this drives off the number of field_names = to $bypassed_field_name on the end of the array
+        
+        // originally we did it just for who you were but not, it seems easiest to size them after we get // the existing arrays. 
+        // ****** 
+
+        // ************
+        // maintain_modifiable_fields
+        // ************
         $working_arrays['maintain_modifiable_fields']['modifiable_fields_array'] = 
         json_decode($record->modifiable_fields_array);
 
-
+        // ************
+        // maintain_browse_fields
+        // ************
+        
         $working_arrays['maintain_browse_fields']['field_name_array'] = array(
             'field_name'        => 'browse_select_array');
         $working_arrays['maintain_browse_fields']['default_values_array'] = array(
@@ -161,34 +181,9 @@ class WorkingArray extends CRHBaseController
         $working_arrays['maintain_browse_fields']['browse_select_array'] = 
         json_decode($record->browse_select_array);
 
-
-
-
-
-
-          
-                //$column_names_array = (array) $this->build_column_names_array($this->model_table);
-                //var_dump($working_arrays[$what_we_are_doing]);$this->debug_exit(__FILE__,__LINE__,10);
- 
-                $tarray = array();
-                $tarray[] = $bypassed_field_name;
-                $tarray[] = $bypassed_field_name;
-                $tarray[] = $bypassed_field_name;
-                $working_arrays['ppv_define_business_rules']['business_rules_field_name_array'] = $tarray;
-                $tarray = array();
-                $tarray[] = "required";
-                $tarray[] = "required";
-                $tarray[] = "required";
-
-                $working_arrays['ppv_define_business_rules']['business_rules_r_o_array'] = $tarray;
-                $tarray = array();
-                $tarray[] = " ";
-                $tarray[] = " ";
-                $tarray[] = " ";
-                $working_arrays['ppv_define_business_rules']['business_rules_value_array'] = $tarray;
-
-// maintain_query_joins
-
+        // ************
+        // maintain_query_joins
+        // ************
         $working_arrays['maintain_query_joins']['data']['joins_join_type_array'] = 
         json_decode($record->joins_join_type_array);
         $working_arrays['maintain_query_joins']['data']['joins_joinee_table_names_array'] = 
@@ -203,37 +198,25 @@ class WorkingArray extends CRHBaseController
         $working_arrays['maintain_query_joins']['field_name_array'] = array(
             'join_types'            => 'joins_join_type_array',
             'joinor_field_names'    => 'joins_joinee_field_name_array',
+            'joins_r_o_array'       => 'joins_r_o_array',
             'joinee_table_names'    => 'joins_joinor_field_name_array',
             'joinee_field_names'    => 'joins_r_o_array',
-            'joins_r_o_array'       => 'joins_value_array',
             );
-
-/*
-        $working_arrays['maintain_query_joins']['field_name_array'] = array(
-            'join_types'            => 'join_types',
-            'joinor_field_names'    => 'joinor_field_names',
-            'joinee_table_names'    => 'joinee_table_names',
-            'joinee_field_names'    => 'joinee_field_names',
-            'joins_r_o_array'       => 'joins_r_o_array',
-            );
-*/
         $working_arrays['maintain_query_joins']['field_type_array'] = array(
             'join_types'            => 'select',
             'joinor_field_names'    => 'select',
+            'joins_r_o_array'       => 'select',
             'joinee_table_names'    => 'select',
             'joinee_field_names'    => 'select',
-            'joins_r_o_array'       => 'select',
             );
-
         $working_arrays['maintain_query_joins']['lookups'] = array(
             'join_types'            => 'join_types',
             'joinor_field_names'    => 'joinor_field_names',
+            'joins_r_o_array'       => 'joins_r_o_array',
             'joinee_table_names'    => 'joinee_table_names',
             'joinee_field_names'    => 'joinee_field_names',
-            'joins_r_o_array'       => 'joins_r_o_array',
             );
-   
-        $working_arrays['maintain_query_joins']['default_values_array'] = array(
+       $working_arrays['maintain_query_joins']['default_values_array'] = array(
             'join_types'             => 'not_used',
             'joinor_field_names'    => 'not_used',
             'joinee_table_names'    => 'not_used',
@@ -241,8 +224,8 @@ class WorkingArray extends CRHBaseController
             'joins_r_o_array'       => '=',
             );
 
+        // ************
         // ppv_define_query
-
         // ************
         $working_arrays['ppv_define_query']['data']['query_field_name_array'] = 
         json_decode($record->query_field_name_array);
@@ -262,13 +245,6 @@ class WorkingArray extends CRHBaseController
             'r_o'        => '=',
             'value'      => ' '
             );
-
-       //var_dump(json_decode($record->query_field_name_array)); //var_dump($working_arrays['ppv_define_query']);
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        //var_dump($record);
-        
-        //var_dump($working_arrays['ppv_define_query']);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-       
         
         if(!is_array($working_arrays['ppv_define_query']['data']['query_field_name_array'])){
             //var_dump($record->query_field_name_array);var_dump(json_decode($record->query_field_name_array));
@@ -281,8 +257,6 @@ class WorkingArray extends CRHBaseController
         else{
             //var_dump($working_arrays);
             //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            //var_dump($working_arrays['ppv_define_query']['data']['query_field_name_array']);
-            ;
             // translate old ro_array from index to values
             $query_relational_operators_array = $this->build_query_relational_operators_array();
             foreach ($working_arrays['ppv_define_query']['data']['query_r_o_array'] as $index=>$value){
@@ -292,55 +266,96 @@ class WorkingArray extends CRHBaseController
                 }
             }
         }
+
         //echo("<br>"$value."*".". $query_relational_operators_array[$value]);
         //var_dump($working_arrays['ppv_define_query']);$this->debug_exit(__FILE__,__LINE__,10);
        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+
+        // *************************
+        // ppv_define_business_rules
+        // *************************
+        $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
+            'field_name' => 'business_rules_field_name_array',
+            'r_o'        => 'business_rules_r_o_array',
+            'value'      => 'business_rules_value_array'
+            );
+        $working_arrays['ppv_define_business_rules']['field_type_array'] = array(
+            'field_name'            => 'select',
+            'r_o'                   => 'select',
+            'value'                 => 'text',
+            );
+        $working_arrays['ppv_define_business_rules']['lookups'] = array(
+            'field_name'            => 'xx',
+            'r_o'                   => '=',
+            'value'                 => ''
+            );
+        $working_arrays['ppv_define_business_rules']['default_values_array'] = array(
+            'field_name'    => 'not_used',
+            'r_o'           => 'required',
+            'value'         => ''
+            );
+  
         $working_arrays['ppv_define_business_rules']['data']['business_rules_field_name_array'] = 
         json_decode($record->business_rules_field_name_array);
         $working_arrays['ppv_define_business_rules']['data']['business_rules_r_o_array'] = 
         json_decode($record->business_rules_r_o_array);
         $working_arrays['ppv_define_business_rules']['data']['business_rules_value_array'] = 
         json_decode($record->business_rules_value_array);
-        $working_arrays['ppv_define_query']['business_rules_r_o_array_values'] = array();
 
-        $working_arrays['ppv_define_business_rules']['field_name_array'] = array(
-            'field_name' => 'business_rules_field_name_array',
-            'r_o'        => 'business_rules_r_o_array',
-            'value'      => 'business_rules_value_array',
-            'business_rules' => 'business_rules'
-            );
-        //var_dump($working_arrays['ppv_define_business_rules']);
-        //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-         $working_arrays['ppv_define_business_rules']['default_values_array'] = array(
-            'field_name'    => 'not_used',
-            'r_o'           => 'required',
-            'value'         => '',
-            'business_rules' => ''
-            );
-
-        //$query_relational_operators_array = $this->build_query_relational_operators_array();
-        //foreach ($working_arrays['ppv_define_query']['business_rules_r_o_array'] as $index=>$value){
-       //    $working_arrays['ppv_define_query']['business_rules_r_o_array_values'][] =
-        //    $query_relational_operators_array[$value];
-        //}
-
-        //var_dump($working_arrays );$this->debug_exit(__FILE__,__LINE__,1);
         return($working_arrays);
     }
 
+
+
+    public function working_arrays_show_arrays($display_option,$index_parms,$working_arrays,$what_we_are_doing) {
+        $this->debugx('0010',__FILE__,__LINE__,__FUNCTION__);
+        echo ("<br/>".'display_option:'. $display_option);
+        //var_dump(array_keys($working_arrays[$what_we_are_doing]));
+
+        $process_indexes_array = str_split($index_parms);
+        //var_dump($process_indexes_array);//exit('xit58 deh');
+        //var_dump($working_arrays[$what_we_are_doing]);//exit('xit58 deh');
+        $values_array = array_values($working_arrays[$what_we_are_doing]);
+        $keys_array = array_keys($working_arrays[$what_we_are_doing]);
+        foreach ($values_array as $index=>$value) {
+            if (in_array($index,$process_indexes_array)){
+                echo("<br/>".$keys_array[$index]."  "."<br/>");
+                $ii = (array_keys($working_arrays[$what_we_are_doing][$keys_array[$index]]));
+                //$vv = (array_values($working_arrays[$what_we_are_doing][$values_array[$index]]));
+                $vv = array();
+                switch ($display_option) {
+                    case 'keys':
+                        var_dump ($ii);
+                        break;
+                    case 'values':
+                        var_dump($vv);
+                        break;
+                    case 'both':
+                        var_dump ($ii);
+                        var_dump($vv);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+       } // end foreach
+       return;
+    }
 
      public function working_arrays_initialize($record,$what_we_are_doing,$bypassed_field_name,$model_table) {
         //echo("working_arrays_initialize");
         // $working_arrays contains some handy grouping of data and arrays we need for various things
         //var_dump($working_arrays);  $this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         $working_arrays = array();
+        $working_arrays     = $this->working_arrays_custom_stuff($working_arrays,$bypassed_field_name);
+        
         $working_arrays     = $this->working_arrays_assign_from_data($working_arrays,$record,$bypassed_field_name);
         //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
 
         $working_arrays     = $this->working_arrays_populate($working_arrays,$record);
         $column_names       = $this->build_column_names_array($model_table);
         //var_dump($working_arrays);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-        //$working_arrays     = $this->working_arrays_populate_lookups($working_arrays,$column_names,$bypassed_field_name);
         //var_dump($working_arrays);  $this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         $working_arrays     = $this->working_arrays_populate_lookups_new($what_we_are_doing,$working_arrays,$model_table);
         //var_dump($working_arrays);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
@@ -355,7 +370,7 @@ class WorkingArray extends CRHBaseController
         foreach ($working_arrays['groups_that_get_padded']as $group_to_be_padded){
             echo("</br>   * ".$group_to_be_padded."</br>");$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             //var_dump($working_arrays [$group_to_be_padded]['field_name_array']);
-            var_dump($working_arrays [$group_to_be_padded]);
+            //var_dump($working_arrays [$group_to_be_padded]);
             $pad_ctr = $this->working_arrays_set_pad_ctr($pad_ctr,$working_arrays,$group_to_be_padded );
             $working_arrays = $this->working_arrays_pad_group($working_arrays,$group_to_be_padded,$pad_ctr,$bypassed_field_name);
          }
@@ -366,22 +381,20 @@ class WorkingArray extends CRHBaseController
     public function working_arrays_set_pad_ctr($pad_ctr,$working_arrays,$group_to_be_padded ) {
         //print_r( $working_arrays[$group_to_be_padded]['field_name_array']);$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
         foreach($working_arrays[$group_to_be_padded]['field_name_array'] as 
-            $generic_array_name=>$specific_array_name) {
-            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo(' '.$generic_array_name."**".$specific_array_name);var_dump($working_arrays[$group_to_be_padded]['field_name_array'][$generic_array_name]);
+            $generic_array_name=>$actual_array_name) {
+            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo(' '.$generic_array_name." ** ".$actual_array_name);var_dump($working_arrays[$group_to_be_padded]['field_name_array'][$generic_array_name]);
             //echo( $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name]);
             $bypassed_field_name = $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name];
             //echo($bypassed_field_name." bypassed_field_name");
 
             //if(is_null($working_arrays[$group_to_be_padded][$generic_array_name])){
-           if(is_null($working_arrays[$group_to_be_padded]['data'][$specific_array_name])){
-                //$working_arrays['maintain_query_joins']['data']['joins_join_type_array'] = 
-                //echo('$pad_ctr'.$pad_ctr);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+           if(is_null($working_arrays[$group_to_be_padded]['data'][$actual_array_name])){
               return $pad_ctr;
             }
             else{
                 //var_dump( $working_arrays[$group_to_be_padded]['default_values_array']);
                 //var_dump( $working_arrays[$group_to_be_padded]['data'][$generic_array_name]);
-                foreach($working_arrays[$group_to_be_padded]['data'][$specific_array_name] as 
+                foreach($working_arrays[$group_to_be_padded]['data'][$actual_array_name] as 
                 $index=>$value) {
                     if ($value == $bypassed_field_name){
                         $pad_ctr -= 1;
@@ -399,15 +412,17 @@ class WorkingArray extends CRHBaseController
     public function working_arrays_pad_group($working_arrays,$group_to_be_padded,$pad_ctr,$bypassed_field_name) {
         //['da']
         //var_dump($working_arrays[$group_to_be_padded]['default_values_array']);
-        //var_dump($working_arrays[$group_to_be_padded]['data']);//$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
+        //echo('$pad_ctr'." *^* ".$pad_ctr);
+        //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
         foreach($working_arrays[$group_to_be_padded]['field_name_array'] as 
-            $generic_array_name=>$specific_array_name) {
-            echo($generic_array_name.$specific_array_name);
-            //var_dump($working_arrays[$group_to_be_padded]['data'][$generic_array_name]);
-            $working_arrays[$group_to_be_padded]['data'][$generic_array_name] = array();
-            $working_arrays[$group_to_be_padded]['data'][$specific_array_name][] =
+            $generic_array_name=>$actual_array_name) {
+            echo($generic_array_name." *^* ".$actual_array_name);
+            
+            //$working_arrays[$group_to_be_padded]['data'][$generic_array_name] = array();
+            $working_arrays[$group_to_be_padded]['data'][$actual_array_name][] =
                 $working_arrays[$group_to_be_padded]['default_values_array'][$generic_array_name];
         }  
+        //$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
         return $working_arrays;
     } 
           
@@ -423,7 +438,29 @@ class WorkingArray extends CRHBaseController
             break;
 
         case "ppv_define_query":
+            break;        
         case "ppv_define_business_rules":
+            $schema = DB::getDoctrineSchemaManager();
+            //var_dump($working_arrays[$what_we_are_doing]['field_name_array'] );
+            //var_dump($working_arrays[$what_we_are_doing]['lookups'] );
+            print_r($working_arrays[$what_we_are_doing]['lookups'] );
+            echo('<br/>');$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+            foreach ($working_arrays[$what_we_are_doing]['lookups'] as $key => $value) {
+            //foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
+                
+                switch ($key) { 
+                    case "field_name":
+                       $array0 = array('not_used'=>'not_used');
+                       $array1 = $this->build_column_names_array($model_table);
+                       $working_arrays[$what_we_are_doing]['lookups'] [$key] = array_merge($array0,$array1);
+                        break;
+                    case "r_o":
+                        $working_arrays[$what_we_are_doing]['lookups'][$key] = 
+                        $this->build_business_rules_relational_operators();     
+                        break;
+                   }
+            }
+
             break;
         case "maintain_query_joins":
 
@@ -438,7 +475,7 @@ class WorkingArray extends CRHBaseController
             $schema = DB::getDoctrineSchemaManager();
             //var_dump($working_arrays[$what_we_are_doing]['field_name_array'] );
             //var_dump($working_arrays[$what_we_are_doing]['lookups'] );
-            //echo('<br/>');$this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
+            //echo('<br/>');$this->debugx('1110',__FILE__,__LINE__,__FUNCTION__);
             foreach ($working_arrays[$what_we_are_doing]['lookups'] as $key => $value) {
             //foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
                 
@@ -496,17 +533,11 @@ class WorkingArray extends CRHBaseController
             $query_relational_operators_array = $this->build_query_relational_operators_array();
             // just to make the name shorter
             $working_arrays['ppv_define_query']['lookups']['relational_operators']  = $query_relational_operators_array;
-            $working_arrays['ppv_define_query']['lookups']['columns_w_bypass']                       =  
+            $working_arrays['ppv_define_query']['lookups']['columns_w_bypass'] =  
                 array_merge(array($bypassed_field_name=>$bypassed_field_name),  $columns);
             $working_arrays['ppv_define_query']['lookups']['query_relational_operators_array'] = $query_relational_operators_array;
 
             $business_rules_relational_operators = $this->build_business_rules_relational_operators();
-            $working_arrays['ppv_define_business_rules']['lookups']['field_names']          = 
-                array_merge(array($bypassed_field_name=>$bypassed_field_name),  $columns);
-            $working_arrays['ppv_define_business_rules']['lookups']['relational_operators'] = $business_rules_relational_operators;
-           $working_arrays['ppv_define_business_rules']['lookups']['columns_w_bypass'] = 
-                array_merge(array($bypassed_field_name=>$bypassed_field_name),  $columns);
-            $working_arrays['ppv_define_business_rules']['lookups']['business_rules_relational_operators']                      = $business_rules_relational_operators;
 
         $working_arrays['maintain_query_joins']['lookups'] = array(
             'join_types'            => 'join_types',
@@ -516,8 +547,6 @@ class WorkingArray extends CRHBaseController
             'joins_r_o_array'       => 'joins_r_o_array',
             );
    
-            //var_dump($working_arrays['ppv_define_business_rules']['lookups']['relational_operators']);
-            //var_dump($business_rules_relational_operators );$this->debug_exit(__FILE__,__LINE__,1);
            return $working_arrays;         //
         }
 
@@ -559,13 +588,7 @@ class WorkingArray extends CRHBaseController
             $working_arrays['ppv_define_query']['lookups']['columns_w_bypass']                       = '';
             $working_arrays['ppv_define_query']['lookups']['query_relational_operators_array']                       = '';
 
-            $working_arrays['ppv_define_business_rules']['lookups']['field_names']           = '';
-            $working_arrays['ppv_define_business_rules']['lookups']['relational_operators']  = '';
-            $working_arrays['ppv_define_business_rules']['lookups']['columns_w_bypass']                       = '';
-            $working_arrays['ppv_define_business_rules']['lookups']['query_relational_operators_array']                       = '';
-            //$working_arrays = $this->getEdit8_array_node_to_array($working_arrays);
 
-            //var_dump($working_arrays);$this->debug_exit(__FILE__,__LINE__,1);
             return($working_arrays);
             
 }

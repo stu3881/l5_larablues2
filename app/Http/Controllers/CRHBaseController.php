@@ -2275,7 +2275,8 @@ class CRHBaseController extends DEHBaseController
                         $snippet_string = $this->snippet_gen_modifiable_fields(
                             $modifiable_fields_array,
                             $lookups_array,
-                            $array1);                   }   
+                            $array1);
+                            }   
 
 
                         $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
@@ -2957,7 +2958,7 @@ class CRHBaseController extends DEHBaseController
     }
 
 
-    public function generic_snippet_gen_update_form($id,$working_arrays,$what_we_are_doing){
+    public function generic_gen_update_form_snippet($id,$working_arrays,$what_we_are_doing){
         // clonedd from ppv_edit_snippet_gen
         // we want to select join type
         // joinor table name is model_table_name
@@ -2974,17 +2975,6 @@ class CRHBaseController extends DEHBaseController
             // 
             */
             //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            //var_dump($working_arrays['ppv_define_business_rules']['field_name_array']);
-/*
-       $working_arrays['maintain_query_joins']['field_name_array'] = array(
-       // these are defined in the class
-            'join_type'             => 'joins_join_type_array',
-            'joinee_table_names'    => 'joins_joinee_table_names_array',
-            'joinor_field_name'     => 'joins_joinor_field_name_array',
-            'r_o'                   => 'joins_r_o_array',
-            'joinee_field_name'     => 'joins_joinee_field_name_array'
-            );
-*/
         $schema = DB::getDoctrineSchemaManager();
         //$working_arrays = $this->working_arrays_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
         switch ($what_we_are_doing) { 
@@ -2994,39 +2984,92 @@ class CRHBaseController extends DEHBaseController
             break;
 
         case "ppv_define_query":
-        case "ppv_define_business_rules":
             break;
+        case "ppv_define_business_rules":
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
         case "maintain_query_joins":
+            $this->debugx('0110',__FILE__,__LINE__,__FUNCTION__);
             //print_r($working_arrays[$what_we_are_doing]['field_name_array']);
-            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //print_r(array_values($working_arrays[$what_we_are_doing]['lookups']));
+            //echo("<br/>".array_keys($working_arrays[$what_we_are_doing]['field_name_array'])."<br/>");
+            /*
+            var_dump(array_keys($working_arrays[$what_we_are_doing]));
+            var_dump(array_keys($working_arrays[$what_we_are_doing]['field_name_array']));
+            var_dump(array_keys($working_arrays[$what_we_are_doing]['lookups']));
+            var_dump(array_values($working_arrays[$what_we_are_doing]));
+            var_dump(array_values($working_arrays[$what_we_are_doing]['field_name_array']));
+            var_dump(array_values($working_arrays[$what_we_are_doing]['lookups']));
+            */
+            //echo("<br/>".$x );
+            //echo("<br/>".array_keys($working_arrays[$what_we_are_doing]['lookups'])."<br/>");
+            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump(array_keys($working_arrays[$what_we_are_doing]['field_name_array']));
+            //$this->dhc('dana',0);
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             //echo("<br/>"."<br/>");print_r($working_arrays['lookups']);
             //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             $crlf = "\r\n";
             $strx = "";
             $j = -1;
-            for ($i=0; $i<(count($working_arrays[$what_we_are_doing]['lookups'])); $i++){
+            $strx .= "<tr>".$crlf; // field names
+            foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
+                $strx .= "<td style=\"text-align:left\">".$crlf.$value."</td>".$crlf;
+                $this->dhc('dana',0);
+                }
+            $strx .= "</tr>".$crlf;   
+            $j = -1;
+            //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);echo("['field_name_array'] ");
+            //var_dump(array_keys($working_arrays[$what_we_are_doing]['field_name_array']));
+            //var_dump(array_values($working_arrays[$what_we_are_doing]['field_name_array']));
+            //var_dump(array_keys($working_arrays[$what_we_are_doing]));
+            //$this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo("['data'] ");
+            //var_dump(array_keys($working_arrays[$what_we_are_doing]['data']));
+            //var_dump(array_values($working_arrays[$what_we_are_doing]['data']));
+
+$this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
+                $this->MyWorkingArray->working_arrays_show_arrays('both','0',$working_arrays,$what_we_are_doing);
+
+         //   $this->MyWorkingArray->working_arrays_show_arrays('values','1',$working_arrays,$what_we_are_doing);
+ $this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);           
+            for ($i=0; $i<(count($working_arrays[$what_we_are_doing]['data'])); $i++){
+                //$this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo("['data'] ");
                 $j++;
                 $strx .= "<tr>".$crlf; // start a new row
                 foreach ($working_arrays[$what_we_are_doing]['field_name_array'] as $key => $value) {
-                    $strx .= // first field is always  relational operator
-                        "<td style=\"text-align:left\">".$crlf.
-                        "{{ Form::select('".$key."[]',".
-                        "$"."working_arrays['".$what_we_are_doing."']['lookups']['".$key."'],".
-                        "$"."working_arrays['".$what_we_are_doing."']['field_name_array']['".$key."']) }}".
-                        $crlf.
-                        "</td>".$crlf;
+                    //print_r( " ** ". $key . " ** ". $value);echo("<br/>");$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
+                    //var_dump(array_values($working_arrays[$what_we_are_doing]['lookups']));
+                    switch ($working_arrays[$what_we_are_doing]['field_type_array'][$key]) { 
+                        case 'select':
+                        $this->dhc('dana',0);
+                            $strx .= // first field is always  relational operator
+                                "<td style=\"text-align:left\">".$crlf.
+                                "{{ Form::select('".$key."[]',".
+                                "$"."working_arrays['".$what_we_are_doing."']['lookups']['".$key."'],".
+                                "$"."working_arrays['".$what_we_are_doing."']['field_name_array']['".$key."']) }}".
+                                $crlf.
+                                "</td>".$crlf;
+                                break;
+                        case 'text':
+                        $this->dhc('dana',0);
+                            $strx .= // first field is always  relational operator
+                                "<td style=\"text-align:left\">".$crlf.
+                                "{{ Form::text(".
+                                "$"."working_arrays['".$what_we_are_doing."']['field_name_array']['".$key."'],".
+                                 "$"."working_arrays['".$what_we_are_doing."']['field_name_array']['".$key."']) }}".                                
+                                $crlf.
+                                "</td>".$crlf;
+                                break;
+                    } 
                 }
                 $strx .= "</tr>".$crlf;   
             }  // end for
         }
-        $strx .= $crlf."<tr><td>".$crlf."{{Form::select('name', array('key' => 'value','pussy' => 'twat'), 'key', array('class' => 'name'))}}".
-               "</td></tr>";
 
-        //$this->debugx('1100',__FILE__,__LINE__,__FUNCTION__);
-        $fnam = $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
-       //var_dump($fnam);$this->debug_exit(__FILE__,__LINE__,01);
-        $this->write_file_from_string($fnam,$strx);
-              
+        $fnam = 
+        $this->view_files_prefix."/".$this->generated_files_folder."/".$id.'_snippet_string.blade.php';
+        $this->write_file_from_string($fnam,$strx);   
+        //echo("</br>"."***".$fnam."</br>"."***".$strx."</br>"."***");  
+        $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
         return $strx;
     }
 
@@ -3199,40 +3242,52 @@ class CRHBaseController extends DEHBaseController
         //var_dump($what_we_are_doing);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
         //var_dump($miscThing[0] );$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
     switch ($what_we_are_doing) {
-
         case "maintain_query_joins":
 
-            $html_str = $this->generic_snippet_gen_update_form($id,$working_arrays,$what_we_are_doing);
+        case "ppv_define_business_rules":
+       //     break;
+        //case "ppv_define_query":
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($working_arrays['ppv_define_business_rules']['field_name_array']);
+            switch ($what_we_are_doing) {
+                case 'ppv_define_query':
+                    $just_the_names_array = 
+                        json_encode($working_arrays['ppv_define_query']['field_name_array']);
+                    break;
+                case 'ppv_define_business_rules':
+                     $just_the_names_array = 
+                     json_encode($working_arrays['ppv_define_business_rules']['field_name_array']);
+                    break;
+             }
 
-             $bladetest = "<tr><td>
-                    {{Form::select('name', array('key' => 'value','cunt' => 'blade'), 'key', array('class' => 'name'))}}
-               </td></tr>";
-              
+            //case "maintain_query_joins":
+            $html_str = $this->generic_gen_update_form_snippet($id,$working_arrays,$what_we_are_doing);
+            $bladetest = "<tr><td>"."</td></tr>";
+
+            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);echo("['lookups'] keys ");
+            var_dump(array_keys($working_arrays[$what_we_are_doing]['lookups']));
+            var_dump(array_values($working_arrays[$what_we_are_doing]['lookups']));
+            var_dump(array_values($working_arrays[$what_we_are_doing]['field_name_array']));
+
+
             //$working_arrays = $this->working_arrays_populate_lookups($what_we_are_doing,$working_arrays,$this->model_table);
-           //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($html_str);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
             // ***************
+            // this includes ... . $id.'snippet_string'
             return view($this->model_table.".query_joins_update"    ,compact('miscThing'))
                 ->with('what_we_are_doing'              ,$what_we_are_doing)
                 ->with('working_arrays'                 ,$working_arrays)       
-                //->with('just_the_names_array'          ,$just_the_names_array)
                 ->with('report_definition_id'            ,$id)
-                //->with('generated_strings'               ,$html_str)
                 ->with('bladetest'                       ,$bladetest)
-
                 ->with('id'                              ,$id)
                 ->with('request'                         ,$request)
-                //->with('first_lookup_array'                 ,$working_arrays[$what_we_are_doing]['lookups'][0])
-                //->with('second_lookup_array'                ,$working_arrays[$what_we_are_doing]['lookups'][1])
-                //->with('field_name_array'                   ,$field_name_array)
-                
-                ->with('generated_strings'                  ,$html_str)
-                //->with('r_o_array'                          ,$r_o_array)
-                //->with('value_array'                        ,$value_array)
-                ->with('generated_files_folder'             ,$this->generated_files_folder)
-                ->with('coming_from'                        ,$coming_from)
-                ->with('node_name'                          ,$this->node_name)
-                ->with('model_table'                        ,$this->model_table)
-                ->with('message'                            ,'')
+                ->with('generated_strings'               ,$html_str)
+                ->with('generated_files_folder'          ,$this->generated_files_folder)
+                ->with('coming_from'                     ,$coming_from)
+                ->with('node_name'                       ,$this->node_name)
+                ->with('model_table'                     ,$this->model_table)
+                ->with('message'                         ,'')
                 ;
                 break;        
         case "maintain_modifiable_fields":
@@ -3273,9 +3328,10 @@ class CRHBaseController extends DEHBaseController
                 break;  
         case "maintain_query_joins":
                 break;  
-        case "ppv_define_query":
         case "ppv_define_business_rules":
-            //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            break;
+        case "ppv_define_query":
+            //$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
             //var_dump($working_arrays['ppv_define_business_rules']['field_name_array']);
             switch ($what_we_are_doing) {
                 case 'ppv_define_query':
@@ -3303,26 +3359,23 @@ class CRHBaseController extends DEHBaseController
             //*
      
  
-            var_dump($working_arrays[$what_we_are_doing]);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_names'];
-            $column_names_array = array_combine(array_values($column_names_array),$column_names_array);
+            //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
+            //var_dump($working_arrays[$what_we_are_doing]['lookups']);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            $this->debugx('0100',__FILE__,__LINE__,__FUNCTION__);
+            $column_names_array = $working_arrays[$what_we_are_doing]['lookups']['field_name'];
+            //$column_names_array = array_combine(array_values($column_names_array),$column_names_array);
 
             // **********************
-            $field_name_array_name  = 
-                ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
+            //$field_name_array_name  =                 ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
             $field_name_array       = 
-                ($working_arrays[$what_we_are_doing][$field_name_array_name]);
-            $r_o_array_name         = 
-                ($working_arrays[$what_we_are_doing]['field_name_array']['r_o']);
-                 var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
-            $r_o_array              = 
-
-                ($working_arrays[$what_we_are_doing][$r_o_array_name]);
+                ($working_arrays[$what_we_are_doing]['lookups']['field_name']);
+            //$field_name_array       =                ($working_arrays[$what_we_are_doing]['field_name_array']['field_name']);
+            //$r_o_array_name         =                 ($working_arrays[$what_we_are_doing]['field_name_array']['r_o']);
+            //var_dump($working_arrays[$what_we_are_doing]);$this->debugx('1111',__FILE__,__LINE__,__FUNCTION__);
+            $r_o_array =  $working_arrays[$what_we_are_doing]['lookups']['r_o'];
+            //$r_o_array = $working_arrays[$what_we_are_doing][$r_o_array_name];
             //$this->debugx('0111',__FILE__,__LINE__,__FUNCTION__);
-            $working_arrays[$what_we_are_doing]['lookups'][1] = 
-            array_combine(
-                $working_arrays[$what_we_are_doing]['lookups'][1],
-                $working_arrays[$what_we_are_doing]['lookups'][1]);
+            //$working_arrays[$what_we_are_doing]['lookups'][1] = array_combine(                $working_arrays[$what_we_are_doing]['lookups'][1],                $working_arrays[$what_we_are_doing]['lookups'][1]);
            //$this->debug_exit(__FILE__,__LINE__,10);
            $value_array_name       = 
                 ($working_arrays[$what_we_are_doing]['field_name_array']['value']);

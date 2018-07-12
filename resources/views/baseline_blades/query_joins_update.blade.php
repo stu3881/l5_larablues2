@@ -64,7 +64,7 @@
 			{{ Form::hidden('business_rules_r_o_array'			, "") }}
 			{{ Form::hidden('business_rules_value_array'		, "") }}
 			{{ Form::hidden('business_rules'					, "") }}
-			{{ Form::hidden('just_the_names_array', $just_the_names_array) }}
+			{{-- Form::hidden('just_the_names_array', $just_the_names_array) --}}
 		@endif						
 
 
@@ -102,10 +102,10 @@
 				<?php
 					echo($bladetest);
 				?>
-		@if($what_we_are_doing == "maintain_query_joins")	
+		<!--@if($what_we_are_doing == "maintain_query_joins")	-->
 			@include($node_name.'/'.'generated_files'.'/'.$id.'_snippet_string')
 
-		@endif		
+		<!--@endif	-->	
 				
 			</table>
 				

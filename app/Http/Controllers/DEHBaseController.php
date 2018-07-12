@@ -83,8 +83,15 @@ class DEHBaseController extends Controller
                }
             }
        } // end foreach
+       //echo ('<br/>');    
        if ($parma[0]) exit();
     }
+
+    public function dhc($name,$active) {
+        if ($active){
+            echo ('<br/>'. $name ." hotter than hot clit");
+        }
+     }
 
     public function debug0($file,$line,$function) {
        // echo ('<BR>'.$file. ' at line: '.$line.' in method: ' .$function);
